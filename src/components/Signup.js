@@ -30,8 +30,8 @@ const Signup = () => {
       nickname: nickname_ref.current.value,
       currentWeight: currentWeight_ref.current.value,
       goalWeight: goalWeight_ref.current.value,
-      startFasting: startFastingHour_ref.current.value + startFastingMinute_ref.current.value,
-      endFasting: endFastingHour_ref.current.value + endFastingMinute_ref.current.value,
+      startFasting: startFastingHour_ref.current.value + ":" + startFastingMinute_ref.current.value,
+      endFasting: endFastingHour_ref.current.value + ":" + endFastingMinute_ref.current.value,
     }
     console.log(SignupInfo)
 
