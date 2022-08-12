@@ -1,11 +1,12 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCamera } from '@fortawesome/free-solid-svg-icons'
 
-const PicSelect = ( {files, setFiles} ) => {
+const PicSelect = ( { files, setFiles } ) => {
 
-  const [ filestxt, setFilesTxt ] = React.useState("");
+  const temp_img = "https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png"
+  const [ prevFiles, setPrevFiles ] = React.useState(temp_img);
 
   const previewImage = async (e) => {
 
@@ -16,16 +17,16 @@ const PicSelect = ( {files, setFiles} ) => {
     const reader = new FileReader();
     reader.readAsDataURL(file); // 내가 올릴 img
     reader.onload = (e) => {
-      setFiles(e.target.result);
-      setFilesTxt(file.name);
+      setPrevFiles(e.target.result);
     };
+    setFiles(file)
   }
 
   return (
     <Wrap>
       <ImgWrap>
         <Img>
-          <img src={files} alt="" />
+          <img src={prevFiles} alt="" />
         </Img>
         <IconWrap htmlFor="file">
           <FontAwesomeIcon icon={faCamera} />

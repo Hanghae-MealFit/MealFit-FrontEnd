@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import axios from 'axios'
 
 import StartHourSelect from '../elements/StartHourSelect'
 import StartMinuteSelect from '../elements/StartMinuteSelect'
@@ -20,6 +21,9 @@ const Signup = () => {
   const startFastingMinute_ref = React.useRef(null);
   const endFastingHour_ref = React.useRef(null);
   const endFastingMinute_ref = React.useRef(null);
+
+  //
+  const [ files, setFiles ] = React.useState(null);
 
   // 현재 체중 목표 체중 값
   const [ curWeight, setCurWeight ] = React.useState();
@@ -54,20 +58,53 @@ const Signup = () => {
       password: password_ref.current.value,
       passwordCheck: passwordCheck_ref.current.value,
       nickname: nickname_ref.current.value,
+      profileImage: files,
       currentWeight: currentWeight_ref.current.value,
       goalWeight: goalWeight_ref.current.value,
       startFasting: startFastingHour_ref.current.value + ":" + startFastingMinute_ref.current.value,
       endFasting: endFastingHour_ref.current.value + ":" + endFastingMinute_ref.current.value,
     }
-    console.log(SignupInfo)
+    // console.log(SignupInfo)
 
     const formData = new FormData()
-    formData.append("username", SignupInfo.username)
+    formData.append("username", SignupInfo.username);
+    formData.append("email", SignupInfo.email);
+    formData.append("password", SignupInfo.password);
+    formData.append("passwordCheck", SignupInfo.passwordCheck);
+    formData.append("nickname", SignupInfo.nickname);
+    formData.append("currentWeight", SignupInfo.currentWeight);
+    formData.append("goalWeight", SignupInfo.goalWeight);
+    formData.append("startFasting", SignupInfo.startFasting);
+    formData.append("endFasting", SignupInfo.endFasting);
+    if(SignupInfo.profileImage !== null) {
+      formData.append("profileImage", SignupInfo.profileImage);
+    }
+    console.log(formData)
+
+    // const res = await axios.post("http://13.125.227.9:8080/user/signup",
+    // {
+    //   formData
+    // }, {
+    //   headers: {
+    //     "Content-Type": "multipart/form-data"
+    //   }
+    // })
+    // console.log(res)
+
+    await axios({
+      baseURL: "http://13.125.227.9:8080/",
+      method: "POST",
+      url: "/user/signup",
+      data: formData,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }).then((response) => {
+      console.log("반응", response)
+    }).catch((error) => {
+      console.log("에러", error)
+    })
   }
-
-
-  const temp_img = "https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png"
-  const [ files, setFiles ] = React.useState(temp_img);
 
   return (
     <SignUpWrap>
@@ -121,23 +158,32 @@ const Signup = () => {
             </div>
           </FastTime>
         </FastTimeWrap>
-        <div>
-          <button>취소</button>
-          <button onClick={onhandleSignUp}>회원가입</button>
-        </div>
+        <Button>
+          <CancleBtn>취소</CancleBtn>
+          <SignUpBtn onClick={onhandleSignUp}>회원가입</SignUpBtn>
+        </Button>
       </form>
+      <LoginTxt>
+        이미 회원이신가요? <span>밀핏 계정으로 로그인하기</span>
+      </LoginTxt>
     </SignUpWrap>
   )
 }
 
 const SignUpWrap = styled.div`
   width: 700px;
-  height: 1100px;
-  margin: 0 auto;
+  height: 920px;
+  margin: 20px auto;
   border-radius: 30px;
   background-color: white;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   h1 {
-    margin: 0 auto;
+    margin: 10px auto;
+    padding: 14px 0;
     font-size: 26px;
     color: #FE7770;
     width: 540px;
@@ -171,7 +217,8 @@ const Contents = styled.div`
     height: 30px;
     border: 1px solid #000;
     border-radius: 6px;
-    font-size: 14px;
+    font-family: 'GmarketM', 'sans-serif';
+    font-size: 12px;
     background-color: transparent;
     cursor: #000;
   }
@@ -180,7 +227,7 @@ const Contents = styled.div`
     bottom: -20px;
     left: 6px;
     margin: 0;
-    font-size: 12px;
+    font-size: 10px;
     color: #D9D9D9;
   }
 `
@@ -225,7 +272,7 @@ const FastTimeWrap = styled.div`
   box-sizing: border-box;
   border: 1px solid #9A9A9A;
   border-radius: 20px;
-  margin: 0 auto;
+  margin: 30px auto;
 `
 
 const FastTime = styled.div`
@@ -235,6 +282,44 @@ const FastTime = styled.div`
   margin: 10px 0;
   p {
     margin: 0;
+  }
+`
+
+const Button = styled.div`
+  width: 460px;
+  height: 40px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  button {
+    width: 140px;
+    height: 100%;
+    margin: 0 10px;
+    border: none;
+    border-radius: 30px;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 900;
+    cursor: pointer;
+  }
+`
+
+const CancleBtn = styled.button`
+  background-color: #C2C2C2;
+`
+
+const SignUpBtn = styled.button`
+  background-color: #FE7770;
+`
+
+const LoginTxt = styled.div`
+  font-size: 12px;
+  margin: 16px auto;
+  text-align: center;
+  span {
+    color: #FE7770;
+    cursor: pointer;
   }
 `
 

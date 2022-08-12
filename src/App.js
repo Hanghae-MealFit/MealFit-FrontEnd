@@ -1,7 +1,10 @@
 import React from 'react';
-import { Router, Routes, Route } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
+
 import './App.css';
+import './fonts/fonts.css'
 import Signup from './components/Signup';
+
 
 function App() {
   return (
