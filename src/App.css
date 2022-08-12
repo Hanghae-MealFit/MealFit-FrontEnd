@@ -1,5 +1,11 @@
+body {
+  background-color: #F6EAE0;
+  font-family: 'GmarketM', 'sans-serif'
+}
+
 .App {
   text-align: center;
+  margin: 0;
 }
 
 .App-logo {
