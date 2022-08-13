@@ -109,7 +109,7 @@ const Signup = () => {
   return (
     <SignUpWrap>
       <h1>회원가입</h1>
-      <form action="">
+      <FormWrap>
         <PicWrap>
           <PicSelect files={files} setFiles={setFiles} />
         </PicWrap>
@@ -162,7 +162,7 @@ const Signup = () => {
           <CancleBtn>취소</CancleBtn>
           <SignUpBtn onClick={onhandleSignUp}>회원가입</SignUpBtn>
         </Button>
-      </form>
+      </FormWrap>
       <LoginTxt>
         이미 회원이신가요? <span>밀핏 계정으로 로그인하기</span>
       </LoginTxt>
@@ -171,9 +171,10 @@ const Signup = () => {
 }
 
 const SignUpWrap = styled.div`
+  position: relative;
   width: 700px;
   height: 920px;
-  margin: 20px auto;
+  margin: 0 auto;
   border-radius: 30px;
   background-color: white;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
@@ -182,14 +183,22 @@ const SignUpWrap = styled.div`
   justify-content: center;
   align-items: center;
   h1 {
-    margin: 10px auto;
-    padding: 14px 0;
+    position: absolute;
+    top: 10px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    padding: 10px 0;
     font-size: 26px;
     color: #FE7770;
     width: 540px;
     border-bottom: 1px solid #E0E2E6;
     text-align: center;
   }
+`
+
+const FormWrap = styled.form`
+  margin-top: 60px;
 `
 
 const PicWrap = styled.div`
@@ -299,8 +308,9 @@ const Button = styled.div`
     border: none;
     border-radius: 30px;
     color: #fff;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 900;
+    font-family: 'GmarketM', 'sans-serif';
     cursor: pointer;
   }
 `
