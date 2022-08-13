@@ -49,38 +49,30 @@ const Login = () => {
   return (
     <LoginWrap>
       <h1>로그인</h1>
-
       <Contents>
-          <input ref={username_ref} type="text" placeholder='아이디' />
-        </Contents>
-
+        <input ref={username_ref} type="text" placeholder='아이디' />
+      </Contents>
       <Contents>
-          <input ref={password_ref} type="password" placeholder='비밀번호' />
-        </Contents>
-
+        <input ref={password_ref} type="password" placeholder='비밀번호' />
+      </Contents>
       <FindTxt>
         <span>아이디 / 비밀번호 찾기</span>
       </FindTxt>
-
       <Button>
-          <LoginBtn onClick={onhandleLogin}>로그인</LoginBtn>
-        </Button>
-
-
+        <LoginBtn onClick={onhandleLogin}>로그인</LoginBtn>
+      </Button>
       <LoginTxt>
         밀핏 회원이 아니신가요? <span>새 계정 만들기</span>
       </LoginTxt>
-
-
     </LoginWrap>
   )
 }
 
 const LoginWrap = styled.div`
+  position: relative;
   width: 700px;
   height: 640px;
-  margin: 150px auto;
-
+  margin: 0 auto;
   border-radius: 30px;
   background-color: white;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
@@ -89,8 +81,12 @@ const LoginWrap = styled.div`
   justify-content: center;
   align-items: center;
   h1 {
-    margin: 10px auto;
-    padding: 14px 0;
+    position: absolute;
+    top: 10px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    padding: 10px 0;
     font-size: 26px;
     color: #FE7770;
     width: 540px;
@@ -102,7 +98,7 @@ const LoginWrap = styled.div`
 const Contents = styled.div`
   position: relative;
   width: 400px;
-  margin: 26px auto;
+  margin: 8px auto;
   input {
     width: 100%;
     border: none;
