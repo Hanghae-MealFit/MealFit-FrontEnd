@@ -6,6 +6,7 @@ import './App.css';
 import './fonts/fonts.css'
 import Signup from './components/Signup';
 import FindMyInfo from './components/FindMyInfo';
+import Login from './components/Login';
 
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
     <Wrap>
       <Routes>
         <Route path="user/signup" element = { <Signup /> } />
+        <Route path="user/login" element = { <Login /> } />
         <Route path="user/find" element = { <FindMyInfo /> } />
       </Routes>
     </Wrap>
