@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
 
@@ -9,6 +9,14 @@ import EndMinuteSelect from '../elements/EndMinuteSelect'
 import PicSelect from '../elements/PicSelect'
 
 const Signup = () => {
+
+  const sessionStorage = window.sessionStorage;
+
+  useEffect(() => {
+    sessionStorage.setItem("checkUsername", false)
+    sessionStorage.setItem("checkNickname", false)
+    sessionStorage.setItem("checkEmail", false)
+  }, []);
 
   const username_ref = React.useRef(null);
   const nickname_ref = React.useRef(null);
@@ -21,6 +29,7 @@ const Signup = () => {
   const startFastingMinute_ref = React.useRef(null);
   const endFastingHour_ref = React.useRef(null);
   const endFastingMinute_ref = React.useRef(null);
+  const username_err_ref = React.useRef(null);
 
   //
   const [ files, setFiles ] = React.useState(null);
@@ -31,6 +40,9 @@ const Signup = () => {
 
   const [ curError, setCurError ] = React.useState();
   const [ goError, setGoError ] = React.useState();
+
+  // ID 중복확인 클릭 시, 유저에게 제공 될 값
+  const [ checkIdMsg, SetCheckIdMsg ] = React.useState("* 사용하실 아이디를 입력해주세요.");
 
   // 체중 입력 시 숫자만 입력할 수 있도록 정규식 사용
   const currentWeight = (e) => {
@@ -106,6 +118,80 @@ const Signup = () => {
     })
   }
 
+  const CheckId = async (e) => {
+    e.preventDefault()
+
+    try {
+      const username = username_ref.current.value
+      const res = await axios.get(`http://13.125.227.9:8080/user/username?username=${username}`,
+      {
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+      console.log(res)
+      if(res.data === "검증완료!" && res.status === 200) {
+        sessionStorage.setItem("checkUsername", true)
+        // alert("사용가능 한 아이디 입니다.")
+        SetCheckIdMsg("* 사용이 가능 한 아이디입니다.")
+        username_err_ref.current.style.color = "#81C147";
+      }
+    } catch(error) {
+      console.log(error)
+      sessionStorage.setItem("checkUsername", false)
+      // alert("사용 불가능 한 아이디 입니다.")
+      SetCheckIdMsg("* 사용이 불가능 한 아이디입니다.")
+      username_err_ref.current.style.color = "#FF0000";
+    }
+  }
+
+  const CheckNickname = async (e) => {
+    e.preventDefault()
+
+    try {
+      const nickname = nickname_ref.current.value
+      const res = await axios.get(`http://13.125.227.9:8080/user/nickname?nickname=${nickname}`,
+      {
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+      console.log(res)
+      if(res.data === "검증완료!" && res.status === 200) {
+        sessionStorage.setItem("checkNickname", true)
+        alert("사용가능 한 닉네임 입니다.")
+      }
+    } catch(error) {
+      console.log(error)
+      sessionStorage.setItem("checkNickname", false)
+      alert("사용 불가능 한 닉네임 입니다.")
+    }
+  }
+
+  const CheckEmail = async (e) => {
+    e.preventDefault()
+
+    try {
+      const email = email_ref.current.value
+      const res = await axios.get(`http://13.125.227.9:8080/user/email?email=${email}`,
+      {
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+      console.log(res)
+      if(res.data === "검증완료!" && res.status === 200) {
+        sessionStorage.setItem("checkEmail", true)
+        alert("사용가능 한 이메일 입니다.")
+      }
+    } catch(error) {
+      console.log(error)
+      console.log(error)
+      sessionStorage.setItem("checkEmail", false)
+      alert("사용 불가능 한 이메일 입니다.")
+    }
+  }
+
   return (
     <SignUpWrap>
       <h1>회원가입</h1>
@@ -115,15 +201,16 @@ const Signup = () => {
         </PicWrap>
         <Contents>
           <input ref={username_ref} type="text" placeholder='ID를 입력해주세요.' />
-          <button>중복확인</button>
+          <button onClick={CheckId}>중복확인</button>
+          <p ref={username_err_ref}>{checkIdMsg}</p>
         </Contents>
         <Contents>
           <input ref={nickname_ref} type="text" placeholder='닉네임를 입력해주세요.' />
-          <button>중복확인</button>
+          <button onClick={CheckNickname}>중복확인</button>
         </Contents>
         <Contents>
           <input ref={email_ref} type="email" placeholder='Email를 입력해주세요.' />
-          <button>중복확인</button>
+          <button onClick={CheckEmail}>중복확인</button>
           <p>* 이메일은 아이디 비밀번호를 찾을 때 사용됩니다.</p>
         </Contents>
         <Contents>
@@ -229,7 +316,7 @@ const Contents = styled.div`
     font-family: 'GmarketM', 'sans-serif';
     font-size: 12px;
     background-color: transparent;
-    cursor: #000;
+    cursor: pointer;
   }
   p {
     position: absolute;

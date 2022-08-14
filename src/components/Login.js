@@ -15,34 +15,35 @@ const Login = () => {
       }
       // console.log(LoginInfo)
   
-      const formData = new FormData()
-        formData.append("username", LoginInfo.username);
-        formData.append("password", LoginInfo.password);
+      // const formData = new FormData()
+      //   formData.append("username", LoginInfo.username);
+      //   formData.append("password", LoginInfo.password);
       // console.log(formData)
   
-      // const res = await axios.post("http://13.125.227.9:8080/user/signup",
-      // {
-      //   formData
-      // }, {
-      //   headers: {
-      //     "Content-Type": "multipart/form-data"
-      //   }
-      // })
-      // console.log(res)
-  
-      await axios({
-        baseURL: "http://13.125.227.9:8080/",
-        method: "POST",
-        url: "/user/login",
-        data: formData,
+      const res = await axios.post("http://43.200.174.111:8080/login",
+      {
+        username: LoginInfo.username,
+        password: LoginInfo.password
+      }, {
         headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }).then((response) => {
-        console.log("반응", response)
-      }).catch((error) => {
-        console.log("에러", error)
+          "Content-Type": "application/json"
+        }
       })
+      console.log(res)
+  
+      // await axios({
+      //   baseURL: "http://13.125.227.9:8080/",
+      //   method: "POST",
+      //   url: "/user/login",
+      //   data: formData,
+      //   headers: {
+      //     "Content-Type": "multipart/form-data",
+      //   },
+      // }).then((response) => {
+      //   console.log("반응", response)
+      // }).catch((error) => {
+      //   console.log("에러", error)
+      // })
     }
 
 
