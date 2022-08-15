@@ -30,8 +30,12 @@ const Signup = () => {
   const endFastingHour_ref = React.useRef(null);
   const endFastingMinute_ref = React.useRef(null);
   const username_err_ref = React.useRef(null);
+  const nickname_err_ref = React.useRef(null);
+  const email_err_ref = React.useRef(null);
+  const pw_err_ref = React.useRef(null);
+  const pw_check_err_ref = React.useRef(null);
 
-  //
+  // formData로 보낼 이미지 파일
   const [ files, setFiles ] = React.useState(null);
 
   // 현재 체중 목표 체중 값
@@ -44,21 +48,43 @@ const Signup = () => {
   // ID 중복확인 클릭 시, 유저에게 제공 될 값
   const [ checkIdMsg, SetCheckIdMsg ] = React.useState("* 사용하실 아이디를 입력해주세요.");
 
+  // 닉네임 중복확인 클릭 시, 유저에게 제공 될 값
+  const [ checkNickMsg, SetCheckNickMsg ] = React.useState("* 사용하실 닉네임을 입력해주세요.");
+
+  // 이메일 중복확인 클릭 시, 유저에게 제공 될 값
+  const [ checkEmailMsg, SetCheckEmailMsg ] = React.useState("* 이메일은 아이디 비밀번호를 찾을 때 사용됩니다.");
+  
+  // 입력된 비밀번호 값이 영어+숫자가 아닐 시, 유저에게 제공 될 값
+  const [ PwMsg, SetPwMsg ] = React.useState("* 비밀번호는 영어/숫자 조합으로 8자 이상 사용 가능합니다.");
+
+  // 입력된 비밀번호 값이 영어+숫자가 아닐 시, 유저에게 제공 될 값
+  const [ checkPwMsg, SetPwCheckMsg ] = React.useState("* 입력하신 비밀번호를 다시 입력해주세요.");
+
+  // 입력된 아이디 값이 4글자보다 적을 시, 버튼 클릭 불가능하게 설정
+  const [ idCheckDis, SetIdCheckDis ] = React.useState(true);
+
+  // 입력된 닉네임 값이 4글자보다 적을 시, 버튼 클릭 불가능하게 설정
+  const [ nickCheckDis, SetNickCheckDis ] = React.useState(true);
+
+  // 입력된 이메일 값이 이메일 형식이 아닐 시, 버튼 클릭 불가능하게 설정
+  const [ emailCheckDis, SetEmailCheckDis ] = React.useState(true);
+
   // 체중 입력 시 숫자만 입력할 수 있도록 정규식 사용
   const currentWeight = (e) => {
-    setCurWeight(e.target.value.replace(/[^0-9.]/g, ''))
 
-    // if(e.target.value.find(/[^0-9.]/g, '')) {
-    //   setCurError('')
-    // } else {
-    //   setCurError('숫자만 입력 가능합니다.')
-    // }
+    setCurWeight(e.target.value.replace(/[^0-9.]/g, ''))
+    const regNum = /^(\d*)[\.]?(\d{1,2})?$/g
+    if(regNum.test(e.target.value) !== true) {
+      setCurError('숫자만 입력 가능합니다.')
+    } else {
+      setCurError('잘 입력하셨습니다.')
+    }
     console.log(e.target.value)
   }
 
   const goalWeight = (e) => {
     setGoWeight(e.target.value.replace(/[^0-9.]/g, ''))
-    // console.log(e.target.value)
+    console.log(e.target.value)
   }
 
   const onhandleSignUp = async (e) => {
@@ -133,15 +159,16 @@ const Signup = () => {
       if(res.data === "검증완료!" && res.status === 200) {
         sessionStorage.setItem("checkUsername", true)
         // alert("사용가능 한 아이디 입니다.")
-        SetCheckIdMsg("* 사용이 가능 한 아이디입니다.")
+        SetCheckIdMsg("* 사용 가능 한 아이디입니다.")
         username_err_ref.current.style.color = "#81C147";
       }
     } catch(error) {
       console.log(error)
       sessionStorage.setItem("checkUsername", false)
       // alert("사용 불가능 한 아이디 입니다.")
-      SetCheckIdMsg("* 사용이 불가능 한 아이디입니다.")
+      SetCheckIdMsg("* 사용 불가능 한 아이디입니다.")
       username_err_ref.current.style.color = "#FF0000";
+      username_ref.current.focus()
     }
   }
 
@@ -159,12 +186,17 @@ const Signup = () => {
       console.log(res)
       if(res.data === "검증완료!" && res.status === 200) {
         sessionStorage.setItem("checkNickname", true)
-        alert("사용가능 한 닉네임 입니다.")
+        // alert("사용가능 한 닉네임 입니다.")
+        SetCheckNickMsg("* 사용 가능 한 닉네임입니다.")
+        nickname_err_ref.current.style.color = "#81C147";
       }
     } catch(error) {
       console.log(error)
       sessionStorage.setItem("checkNickname", false)
-      alert("사용 불가능 한 닉네임 입니다.")
+      // alert("사용 불가능 한 닉네임 입니다.")
+      SetCheckNickMsg("* 사용 불가능 한 닉네임입니다.")
+      nickname_err_ref.current.style.color = "#FF0000";
+      nickname_ref.current.focus()
     }
   }
 
@@ -182,13 +214,106 @@ const Signup = () => {
       console.log(res)
       if(res.data === "검증완료!" && res.status === 200) {
         sessionStorage.setItem("checkEmail", true)
-        alert("사용가능 한 이메일 입니다.")
+        SetCheckEmailMsg("* 사용 가능 한 이메일입니다.")
+        email_err_ref.current.style.color = "#81C147";
       }
     } catch(error) {
       console.log(error)
-      console.log(error)
       sessionStorage.setItem("checkEmail", false)
-      alert("사용 불가능 한 이메일 입니다.")
+      SetCheckEmailMsg("* 사용 불가능 한 이메일 입니다.")
+      email_err_ref.current.style.color = "#FF0000";
+    }
+  }
+
+  const IdChange = (e) => {
+    let regTxt = /[0-9a-zA-Z]/;
+    let regKor = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+    let regSpecial = /[.,~!@#$%^&*()_+|<>?:{}]/;
+    let regBlank = /[\s]/;
+    if(e.target.value.length === 0) {
+      SetIdCheckDis(true)
+      SetCheckIdMsg("* 사용하실 아이디를 입력해주세요.")
+      username_err_ref.current.style.color = "#D9D9D9";
+    } else if (!(regTxt.test(e.target.value)) || (regKor.test(e.target.value)) || (regSpecial.test(e.target.value)) || (regBlank.test(e.target.value)) ) {
+      SetIdCheckDis(true)
+      SetCheckIdMsg("* 영어 / 숫자를 제외한 다른 문자는 사용할 수 없습니다.")
+      username_err_ref.current.style.color = "#FF7F00";
+    } else if(e.target.value.length < 4) {
+      SetIdCheckDis(true)
+      SetCheckIdMsg("* 아이디는 4글자 이상 12글자 이하로 사용 가능합니다.")
+      username_err_ref.current.style.color = "#FF7F00";
+    } else {
+      SetIdCheckDis(false)
+      SetCheckIdMsg("* 아이디 중복확인을 진행해주세요.")
+      username_err_ref.current.style.color = "#FF7F00";
+    }
+  }
+
+  const NickChange = (e) => {
+    let regTxt = /[0-9a-zA-Zㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+    let regSpecial = /[.,~!@#$%^&*()_+|<>?:{}]/;
+    let regBlank = /[\s]/;
+    if(e.target.value.length === 0) {
+      SetNickCheckDis(true)
+      SetCheckNickMsg("* 사용하실 닉네임을 입력해주세요.")
+      nickname_err_ref.current.style.color = "#D9D9D9";
+    } else if (!(regTxt.test(e.target.value)) || (regSpecial.test(e.target.value)) || (regBlank.test(e.target.value)) ) {
+      SetNickCheckDis(true)
+      SetCheckNickMsg("* 영어 / 한글 / 숫자를 제외한 다른 문자는 사용할 수 없습니다.")
+      nickname_err_ref.current.style.color = "#FF7F00";
+    } else if(e.target.value.length < 2){
+      SetNickCheckDis(true)
+      SetCheckNickMsg("* 닉네임은 2글자 이상 12글자 이하로 사용 가능합니다.")
+      nickname_err_ref.current.style.color = "#FF7F00";
+    } else {
+      SetNickCheckDis(false)
+      SetCheckNickMsg("* 닉네임 중복확인을 진행해주세요.")
+      nickname_err_ref.current.style.color = "#FF7F00";
+    }
+  }
+
+  const EmailChange = (e) => {
+    const regEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/g;
+    if(e.target.value.length === 0) {
+      SetEmailCheckDis(true)
+      SetCheckEmailMsg("* 이메일은 아이디 비밀번호를 찾을 때 사용됩니다.")
+      email_err_ref.current.style.color = "#D9D9D9";
+    } else if(regEmail.test(e.target.value) !== true) {
+      SetEmailCheckDis(true)
+      SetCheckEmailMsg("* 이메일 형식으로 작성해주세요. ( ex) abc@naver.com )")
+      email_err_ref.current.style.color = "#FF7F00";
+    } else {
+      SetEmailCheckDis(false)
+      SetCheckEmailMsg("* 이메일 중복확인을 진행해주세요.")
+      email_err_ref.current.style.color = "#FF7F00";
+    }
+  }
+
+  const PwChange = (e) => {
+    const regPw = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    if(e.target.value.length === 0) {
+      SetPwMsg("* 비밀번호는 영어/숫자 조합으로 8자 이상 사용 가능합니다.")
+      pw_err_ref.current.style.color = "#D9D9D9";
+    } else if(regPw.test(e.target.value) !== true) {
+      SetPwMsg("* 비밀번호는 영어/숫자 조합으로 8자 이상 사용 가능합니다.")
+      pw_err_ref.current.style.color = "#FF0000";
+    } else {
+      SetPwMsg("* 사용 가능한 비밀번호 입니다.")
+      pw_err_ref.current.style.color = "#81C147";
+    }
+  }
+
+  const PwCheckChange = (e) => {
+    if(e.target.value.length === 0) {
+      SetPwCheckMsg("* 입력하신 비밀번호를 다시 입력해주세요.")
+      pw_check_err_ref.current.style.color = "#D9D9D9";
+    }
+    else if(password_ref.current.value === e.target.value) {
+      SetPwCheckMsg("* 비밀번호가 일치합니다.")
+      pw_check_err_ref.current.style.color = "#81C147";
+    } else {
+      SetPwCheckMsg("* 입력하신 비밀번호와 값이 다릅니다. ")
+      pw_check_err_ref.current.style.color = "#FF0000";
     }
   }
 
@@ -200,32 +325,36 @@ const Signup = () => {
           <PicSelect files={files} setFiles={setFiles} />
         </PicWrap>
         <Contents>
-          <input ref={username_ref} type="text" placeholder='ID를 입력해주세요.' />
-          <button onClick={CheckId}>중복확인</button>
+          <input ref={username_ref} type="text" placeholder='ID를 입력해주세요.' onChange={IdChange} maxLength='12' />
+          <button onClick={CheckId} disabled={idCheckDis} >중복확인</button>
           <p ref={username_err_ref}>{checkIdMsg}</p>
         </Contents>
         <Contents>
-          <input ref={nickname_ref} type="text" placeholder='닉네임를 입력해주세요.' />
-          <button onClick={CheckNickname}>중복확인</button>
+          <input ref={nickname_ref} type="text" placeholder='닉네임를 입력해주세요.' onChange={NickChange} maxLength='12' />
+          <button onClick={CheckNickname} disabled={nickCheckDis} >중복확인</button>
+          <p ref={nickname_err_ref}>{checkNickMsg}</p>
         </Contents>
         <Contents>
-          <input ref={email_ref} type="email" placeholder='Email를 입력해주세요.' />
-          <button onClick={CheckEmail}>중복확인</button>
-          <p>* 이메일은 아이디 비밀번호를 찾을 때 사용됩니다.</p>
+          <input ref={email_ref} type="email" placeholder='Email를 입력해주세요.' onChange={EmailChange} />
+          <button onClick={CheckEmail} disabled={emailCheckDis}>중복확인</button>
+          <p ref={email_err_ref}>{checkEmailMsg}</p>
         </Contents>
         <Contents>
-          <input ref={password_ref} type="password" placeholder='Password를 입력해주세요.' />
+          <input ref={password_ref} type="password" placeholder='Password를 입력해주세요.' onChange={PwChange} />
+          <p ref={pw_err_ref}>{PwMsg}</p>
         </Contents>
         <Contents>
-          <input ref={passwordCheck_ref} type="password" placeholder='Password를 확인해주세요.' />
+          <input ref={passwordCheck_ref} type="password" placeholder='Password를 확인해주세요.' onChange={PwCheckChange} />
+          <p ref={pw_check_err_ref}>{checkPwMsg}</p>
         </Contents>
         <WeightWrap>
           <div>
-            <input ref={currentWeight_ref} maxLength={10} type="text" placeholder='현재 체중을 입력해주세요.' onChange={(e) => {currentWeight(e)}} value={curWeight || ''} />
+            <input ref={currentWeight_ref} maxLength="10" type="number" placeholder='현재 체중을 입력해주세요.' onChange={(e) => {currentWeight(e)}} value={curWeight || ''} />
             <span>(kg)</span>
+            <p>{curError}</p>
           </div>
           <div>
-            <input ref={goalWeight_ref} maxLength={10} type="text" placeholder='목표 체중을 입력해주세요.' onChange={(e) => {goalWeight(e)}} value={goWeight || ''} />
+            <input ref={goalWeight_ref} maxLength="10" type="number" placeholder='목표 체중을 입력해주세요.' onChange={(e) => {goalWeight(e)}} value={goWeight || ''} />
             <span>(kg)</span>
           </div>
         </WeightWrap>
@@ -261,7 +390,8 @@ const SignUpWrap = styled.div`
   position: relative;
   width: 700px;
   height: 920px;
-  margin: 0 auto;
+  margin-left: 260px;
+  /* margin: 0 auto; */
   border-radius: 30px;
   background-color: white;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
@@ -318,6 +448,10 @@ const Contents = styled.div`
     background-color: transparent;
     cursor: pointer;
   }
+  button:disabled {
+    border: 1px solid #9A9A9A;
+    cursor: default;
+  }
   p {
     position: absolute;
     bottom: -20px;
@@ -349,6 +483,11 @@ const WeightWrap = styled.div`
     box-sizing: border-box;
     outline: none;
   }
+  div input[type="number"]::-webkit-outer-spin-button,
+  div input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
   div span {
     position: absolute;
     bottom: 12px;
