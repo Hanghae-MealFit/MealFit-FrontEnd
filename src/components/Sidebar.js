@@ -99,7 +99,7 @@ const Logo = styled.div`
   font-family: 'Montserrat';
   font-style: normal;
   font-weight: 800;
-  font-size: 36px;
+  font-size: 32px;
   line-height: 44px;
   /* identical to box height */
 
