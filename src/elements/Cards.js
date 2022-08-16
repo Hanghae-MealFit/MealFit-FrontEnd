@@ -22,7 +22,7 @@ const Cards = (props) => {
                 <CardInner>
                   <CardImg src="https://images.unsplash.com/photo-1571047399553-603e2138b646?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" />
                   <CardText>
-                    <text>신선한 채소와 다양한 토핑들을 추가해서 먹는 포만감 만점, 다이어트 불가능한 샐러드 래시피!</text></CardText>
+                    <p>신선한 채소와 다양한 토핑들을 추가해서 먹는 포만감 만점, 다이어트 불가능한 샐러드 래시피!</p></CardText>
                   <TextLabel>
                     좋아요 2 ∙ 댓글 2
                 </TextLabel>
@@ -82,14 +82,14 @@ const CardImg = styled.img`
 const CardText = styled.div`
     margin: 5px 10px 10px;
     font-size: 14px;
-    text {
+    p {
         height: 40px;
         text-overflow: ellipsis;
         word-wrap: break-word;
         display: -webkit-box;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
-        overflow:hidden
+        overflow: hidden
     }
 `;
 
