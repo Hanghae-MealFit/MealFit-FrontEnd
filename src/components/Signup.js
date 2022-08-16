@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 import StartHourSelect from '../elements/StartHourSelect'
 import StartMinuteSelect from '../elements/StartMinuteSelect'
@@ -10,13 +11,7 @@ import PicSelect from '../elements/PicSelect'
 
 const Signup = () => {
 
-  const sessionStorage = window.sessionStorage;
-
-  useEffect(() => {
-    sessionStorage.setItem("checkUsername", false)
-    sessionStorage.setItem("checkNickname", false)
-    sessionStorage.setItem("checkEmail", false)
-  }, []);
+  const navigate = useNavigate();
 
   const username_ref = React.useRef(null);
   const nickname_ref = React.useRef(null);
@@ -34,6 +29,8 @@ const Signup = () => {
   const email_err_ref = React.useRef(null);
   const pw_err_ref = React.useRef(null);
   const pw_check_err_ref = React.useRef(null);
+  const current_weight_err_ref = React.useRef(null);
+  const goal_weight_err_ref = React.useRef(null);
 
   // formData로 보낼 이미지 파일
   const [ files, setFiles ] = React.useState(null);
@@ -42,8 +39,10 @@ const Signup = () => {
   const [ curWeight, setCurWeight ] = React.useState();
   const [ goWeight, setGoWeight ] = React.useState();
 
-  const [ curError, setCurError ] = React.useState();
-  const [ goError, setGoError ] = React.useState();
+  const [ curInfoMsg, SetCurInfoMsg ] = React.useState(false);
+  const [ goInfoMsg, SetGoInfoMsg ] = React.useState(false);
+  const [ curError, setCurError ] = React.useState("* 현재 체중을 입력해주세요.");
+  const [ goError, setGoError ] = React.useState("* 목표 체중을 입력해주세요.");
 
   // ID 중복확인 클릭 시, 유저에게 제공 될 값
   const [ checkIdMsg, SetCheckIdMsg ] = React.useState("* 사용하실 아이디를 입력해주세요.");
@@ -68,24 +67,6 @@ const Signup = () => {
 
   // 입력된 이메일 값이 이메일 형식이 아닐 시, 버튼 클릭 불가능하게 설정
   const [ emailCheckDis, SetEmailCheckDis ] = React.useState(true);
-
-  // 체중 입력 시 숫자만 입력할 수 있도록 정규식 사용
-  const currentWeight = (e) => {
-
-    setCurWeight(e.target.value.replace(/[^0-9.]/g, ''))
-    const regNum = /^(\d*)[\.]?(\d{1,2})?$/g
-    if(regNum.test(e.target.value) !== true) {
-      setCurError('숫자만 입력 가능합니다.')
-    } else {
-      setCurError('잘 입력하셨습니다.')
-    }
-    console.log(e.target.value)
-  }
-
-  const goalWeight = (e) => {
-    setGoWeight(e.target.value.replace(/[^0-9.]/g, ''))
-    console.log(e.target.value)
-  }
 
   const onhandleSignUp = async (e) => {
     e.preventDefault()
@@ -119,16 +100,6 @@ const Signup = () => {
     }
     console.log(formData)
 
-    // const res = await axios.post("http://13.125.227.9:8080/user/signup",
-    // {
-    //   formData
-    // }, {
-    //   headers: {
-    //     "Content-Type": "multipart/form-data"
-    //   }
-    // })
-    // console.log(res)
-
     await axios({
       baseURL: "http://13.125.227.9:8080/",
       method: "POST",
@@ -138,9 +109,12 @@ const Signup = () => {
         "Content-Type": "multipart/form-data",
       },
     }).then((response) => {
-      console.log("반응", response)
+      if(response.status === 201 && response.data === "가입 완료!")
+      alert(`${nickname_ref.current.value}님 반갑습니다.\n밀핏 회원가입에 성공하셨습니다.`)
+      navigate("/user/login")
     }).catch((error) => {
       console.log("에러", error)
+      alert(`밀핏 회원가입에 실패하셨습니다.`)
     })
   }
 
@@ -155,17 +129,12 @@ const Signup = () => {
           "Content-Type": "application/json"
         }
       })
-      console.log(res)
       if(res.data === "검증완료!" && res.status === 200) {
-        sessionStorage.setItem("checkUsername", true)
-        // alert("사용가능 한 아이디 입니다.")
         SetCheckIdMsg("* 사용 가능 한 아이디입니다.")
         username_err_ref.current.style.color = "#81C147";
       }
     } catch(error) {
       console.log(error)
-      sessionStorage.setItem("checkUsername", false)
-      // alert("사용 불가능 한 아이디 입니다.")
       SetCheckIdMsg("* 사용 불가능 한 아이디입니다.")
       username_err_ref.current.style.color = "#FF0000";
       username_ref.current.focus()
@@ -183,17 +152,12 @@ const Signup = () => {
           "Content-Type": "application/json"
         }
       })
-      console.log(res)
       if(res.data === "검증완료!" && res.status === 200) {
-        sessionStorage.setItem("checkNickname", true)
-        // alert("사용가능 한 닉네임 입니다.")
         SetCheckNickMsg("* 사용 가능 한 닉네임입니다.")
         nickname_err_ref.current.style.color = "#81C147";
       }
     } catch(error) {
       console.log(error)
-      sessionStorage.setItem("checkNickname", false)
-      // alert("사용 불가능 한 닉네임 입니다.")
       SetCheckNickMsg("* 사용 불가능 한 닉네임입니다.")
       nickname_err_ref.current.style.color = "#FF0000";
       nickname_ref.current.focus()
@@ -211,15 +175,12 @@ const Signup = () => {
           "Content-Type": "application/json"
         }
       })
-      console.log(res)
       if(res.data === "검증완료!" && res.status === 200) {
-        sessionStorage.setItem("checkEmail", true)
         SetCheckEmailMsg("* 사용 가능 한 이메일입니다.")
         email_err_ref.current.style.color = "#81C147";
       }
     } catch(error) {
       console.log(error)
-      sessionStorage.setItem("checkEmail", false)
       SetCheckEmailMsg("* 사용 불가능 한 이메일 입니다.")
       email_err_ref.current.style.color = "#FF0000";
     }
@@ -317,6 +278,52 @@ const Signup = () => {
     }
   }
 
+  const CurrentWeightChange = (e) => {
+    // 체중 입력 시 숫자만 입력할 수 있도록 정규식 사용
+    setCurWeight(e.target.value.replace(/[^0-9.]/g, ''))
+    const regDot = /[\.]/g
+    const regNum = /^(\d{0,3})[\.]?(\d{1})?$/g
+    if(e.target.value.length === 0) {
+      setCurError("* 현재 체중을 입력해주세요.")
+      current_weight_err_ref.current.style.color = "#D9D9D9"
+    } else if(!(regDot.test(e.target.value)) && e.target.value.length === 4) {
+      setCurError("* 양식에 맞춰 작성해주세요.")
+      current_weight_err_ref.current.style.color = "#FF0000";
+    } else if(regNum.test(e.target.value) !== true) {
+      setCurError("* 양식에 맞춰 작성해주세요.")
+      current_weight_err_ref.current.style.color = "#FF0000";
+    } else {
+      setCurError('* 양식에 맞게 작성되었습니다.')
+      current_weight_err_ref.current.style.color = "#81C147";
+    }
+  }
+
+  const GoalWeightChange = (e) => {
+    // 체중 입력 시 숫자만 입력할 수 있도록 정규식 사용
+    setGoWeight(e.target.value.replace(/[^0-9.]/g, ''))
+    const regDot = /[\.]/g
+    const regNum = /^(\d{0,3})[\.]?(\d{1})?$/g
+    if(e.target.value.length === 0) {
+      setGoError("* 현재 체중을 입력해주세요.")
+      goal_weight_err_ref.current.style.color = "#D9D9D9"
+    } else if(!(regDot.test(e.target.value)) && e.target.value.length === 4) {
+      setGoError("* 양식에 맞춰 작성해주세요.")
+      goal_weight_err_ref.current.style.color = "#FF0000";
+    } else if(regNum.test(e.target.value) !== true) {
+      setGoError("* 양식에 맞춰 작성해주세요.")
+      goal_weight_err_ref.current.style.color = "#FF0000";
+    } else {
+      setGoError('* 양식에 맞게 작성되었습니다.')
+      goal_weight_err_ref.current.style.color = "#81C147";
+    }
+  }
+
+  const maxLengthCheck = (object) => {
+    if (object.target.value.length > object.target.maxLength) {
+     object.target.value = object.target.value.slice(0, object.target.maxLength)
+    }
+  }
+
   return (
     <SignUpWrap>
       <h1>회원가입</h1>
@@ -349,13 +356,36 @@ const Signup = () => {
         </Contents>
         <WeightWrap>
           <div>
-            <input ref={currentWeight_ref} maxLength="10" type="number" placeholder='현재 체중을 입력해주세요.' onChange={(e) => {currentWeight(e)}} value={curWeight || ''} />
-            <span>(kg)</span>
-            <p>{curError}</p>
+            { curInfoMsg ? 
+              (
+                <HoverMsg>
+                  정수 혹은 소수점 첫째자리까지 입력해주세요.<br />
+                  <span>ex) 40 / 40.5 / 100.5</span>
+                </HoverMsg>
+              ) :
+              (
+                null
+              )
+            }
+            <input ref={currentWeight_ref} maxLength={5} type="number" onInput={maxLengthCheck} onMouseEnter={() => SetCurInfoMsg(true)} onMouseLeave={() => SetCurInfoMsg(false)} placeholder='현재 체중을 입력해주세요.' onChange={(e) => {CurrentWeightChange(e)}} value={curWeight || ''} />
+            <span className='weight'>(kg)</span>
+            <p ref={current_weight_err_ref}>{curError}</p>
           </div>
           <div>
-            <input ref={goalWeight_ref} maxLength="10" type="number" placeholder='목표 체중을 입력해주세요.' onChange={(e) => {goalWeight(e)}} value={goWeight || ''} />
-            <span>(kg)</span>
+            { goInfoMsg ?
+              (
+                <HoverMsg>
+                  정수 혹은 소수점 첫째자리까지 입력해주세요.<br />
+                  <span>ex) 40 / 40.5 / 100.5</span>
+                </HoverMsg>
+              ) :
+              (
+                null
+              )
+            }
+            <input ref={goalWeight_ref} maxLength={5} type="number" onInput={maxLengthCheck} onMouseEnter={() => SetGoInfoMsg(true)} onMouseLeave={() => SetGoInfoMsg(false)} placeholder='목표 체중을 입력해주세요.' onChange={(e) => {GoalWeightChange(e)}} value={goWeight || ''} />
+            <span className='weight'>(kg)</span>
+            <p ref={goal_weight_err_ref}>{goError}</p>
           </div>
         </WeightWrap>
         <FastTimeWrap>
@@ -376,7 +406,23 @@ const Signup = () => {
         </FastTimeWrap>
         <Button>
           <CancleBtn>취소</CancleBtn>
-          <SignUpBtn onClick={onhandleSignUp}>회원가입</SignUpBtn>
+          <SignUpBtn
+            onClick={onhandleSignUp}
+            disabled=
+            {
+              checkIdMsg === "* 사용 가능 한 아이디입니다." &&
+              checkNickMsg === "* 사용 가능 한 닉네임입니다." &&
+              checkEmailMsg === "* 사용 가능 한 이메일입니다." &&
+              PwMsg === "* 사용 가능한 비밀번호 입니다." &&
+              checkPwMsg === "* 비밀번호가 일치합니다." &&
+              curError === "* 양식에 맞게 작성되었습니다." &&
+              goError === "* 양식에 맞게 작성되었습니다." &&
+              startFastingHour_ref.current.value !== "default" &&
+              startFastingMinute_ref.current.value !== "default" &&
+              endFastingHour_ref.current.value !== "default" &&
+              endFastingMinute_ref.current.value !== "default"
+              ? false : true
+            }>회원가입</SignUpBtn>
         </Button>
       </FormWrap>
       <LoginTxt>
@@ -487,13 +533,53 @@ const WeightWrap = styled.div`
   div input[type="number"]::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
-}
-  div span {
+  }
+  div span.weight {
     position: absolute;
     bottom: 12px;
     right: 10px;
     font-size: 12px;
     color: #9A9A9A;
+  }
+  div p {
+    position: absolute;
+    bottom: -20px;
+    left: 6px;
+    margin: 0;
+    font-size: 10px;
+    color: #D9D9D9;
+  }
+`
+
+const HoverMsg = styled.p`
+  position: fixed;
+  top: 48px;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  height: 40px;
+  font-size: 10px;
+  background-color: #7E7E7E;
+  border-radius: 6px;
+  padding: 5px;
+  /* box-sizing: border-box; */
+  z-index: 5000;
+  span {
+    color: #81C147;
+    font-size: 11px;
+  }
+  &::after {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: 20px;
+    width: 8px;
+    height: 8px;
+    background-color: #7E7E7E;
+    transform: rotate(45deg);
   }
 `
 
@@ -547,6 +633,10 @@ const CancleBtn = styled.button`
 
 const SignUpBtn = styled.button`
   background-color: #FE7770;
+  &:disabled {
+    background-color: #C2C2C2;
+    cursor: default;
+  }
 `
 
 const LoginTxt = styled.div`
