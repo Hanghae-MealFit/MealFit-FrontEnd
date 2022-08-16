@@ -1,66 +1,97 @@
 import React from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const username_ref = React.useRef(null);
   const password_ref = React.useRef(null);
+  const username_err_ref = React.useRef(null);
+  const pw_err_ref = React.useRef(null);
+
+  const [ checkIdMsg, SetCheckIdMsg] = React.useState("")
+  const [ pwMsg, SetPwMsg ] = React.useState("")
+
+  const sessionStorage = window.sessionStorage;
+  const navigate = useNavigate();
+
+  const IdChange = (e) => {
+    let regTxt = /[0-9a-zA-Z]/;
+    let regKor = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+    let regSpecial = /[.,~!@#$%^&*()_+|<>?:{}]/;
+    let regBlank = /[\s]/;
+    if(e.target.value.length === 0) {
+      SetCheckIdMsg("")
+    } else if (!(regTxt.test(e.target.value)) || (regKor.test(e.target.value)) || (regSpecial.test(e.target.value)) || (regBlank.test(e.target.value)) ) {
+      SetCheckIdMsg("* 영어 / 숫자를 제외한 다른 문자는 사용할 수 없습니다.")
+      username_err_ref.current.style.color = "#FF7F00";
+    } else if(e.target.value.length < 4) {
+      SetCheckIdMsg("* 아이디는 4글자 이상 12글자 이하로 사용 가능합니다.")
+      username_err_ref.current.style.color = "#FF7F00";
+    } else {
+      SetCheckIdMsg(true)
+    }
+  }
+
+  const PwChange = (e) => {
+    const regPw = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    if(e.target.value.length === 0) {
+      SetPwMsg("")
+    } else if(regPw.test(e.target.value) !== true) {
+      SetPwMsg("* 비밀번호는 영어/숫자 조합으로 8자 이상 사용 가능합니다.")
+      pw_err_ref.current.style.color = "#FF0000";
+    } else {
+      SetPwMsg(true)
+    }
+  }
 
   const onhandleLogin = async (e) => {
+
       e.preventDefault()
   
       const LoginInfo = {
         username: username_ref.current.value,
         password: password_ref.current.value,
       }
-      // console.log(LoginInfo)
-  
-      // const formData = new FormData()
-      //   formData.append("username", LoginInfo.username);
-      //   formData.append("password", LoginInfo.password);
-      // console.log(formData)
-  
-      const res = await axios.post("http://43.200.174.111:8080/login",
-      {
-        username: LoginInfo.username,
-        password: LoginInfo.password
-      }, {
-        headers: {
-          "Content-Type": "application/json"
+      try {
+        const res = await axios.post("http://13.125.227.9:8080/login",
+        {
+          username: LoginInfo.username,
+          password: LoginInfo.password
+        }, {
+          headers: {
+            "Content-Type": "application/json"
+          }
+        })
+        console.log(res)
+        if(res.status === 200 && res.headers.authorization !== "") {
+          sessionStorage.setItem("token", res.headers.authorization)
+          window.alert("로그인에 성공하였습니다. 밀핏을 찾아주셔서 감사합니다.")
+          navigate("/")
         }
-      })
-      console.log(res)
-  
-      // await axios({
-      //   baseURL: "http://13.125.227.9:8080/",
-      //   method: "POST",
-      //   url: "/user/login",
-      //   data: formData,
-      //   headers: {
-      //     "Content-Type": "multipart/form-data",
-      //   },
-      // }).then((response) => {
-      //   console.log("반응", response)
-      // }).catch((error) => {
-      //   console.log("에러", error)
-      // })
+      } catch(error) {
+        console.log(error)
+        window.alert("로그인에 실패하였습니다. 아이디 혹은 비밀번호를 다시 확인해주세요.")
+        username_ref.current.focus()
+      }
     }
-
 
   return (
     <LoginWrap>
       <h1>로그인</h1>
       <Contents>
-        <input ref={username_ref} type="text" placeholder='아이디' />
+        <input ref={username_ref} type="text" placeholder='아이디' onChange={IdChange} maxLength={12} />
+        <p ref={username_err_ref}>{checkIdMsg}</p>
       </Contents>
       <Contents>
-        <input ref={password_ref} type="password" placeholder='비밀번호' />
+        <input ref={password_ref} type="password" placeholder='비밀번호' onChange={PwChange} />
+        <p ref={pw_err_ref}>{pwMsg}</p>
       </Contents>
       <FindTxt>
         <span>아이디 / 비밀번호 찾기</span>
       </FindTxt>
       <Button>
-        <LoginBtn onClick={onhandleLogin}>로그인</LoginBtn>
+        <LoginBtn onClick={onhandleLogin} disabled={checkIdMsg === true && pwMsg === true ? false : true}>로그인</LoginBtn>
       </Button>
       <LoginTxt>
         밀핏 회원이 아니신가요? <span>새 계정 만들기</span>
@@ -99,7 +130,7 @@ const LoginWrap = styled.div`
 const Contents = styled.div`
   position: relative;
   width: 400px;
-  margin: 8px auto;
+  margin: 12px auto;
   input {
     width: 100%;
     border: none;
@@ -161,6 +192,10 @@ const Button = styled.div`
 `
 const LoginBtn = styled.button`
   background-color: #FE7770;
+  &:disabled {
+    background-color: #C2C2C2;
+    cursor: default;
+  }
 `
 
 const LoginTxt = styled.div`

@@ -9,9 +9,8 @@ const FindMyInfo = () => {
 
   const FindId = async () => {
     try {
-      const email = id_email_ref.currnet.value
       const res = await axios.post("http://13.125.227.9:8080/user/find/username", {
-        email
+        "email": id_email_ref.current.value
       }, {
         headers: {
           "Content-Type": "application/json"

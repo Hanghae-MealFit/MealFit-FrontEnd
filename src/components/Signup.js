@@ -1,12 +1,8 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 
-import StartHourSelect from '../elements/StartHourSelect'
-import StartMinuteSelect from '../elements/StartMinuteSelect'
-import EndHourSelect from '../elements/EndHourSelect'
-import EndMinuteSelect from '../elements/EndMinuteSelect'
 import PicSelect from '../elements/PicSelect'
 
 const Signup = () => {
@@ -31,6 +27,7 @@ const Signup = () => {
   const pw_check_err_ref = React.useRef(null);
   const current_weight_err_ref = React.useRef(null);
   const goal_weight_err_ref = React.useRef(null);
+  const hour_check_ref = React.useRef(null)
 
   // formData로 보낼 이미지 파일
   const [ files, setFiles ] = React.useState(null);
@@ -59,10 +56,13 @@ const Signup = () => {
   // 입력된 비밀번호 값이 영어+숫자가 아닐 시, 유저에게 제공 될 값
   const [ checkPwMsg, SetPwCheckMsg ] = React.useState("* 입력하신 비밀번호를 다시 입력해주세요.");
 
+  // 단식 시간 설정하지 않았을 경우, 버튼 클릭 불가능하게 설정
+  const [ startHourCheck, SetStartHourCheck ] = React.useState("* 필수 선택값을 선택하세요.");
+
   // 입력된 아이디 값이 4글자보다 적을 시, 버튼 클릭 불가능하게 설정
   const [ idCheckDis, SetIdCheckDis ] = React.useState(true);
 
-  // 입력된 닉네임 값이 4글자보다 적을 시, 버튼 클릭 불가능하게 설정
+  // 입력된 닉네임 값이 2글자보다 적을 시, 버튼 클릭 불가능하게 설정
   const [ nickCheckDis, SetNickCheckDis ] = React.useState(true);
 
   // 입력된 이메일 값이 이메일 형식이 아닐 시, 버튼 클릭 불가능하게 설정
@@ -324,6 +324,16 @@ const Signup = () => {
     }
   }
 
+  const TimeChange = (e) => {
+    if(startFastingHour_ref.current.value && startFastingMinute_ref.current.value && endFastingHour_ref.current.value && endFastingMinute_ref.current.value !== "default") {
+      SetStartHourCheck("")
+      hour_check_ref.current.style.display = "none"
+    } else {
+      SetStartHourCheck("* 필수 선택값을 모두 선택하세요.")
+      hour_check_ref.current.style.color = "#FF0000"
+    }
+  }
+
   return (
     <SignUpWrap>
       <h1>회원가입</h1>
@@ -389,18 +399,47 @@ const Signup = () => {
           </div>
         </WeightWrap>
         <FastTimeWrap>
+          <span ref={hour_check_ref}>{startHourCheck}</span>
           <FastTime>
             <p>단식 시작시간</p>
             <div>
-              <StartHourSelect startHour={startFastingHour_ref} /> 시
-              <StartMinuteSelect startMinute={startFastingMinute_ref} /> 분
+              <Select ref={startFastingHour_ref} onChange={TimeChange} defaultValue="default" id="StartHour" name="StartHour">
+                <option value="default" disabled>시간</option>
+                { 
+                  Array.from({ length: 24 }, (item, index) => {
+                  return <option value = {(index < 10 ? "0" + index : index)} key = {(index < 10 ? "0" + index : index) + "Hour"}> {index < 10 ? "0" + index : index}</option>
+                  })
+                }
+              </Select> 시
+              <Select ref={startFastingMinute_ref} onChange={TimeChange} defaultValue="default" id="StartMinute" name="StartMinute">
+                <option value="default" disabled>분</option>
+                { 
+                  Array.from({ length: 60 }, (item, index) => {
+                  return <option value = {(index < 10 ? "0" + index : index)} key = {(index < 10 ? "0" + index : index) + "Minute"}> {index < 10 ? "0" + index : index}</option>
+                  })
+                }
+              </Select> 분
             </div>
           </FastTime>
           <FastTime>
             <p>단식 종료시간</p>
             <div>
-              <EndHourSelect endHour={endFastingHour_ref} /> 시
-              <EndMinuteSelect endMinute={endFastingMinute_ref} /> 분
+              <Select ref={endFastingHour_ref} onChange={TimeChange} defaultValue="default" id="EndHour" name="EndHour">
+                <option value="default" disabled>시간</option>
+                { 
+                  Array.from({ length: 24 }, (item, index) => {
+                  return <option value = {(index < 10 ? "0" + index : index)} key = {(index < 10 ? "0" + index : index) + "Hour"}> {index < 10 ? "0" + index : index}</option>
+                  })
+                }
+              </Select> 시
+              <Select ref={endFastingMinute_ref} onChange={TimeChange} defaultValue="default" id="EndMinute" name="EndMinute">
+                <option value="default" disabled>분</option>
+                { 
+                  Array.from({ length: 60 }, (item, index) => {
+                  return <option value = {(index < 10 ? "0" + index : index)} key = {(index < 10 ? "0" + index : index) + "Minute"}> {index < 10 ? "0" + index : index}</option>
+                  })
+                }
+              </Select> 분
             </div>
           </FastTime>
         </FastTimeWrap>
@@ -417,16 +456,13 @@ const Signup = () => {
               checkPwMsg === "* 비밀번호가 일치합니다." &&
               curError === "* 양식에 맞게 작성되었습니다." &&
               goError === "* 양식에 맞게 작성되었습니다." &&
-              startFastingHour_ref.current.value !== "default" &&
-              startFastingMinute_ref.current.value !== "default" &&
-              endFastingHour_ref.current.value !== "default" &&
-              endFastingMinute_ref.current.value !== "default"
+              startHourCheck === ""
               ? false : true
             }>회원가입</SignUpBtn>
         </Button>
       </FormWrap>
       <LoginTxt>
-        이미 회원이신가요? <span>밀핏 계정으로 로그인하기</span>
+        이미 회원이신가요? <span onClick={() => navigate("/user/login")}>밀핏 계정으로 로그인하기</span>
       </LoginTxt>
     </SignUpWrap>
   )
@@ -437,7 +473,6 @@ const SignUpWrap = styled.div`
   width: 700px;
   height: 920px;
   margin-left: 260px;
-  /* margin: 0 auto; */
   border-radius: 30px;
   background-color: white;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
@@ -584,6 +619,7 @@ const HoverMsg = styled.p`
 `
 
 const FastTimeWrap = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -594,6 +630,13 @@ const FastTimeWrap = styled.div`
   border: 1px solid #9A9A9A;
   border-radius: 20px;
   margin: 30px auto;
+  span {
+    position: absolute;
+    bottom: -20px;
+    left: 6px;
+    font-size: 10px;
+    color: #D9D9D9;
+  }
 `
 
 const FastTime = styled.div`
@@ -647,6 +690,19 @@ const LoginTxt = styled.div`
     color: #FE7770;
     cursor: pointer;
   }
+`
+
+const Select = styled.select`
+  width: 60px;
+  height: 30px;
+  border: none;
+  border-bottom: 1px solid #9A9A9A;
+  outline: none;
+  padding: 0 4px;
+  box-sizing: border-box;
+  font-family: 'GmarketM', 'sans-serif';
+  font-size: 12px;
+  text-align: center;
 `
 
 export default Signup
