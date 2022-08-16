@@ -49,15 +49,15 @@ const Sidebar = () => {
 }
 
 const SideBar = styled.div`
+    position: fixed;
+    top: 0;
+    left: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
-    // justify-content: center;
-    position: absolute;
+    /* justify-content: center; */
     width: 260px;
     height: 100%;
-    left: 0px;
-    top: 0px;
     background-color: #FE7770;
 `;
 
@@ -67,12 +67,10 @@ const Info = styled.div`
     align-items: center;
     justify-content: center;
     font-size: 18px;
-    // background-color: green;
 `;
 
 const SideBox = styled.div`
     margin-top: 100px;
-    // background-color: red;
 `;
 
 const Profile = styled.img`
@@ -80,7 +78,6 @@ const Profile = styled.img`
     height: 50px;
     border-radius: 100%;
     margin-right: 20px;
-
 `
 const Menu = styled.div`
     margin-top: 50px;
@@ -90,36 +87,31 @@ const Menu = styled.div`
     justify-content: center;
     flex-direction: column;
     font-size: 18px;
-    // background-color: pink;
 `;
 
 const Logo = styled.div`
-    position: absolute;
-    width: 70x;
-    height: 44px;
-    left: 90px;
-    top: 22px;
+  position: absolute;
+  width: 70px;
+  height: 44px;
+  left: 90px;
+  top: 22px;
 
-    font-family: 'Montserrat';
-    font-style: normal;
-    font-weight: 800;
-    font-size: 36px;
-    line-height: 44px;
-    /* identical to box height */
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 800;
+  font-size: 36px;
+  line-height: 44px;
+  /* identical to box height */
 
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 
-    color: #FFFFFF;
+  color: #FFFFFF;
 `;
 
 const Button = styled.div`
-  width: 460px;
-  height: 40px;
-//   margin: 0 auto;
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
+    width: 460px;
+    height: 40px;
   button {
     width: 140px;
     height: 40px;

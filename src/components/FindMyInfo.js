@@ -1,7 +1,44 @@
 import React from 'react'
 import styled from 'styled-components'
+import axios from 'axios'
 
 const FindMyInfo = () => {
+  const id_email_ref = React.useRef(null)
+  const pw_id_ref = React.useRef(null)
+  const pw_email_ref = React.useRef(null)
+
+  const FindId = async () => {
+    try {
+      const email = id_email_ref.currnet.value
+      const res = await axios.post("http://13.125.227.9:8080/user/find/username", {
+        email
+      }, {
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+      console.log(res)
+    } catch(error) {
+      console.log(error)
+    }
+  }
+
+  const FindPw = async () => {
+    try {
+      const res = await axios.post("http://13.125.227.9:8080/user/find/password", {
+        "username": pw_id_ref.current.value,
+        "email": pw_email_ref.current.value
+      }, {
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+      console.log(res)
+    } catch(error) {
+      console.log(error)
+    }
+  }
+
   return (
     <FindWrap>
       <h1>아이디/비밀번호 찾기</h1>
@@ -9,16 +46,16 @@ const FindMyInfo = () => {
         <FindInputWrap>
           <p>아이디를 찾기 위해 이메일을 입력해주세요.</p>
           <Find>
-            <input type="email" placeholder='이메일을 입력해주세요.' />
-            <button>아이디 찾기</button>
+            <input type="email" placeholder='이메일을 입력해주세요.' ref={id_email_ref} />
+            <button onClick={FindId}>아이디 찾기</button>
           </Find>
         </FindInputWrap>
         <FindInputWrap>
           <p>비밀번호를 찾기 위해 아이디와 이메일을 입력해주세요.</p>
           <Find>
-            <input type="text" placeholder='아이디를 입력해주세요.' />
-            <input type="email" placeholder='이메일을 입력해주세요.' />
-            <button>비밀번호 찾기</button>
+            <input type="text" placeholder='아이디를 입력해주세요.' ref={pw_id_ref} />
+            <input type="email" placeholder='이메일을 입력해주세요.' ref={pw_email_ref} />
+            <button onClick={FindPw}>비밀번호 찾기</button>
           </Find>
         </FindInputWrap>
       </InputWrap>
