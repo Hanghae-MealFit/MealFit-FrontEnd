@@ -2,13 +2,16 @@ import React from 'react'
 import styled from 'styled-components'
 
 const StartHourSelect = ({ startHour }) => {
+  const TimeChange = (e) => {
+    console.log(e.target.value)
+  }
 
   return (
-    <Select ref={startHour} defaultValue="default" id="StartHour" name="StartHour">
+    <Select ref={startHour} onChange={TimeChange} defaultValue="default" id="StartHour" name="StartHour">
       <option value="default" disabled>시간</option>
       { 
         Array.from({ length: 24 }, (item, index) => {
-        return <option value = {(index < 10 ? "0" + index : index)} key = {(index < 10 ? "0" + index : index) + "Hour"}> {index < 10 ? "0" + index : index}시</option>
+        return <option value = {(index < 10 ? "0" + index : index)} key = {(index < 10 ? "0" + index : index) + "Hour"}> {index < 10 ? "0" + index : index}</option>
         })
       }
     </Select>
@@ -25,6 +28,7 @@ const Select = styled.select`
   box-sizing: border-box;
   font-family: 'GmarketM', 'sans-serif';
   font-size: 12px;
+  text-align: center;
 `
 
 export default StartHourSelect
