@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import Cards from "../elements/Cards";
-import Progressbar from "../elements/ProgressBar";
 
 const Main = () => {
     const data = useSelector((state) => state.card.post);
@@ -18,7 +17,6 @@ const Main = () => {
         <Grid>
             <Item1></Item1>
             <Item2>
-            {/* <Progressbar /> */}
             <CircleWrap>
             <InsideCircle>
             <TopText>
