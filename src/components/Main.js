@@ -30,8 +30,7 @@ const Main = () => {
             </InsideCircle>
             </CircleWrap>
             </Item2>
-            <Item3>
-                몸무게 변화량</Item3>
+            <Item3>몸무게 변화량</Item3>
             <Item4>체지방 변화량</Item4>
             <Item5>
                 <H2>오늘의 식단</H2>
@@ -39,7 +38,7 @@ const Main = () => {
                     {data.map((v, idx) => (
                         <CardsBox
                             onClick={() => {
-                                navigate(`/detail/${v.postId}`);
+                                navigate(`/post/${v.postId}`);
                             }}
                             key={idx}
                         >
