@@ -10,7 +10,7 @@ import Signup from './components/Signup';
 import SignupSNS from './components/SignupSNS';
 import FindMyInfo from './components/FindMyInfo';
 import Login from './components/Login';
-
+import Data from './components/Data';
 import PostUp from './components/PostUp';
 import PostView from './components/PostView';
 
@@ -25,7 +25,7 @@ function App() {
         <Route path="user/signupsns" element = { <SignupSNS /> } />
         <Route path="user/login" element = { <Login /> } />
         <Route path="user/find" element = { <FindMyInfo /> } />
-
+        <Route path="oauth2/redirect" element = { <Data /> } />
         <Route path="post" element = { <PostUp /> } />
         <Route path="post/:postId" element = { <PostView /> } />
       </Routes>
