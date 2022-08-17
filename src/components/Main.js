@@ -38,7 +38,7 @@ const Main = () => {
                     {data.map((v, idx) => (
                         <CardsBox
                             onClick={() => {
-                                navigate(`/detail/${v.postId}`);
+                                navigate(`/post/${v.postId}`);
                             }}
                             key={idx}
                         >
