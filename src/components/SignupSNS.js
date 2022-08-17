@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
 
@@ -103,7 +103,7 @@ const SignupSNS = () => {
 
   const NickChange = (e) => {
     let regTxt = /[0-9a-zA-Zㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
-    let regSpecial = /[.,~!@#$%^&*()_+|<>?:{}]/;
+    let regSpecial = /[.,~!@#$%^&*()_+|<>?:{}/\\]/;
     let regBlank = /[\s]/;
     if(e.target.value.length === 0) {
       SetNickCheckDis(true)

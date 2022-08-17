@@ -2,6 +2,9 @@ import React from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
+import KakaoLogin from '../elements/KakaoLogin';
+import NaverLogin from '../elements/NaverLogin';
+import GoogleLogin from '../elements/GoogleLogin';
 
 const Login = () => {
   const username_ref = React.useRef(null);
@@ -96,6 +99,17 @@ const Login = () => {
       <LoginTxt>
         밀핏 회원이 아니신가요? <span>새 계정 만들기</span>
       </LoginTxt>
+      <div>
+        <div>
+          <KakaoLogin />
+        </div>
+        <div>
+          <NaverLogin />
+        </div>
+        <div>
+          <GoogleLogin />
+        </div>
+      </div>
     </LoginWrap>
   )
 }

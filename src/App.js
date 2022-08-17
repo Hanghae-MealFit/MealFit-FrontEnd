@@ -10,6 +10,8 @@ import Signup from './components/Signup';
 import SignupSNS from './components/SignupSNS';
 import FindMyInfo from './components/FindMyInfo';
 import Login from './components/Login';
+import KakaoLogin from './elements/KakaoLogin';
+import Data from './components/Data';
 
 
 function App() {
@@ -22,6 +24,7 @@ function App() {
         <Route path="user/signupsns" element = { <SignupSNS /> } />
         <Route path="user/login" element = { <Login /> } />
         <Route path="user/find" element = { <FindMyInfo /> } />
+        <Route path="oauth2/redirect" element = { <Data /> } />
       </Routes>
     </Wrap>
   );

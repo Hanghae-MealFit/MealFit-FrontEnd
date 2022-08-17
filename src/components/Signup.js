@@ -187,17 +187,18 @@ const Signup = () => {
   }
 
   const IdChange = (e) => {
-    let regTxt = /[0-9a-zA-Z]/;
+    let regTxt = /[a-z0-9]/;
+    let regUpperTxt = /[A-Z]/;
     let regKor = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
-    let regSpecial = /[.,~!@#$%^&*()_+|<>?:{}]/;
+    let regSpecial = /[.,~!@#$%^&*()_+|<>?:{}/\\]/;
     let regBlank = /[\s]/;
     if(e.target.value.length === 0) {
       SetIdCheckDis(true)
       SetCheckIdMsg("* 사용하실 아이디를 입력해주세요.")
       username_err_ref.current.style.color = "#D9D9D9";
-    } else if (!(regTxt.test(e.target.value)) || (regKor.test(e.target.value)) || (regSpecial.test(e.target.value)) || (regBlank.test(e.target.value)) ) {
+    } else if (!(regTxt.test(e.target.value)) || (regUpperTxt.test(e.target.value)) || (regKor.test(e.target.value)) || (regSpecial.test(e.target.value)) || (regBlank.test(e.target.value)) ) {
       SetIdCheckDis(true)
-      SetCheckIdMsg("* 영어 / 숫자를 제외한 다른 문자는 사용할 수 없습니다.")
+      SetCheckIdMsg("* 영어 소문자 / 숫자를 제외한 다른 문자는 사용할 수 없습니다.")
       username_err_ref.current.style.color = "#FF7F00";
     } else if(e.target.value.length < 4) {
       SetIdCheckDis(true)
@@ -212,7 +213,7 @@ const Signup = () => {
 
   const NickChange = (e) => {
     let regTxt = /[0-9a-zA-Zㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
-    let regSpecial = /[.,~!@#$%^&*()_+|<>?:{}]/;
+    let regSpecial = /[.,~!@#$%^&*()_+|<>?:{}/\\]/;
     let regBlank = /[\s]/;
     if(e.target.value.length === 0) {
       SetNickCheckDis(true)
