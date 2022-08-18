@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
+import { IconWrap } from './KakaoLogin'
 
 const NaverLogin = () => {
 
@@ -37,10 +38,31 @@ const NaverLogin = () => {
 
   return (
     // <div id="naverIdLogin">NaverLogin</div>
-    <div onClick={handleLogin}>NaverLogin</div>
+    <IconWrap>
+      <ImgBox onClick={handleLogin} id="naver">
+        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+          <g fill="#FFF" fillRule="evenodd">
+            <path fill="#FFF" d="M21 25.231V34h-7V15h7l6 8.769V15h7v19h-7l-6-8.769z"></path>
+          </g>
+        </svg>
+      </ImgBox>
+      {/* <label htmlFor="naver">네이버</label> */}
+    </IconWrap>
   )
 };
 
-
+const ImgBox = styled.button`
+  width: 48px;
+  height: 48px;
+  background-color: #00C63B;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+`
 
 export default NaverLogin
