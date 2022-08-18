@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import axios from "axios";
 
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const PostView = () => {
     const [dataTest, setdataTest] = React.useState({
@@ -54,72 +54,115 @@ const PostView = () => {
 
 
     // // 삭제
-    // const DelPost = () => {
-    //     axios.delete("http://13.125.227.9:8080/post/{postId}",
-    //         {
-    //             headers: {
-    //                 Authorization: `Bearer ${auth.Authorization}`,
-    //                 refresh_token: `Bearer ${auth.refresh_token}`,
-    //             }
-    //         })
-    //         .then(function (response) {
-    //             console.log("반응", response)
-    //             window.alert("삭제되었습니다.")
-    //         })
-    //         .catch(function (error) {
-    //             console.log("에러", error)
-    //         });
-    //     // console.log("삭제됨!", DelPost) 
-    // }
+    const DeletPost = () => {
+        // axios.delete("http://13.125.227.9:8080/post/{postId}",
+        //     {
+        //         headers: {
+        //             Authorization: `Bearer ${auth.Authorization}`,
+        //             refresh_token: `Bearer ${auth.refresh_token}`,
+        //         }
+        //     })
+        //     .then(function (response) {
+        //         console.log("반응", response)
+        //         window.alert("삭제되었습니다.")
+        //     })
+        //     .catch(function (error) {
+        //         console.log("에러", error)
+        //     });
+        // // console.log("삭제됨!", DelPost) 
+    }
 
+    // 댓글 입력값 State 저장
+    // const [comment, setComment] = React.useState("");
+    const [comment, setComment] = React.useState({
+        username: "봄봄",
+        userProfile: "https://images.unsplash.com/photo-1660632531779-b363f16acdbd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
+        comment: "여러분 무플방지 환영합니다! 댓글 달아주세용!",
+        likeToggle: Boolean
+    });
+    // const onChange = event => setComment(event.target.value);
 
-    // 댓글
     const onhandleComment = async (e) => {
         e.preventDefault()
+        // const CommentApi = axios.create({
+        //     baseURL: "http://13.125.227.9:8080/",
+        //     headers: {
+        //         Authorization: `Bearer ${auth.Authorization}`,
+        //         refresh_token: `Bearer ${auth.refresh_token}`,
+        //     }
+        // });
+
+        // const CommentUp = await CommentApi
+        //     .get("/post/{postId}/comment")
+        //     .then((response) => {
+        //         console.log("반응", response)
+        //         window.alert("댓글 작성 성공!")
+        //     }).catch((error) => {
+        //         console.log("에러", error)
+        //         window.alert("댓글 작성 실패!")
+        //     });
     }
+
+    // 댓글 입력값 저장되는 곳 지정
+    const [commentArray, setCommentArray] = React.useState([]);
+    const onSubmit = event => {
+        event.preventDefault();
+        if (comment === '') {
+            return;
+        }
+        setCommentArray(commentValueList => [comment, ...commentValueList]);
+        setComment('');
+    };
 
     return (
         <Wrap>
-            <ImgWrap src={dataTest.postImage} />
+        <ImgWrap src={dataTest.postImage} />
+            <ModifyDelBtn>
+          <button onClick={DeletPost} style={{ color: 'black', margin: "0px 10px 0px 0px" }} >
+            삭제</button>
+          <button onClick={ModifyPost} style={{ color: 'black' }} >
+            수정</button>
+        </ModifyDelBtn>
 
-            {/* <div style={{display: "flex", justifyContent: "right", marginRight: "10px"}}>
-          <Button onClick={ApiDetailDel} style={{ color: 'gray', margin: "0px 8px 0px 0px" }} variant="outlined" color="inherit">
-            삭제</Button>
-          <Button onClick={ModdifyPost} style={{ color: 'gray' }} variant="outlined" color="inherit">
-            수정</Button>
-        </div> */}
-
-            <profileInfo>
-                <div style={{ display: "flex", alignItems: "center", marginTop: "15px", marginLeft: "25px" }}>
+            <div>
+                <div style={{ display: "flex", alignItems: "center", marginTop: "15px", marginLeft: "25px", marginBottom: "15px" }}>
                     <img src={dataTest.profileImage}
                         style={{ width: "50px", height: "50px", borderRadius: "25px", backgroundColor: "gray" }} />
                     <span style={{ fontWeight: "bold", marginLeft: "10px" }}>{dataTest.nickname}</span>
                     <Likecomment>좋아요 {dataTest.likeNumber} ∙ 댓글 {dataTest.commentNumber}</Likecomment>
                 </div>
-            </profileInfo>
-            <hr style={{ width: "640px", borderBottom: "1px solid #eeeeee"}} />
+            </div>
+            <hr style={{ width: "640px", borderBottom: "1px solid #eeeeee" }} />
             <Contents>{dataTest.content}</Contents>
-            <hr style={{ width: "640px", borderBottom: "1px solid #eeeeee"}} />
+            <hr style={{ width: "640px", borderBottom: "1px solid #eeeeee" }} />
+            <p style={{ marginLeft: "40px", fontSize: "14px", color: "#9A9A9A" }}>댓글</p>
 
-            <h5 style={{marginLeft: "40px"}}>댓글</h5>
-
-            <CommentBox style={{ marginLeft: "45px"}}>
-                <input type="text" placeholder="댓글을 입력해주세요." />
-
-                <Button>
-                    <CommentBtn onClick={onhandleComment}>댓글 작성하기</CommentBtn>
-                </Button>
-            </CommentBox>
+            <CommentContainer onSubmit={onSubmit}>
+                <div style={{ display: "flex", alignItems: "center", marginTop: "15px", marginLeft: "35px", marginBottom: "15px" }}>
+                    <img src={comment.userProfile}
+                        style={{ width: "40px", height: "40px", borderRadius: "25px", backgroundColor: "gray" }} />
+                    <span style={{ fontWeight: "bold", marginLeft: "10px" }}>{comment.username}</span>
+                    <span style={{ marginLeft: "10px" }}>{comment.comment}</span>
+                </div>
+                {/* <div>{comment.likeToggle : Boolean}</div> */}
+                <CommentBox style={{ marginLeft: "45px" }}>
+                    <input type="text" placeholder="댓글을 입력해주세요."
+                    // value={comment} onChange={onChange}
+                     />
+                    <Button>
+                        <CommentBtn onClick={onhandleComment}>댓글 작성하기</CommentBtn>
+                    </Button>
+                </CommentBox>
+            </CommentContainer>
         </Wrap>
-
     )
-};
+}
 
 const Wrap = styled.div`
-    position: absolute;
+    position: relative;
     width: 700px;
     height: 95%;
-    left: 40%;
+    // left: 40%;
     border-radius: 30px;
     background-color: white;
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
@@ -134,20 +177,21 @@ const ImgWrap = styled.img`
     width: 700px;
     height: 420px;
     border-radius: 30px 30px 0px 0px;
+    // margin-top: 20px;
     overflow: hidden;
     object-fit: cover;
 `
 
-const profileInfo = styled.div`
-    position: relative;
-    display: flex;
-    align-items: center;
-`;
+// const profileInfo = styled.div`
+//     position: relative;
+//     display: flex;
+//     align-items: center;
+// `;
 
 const Contents = styled.div`
     position: relative;
     width: 600px;
-    // height: 200px;
+    height: 150px;
     display: flex;
     // align-items: center;
     justify-content: center;
@@ -187,13 +231,38 @@ position: absolute;
 // background-color: red;
 `
 
+const ModifyDelBtn = styled.div`
+    display: flex;
+    justify-content: right;
+    background-color: red;
+    margin-top: -400px;
+    margin-bottom: 380px;
+
+    button {
+    position: relative;
+    width: 60px;
+    height: 30px;
+    margin-right: 40px;
+    font-size: 12px;
+    font-weight: 900;
+    border-radius: 30px;
+    cursor: pointer;
+    border: 1px solid black;
+    background-color: white;
+    }
+`
+
 const CommentBtn = styled.button`
-  background-color: #FE7770;
+  background-color: black;
   &:disabled {
     background-color: #C2C2C2;
     cursor: default;
   }
 `
+
+const CommentContainer = styled.div`
+
+`;
 
 const CommentBox = styled.div`
     position: absolute;
@@ -218,7 +287,7 @@ const CommentBox = styled.div`
 
 const Likecomment = styled.div`
     font-size: 14px;
-    color: rgb(136, 136, 136);
+    color: #9A9A9A;
     margin-left: 430px;
     // background-color: red;
 `;
