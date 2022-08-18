@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -7,48 +7,67 @@ import { useNavigate } from "react-router-dom";
 import Cards from "../elements/Cards";
 
 const Main = () => {
-    const data = useSelector((state) => state.card.post);
-  console.log("나야나", data);
+  const data = useSelector((state) => state.card.post);
+  // console.log("나야나", data);
+
+  const [time, setTime] = React.useState(new Date());
+  const interval = React.useRef(null)
+  useEffect(() => {
+    interval.current = setInterval(() => {
+        setTime(new Date());
+      }, 1000);
+      return () => clearInterval(interval.current)
+  });
+  const Year = time.getFullYear();
+  const Month = time.getMonth() + 1;
+  const Day = time.getDate();
+  const Hour = time.getHours();
+  const Minute = time.getMinutes();
+  const Second = time.getSeconds();
+  const TodaySecond = 86400;
+  const NowSecond = (((Hour * 60) + Minute) * 60) + Second
+  const TodayPer = ((NowSecond / TodaySecond) * 100).toFixed(1)
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-    return (
-        <Grid>
-            <Item1></Item1>
-            <Item2>
-            <CircleWrap>
+  return (
+      <Grid>
+        <Item1></Item1>
+        <Item2>
+          <CircleWrap>
             <InsideCircle>
-            <TopText>
-                     <p>2022년 8월 13일</p>
-                     <p>지금은 단식시간 입니다.</p>
-                     </TopText>
-                     <BottomText>
-                     <p>단식 시간 : 18시 ~ 10시</p>
-                     <p>음식 섭취 가능 시간 : 10시 ~ 18시</p>
-                     </BottomText>
+              <TopText>
+                <p>{Year}년 {Month < 10 ? '0' + Month : Month}월 {Day < 10 ? '0' + Day : Day}일</p>
+                <p>{Hour < 10 ? '0' + Hour : Hour} : {Minute < 10 ? '0' + Minute : Minute} : {Second < 10 ? '0' + Second : Second}</p>
+                <p>지금은 단식시간 입니다.</p>
+              </TopText>
+              <BottomText>
+                <p>단식 시간 : 18시 ~ 10시</p>
+                <p>음식 섭취 가능 시간 : 10시 ~ 18시</p>
+              </BottomText>
             </InsideCircle>
-            </CircleWrap>
-            </Item2>
-            <Item3>몸무게 변화량</Item3>
-            <Item4>체지방 변화량</Item4>
-            <Item5>
-                <H2>오늘의 식단</H2>
-                <CardList>
-                    {data.map((v, idx) => (
-                        <CardsBox
-                            onClick={() => {
-                                navigate(`/post/${v.postId}`);
-                            }}
-                            key={idx}
-                        >
-                            <Cards post={v} />
-                        </CardsBox>
-                    ))}
-                </CardList>
-            </Item5>
-        </Grid>
-    );
+          </CircleWrap>
+        </Item2>
+        <Item3>몸무게 변화량</Item3>
+        <Item4>체지방 변화량</Item4>
+        <Item5>
+          <H2>오늘의 식단</H2>
+          <CardList>
+              {data.map((v, idx) => (
+                  <CardsBox
+                      onClick={() => {
+                          navigate(`/post/${v.postId}`);
+                      }}
+                      key={idx}
+                  >
+                      <Cards post={v} />
+                  </CardsBox>
+              ))}
+          </CardList>
+        </Item5>
+      </Grid>
+  );
 }
 
 const Grid = styled.div`
@@ -114,7 +133,7 @@ const Item5 = styled.div`
 `;
 
 const Wrap = styled.div`
-  mwidth: 100vw;
+  width: 100vw;
   position: relative;
   height: 100%;
   margin: 0 auto;
@@ -131,44 +150,44 @@ const H2 = styled.div`
 `;
 
 const CircleWrap = styled.div`
-    margin: 10px auto;
-    width: 480px;
-    height: 480px;
-    // left: 330px;
-    // top: 64px;
-    background: #fefcff;
-    // position: absolute;
-    border-radius: 50%;
-    // border: 1px solid #cdcbd0;
+  margin: 10px auto;
+  width: 480px;
+  height: 480px;
+  // left: 330px;
+  // top: 64px;
+  background: #fefcff;
+  // position: absolute;
+  border-radius: 50%;
+  // border: 1px solid #cdcbd0;
 `
 
 const InsideCircle = styled.div`
-    margin: 30px auto;
-    width: 430px;
-    height: 430px;
-    left: 155px;
-    top: 35px;
-    border-radius: 50%;
-    background: #FFB0AC;
-    line-height: 14px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    flex-direction: column;
-    margin-top: 25px;
-    margin-left: 25px;
-    position: absolute;
-    z-index: 100;
-    font-weight: 700;
-    font-size: 18px;
+  margin: 30px auto;
+  width: 430px;
+  height: 430px;
+  left: 155px;
+  top: 35px;
+  border-radius: 50%;
+  background: #FFB0AC;
+  line-height: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  flex-direction: column;
+  margin-top: 25px;
+  margin-left: 25px;
+  position: absolute;
+  z-index: 100;
+  font-weight: 700;
+  font-size: 18px;
 `
 
 
 const TopText = styled.div`
-    color: #ffffff;
-    font-size: 22px;
-    text-shadow: -1px 0 #FE7770, 0 1px #FE7770, 1px 0 #FE7770, 0 -1px #FE7770;
+  color: #ffffff;
+  font-size: 22px;
+  text-shadow: -1px 0 #FE7770, 0 1px #FE7770, 1px 0 #FE7770, 0 -1px #FE7770;
 `;
 
 const BottomText = styled.div`

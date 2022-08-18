@@ -473,7 +473,6 @@ const SignUpWrap = styled.div`
   position: relative;
   width: 700px;
   height: 920px;
-  margin-left: 260px;
   border-radius: 30px;
   background-color: white;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);

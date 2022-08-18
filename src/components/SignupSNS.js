@@ -17,6 +17,11 @@ const SignupSNS = () => {
   const current_weight_err_ref = React.useRef(null);
   const goal_weight_err_ref = React.useRef(null);
   const hour_check_ref = React.useRef(null);
+  const goal_kcal_ref = React.useRef(null);
+  const goal_carbs_ref = React.useRef(null);
+  const goal_pro_ref = React.useRef(null);
+  const goal_fat_ref = React.useRef(null);
+  const intake_check_ref = React.useRef(null);
 
   //
   const [ files, setFiles ] = React.useState(null);
@@ -37,7 +42,28 @@ const SignupSNS = () => {
   const [ nickCheckDis, SetNickCheckDis ] = React.useState(true);
 
   // 단식 시간 설정하지 않았을 경우, 버튼 클릭 불가능하게 설정
-  const [ startHourCheck, SetStartHourCheck ] = React.useState("* 필수 선택값을 선택하세요.");
+  const [ startHourCheck, SetStartHourCheck ] = React.useState("* 필수 선택값을 모두 선택하세요.");
+
+  // 목표 섭취량 설정하지 않았을 경우, 버튼 클릭 불가능하게 설정
+  const [ intakeCheck, SetIntakeCheck ] = React.useState("* 필수 입력값을 모두 입력하세요.");
+
+  // 목표 섭취량 입력 시, 예시 표시
+  const [ calInfo, SetCalInfo ] = React.useState();
+  const [ carbsInfo, SetCarbsInfo ] = React.useState();
+  const [ proInfo, SetProInfo ] = React.useState();
+  const [ fatInfo, SetFatInfo ] = React.useState();
+
+  const [ goalKcal, setGoalKcal ] = React.useState();
+  const [ goalKcalError, setGoalKcalError ] = React.useState("");
+
+  const [ goalCarbs, setGoalCarbs ] = React.useState();
+  const [ goalCarbsError, setGoalCarbsError ] = React.useState("");
+
+  const [ goalPro, setGoalPro ] = React.useState();
+  const [ goalProError, setGoalProError ] = React.useState("");
+
+  const [ goalFat, setGoalFat ] = React.useState();
+  const [ goalFatError, setGoalFatError ] = React.useState("");
 
   const onhandleSignUpSNS = async (e) => {
     e.preventDefault()
@@ -66,7 +92,7 @@ const SignupSNS = () => {
     await axios({
       baseURL: "http://13.125.227.9:8080/",
       method: "POST",
-      url: "/user/signupsns",
+      url: "/user/signup",
       data: formData,
       headers: {
         "Content-Type": "multipart/form-data",
@@ -180,6 +206,90 @@ const SignupSNS = () => {
     }
   }
 
+  const GoalKcalChange = (e) => {
+    // 체중 입력 시 숫자만 입력할 수 있도록 정규식 사용
+    setGoalKcal(e.target.value.replace(/[^0-9]/g, ''))
+    const regNum = /^(\d{0,5})$/g
+    const regDot = /[\.]/g
+    if(e.target.value.length === 0) {
+      setGoalKcalError("입력")
+    } else if((regDot.test(e.target.value))) {
+      setGoalKcalError("소수점")
+    } else if(regNum.test(e.target.value) !== true) {
+      setGoalKcalError("숫자아님")
+    } else {
+      setGoalKcalError(true)
+    }
+  }
+  
+  const GoalCarbsChange = (e) => {
+    // 체중 입력 시 숫자만 입력할 수 있도록 정규식 사용
+    setGoalCarbs(e.target.value.replace(/[^0-9]/g, ''))
+    const regNum = /^(\d{0,3})$/g
+    const regDot = /[\.]/g
+    if(e.target.value.length === 0) {
+      setGoalCarbsError("입력")
+    } else if((regDot.test(e.target.value))) {
+      setGoalCarbsError("소수점")
+    } else if(regNum.test(e.target.value) !== true) {
+      setGoalCarbsError("숫자아님")
+    } else {
+      setGoalCarbsError(true)
+    }
+  }
+
+  const GoalProChange = (e) => {
+    // 체중 입력 시 숫자만 입력할 수 있도록 정규식 사용
+    setGoalPro(e.target.value.replace(/[^0-9]/g, ''))
+    const regNum = /^(\d{0,3})$/g
+    const regDot = /[\.]/g
+    if(e.target.value.length === 0) {
+      setGoalProError("입력")
+    } else if((regDot.test(e.target.value))) {
+      setGoalProError("소수점")
+    } else if(regNum.test(e.target.value) !== true) {
+      setGoalProError("숫자아님")
+    } else {
+      setGoalProError(true)
+    }
+  }
+
+  const GoalFatChange = (e) => {
+    // 체중 입력 시 숫자만 입력할 수 있도록 정규식 사용
+    setGoalFat(e.target.value.replace(/[^0-9]/g, ''))
+    const regNum = /^(\d{0,3})$/g
+    const regDot = /[\.]/g
+    if(e.target.value.length === 0) {
+      setGoalFatError("입력")
+    } else if((regDot.test(e.target.value))) {
+      setGoalFatError("소수점")
+    } else if(regNum.test(e.target.value) !== true) {
+      setGoalFatError("숫자아님")
+    } else {
+      setGoalFatError(true)
+    }
+  }
+
+  const IntakeChange = (e) => {
+    if(goalKcalError && goalCarbsError && goalProError && goalFatError !== true) {
+      SetIntakeCheck("")
+      intake_check_ref.current.style.display = "none"
+    } else if(goalKcalError || goalCarbsError || goalProError || goalFatError === "소수점") {
+      SetIntakeCheck("* 입력값 중 소수점이 포함되어 있습니다.")
+      intake_check_ref.current.style.color = "#FF0000"
+    } else if(goalKcalError || goalCarbsError || goalProError || goalFatError === "숫자아님") {
+      SetIntakeCheck("* 입력값은 숫자만 사용 가능합니다.")
+      intake_check_ref.current.style.color = "#FF0000"
+    } else {
+      SetIntakeCheck("* 필수 입력값을 모두 입력하세요.")
+      intake_check_ref.current.style.color = "#FF0000"
+    }
+  }
+  console.log(goalKcalError)
+  console.log(goalCarbsError)
+  console.log(goalProError)
+  console.log(goalFatError)
+
   return (
     <SignUpWrap>
       <h1>회원정보 작성</h1>
@@ -271,6 +381,94 @@ const SignupSNS = () => {
             </div>
           </FastTime>
         </FastTimeWrap>
+        <IntakeWrap>
+          <h4>일일 목표 섭취량</h4>
+          <span className="check" ref={intake_check_ref}>{intakeCheck}</span>
+          <GoalInfoWrap>
+            { calInfo ? 
+              (
+                <GoalHoverMsg>
+                  목표 섭취 칼로리를 입력해주세요.<br />
+                  <span>ex) 2400 / 2000 / 1400</span>
+                </GoalHoverMsg>
+              ) :
+              (
+                null
+              )
+            }
+            <GoalTitle>칼로리</GoalTitle>
+            <GoalInfo>
+              <input ref={goal_kcal_ref} maxLength={5} type="number" onInput={maxLengthCheck} onMouseEnter={() => SetCalInfo(true)} onMouseLeave={() => SetCalInfo(false)} placeholder='칼로리' onChange={(e) => {
+                GoalKcalChange(e)
+                IntakeChange(e)
+              }} value={goalKcal || ''} />
+              <span className='unit'>(Kcal)</span>
+            </GoalInfo>
+          </GoalInfoWrap>
+          <GoalInfoWrap>
+            { carbsInfo ? 
+              (
+                <GoalHoverMsg>
+                  목표 섭취 탄수화물을 입력해주세요.<br />
+                  <span>ex) 100 / 110 / 120 </span>
+                </GoalHoverMsg>
+              ) :
+              (
+                null
+              )
+            }
+            <GoalTitle>탄수화물</GoalTitle>
+            <GoalInfo>
+              <input ref={goal_carbs_ref} maxLength={3} type="number" onInput={maxLengthCheck} onMouseEnter={() => SetCarbsInfo(true)} onMouseLeave={() => SetCarbsInfo(false)} placeholder='탄수화물' onChange={(e) => {
+                GoalCarbsChange(e)
+                IntakeChange(e)
+              }} value={goalCarbs || ''} />
+              <span className='unit'>(g)</span>
+            </GoalInfo>
+          </GoalInfoWrap>
+          <GoalInfoWrap>
+            { proInfo ? 
+              (
+                <GoalHoverMsg>
+                  목표 섭취 단백질을 입력해주세요.<br />
+                  <span>ex) 100 / 110 / 120 </span>
+                </GoalHoverMsg>
+              ) :
+              (
+                null
+              )
+            }
+            <GoalTitle>단백질</GoalTitle>
+            <GoalInfo>
+              <input ref={goal_pro_ref} maxLength={3} type="number" onInput={maxLengthCheck} onMouseEnter={() => SetProInfo(true)} onMouseLeave={() => SetProInfo(false)} placeholder='단백질' onChange={(e) => {
+                GoalProChange(e)
+                IntakeChange(e)
+              }} value={goalPro || ''} />
+              <span className='unit'>(g)</span>
+            </GoalInfo>
+          </GoalInfoWrap>
+          <GoalInfoWrap>
+            { fatInfo ? 
+              (
+                <GoalHoverMsg>
+                  목표 섭취 지방을 입력해주세요.<br />
+                  <span>ex) 100 / 110 / 120 </span>
+                </GoalHoverMsg>
+              ) :
+              (
+                null
+              )
+            }
+            <GoalTitle>지방</GoalTitle>
+            <GoalInfo>
+              <input ref={goal_fat_ref} maxLength={3} type="number" onInput={maxLengthCheck} onMouseEnter={() => SetFatInfo(true)} onMouseLeave={() => SetFatInfo(false)} placeholder='지방' onChange={(e) => {
+                GoalFatChange(e)
+                IntakeChange(e)
+              }} value={goalFat || ''} />
+              <span className='unit'>(g)</span>
+            </GoalInfo>
+          </GoalInfoWrap>
+        </IntakeWrap>
         <Button>
           <CancleBtn>뒤로가기</CancleBtn>
           <SignUpBtn onClick={onhandleSignUpSNS}
@@ -292,8 +490,7 @@ const SignUpWrap = styled.div`
   position: relative;
   width: 700px;
   height: 920px;
-  margin-left: 260px;
-  /* margin: 0 auto; */
+  margin: 0 auto;
   border-radius: 30px;
   background-color: white;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
@@ -524,6 +721,123 @@ const Select = styled.select`
   font-family: 'GmarketM', 'sans-serif';
   font-size: 12px;
   text-align: center;
+`
+
+const IntakeWrap = styled.div`
+  position: relative;
+  width: 460px;
+  margin: 40px auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  border: 1px solid #FE7770;
+  border-radius: 20px;
+  padding: 20px 14px;
+  box-sizing: border-box;
+  h4 {
+    position: absolute;
+    top: -15px;
+    left: 20px;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    width: 140px;
+    height: 30px;
+    background-color: #FE7770;
+    color: #fff;
+    border-radius: 6px;
+  }
+  span.check {
+    position: absolute;
+    bottom: -20px;
+    left: 6px;
+    font-size: 10px;
+    color: #D9D9D9;
+  }
+`
+
+const GoalInfoWrap = styled.div`
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+
+const GoalHoverMsg = styled.p`
+  position: absolute;
+  top: 35px;
+  left: 90px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  width: 75%;
+  height: 40px;
+  font-size: 10px;
+  background-color: #7E7E7E;
+  border-radius: 6px;
+  padding: 5px;
+  color: #fff;
+  /* box-sizing: border-box; */
+  z-index: 5000;
+  span {
+    color: #81C147;
+    font-size: 11px;
+  }
+  &::after {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: 20px;
+    width: 8px;
+    height: 8px;
+    background-color: #7E7E7E;
+    transform: rotate(45deg);
+  }
+`
+
+const GoalTitle = styled.div`
+  width: 80px;
+  height: 30px;
+  background-color: #FE7770;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 10px;
+`
+
+const GoalInfo = styled.div`
+  position: relative;
+  width: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  input {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-bottom: 1px solid #9A9A9A;
+    box-sizing: border-box;
+    outline: none;
+  }
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  span.unit {
+    position: absolute;
+    bottom: 12px;
+    right: 10px;
+    font-size: 12px;
+    color: #9A9A9A;
+  }
 `
 
 export default SignupSNS
