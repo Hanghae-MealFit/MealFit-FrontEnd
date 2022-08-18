@@ -101,7 +101,7 @@ const PostView = () => {
             <Contents>{dataTest.content}</Contents>
             <hr style={{ width: "640px", borderBottom: "1px solid #eeeeee"}} />
 
-            <h5 style={{marginLeft: "40px"}}>댓글</h5>
+            <p style={{marginLeft: "40px", fontSize: "14px", color: "#9A9A9A"}}>댓글</p>
 
             <CommentBox style={{ marginLeft: "45px"}}>
                 <input type="text" placeholder="댓글을 입력해주세요." />
@@ -188,7 +188,7 @@ position: absolute;
 `
 
 const CommentBtn = styled.button`
-  background-color: #FE7770;
+  background-color: black;
   &:disabled {
     background-color: #C2C2C2;
     cursor: default;
@@ -218,7 +218,7 @@ const CommentBox = styled.div`
 
 const Likecomment = styled.div`
     font-size: 14px;
-    color: rgb(136, 136, 136);
+    color: #9A9A9A;
     margin-left: 430px;
     // background-color: red;
 `;
