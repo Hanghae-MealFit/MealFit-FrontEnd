@@ -4,13 +4,12 @@ import styled from 'styled-components'
 
 import './App.css';
 import './fonts/fonts.css'
-import Sidebar from "./components/Sidebar";
 import Main from './components/Main';
 import Signup from './components/Signup';
 import SignupSNS from './components/SignupSNS';
 import FindMyInfo from './components/FindMyInfo';
 import Login from './components/Login';
-import Data from './components/Data';
+import SocialUserCheck from './components/SocialUserCheck';
 import PostUp from './components/PostUp';
 import PostView from './components/PostView';
 
@@ -18,14 +17,13 @@ import PostView from './components/PostView';
 function App() {
   return (
     <Wrap>
-      <Sidebar/>
       <Routes>
         <Route path="/" element = { <Main /> } />
         <Route path="user/signup" element = { <Signup /> } />
         <Route path="user/signupsns" element = { <SignupSNS /> } />
         <Route path="user/login" element = { <Login /> } />
         <Route path="user/find" element = { <FindMyInfo /> } />
-        <Route path="oauth2/redirect" element = { <Data /> } />
+        <Route path="oauth2/redirect" element = { <SocialUserCheck /> } />
         <Route path="post" element = { <PostUp /> } />
         <Route path="post/:postId" element = { <PostView /> } />
       </Routes>

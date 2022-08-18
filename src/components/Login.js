@@ -83,33 +83,26 @@ const Login = () => {
     <LoginWrap>
       <h1>로그인</h1>
       <Contents>
-        <input ref={username_ref} type="text" placeholder='아이디' onChange={IdChange} maxLength={12} />
+        <input ref={username_ref} type="text" placeholder='아이디를 입력해주세요.' onChange={IdChange} maxLength={12} />
         <p ref={username_err_ref}>{checkIdMsg}</p>
       </Contents>
       <Contents>
-        <input ref={password_ref} type="password" placeholder='비밀번호' onChange={PwChange} />
+        <input ref={password_ref} type="password" placeholder='비밀번호를 입력해주세요.' onChange={PwChange} />
         <p ref={pw_err_ref}>{pwMsg}</p>
       </Contents>
-      <FindTxt>
-        <span>아이디 / 비밀번호 찾기</span>
-      </FindTxt>
       <Button>
         <LoginBtn onClick={onhandleLogin} disabled={checkIdMsg === true && pwMsg === true ? false : true}>로그인</LoginBtn>
       </Button>
       <LoginTxt>
-        밀핏 회원이 아니신가요? <span>새 계정 만들기</span>
+        <span onClick={() => {navigate("/user/signup")}}>회원가입 하기</span>
+        <span onClick={() => {navigate("/user/find")}}>아이디/비밀번호 찾기</span>
       </LoginTxt>
-      <div>
-        <div>
-          <KakaoLogin />
-        </div>
-        <div>
-          <NaverLogin />
-        </div>
-        <div>
-          <GoogleLogin />
-        </div>
-      </div>
+      <SocialTxt>소셜 로그인</SocialTxt>
+      <SocialBtnWrap>
+        <KakaoLogin />
+        <NaverLogin />
+        <GoogleLogin />
+      </SocialBtnWrap>
     </LoginWrap>
   )
 }
@@ -149,6 +142,7 @@ const Contents = styled.div`
     width: 100%;
     border: none;
     border-bottom: 1px solid #9A9A9A;
+    background-color: transparent;
     padding: 12px 0 12px 6px;
     box-sizing: border-box;
     outline: none;
@@ -176,28 +170,19 @@ const Contents = styled.div`
   }
 `
 
-const FindTxt = styled.div`
-  font-size: 14px;
-  margin: 16px auto;
-  text-align: center;
-  span {
-    color: #808080;
-    cursor: pointer;
-  }
-`
 const Button = styled.div`
-  width: 425px;
-  height: 40px;
-  margin: 0 auto;
+  width: 400px;
+  height: 52px;
+  margin: 20px auto 0;
   display: flex;
   justify-content: center;
   align-items: center;
   button {
     width: 500px;
     height: 100%;
-    margin: 0 10px;
+    margin: 0;
     border: none;
-    border-radius: 30px;
+    border-radius: 12px;
     color: #fff;
     font-size: 18px;
     font-weight: 900;
@@ -217,9 +202,57 @@ const LoginTxt = styled.div`
   margin: 16px auto;
   text-align: center;
   span {
-    color: #FE7770;
+    position: relative;
+    color: #808080;
     cursor: pointer;
+    margin: 0 10px;
+    transition: 0.2s;
   }
+  span:hover {
+    color: #FE7770;
+  }
+  span:first-child::before {
+    content: '';
+    position: absolute;
+    top: calc(50% - 5px);
+    right: -10px;
+    width: 1px;
+    height: 10px;
+    border-right: 1px solid #CCC;
+  }
+`
+
+const SocialTxt = styled.h4`
+  position: relative;
+  width: 400px;
+  font-size: 12px;
+  text-align: center;
+  margin: 12px auto 6px;
+  color: #808080;
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 34%;
+    border-top: 1px solid #CCC;
+  }
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 0;
+    width: 34%;
+    border-top: 1px solid #CCC;
+  }
+`
+
+const SocialBtnWrap = styled.div`
+  width: 50%;
+  margin: 26px auto 0;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
 `
 
 export default Login

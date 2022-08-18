@@ -6,6 +6,13 @@ const FindMyInfo = () => {
   const id_email_ref = React.useRef(null)
   const pw_id_ref = React.useRef(null)
   const pw_email_ref = React.useRef(null)
+  const id_email_msg_ref = React.useRef(null)
+  const pw_id_msg_ref = React.useRef(null)
+  const pw_email_msg_ref = React.useRef(null)
+
+  const [ idEmailMsg, SetIdEmailMsg] = React.useState("* 가입하신 아이디의 이메일을 입력해주세요.")
+  const [ pwIdMsg, SetPwIdMsg] = React.useState("* 가입하신 아이디를 입력해주세요.")
+  const [ pwEmailMsg, SetPwEmailMsg] = React.useState("* 가입하신 아이디의 이메일을 입력해주세요.")
 
   const FindId = async () => {
     try {
@@ -38,6 +45,55 @@ const FindMyInfo = () => {
     }
   }
 
+  const IdEmailChange = (e) => {
+    const regEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/g;
+    if(e.target.value.length === 0) {
+      SetIdEmailMsg("* 이메일은 아이디 비밀번호를 찾을 때 사용됩니다.")
+      id_email_msg_ref.current.style.color = "#D9D9D9";
+    } else if(regEmail.test(e.target.value) !== true) {
+      SetIdEmailMsg("* 이메일 형식으로 작성해주세요. ( ex) abc@naver.com )")
+      id_email_msg_ref.current.style.color = "#FF7F00";
+    } else {
+      SetIdEmailMsg("* 올바른 양식으로 작성하였습니다.")
+      id_email_msg_ref.current.style.color = "#81C147";
+    }
+  }
+
+  const PwIdChange = (e) => {
+    let regTxt = /[a-z0-9]/;
+    let regUpperTxt = /[A-Z]/;
+    let regKor = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+    let regSpecial = /[.,~!@#$%^&*()_+|<>?:{}/\\]/;
+    let regBlank = /[\s]/;
+    if(e.target.value.length === 0) {
+      SetPwIdMsg("* 가입하신 아이디를 입력해주세요.")
+      pw_id_msg_ref.current.style.color = "#D9D9D9";
+    } else if (!(regTxt.test(e.target.value)) || (regUpperTxt.test(e.target.value)) || (regKor.test(e.target.value)) || (regSpecial.test(e.target.value)) || (regBlank.test(e.target.value)) ) {
+      SetPwIdMsg("* 영어 소문자 / 숫자를 제외한 다른 문자는 사용할 수 없습니다.")
+      pw_id_msg_ref.current.style.color = "#FF7F00";
+    } else if(e.target.value.length < 4) {
+      SetPwIdMsg("* 아이디는 4글자 이상 12글자 이하로 사용 가능합니다.")
+      pw_id_msg_ref.current.style.color = "#FF7F00";
+    } else {
+      SetPwIdMsg("* 올바른 양식으로 작성하였습니다.")
+      pw_id_msg_ref.current.style.color = "#81C147";
+    }
+  }
+
+  const PwEmailChange = (e) => {
+    const regEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/g;
+    if(e.target.value.length === 0) {
+      SetPwEmailMsg("* 이메일은 아이디 비밀번호를 찾을 때 사용됩니다.")
+      pw_email_msg_ref.current.style.color = "#D9D9D9";
+    } else if(regEmail.test(e.target.value) !== true) {
+      SetPwEmailMsg("* 이메일 형식으로 작성해주세요. ( ex) abc@naver.com )")
+      pw_email_msg_ref.current.style.color = "#FF7F00";
+    } else {
+      SetPwEmailMsg("* 올바른 양식으로 작성하였습니다.")
+      pw_email_msg_ref.current.style.color = "#81C147";
+    }
+  }
+
   return (
     <FindWrap>
       <h1>아이디/비밀번호 찾기</h1>
@@ -45,16 +101,25 @@ const FindMyInfo = () => {
         <FindInputWrap>
           <p>아이디를 찾기 위해 이메일을 입력해주세요.</p>
           <Find>
-            <input type="email" placeholder='이메일을 입력해주세요.' ref={id_email_ref} />
-            <button onClick={FindId}>아이디 찾기</button>
+            <InputTxt>
+              <input type="email" placeholder='이메일을 입력해주세요.' ref={id_email_ref} onChange={IdEmailChange} />
+              <p ref={id_email_msg_ref}>{idEmailMsg}</p>
+            </InputTxt>
+            <button onClick={FindId} disabled={idEmailMsg === "* 올바른 양식으로 작성하였습니다." ? false : true}>아이디 찾기</button>
           </Find>
         </FindInputWrap>
         <FindInputWrap>
           <p>비밀번호를 찾기 위해 아이디와 이메일을 입력해주세요.</p>
           <Find>
-            <input type="text" placeholder='아이디를 입력해주세요.' ref={pw_id_ref} />
-            <input type="email" placeholder='이메일을 입력해주세요.' ref={pw_email_ref} />
-            <button onClick={FindPw}>비밀번호 찾기</button>
+            <InputTxt>
+              <input type="text" placeholder='아이디를 입력해주세요.' ref={pw_id_ref} onChange={PwIdChange} />
+              <p ref={pw_id_msg_ref}>{pwIdMsg}</p>
+            </InputTxt>
+            <InputTxt>
+              <input type="email" placeholder='이메일을 입력해주세요.' ref={pw_email_ref} onChange={PwEmailChange} />
+              <p ref={pw_email_msg_ref}>{pwEmailMsg}</p>
+            </InputTxt>
+            <button onClick={FindPw} disabled={pwIdMsg === "* 올바른 양식으로 작성하였습니다." && pwEmailMsg === "* 올바른 양식으로 작성하였습니다." ? false : true}>비밀번호 찾기</button>
           </Find>
         </FindInputWrap>
       </InputWrap>
@@ -123,25 +188,41 @@ const Find = styled.div`
   justify-content: center;
   align-items: center;
   input {
-    width: 360px;
+    width: 400px;
     border: none;
-    border-bottom: 1px solid #9A9A9A;
-    padding: 12px;
-    margin: 8px auto;
+    border-bottom: 1px solid #808080;
+    padding: 12px 0 12px 6px;
+    margin: 12px auto;
     box-sizing: border-box;
     outline: none;
   }
   button {
-    width: 240px;
-    height: 34px;
+    width: 400px;
+    height: 40px;
     border: none;
-    border-radius: 30px;
+    border-radius: 12px;
     font-family: 'GmarketM', 'sans-serif';
-    font-size: 12px;
+    font-size: 14px;
     background-color: #FE7770;
     color: #fff;
-    margin-top: 24px;
+    margin-top: 20px;
     cursor: pointer;
+  }
+  button:disabled {
+    background-color: #808080;
+    cursor: default; 
+  }
+`
+
+const InputTxt = styled.div`
+  position: relative;
+  p {
+    margin: 0;
+    position: absolute;
+    left: 6px;
+    bottom: -6px;
+    font-size: 10px;
+    color: #808080;
   }
 `
 
