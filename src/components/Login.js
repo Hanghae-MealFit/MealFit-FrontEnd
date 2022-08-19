@@ -82,27 +82,29 @@ const Login = () => {
   return (
     <LoginWrap>
       <h1>로그인</h1>
-      <Contents>
-        <input ref={username_ref} type="text" placeholder='아이디를 입력해주세요.' onChange={IdChange} maxLength={12} />
-        <p ref={username_err_ref}>{checkIdMsg}</p>
-      </Contents>
-      <Contents>
-        <input ref={password_ref} type="password" placeholder='비밀번호를 입력해주세요.' onChange={PwChange} />
-        <p ref={pw_err_ref}>{pwMsg}</p>
-      </Contents>
-      <Button>
-        <LoginBtn onClick={onhandleLogin} disabled={checkIdMsg === true && pwMsg === true ? false : true}>로그인</LoginBtn>
-      </Button>
-      <LoginTxt>
-        <span onClick={() => {navigate("/user/signup")}}>회원가입 하기</span>
-        <span onClick={() => {navigate("/user/find")}}>아이디/비밀번호 찾기</span>
-      </LoginTxt>
-      <SocialTxt>소셜 로그인</SocialTxt>
-      <SocialBtnWrap>
-        <KakaoLogin />
-        <NaverLogin />
-        <GoogleLogin />
-      </SocialBtnWrap>
+      <ConWrap>
+        <Contents>
+          <input ref={username_ref} type="text" placeholder='아이디를 입력해주세요.' onChange={IdChange} maxLength={12} />
+          <p ref={username_err_ref}>{checkIdMsg}</p>
+        </Contents>
+        <Contents>
+          <input ref={password_ref} type="password" placeholder='비밀번호를 입력해주세요.' onChange={PwChange} />
+          <p ref={pw_err_ref}>{pwMsg}</p>
+        </Contents>
+        <Button>
+          <LoginBtn onClick={onhandleLogin} disabled={checkIdMsg === true && pwMsg === true ? false : true}>로그인</LoginBtn>
+        </Button>
+        <LoginTxt>
+          <span onClick={() => {navigate("/user/signup")}}>회원가입 하기</span>
+          <span onClick={() => {navigate("/user/find")}}>아이디/비밀번호 찾기</span>
+        </LoginTxt>
+        <SocialTxt>소셜 로그인</SocialTxt>
+        <SocialBtnWrap>
+          <KakaoLogin />
+          <NaverLogin />
+          <GoogleLogin />
+        </SocialBtnWrap>
+      </ConWrap>
     </LoginWrap>
   )
 }
@@ -121,17 +123,27 @@ const LoginWrap = styled.div`
   align-items: center;
   h1 {
     position: absolute;
-    top: 10px;
+    top: 0;
     left: 0;
     right: 0;
     margin: 0 auto;
-    padding: 10px 0;
+    padding: 30px 0;
     font-size: 26px;
     color: #FE7770;
     width: 540px;
     border-bottom: 1px solid #E0E2E6;
     text-align: center;
   }
+`
+
+const ConWrap = styled.div`
+  width: 100%;
+  height: 100%;
+  margin: 94px auto 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `
 
 const Contents = styled.div`

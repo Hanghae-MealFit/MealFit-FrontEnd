@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
+import axios from "axios";
 
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -12,12 +13,34 @@ const Main = () => {
 
   const [time, setTime] = React.useState(new Date());
   const interval = React.useRef(null)
+
+  const sessionStorage = window.sessionStorage;
+  const ACCESS_TOKEN = sessionStorage.getItem("ACCESS_TOKEN")
+  const REFRESH_TOKEN = sessionStorage.getItem("REFRESH_TOKEN")
+  const GetUser = async () => {
+    try {
+      const res = await axios.get("http://13.125.227.9:8080/user/info",
+      {
+        headers: {
+          Authorization: `Bearer ${ACCESS_TOKEN}`,
+          refresh_token: `Bearer ${REFRESH_TOKEN}`
+        }
+      })
+      console.log(res)
+    } catch(error) {
+      console.log(error)
+    }
+  }
+  useEffect(() => {
+    GetUser()
+  }, [])
+
   useEffect(() => {
     interval.current = setInterval(() => {
         setTime(new Date());
       }, 1000);
-      return () => clearInterval(interval.current)
-  });
+    return () => clearInterval(interval.current)
+  }, []);
   const Year = time.getFullYear();
   const Month = time.getMonth() + 1;
   const Day = time.getDate();
