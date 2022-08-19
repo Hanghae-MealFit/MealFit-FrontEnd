@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 import PicSelect from '../elements/PicSelect'
 
@@ -21,7 +22,12 @@ const SignupSNS = () => {
   const goal_carbs_ref = React.useRef(null);
   const goal_pro_ref = React.useRef(null);
   const goal_fat_ref = React.useRef(null);
-  const intake_check_ref = React.useRef(null);
+  const goal_kcal_err_ref = React.useRef(null);
+  const goal_carbs_err_ref = React.useRef(null);
+  const goal_pro_err_ref = React.useRef(null);
+  const goal_fat_err_ref = React.useRef(null);
+
+  const navigate = useNavigate();
 
   //
   const [ files, setFiles ] = React.useState(null);
@@ -44,9 +50,6 @@ const SignupSNS = () => {
   // 단식 시간 설정하지 않았을 경우, 버튼 클릭 불가능하게 설정
   const [ startHourCheck, SetStartHourCheck ] = React.useState("* 필수 선택값을 모두 선택하세요.");
 
-  // 목표 섭취량 설정하지 않았을 경우, 버튼 클릭 불가능하게 설정
-  const [ intakeCheck, SetIntakeCheck ] = React.useState("* 필수 입력값을 모두 입력하세요.");
-
   // 목표 섭취량 입력 시, 예시 표시
   const [ calInfo, SetCalInfo ] = React.useState();
   const [ carbsInfo, SetCarbsInfo ] = React.useState();
@@ -54,16 +57,16 @@ const SignupSNS = () => {
   const [ fatInfo, SetFatInfo ] = React.useState();
 
   const [ goalKcal, setGoalKcal ] = React.useState();
-  const [ goalKcalError, setGoalKcalError ] = React.useState("");
+  const [ goalKcalError, setGoalKcalError ] = React.useState("* 값을 입력해주세요.");
 
   const [ goalCarbs, setGoalCarbs ] = React.useState();
-  const [ goalCarbsError, setGoalCarbsError ] = React.useState("");
+  const [ goalCarbsError, setGoalCarbsError ] = React.useState("* 값을 입력해주세요.");
 
   const [ goalPro, setGoalPro ] = React.useState();
-  const [ goalProError, setGoalProError ] = React.useState("");
+  const [ goalProError, setGoalProError ] = React.useState("* 값을 입력해주세요.");
 
   const [ goalFat, setGoalFat ] = React.useState();
-  const [ goalFatError, setGoalFatError ] = React.useState("");
+  const [ goalFatError, setGoalFatError ] = React.useState("* 값을 입력해주세요.");
 
   const onhandleSignUpSNS = async (e) => {
     e.preventDefault()
@@ -75,8 +78,12 @@ const SignupSNS = () => {
       goalWeight: goalWeight_ref.current.value,
       startFasting: startFastingHour_ref.current.value + ":" + startFastingMinute_ref.current.value,
       endFasting: endFastingHour_ref.current.value + ":" + endFastingMinute_ref.current.value,
+      kcal: goal_kcal_ref.current.value,
+      carbs: goal_carbs_ref.current.value,
+      protein: goal_pro_ref.current.value,
+      fat: goal_fat_ref.current.value,
     }
-    // console.log(SignupInfo)
+    console.log(SignupSNSInfo)
 
     const formData = new FormData()
     formData.append("nickname", SignupSNSInfo.nickname);
@@ -84,24 +91,53 @@ const SignupSNS = () => {
     formData.append("goalWeight", SignupSNSInfo.goalWeight);
     formData.append("startFasting", SignupSNSInfo.startFasting);
     formData.append("endFasting", SignupSNSInfo.endFasting);
+    formData.append("kcal", SignupSNSInfo.kcal);
+    formData.append("carbs", SignupSNSInfo.carbs);
+    formData.append("protein", SignupSNSInfo.protein);
+    formData.append("fat", SignupSNSInfo.fat);
     if(SignupSNSInfo.profileImage !== null) {
       formData.append("profileImage", SignupSNSInfo.profileImage);
     }
-    console.log(formData)
+
+    const sessionStorage = window.sessionStorage;
+    const ACCESS_TOKEN = sessionStorage.getItem("ACCESS_TOKEN")
+    const REFRESH_TOKEN = sessionStorage.getItem("REFRESH_TOKEN")
 
     await axios({
       baseURL: "http://13.125.227.9:8080/",
-      method: "POST",
-      url: "/user/signup",
+      method: "PUT",
+      url: "/user/info",
       data: formData,
       headers: {
         "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${ACCESS_TOKEN}`,
+        refresh_token: `Bearer ${REFRESH_TOKEN}`
       },
     }).then((response) => {
-      console.log("반응", response)
+      console.log(response.status)
+      if(response.status === 200) {
+        window.alert("회원정보 등록에 성공하셨습니다.")
+        navigate("/")
+      }
     }).catch((error) => {
-      console.log("에러", error)
+      console.log(error)
+      window.alert("회원정보 등록에 실패하셨습니다.")
     })
+
+    // try {
+    //   const res = await axios.put("http://13.125.227.9:8080/user/info",{
+    //     formData
+    //   }, {
+    //     headers: {
+    //       "Content-Type": "multipart/form-data",
+    //       Authorization: `Bearer ${ACCESS_TOKEN}`,
+    //       refresh_token: `Bearer ${REFRESH_TOKEN}`
+    //     }
+    //   })
+    //   console.log(res)
+    // } catch(error) {
+    //   console.log(error)
+    // }
   }
 
   const CheckNickname = async (e) => {
@@ -209,86 +245,76 @@ const SignupSNS = () => {
   const GoalKcalChange = (e) => {
     // 체중 입력 시 숫자만 입력할 수 있도록 정규식 사용
     setGoalKcal(e.target.value.replace(/[^0-9]/g, ''))
-    const regNum = /^(\d{0,5})$/g
-    const regDot = /[\.]/g
+    const regNum = /^(\d{3,4})$/g
     if(e.target.value.length === 0) {
-      setGoalKcalError("입력")
-    } else if((regDot.test(e.target.value))) {
-      setGoalKcalError("소수점")
+      setGoalKcalError("* 값을 입력해주세요.")
+      goal_kcal_err_ref.current.style.color = "#FF7F00"
+    } else if(e.target.value.length < 3) {
+      setGoalKcalError("* 양식을 확인해주세요.")
+      goal_kcal_err_ref.current.style.color = "#FF7F00"
     } else if(regNum.test(e.target.value) !== true) {
-      setGoalKcalError("숫자아님")
+      setGoalKcalError("* 숫자만 사용 가능합니다.")
+      goal_kcal_err_ref.current.style.color = "#FF7F00"
     } else {
-      setGoalKcalError(true)
+      setGoalKcalError("")
     }
+    // console.log(e.target.value)
+    // console.log(e.target.value.length)
   }
-  
+
   const GoalCarbsChange = (e) => {
     // 체중 입력 시 숫자만 입력할 수 있도록 정규식 사용
     setGoalCarbs(e.target.value.replace(/[^0-9]/g, ''))
-    const regNum = /^(\d{0,3})$/g
-    const regDot = /[\.]/g
+    const regNum = /^(\d{2,3})$/g
     if(e.target.value.length === 0) {
-      setGoalCarbsError("입력")
-    } else if((regDot.test(e.target.value))) {
-      setGoalCarbsError("소수점")
+      setGoalCarbsError("* 값을 입력해주세요.")
+      goal_carbs_err_ref.current.style.color = "#FF7F00"
+    } else if(e.target.value.length < 2) {
+      setGoalCarbsError("* 양식을 확인해주세요.")
+      goal_carbs_err_ref.current.style.color = "#FF7F00"
     } else if(regNum.test(e.target.value) !== true) {
-      setGoalCarbsError("숫자아님")
+      setGoalCarbsError("* 숫자만 사용 가능합니다.")
+      goal_carbs_err_ref.current.style.color = "#FF7F00"
     } else {
-      setGoalCarbsError(true)
+      setGoalCarbsError("")
     }
   }
 
   const GoalProChange = (e) => {
     // 체중 입력 시 숫자만 입력할 수 있도록 정규식 사용
     setGoalPro(e.target.value.replace(/[^0-9]/g, ''))
-    const regNum = /^(\d{0,3})$/g
-    const regDot = /[\.]/g
+    const regNum = /^(\d{2,3})$/g
     if(e.target.value.length === 0) {
-      setGoalProError("입력")
-    } else if((regDot.test(e.target.value))) {
-      setGoalProError("소수점")
+      setGoalProError("* 값을 입력해주세요.")
+      goal_pro_err_ref.current.style.color = "#FF7F00"
+    } else if(e.target.value.length < 2) {
+      setGoalProError("* 양식을 확인해주세요.")
+      goal_pro_err_ref.current.style.color = "#FF7F00"
     } else if(regNum.test(e.target.value) !== true) {
-      setGoalProError("숫자아님")
+      setGoalProError("* 숫자만 사용 가능합니다.")
+      goal_pro_err_ref.current.style.color = "#FF7F00"
     } else {
-      setGoalProError(true)
+      setGoalProError("")
     }
   }
 
   const GoalFatChange = (e) => {
     // 체중 입력 시 숫자만 입력할 수 있도록 정규식 사용
     setGoalFat(e.target.value.replace(/[^0-9]/g, ''))
-    const regNum = /^(\d{0,3})$/g
-    const regDot = /[\.]/g
+    const regNum = /^(\d{2,3})$/g
     if(e.target.value.length === 0) {
-      setGoalFatError("입력")
-    } else if((regDot.test(e.target.value))) {
-      setGoalFatError("소수점")
+      setGoalFatError("* 값을 입력해주세요.")
+      goal_fat_err_ref.current.style.color = "#FF7F00"
+    } else if(e.target.value.length < 2) {
+      setGoalFatError("* 양식을 확인해주세요.")
+      goal_fat_err_ref.current.style.color = "#FF7F00"
     } else if(regNum.test(e.target.value) !== true) {
-      setGoalFatError("숫자아님")
+      setGoalFatError("* 숫자만 사용 가능합니다.")
+      goal_fat_err_ref.current.style.color = "#FF7F00"
     } else {
-      setGoalFatError(true)
+      setGoalFatError("")
     }
   }
-
-  const IntakeChange = (e) => {
-    if(goalKcalError && goalCarbsError && goalProError && goalFatError !== true) {
-      SetIntakeCheck("")
-      intake_check_ref.current.style.display = "none"
-    } else if(goalKcalError || goalCarbsError || goalProError || goalFatError === "소수점") {
-      SetIntakeCheck("* 입력값 중 소수점이 포함되어 있습니다.")
-      intake_check_ref.current.style.color = "#FF0000"
-    } else if(goalKcalError || goalCarbsError || goalProError || goalFatError === "숫자아님") {
-      SetIntakeCheck("* 입력값은 숫자만 사용 가능합니다.")
-      intake_check_ref.current.style.color = "#FF0000"
-    } else {
-      SetIntakeCheck("* 필수 입력값을 모두 입력하세요.")
-      intake_check_ref.current.style.color = "#FF0000"
-    }
-  }
-  console.log(goalKcalError)
-  console.log(goalCarbsError)
-  console.log(goalProError)
-  console.log(goalFatError)
 
   return (
     <SignUpWrap>
@@ -317,7 +343,7 @@ const SignupSNS = () => {
             }
             <input ref={currentWeight_ref} maxLength={5} type="number" onInput={maxLengthCheck} onMouseEnter={() => SetCurInfoMsg(true)} onMouseLeave={() => SetCurInfoMsg(false)} placeholder='현재 체중을 입력해주세요.' onChange={(e) => {CurrentWeightChange(e)}} value={curWeight || ''} />
             <span className='weight'>(kg)</span>
-            <p ref={current_weight_err_ref}>{curError}</p>
+            <p className="infomsg" ref={current_weight_err_ref}>{curError}</p>
           </div>
           <div>
             { goInfoMsg ?
@@ -333,7 +359,7 @@ const SignupSNS = () => {
             }
             <input ref={goalWeight_ref} maxLength={5} type="number" onInput={maxLengthCheck} onMouseEnter={() => SetGoInfoMsg(true)} onMouseLeave={() => SetGoInfoMsg(false)} placeholder='목표 체중을 입력해주세요.' onChange={(e) => {GoalWeightChange(e)}} value={goWeight || ''} />
             <span className='weight'>(kg)</span>
-            <p ref={goal_weight_err_ref}>{goError}</p>
+            <p className="infomsg" ref={goal_weight_err_ref}>{goError}</p>
           </div>
         </WeightWrap>
         <FastTimeWrap>
@@ -383,7 +409,6 @@ const SignupSNS = () => {
         </FastTimeWrap>
         <IntakeWrap>
           <h4>일일 목표 섭취량</h4>
-          <span className="check" ref={intake_check_ref}>{intakeCheck}</span>
           <GoalInfoWrap>
             { calInfo ? 
               (
@@ -398,11 +423,9 @@ const SignupSNS = () => {
             }
             <GoalTitle>칼로리</GoalTitle>
             <GoalInfo>
-              <input ref={goal_kcal_ref} maxLength={5} type="number" onInput={maxLengthCheck} onMouseEnter={() => SetCalInfo(true)} onMouseLeave={() => SetCalInfo(false)} placeholder='칼로리' onChange={(e) => {
-                GoalKcalChange(e)
-                IntakeChange(e)
-              }} value={goalKcal || ''} />
+              <input ref={goal_kcal_ref} maxLength={4} type="number" onInput={maxLengthCheck} onMouseEnter={() => SetCalInfo(true)} onMouseLeave={() => SetCalInfo(false)} placeholder='칼로리' onChange={(e) => {GoalKcalChange(e)}} value={goalKcal || ''} />
               <span className='unit'>(Kcal)</span>
+              <p ref={goal_kcal_err_ref}>{goalKcalError}</p>
             </GoalInfo>
           </GoalInfoWrap>
           <GoalInfoWrap>
@@ -419,11 +442,9 @@ const SignupSNS = () => {
             }
             <GoalTitle>탄수화물</GoalTitle>
             <GoalInfo>
-              <input ref={goal_carbs_ref} maxLength={3} type="number" onInput={maxLengthCheck} onMouseEnter={() => SetCarbsInfo(true)} onMouseLeave={() => SetCarbsInfo(false)} placeholder='탄수화물' onChange={(e) => {
-                GoalCarbsChange(e)
-                IntakeChange(e)
-              }} value={goalCarbs || ''} />
+              <input ref={goal_carbs_ref} maxLength={3} type="number" onInput={maxLengthCheck} onMouseEnter={() => SetCarbsInfo(true)} onMouseLeave={() => SetCarbsInfo(false)} placeholder='탄수화물' onChange={(e) => {GoalCarbsChange(e)}} value={goalCarbs || ''} />
               <span className='unit'>(g)</span>
+              <p ref={goal_carbs_err_ref}>{goalCarbsError}</p>
             </GoalInfo>
           </GoalInfoWrap>
           <GoalInfoWrap>
@@ -440,11 +461,9 @@ const SignupSNS = () => {
             }
             <GoalTitle>단백질</GoalTitle>
             <GoalInfo>
-              <input ref={goal_pro_ref} maxLength={3} type="number" onInput={maxLengthCheck} onMouseEnter={() => SetProInfo(true)} onMouseLeave={() => SetProInfo(false)} placeholder='단백질' onChange={(e) => {
-                GoalProChange(e)
-                IntakeChange(e)
-              }} value={goalPro || ''} />
+              <input ref={goal_pro_ref} maxLength={3} type="number" onInput={maxLengthCheck} onMouseEnter={() => SetProInfo(true)} onMouseLeave={() => SetProInfo(false)} placeholder='단백질' onChange={(e) => {GoalProChange(e)}} value={goalPro || ''} />
               <span className='unit'>(g)</span>
+              <p ref={goal_pro_err_ref}>{goalProError}</p>
             </GoalInfo>
           </GoalInfoWrap>
           <GoalInfoWrap>
@@ -461,23 +480,25 @@ const SignupSNS = () => {
             }
             <GoalTitle>지방</GoalTitle>
             <GoalInfo>
-              <input ref={goal_fat_ref} maxLength={3} type="number" onInput={maxLengthCheck} onMouseEnter={() => SetFatInfo(true)} onMouseLeave={() => SetFatInfo(false)} placeholder='지방' onChange={(e) => {
-                GoalFatChange(e)
-                IntakeChange(e)
-              }} value={goalFat || ''} />
+              <input ref={goal_fat_ref} maxLength={3} type="number" onInput={maxLengthCheck} onMouseEnter={() => SetFatInfo(true)} onMouseLeave={() => SetFatInfo(false)} placeholder='지방' onChange={(e) => {GoalFatChange(e)}} value={goalFat || ''} />
               <span className='unit'>(g)</span>
+              <p ref={goal_fat_err_ref}>{goalFatError}</p>
             </GoalInfo>
           </GoalInfoWrap>
         </IntakeWrap>
         <Button>
-          <CancleBtn>뒤로가기</CancleBtn>
+          <CancleBtn onClick={() => {navigate("/")}}>뒤로가기</CancleBtn>
           <SignUpBtn onClick={onhandleSignUpSNS}
             disabled=
             {
               checkNickMsg === "* 사용 가능 한 닉네임입니다." &&
               curError === "* 양식에 맞게 작성되었습니다." &&
               goError === "* 양식에 맞게 작성되었습니다." &&
-              startHourCheck === ""
+              startHourCheck === "" &&
+              goalKcalError === "" &&
+              goalCarbsError === "" &&
+              goalProError === "" &&
+              goalFatError === ""
               ? false : true
             }>회원가입</SignUpBtn>
         </Button>
@@ -500,11 +521,11 @@ const SignUpWrap = styled.div`
   align-items: center;
   h1 {
     position: absolute;
-    top: 10px;
+    top: 0;
     left: 0;
     right: 0;
     margin: 0 auto;
-    padding: 10px 0;
+    padding: 30px 0;
     font-size: 26px;
     color: #FE7770;
     width: 540px;
@@ -514,7 +535,7 @@ const SignUpWrap = styled.div`
 `
 
 const FormWrap = styled.form`
-  margin-top: 60px;
+  margin-top: 94px;
 `
 
 const PicWrap = styled.div`
@@ -594,7 +615,7 @@ const WeightWrap = styled.div`
     font-size: 12px;
     color: #9A9A9A;
   }
-  div p {
+  div p.infomsg {
     position: absolute;
     bottom: -20px;
     left: 6px;
@@ -605,8 +626,8 @@ const WeightWrap = styled.div`
 `
 
 const HoverMsg = styled.p`
-  position: fixed;
-  top: 48px;
+  position: absolute;
+  top: 35px;
   left: 0;
   display: flex;
   flex-direction: column;
@@ -614,24 +635,32 @@ const HoverMsg = styled.p`
   align-items: flex-start;
   width: 100%;
   height: 40px;
-  font-size: 10px;
-  background-color: #7E7E7E;
+  font-size: 9px;
+  background-color: white;
+  border: 1px solid #FE7770;
   border-radius: 6px;
-  padding: 5px;
+  padding: 4px;
+  color: #333;
   /* box-sizing: border-box; */
   z-index: 5000;
   span {
     color: #81C147;
     font-size: 11px;
+    margin-top: 6px;
   }
-  &::after {
+  &::before {
     content: '';
     position: absolute;
     top: -4px;
     left: 20px;
     width: 8px;
     height: 8px;
-    background-color: #7E7E7E;
+    border-bottom: 1px solid transparent;
+    border-right: 1px solid transparent;
+    border-top: 1px solid #FE7770;
+    border-left: 1px solid #FE7770;
+    box-sizing: border-box;
+    background-color: white;
     transform: rotate(45deg);
   }
 `
@@ -672,12 +701,12 @@ const Button = styled.div`
   height: 40px;
   margin: 0 auto;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   button {
-    width: 140px;
+    width: 46%;
     height: 100%;
-    margin: 0 10px;
+    margin: 0;
     border: none;
     border-radius: 30px;
     color: #fff;
@@ -697,16 +726,6 @@ const SignUpBtn = styled.button`
   &:disabled {
     background-color: #C2C2C2;
     cursor: default;
-  }
-`
-
-const LoginTxt = styled.div`
-  font-size: 12px;
-  margin: 16px auto;
-  text-align: center;
-  span {
-    color: #FE7770;
-    cursor: pointer;
   }
 `
 
@@ -750,13 +769,6 @@ const IntakeWrap = styled.div`
     color: #fff;
     border-radius: 6px;
   }
-  span.check {
-    position: absolute;
-    bottom: -20px;
-    left: 6px;
-    font-size: 10px;
-    color: #D9D9D9;
-  }
 `
 
 const GoalInfoWrap = styled.div`
@@ -764,6 +776,7 @@ const GoalInfoWrap = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: 10px auto 4px;
 `
 
 const GoalHoverMsg = styled.p`
@@ -777,24 +790,31 @@ const GoalHoverMsg = styled.p`
   width: 75%;
   height: 40px;
   font-size: 10px;
-  background-color: #7E7E7E;
+  background-color: white;
+  border: 1px solid #FE7770;
   border-radius: 6px;
   padding: 5px;
-  color: #fff;
+  color: #333;
   /* box-sizing: border-box; */
   z-index: 5000;
   span {
     color: #81C147;
     font-size: 11px;
+    margin-top: 6px;
   }
-  &::after {
+  &::before {
     content: '';
     position: absolute;
     top: -4px;
     left: 20px;
     width: 8px;
     height: 8px;
-    background-color: #7E7E7E;
+    border-bottom: 1px solid transparent;
+    border-right: 1px solid transparent;
+    border-top: 1px solid #FE7770;
+    border-left: 1px solid #FE7770;
+    box-sizing: border-box;
+    background-color: white;
     transform: rotate(45deg);
   }
 `
@@ -837,6 +857,14 @@ const GoalInfo = styled.div`
     right: 10px;
     font-size: 12px;
     color: #9A9A9A;
+  }
+  p {
+    position: absolute;
+    bottom: -14px;
+    left: 4px;
+    margin: 0;
+    font-size: 6px;
+    color: #D9D9D9;
   }
 `
 

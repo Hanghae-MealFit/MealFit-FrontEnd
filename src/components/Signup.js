@@ -380,7 +380,7 @@ const Signup = () => {
             }
             <input ref={currentWeight_ref} maxLength={5} type="number" onInput={maxLengthCheck} onMouseEnter={() => SetCurInfoMsg(true)} onMouseLeave={() => SetCurInfoMsg(false)} placeholder='현재 체중을 입력해주세요.' onChange={(e) => {CurrentWeightChange(e)}} value={curWeight || ''} />
             <span className='weight'>(kg)</span>
-            <p ref={current_weight_err_ref}>{curError}</p>
+            <p className="infomsg" ref={current_weight_err_ref}>{curError}</p>
           </div>
           <div>
             { goInfoMsg ?
@@ -396,7 +396,7 @@ const Signup = () => {
             }
             <input ref={goalWeight_ref} maxLength={5} type="number" onInput={maxLengthCheck} onMouseEnter={() => SetGoInfoMsg(true)} onMouseLeave={() => SetGoInfoMsg(false)} placeholder='목표 체중을 입력해주세요.' onChange={(e) => {GoalWeightChange(e)}} value={goWeight || ''} />
             <span className='weight'>(kg)</span>
-            <p ref={goal_weight_err_ref}>{goError}</p>
+            <p className="infomsg" ref={goal_weight_err_ref}>{goError}</p>
           </div>
         </WeightWrap>
         <FastTimeWrap>
@@ -472,7 +472,7 @@ const Signup = () => {
 const SignUpWrap = styled.div`
   position: relative;
   width: 700px;
-  height: 920px;
+  height: 960px;
   border-radius: 30px;
   background-color: white;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
@@ -482,11 +482,11 @@ const SignUpWrap = styled.div`
   align-items: center;
   h1 {
     position: absolute;
-    top: 10px;
+    top: 0;
     left: 0;
     right: 0;
     margin: 0 auto;
-    padding: 10px 0;
+    padding: 30px 0;
     font-size: 26px;
     color: #FE7770;
     width: 540px;
@@ -496,7 +496,7 @@ const SignUpWrap = styled.div`
 `
 
 const FormWrap = styled.form`
-  margin-top: 60px;
+  margin-top: 94px;
 `
 
 const PicWrap = styled.div`
@@ -576,7 +576,7 @@ const WeightWrap = styled.div`
     font-size: 12px;
     color: #9A9A9A;
   }
-  div p {
+  div p.infomsg {
     position: absolute;
     bottom: -20px;
     left: 6px;
@@ -587,8 +587,8 @@ const WeightWrap = styled.div`
 `
 
 const HoverMsg = styled.p`
-  position: fixed;
-  top: 48px;
+  position: absolute;
+  top: 35px;
   left: 0;
   display: flex;
   flex-direction: column;
@@ -596,24 +596,32 @@ const HoverMsg = styled.p`
   align-items: flex-start;
   width: 100%;
   height: 40px;
-  font-size: 10px;
-  background-color: #7E7E7E;
+  font-size: 9px;
+  background-color: white;
+  border: 1px solid #FE7770;
   border-radius: 6px;
-  padding: 5px;
+  padding: 4px;
+  color: #333;
   /* box-sizing: border-box; */
   z-index: 5000;
   span {
     color: #81C147;
     font-size: 11px;
+    margin-top: 6px;
   }
-  &::after {
+  &::before {
     content: '';
     position: absolute;
     top: -4px;
     left: 20px;
     width: 8px;
     height: 8px;
-    background-color: #7E7E7E;
+    border-bottom: 1px solid transparent;
+    border-right: 1px solid transparent;
+    border-top: 1px solid #FE7770;
+    border-left: 1px solid #FE7770;
+    box-sizing: border-box;
+    background-color: white;
     transform: rotate(45deg);
   }
 `
@@ -654,12 +662,12 @@ const Button = styled.div`
   height: 40px;
   margin: 0 auto;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   button {
-    width: 140px;
+    width: 46%;
     height: 100%;
-    margin: 0 10px;
+    margin: 0;
     border: none;
     border-radius: 30px;
     color: #fff;
