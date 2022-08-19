@@ -6,6 +6,8 @@ import { faCamera } from '@fortawesome/free-solid-svg-icons'
 const PostImgSelect = ({ files, setFiles }) => {
 
   const temp_img = "https://cdn.icon-icons.com/icons2/2828/PNG/512/images_photos_photo_image_icon_179766.png"
+  
+  
   const [prevFiles, setPrevFiles] = React.useState(temp_img);
 
   const previewImage = async (e) => {
@@ -53,14 +55,18 @@ const ImgWrap = styled.div`
 `
 
 const Img = styled.div`
+position: absolute;
   width: 100%;
   height: 100%;
-  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border-radius: 30px 30px 0px 0px;
   overflow: hidden;
   img {
     width: 100%;
-    height: 100%;
+    // height: 100%;
+    border-radius: 20px
     object-fit: cover;
     // background: red;
   }
@@ -73,7 +79,7 @@ const IconWrap = styled.label`
   width: 35px;
   height: 35px;
   border-radius: 50%;
-  background-color: black;
+  background-color: #555;
   display: flex;
   justify-content: center;
   align-items: center;

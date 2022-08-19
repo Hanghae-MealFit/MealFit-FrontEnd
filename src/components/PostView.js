@@ -4,7 +4,10 @@ import axios from "axios";
 
 import { useNavigate, useParams } from "react-router-dom";
 
-const PostView = () => {
+import Sidebar from "./Sidebar";
+import Modal from "../elements/Modal"
+
+const PostView = ({ _handleModal }) => {
     const [dataTest, setdataTest] = React.useState({
         postId: "1",
         nickname: "봄봄",
@@ -26,8 +29,28 @@ const PostView = () => {
         navigation(`/post/${postId}`)
     }
 
+
+    // 삭제 axios
+    const DeletPost = () => {
+        //     axios.delete("http://13.125.227.9:8080/post/{postId}",
+        //         {
+        //             headers: {
+        //                 Authorization: `Bearer ${auth.Authorization}`,
+        //                 refresh_token: `Bearer ${auth.refresh_token}`,
+        //             }
+        //         })
+        //         .then(function (response) {
+        //             console.log("반응", response)
+        //             window.alert("삭제되었습니다.")
+        //         })
+        //         .catch(function (error) {
+        //             console.log("에러", error)
+        //         });
+        //     // console.log("삭제됨!", DelPost) 
+    }
+
     const auth = {
-        Authorization: sessionStorage.getItem("Authorization"),
+        authorization: sessionStorage.getItem("token"),
         refresh_token: sessionStorage.getItem("refresh_token")
     }
 
@@ -52,25 +75,12 @@ const PostView = () => {
     //         });
     // }, []);
 
+    const [modal, setModal] = React.useState(false);
 
-    // // 삭제
-    const DeletPost = () => {
-        // axios.delete("http://13.125.227.9:8080/post/{postId}",
-        //     {
-        //         headers: {
-        //             Authorization: `Bearer ${auth.Authorization}`,
-        //             refresh_token: `Bearer ${auth.refresh_token}`,
-        //         }
-        //     })
-        //     .then(function (response) {
-        //         console.log("반응", response)
-        //         window.alert("삭제되었습니다.")
-        //     })
-        //     .catch(function (error) {
-        //         console.log("에러", error)
-        //     });
-        // // console.log("삭제됨!", DelPost) 
-    }
+    const modalOn = () => {
+        setModal(!modal);
+    };
+
 
     // 댓글 입력값 State 저장
     // const [comment, setComment] = React.useState("");
@@ -116,13 +126,15 @@ const PostView = () => {
 
     return (
         <Wrap>
-        <ImgWrap src={dataTest.postImage} />
+            <Sidebar />
+            <ImgWrap src={dataTest.postImage} />
             <ModifyDelBtn>
-          <button onClick={DeletPost} style={{ color: 'black', margin: "0px 10px 0px 0px" }} >
-            삭제</button>
-          <button onClick={ModifyPost} style={{ color: 'black' }} >
-            수정</button>
-        </ModifyDelBtn>
+                <button onClick={modalOn}
+                    style={{ color: 'black', margin: "0px 10px 0px 0px" }} >
+                    삭제</button>
+                <button onClick={ModifyPost} style={{ color: 'black' }} >
+                    수정</button>
+            </ModifyDelBtn>
 
             <div>
                 <div style={{ display: "flex", alignItems: "center", marginTop: "15px", marginLeft: "25px", marginBottom: "15px" }}>
@@ -148,29 +160,35 @@ const PostView = () => {
                 <CommentBox style={{ marginLeft: "45px" }}>
                     <input type="text" placeholder="댓글을 입력해주세요."
                     // value={comment} onChange={onChange}
-                     />
+                    />
                     <Button>
                         <CommentBtn onClick={onhandleComment}>댓글 작성하기</CommentBtn>
                     </Button>
                 </CommentBox>
             </CommentContainer>
+
+            <Modal _handleModal={_handleModal}>
+            <p>게시글이 삭제됩니다. 삭제하시겠습니까?</p>
+                <div>
+                <button>NO</button>
+                <button onClick={DeletPost}>YES</button>
+                </div>
+        </Modal>
+
         </Wrap>
+
+        
     )
 }
 
+
 const Wrap = styled.div`
-    position: relative;
     width: 700px;
     height: 95%;
-    // left: 40%;
     border-radius: 30px;
     background-color: white;
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
-    // display: flex;
-    // flex-direction: column;
-    // justify-content: center;
-    // align-items: center;
-`
+`;
 
 const ImgWrap = styled.img`
     position: relative;
@@ -180,7 +198,7 @@ const ImgWrap = styled.img`
     // margin-top: 20px;
     overflow: hidden;
     object-fit: cover;
-`
+`;
 
 // const profileInfo = styled.div`
 //     position: relative;
@@ -204,9 +222,9 @@ const Contents = styled.div`
     position: relative;
     bottom: -20px;
     font-size: 16px;
-    color: #D9D9D9;
+    color: #808080;
   }
-`
+`;
 
 const Button = styled.div`
 position: absolute;
@@ -229,7 +247,7 @@ position: absolute;
     cursor: pointer;
   }
 // background-color: red;
-`
+`;
 
 const ModifyDelBtn = styled.div`
     display: flex;
@@ -247,18 +265,18 @@ const ModifyDelBtn = styled.div`
     font-weight: 900;
     border-radius: 30px;
     cursor: pointer;
-    border: 1px solid black;
+    border: 1px solid #555;
     background-color: white;
     }
-`
+`;
 
 const CommentBtn = styled.button`
-  background-color: black;
+  background-color: #555;
   &:disabled {
-    background-color: #C2C2C2;
+    background-color: #555;
     cursor: default;
   }
-`
+`;
 
 const CommentContainer = styled.div`
 
@@ -274,7 +292,7 @@ const CommentBox = styled.div`
     justify-content: center;
     align-items: center;
     border-radius: 30px;
-    border: 1px solid #9A9A9A;
+    border: 1px solid #808080;
 
     input {
         width: 100%;
@@ -283,11 +301,11 @@ const CommentBox = styled.div`
         box-sizing: border-box;
         outline: none;
       }
-`
+`;
 
 const Likecomment = styled.div`
     font-size: 14px;
-    color: #9A9A9A;
+    color: #bbb;
     margin-left: 430px;
     // background-color: red;
 `;

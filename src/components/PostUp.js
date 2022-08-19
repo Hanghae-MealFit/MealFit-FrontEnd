@@ -3,6 +3,7 @@ import styled from "styled-components";
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
 
+import Sidebar from "./Sidebar";
 import PostImgSelect from '../elements/PostImgSelect'
 
 const PostUp = () => {
@@ -21,7 +22,7 @@ const PostUp = () => {
 
 
         const auth = {
-            Authorization: sessionStorage.getItem("Authorization"),
+            authorization: sessionStorage.getItem("token"),
             refresh_token: sessionStorage.getItem("refresh_token")
         }
 
@@ -34,7 +35,7 @@ const PostUp = () => {
                 content: PostUpInfo.content
             },
             headers: {
-                Authorization: `Bearer ${auth.Authorization}`,
+                Authorization: `Bearer ${auth.authorization}`,
                 refresh_token: `Bearer ${auth.refresh_token}`,
             },
         }).then((response) => {
@@ -46,8 +47,15 @@ const PostUp = () => {
             window.alert("식단 작성 실패!")
         })
     }
+
+    const onhandleBack = () => {
+      navigate("/")
+    };
+
+    
     return (
         <Wrap>
+          <Sidebar />
             <PicWrap>
                 <PostImgSelect files={files} setFiles={setFiles} />
             </PicWrap>
@@ -57,7 +65,7 @@ const PostUp = () => {
             </Contents>
 
             <Button>
-                <CancleBtn>뒤로가기</CancleBtn>
+                <CancleBtn onClick={onhandleBack}>뒤로가기</CancleBtn>
                 <PostUpBtn onClick={onhandlePostUp}>올리기</PostUpBtn>
             </Button>
         </Wrap>
@@ -117,7 +125,8 @@ const Contents = styled.div`
 const Textarea = styled.textarea`
     width: 600px;
     height: 300px;
-    border: 1px solid #9A9A9A;
+    border: none;
+    // border: 1px solid #9A9A9A;
     // border-radius: 10px;
     padding-left: 10px;
     padding-right: 5px;

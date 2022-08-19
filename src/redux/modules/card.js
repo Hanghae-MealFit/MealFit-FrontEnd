@@ -8,6 +8,7 @@ import axios from "axios"; //axios: node.js와 브라우저를 위한 Promise �
 const LOAD = "post/LOAD";
 const UPDATE = "post/UPDATE";
 const CREATEPOST = "post/CREATEPOST";
+const DELETEPOST = "post/DELETEPOST";
 
 
 //reducer이 사용할 initialState
@@ -61,12 +62,16 @@ export function loadPost(post) {
   export function createPost(post) {
     return { type: CREATEPOST, post }
   }
+
+  export function delPost(post) {
+    return { type: DELETEPOST, post }
+  }
   
   // middlewares
   export const loadPostDB = () => {
     return async function (dispatch) {
       await axios
-      .get("http://13.125.227.9:8080/api/posts?", {
+      .get("http://13.125.227.9:8080/posts?", {
         headers: {
           "Content-Type": "application/json"
         }
@@ -75,7 +80,7 @@ export function loadPost(post) {
         dispatch(createPost(response.data.content));
       })
       .catch((error) => {
-        console.log("실패: 400 BAD_REQUEST", error);
+        console.log("데이터 불러오기 실패", error);
       });
     //   try {
     //     const res = await axios.get("http://13.125.227.9:8080/post");
@@ -111,6 +116,8 @@ export function loadPost(post) {
           state.post = new_post
           return { ...state }
         }
+
+
   
       default: return state;
     }

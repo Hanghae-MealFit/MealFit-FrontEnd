@@ -5,55 +5,54 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from 'react-router-dom'
 
 const Cards = (props) => {
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-    // const image = React.useRef()
-    // const content = React.useRef()
-    // const likeCount = React.useRef()
-    // const commentCount = React.useRef()
+  // const image = React.useRef()
+  // const content = React.useRef()
+  // const likeCount = React.useRef()
+  // const commentCount = React.useRef()
 
-    // const { image, contents, likeCount, commentCount } = props.post;
-    // console.log("나는 어디에", props.post)
+  // const { image, contents, likeCount, commentCount } = props.post;
+  // console.log("나는 어디에", props.post)
 
-    return (
-        <>
-          <Card>
-            <CardInner>
-              <CardImg src="https://images.unsplash.com/photo-1571047399553-603e2138b646?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" />
-              <CardText>
-                <p>신선한 채소와 다양한 토핑들을 추가해서 먹는 포만감 만점, 다이어트 불가능한 샐러드 래시피!</p></CardText>
-              <TextLabel>
-                좋아요 2 ∙ 댓글 2
-              </TextLabel>
+  return (
+    <>
+      <Card>
+        <CardInner>
+          <CardImg src="https://images.unsplash.com/photo-1571047399553-603e2138b646?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" />
+          <TextBox>
+            <CardText>
+              <p>신선한 채소와 다양한 토핑들을 추가해서 먹는 포만감 만점, 다이어트 불가능한 샐러드 래시피!</p>
+            </CardText>
+            <TextLabel>
+              좋아요 2 ∙ 댓글 2
+            </TextLabel>
+          </TextBox>
 
-              {/* <div>{image}</div>
+          {/* <div>{image}</div>
               <div>{content}</div>
               <div>좋아요 {likeCount} ∙ 댓글 {commentCount}</div> */}
 
-                {/* <CardImg>
+          {/* <CardImg>
                     <img src={props.post.image} alt="" />
                 </CardImg>
                 <CardContents>
                     <CardText>{props.post.contents}</CardText>
                 </CardContents> */}
-            </CardInner>
-            {/* <TextLabel>
+        </CardInner>
+        {/* <TextLabel>
                 관심 {props.post.likeCount} ∙ 댓글 {props.post.commentCount}
             </TextLabel> */}
-          </Card>
-        </>
-    );
+      </Card>
+    </>
+  );
 };
 
 const Card = styled.div`
     display: block;
-    width: 245px;
-    height: 340px;
-    // margin-bottom: 20px;
-    // maring: 0 10px;
-    // background-color: red;
-    // padding : 0px 20px 0px 20px;
+    width: 100%;
+    height: 100%;
     
     &:nth-child(5n) {
         margin-right: 10px;
@@ -61,29 +60,43 @@ const Card = styled.div`
     `;
 
 const CardInner = styled.a`
-//   border: 1px solid rgb(238, 238, 238);
-  background: rgb(255, 255, 255);
-  display: block;
-  // border-radius: 2em;
-  padding-bottom: 10px;
-
+  // border: 3px solid green;
+  width: 100%;
+  height: 100%;
+  // background: green;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 `;
 
 const CardImg = styled.img`
     width: 100%;
-    height: auto;
-    max-width: 245px;
-    max-height: 220px;
+    height: 60%;
+    max-height: 180px;
     overflow: hidden;
-    // background-color: yellow;
-
+    object-fit: contain;
+    background-color: rgba(255, 255, 255, 0.5);
 `;
 
+const TextBox = styled.div`
+    background: #fff;
+    width: 100%;
+    height: 40%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    `;
+
 const CardText = styled.div`
-    margin: 5px 10px 10px;
+   // background: pink;
     font-size: 14px;
+    width: 90%;
+    height: 60%;
+    border-bottom: 1px solid #ddd;
     p {
-        height: 40px;
+        height: 100%;
         text-overflow: ellipsis;
         word-wrap: break-word;
         display: -webkit-box;
@@ -94,8 +107,16 @@ const CardText = styled.div`
 `;
 
 const TextLabel = styled.div`
+// background: green;
+    color: #808080;
     font-size: 12px;
-    margin-top: 10px;
+    width: 100%;
+    height: 40%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-right: 40px;
+    // flex-direction: column;
 `;
 
 // const CardContents = styled.div`
