@@ -130,7 +130,7 @@ const FindMyInfo = () => {
 const FindWrap = styled.div`
   position: relative;
   width: 600px;
-  height: 600px;
+  height: 740px;
   margin: 0 auto;
   border-radius: 30px;
   background-color: white;
@@ -139,13 +139,14 @@ const FindWrap = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
   h1 {
     position: absolute;
-    top: 10px;
+    top: 0;
     left: 0;
     right: 0;
     margin: 0 auto;
-    padding: 10px 0;
+    padding: 30px 0;
     font-size: 26px;
     color: #FE7770;
     width: 540px;
@@ -155,21 +156,21 @@ const FindWrap = styled.div`
 `
 
 const InputWrap = styled.div`
-  width: 500px;
+  width: 100%;
   height: 100%;
-  margin: 0 auto;
+  margin: 94px auto 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  & > div:nth-of-type(1) {
-    border-bottom: 1px solid #9A9A9A;
+  & > div:nth-of-type(2) {
+    background-color: #eee;
   }
 `
 
 const FindInputWrap = styled.div`
   width: 100%;
-  height: 40%;
+  height: 50%;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -189,6 +190,7 @@ const Find = styled.div`
   align-items: center;
   input {
     width: 400px;
+    background-color: transparent;
     border: none;
     border-bottom: 1px solid #808080;
     padding: 12px 0 12px 6px;
