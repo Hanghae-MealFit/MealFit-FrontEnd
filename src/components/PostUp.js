@@ -225,4 +225,4 @@ position: absolute;
   }
 `
 
-  export default PostUp;
+export default PostUp;

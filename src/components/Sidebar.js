@@ -37,14 +37,14 @@ const Sidebar = () => {
   };
 
   const menus = [  
-    { name: "식단게시판", path: "/" },
+    { name: "식단게시판", path: "/post/all" },
+    // 임시로 만든 url
     { name: "식단가이드", path: "/" },
-    { name: "기록하기", path: "/" }
+    { name: "기록하기", path: "/record" }
   ];
    
-  console.log(isLogin)  
+  // console.log(isLogin)
   
-
     //  닉네임과 프사는 어디서 받아오죵?
     const nickname = sessionStorage.getItem("nickname")
     // console.log("닉네임 있어?", nickname);
