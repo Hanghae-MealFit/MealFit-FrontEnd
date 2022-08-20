@@ -22,7 +22,7 @@ const PostUp = () => {
       content: content_ref.current.value
     };
   
-    formData.append("postImage", ImageFile);
+    formData.append("postImage", ImageFile);  
     formData.append("content", content_ref.current.value);
     console.log(formData);
     console.log(ImageFile);
