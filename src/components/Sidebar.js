@@ -9,7 +9,23 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from "react-redux";
 
 const Sidebar = () => {
+
   const [isLogin, setIsLogin] = React.useState(false);
+
+  const LoginCheck = () => {
+    const Token = {
+      authorization: sessionStorage.getItem("accessToken"),
+      refresh_token: sessionStorage.getItem("refreshToken")
+    }
+    console.log(Token)
+    if(Token.authorization !== "" && Token.refresh_token !== "") {
+      setIsLogin(true)
+    }
+  }
+
+  React.useEffect(() => {
+    LoginCheck()
+  }, [isLogin]);
 
   const sessionStorage = window.sessionStorage;
   const dispatch = useDispatch();
@@ -25,20 +41,7 @@ const Sidebar = () => {
     { name: "식단가이드", path: "/" },
     { name: "기록하기", path: "/" }
   ];
-
-  const LoginCheck = () => {
-    const Token = {
-      authorization: sessionStorage.getItem("accessToken"),
-      refresh_token: sessionStorage.getItem("refreshToken")
-    }
-    console.log(Token)
-    if(Token.authorization !== "" && Token.refresh_token !== "") {
-      setIsLogin(true)
-    }
-  }
-  React.useEffect(() => {
-    LoginCheck()
-  }, [isLogin]);
+  
   console.log(isLogin)
   
 
