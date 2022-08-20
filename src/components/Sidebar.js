@@ -10,15 +10,14 @@ import { useDispatch, useSelector } from "react-redux";
 
 const Sidebar = () => {
     const [isLogin, setIsLogin] = React.useState(false);
-    console.log(isLogin)
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const auth = {
-        authorization: sessionStorage.getItem("token"),
-        refresh_token: sessionStorage.getItem("refresh_token")
-    }
+        authorization: sessionStorage.getItem("accessToken"),
+        refresh_token: sessionStorage.getItem("refreshToken")
+      };
 
     const menus = [
         { name: "식단게시판", path: "/" },
@@ -27,18 +26,19 @@ const Sidebar = () => {
     ];
 
   React.useEffect(() => {
-    // sessionStorage 가져오기
-    let isLogin = sessionStorage.getItem("token");
-    // sessionStorage 확인
-    // console.log("로그인 했어?", isLogin);
-    // sessionStorage가 있으면?
-    if (isLogin) {
+    const Token = {
+        authorization: sessionStorage.getItem("accessToken"),
+        refresh_token: sessionStorage.getItem("refreshToken")
+    }
+    if (Token.authorization !== "" && Token.refresh_token !== "" ) {
       setIsLogin(true);
     } else {
       setIsLogin(false);
     }
-  });
+  }, []);
+  console.log(isLogin)
   
+
     //  닉네임과 프사는 어디서 받아오죵?
     const nickname = sessionStorage.getItem("nickname")
     // console.log("닉네임 있어?", nickname);
@@ -47,14 +47,13 @@ const Sidebar = () => {
     // console.log("프사 있어?", profile);
 
     const onClickLogin = () => {
-        sessionStorage.getItem("token")
         navigate("/user/login");
     }
 
     const onhandleLogOut = async (e) => {
         e.preventDefault()
 
-        sessionStorage.clear("token")
+        sessionStorage.clear()
         window.alert("로그아웃!")
         navigate("/");
           }

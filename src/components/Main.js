@@ -15,17 +15,19 @@ const Main = () => {
   const [time, setTime] = React.useState(new Date());
   const interval = React.useRef(null)
 
-  const sessionStorage = window.sessionStorage;
-  const ACCESS_TOKEN = sessionStorage.getItem("ACCESS_TOKEN")
-  const REFRESH_TOKEN = sessionStorage.getItem("REFRESH_TOKEN")
+  const auth = {
+      authorization: sessionStorage.getItem("accessToken"),
+      refresh_token: sessionStorage.getItem("refreshToken")
+    };
+
   const GetUser = async () => {
     try {
       const res = await axios.get("http://13.125.227.9:8080/user/info",
       {
         headers: {
-          Authorization: `Bearer ${ACCESS_TOKEN}`,
-          refresh_token: `Bearer ${REFRESH_TOKEN}`
-        }
+          Authorization: `Bearer ${auth.authorization}`,
+          refresh_token: `Bearer ${auth.refresh_token}`
+        },
       })
       console.log(res)
     } catch(error) {

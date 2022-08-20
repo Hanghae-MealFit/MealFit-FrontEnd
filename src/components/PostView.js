@@ -5,7 +5,8 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 
 import Sidebar from "./Sidebar";
-import Modal from "../elements/Modal"
+import Modal from "../elements/Modal";
+import { loadPost } from "../redux/modules/card";
 
 const PostView = ({ _handleModal }) => {
     const [dataTest, setdataTest] = React.useState({
@@ -18,69 +19,52 @@ const PostView = ({ _handleModal }) => {
         likeNumber: 2,
         commentNumber: 2
     });
-    console.log(dataTest)
+    console.log(dataTest);
 
     let { postId } = useParams();
     const navigation = useNavigate();
-    console.log(postId)
+    console.log(postId);
 
     // 수정
     const ModifyPost = () => {
-        navigation(`/post/${postId}`)
-    }
-
-
-    // 삭제 axios
-    const DeletPost = () => {
-        //     axios.delete("http://13.125.227.9:8080/post/{postId}",
-        //         {
-        //             headers: {
-        //                 Authorization: `Bearer ${auth.Authorization}`,
-        //                 refresh_token: `Bearer ${auth.refresh_token}`,
-        //             }
-        //         })
-        //         .then(function (response) {
-        //             console.log("반응", response)
-        //             window.alert("삭제되었습니다.")
-        //         })
-        //         .catch(function (error) {
-        //             console.log("에러", error)
-        //         });
-        //     // console.log("삭제됨!", DelPost) 
+        navigation(`/post/${postId}`);
     }
 
     const auth = {
         authorization: sessionStorage.getItem("token"),
         refresh_token: sessionStorage.getItem("refresh_token")
-    }
-
-    // React.useEffect(async () => {
-    //     const Post = axios.create({
-    //         baseURL: "http://13.125.227.9:8080/",
-    //         headers: {
-    //             Authorization: `Bearer ${auth.Authorization}`,
-    //             refresh_token: `Bearer ${auth.refresh_token}`,
-    //         }
-    //     });
-
-    //     const PostImg = await Post
-    //         .get("/post/{postId}")
-    //         .then((response) => {
-    //             console.log("반응", response)
-    //             console.log('보내주신 data는', response.data)
-    //             setdataTest(response.data)
-    //         })
-    //         .catch(function (error) {
-    //             console.log("에러", error)
-    //         });
-    // }, []);
-
-    const [modal, setModal] = React.useState(false);
-
-    const modalOn = () => {
-        setModal(!modal);
     };
 
+    const loadPostAX = async() => {
+        const apiPost = axios.create({
+            baseURL: "http://13.125.227.9:8080/",
+            headers: {
+                Authorization: `Bearer ${auth.Authorization}`,
+                refresh_token: `Bearer ${auth.refresh_token}`,
+            }
+        });
+        const CreatePostAXImg = await apiPost
+            .get("/post/{postId}")
+            .then((response) => {
+                console.log("반응", response)
+                console.log('보내주신 data는', response.data)
+                setdataTest(response.data)
+            })
+            .catch(function (error) {
+                console.log("에러", error)
+            });
+    }
+
+    React.useEffect(() => {
+        loadPostAX()
+    }, []);
+
+    // 삭제 모달창
+    const [modalOpen, setModalOpen] = React.useState(false);
+
+    const closeModal = () => {
+        setModalOpen(false);
+    };
 
     // 댓글 입력값 State 저장
     // const [comment, setComment] = React.useState("");
@@ -94,24 +78,31 @@ const PostView = ({ _handleModal }) => {
 
     const onhandleComment = async (e) => {
         e.preventDefault()
-        // const CommentApi = axios.create({
-        //     baseURL: "http://13.125.227.9:8080/",
-        //     headers: {
-        //         Authorization: `Bearer ${auth.Authorization}`,
-        //         refresh_token: `Bearer ${auth.refresh_token}`,
-        //     }
-        // });
+        const CommentApi = axios.create({
+            baseURL: "http://13.125.227.9:8080/",
+            headers: {
+                Authorization: `Bearer ${auth.Authorization}`,
+                refresh_token: `Bearer ${auth.refresh_token}`,
+            }
+        });
 
-        // const CommentUp = await CommentApi
-        //     .get("/post/{postId}/comment")
-        //     .then((response) => {
-        //         console.log("반응", response)
-        //         window.alert("댓글 작성 성공!")
-        //     }).catch((error) => {
-        //         console.log("에러", error)
-        //         window.alert("댓글 작성 실패!")
-        //     });
+        // 댓글 보기
+
+
+
+
+        // 댓글 쓰기
+        const CommentUp = await CommentApi
+            .post("/post/{postId}/comment")
+            .then((response) => {
+                console.log("반응", response)
+                window.alert("댓글 작성 성공!")
+            }).catch((error) => {
+                console.log("에러", error)
+                window.alert("댓글 작성 실패!")
+            });
     }
+
 
     // 댓글 입력값 저장되는 곳 지정
     const [commentArray, setCommentArray] = React.useState([]);
@@ -129,11 +120,21 @@ const PostView = ({ _handleModal }) => {
             <Sidebar />
             <ImgWrap src={dataTest.postImage} />
             <ModifyDelBtn>
-                <button onClick={modalOn}
-                    style={{ color: 'black', margin: "0px 10px 0px 0px" }} >
-                    삭제</button>
-                <button onClick={ModifyPost} style={{ color: 'black' }} >
-                    수정</button>
+                <button onClick={() => { setModalOpen(true) }}
+                    style={{ margin: "0px 10px 0px 0px" }} >
+                    삭제
+                </button>
+                {
+                    modalOpen === true? (
+                        <Modal setModalOpen={setModalOpen} />
+                    ) : (
+                        null
+                    )
+                }
+
+                <button onClick={ModifyPost}>
+                    수정
+                </button>
             </ModifyDelBtn>
 
             <div>
@@ -166,18 +167,7 @@ const PostView = ({ _handleModal }) => {
                     </Button>
                 </CommentBox>
             </CommentContainer>
-
-            <Modal _handleModal={_handleModal}>
-            <p>게시글이 삭제됩니다. 삭제하시겠습니까?</p>
-                <div>
-                <button>NO</button>
-                <button onClick={DeletPost}>YES</button>
-                </div>
-        </Modal>
-
         </Wrap>
-
-        
     )
 }
 
@@ -309,6 +299,5 @@ const Likecomment = styled.div`
     margin-left: 430px;
     // background-color: red;
 `;
-
 
 export default PostView;

@@ -5,7 +5,6 @@ import styled from 'styled-components'
 import './App.css';
 import './fonts/fonts.css'
 import Main from './components/Main';
-import Sidebar from './components/Sidebar'
 import Signup from './components/Signup';
 import SignupSNS from './components/SignupSNS';
 import FindMyInfo from './components/FindMyInfo';
