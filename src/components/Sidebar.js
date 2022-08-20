@@ -42,7 +42,7 @@ const Sidebar = () => {
     { name: "기록하기", path: "/" }
   ];
    
-  console.log(isLogin)
+  console.log(isLogin)  
   
 
     //  닉네임과 프사는 어디서 받아오죵?
