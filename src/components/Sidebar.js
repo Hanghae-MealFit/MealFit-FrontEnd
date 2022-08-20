@@ -9,33 +9,39 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from "react-redux";
 
 const Sidebar = () => {
-    const [isLogin, setIsLogin] = React.useState(false);
 
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+  const [isLogin, setIsLogin] = React.useState(false);
 
-    const auth = {
-        authorization: sessionStorage.getItem("accessToken"),
-        refresh_token: sessionStorage.getItem("refreshToken")
-      };
-
-    const menus = [
-        { name: "식단게시판", path: "/" },
-        { name: "식단가이드", path: "/" },
-        { name: "기록하기", path: "/" }
-    ];
+  const LoginCheck = () => {
+    const Token = {
+      authorization: sessionStorage.getItem("accessToken"),
+      refresh_token: sessionStorage.getItem("refreshToken")
+    }
+    console.log(Token)
+    if(Token.authorization !== "" && Token.refresh_token !== "") {
+      setIsLogin(true)
+    }
+  }
 
   React.useEffect(() => {
-    const Token = {
-        authorization: sessionStorage.getItem("accessToken"),
-        refresh_token: sessionStorage.getItem("refreshToken")
-    }
-    if (Token.authorization !== "" && Token.refresh_token !== "" ) {
-      setIsLogin(true);
-    } else {
-      setIsLogin(false);
-    }
-  }, []);
+    LoginCheck()
+  }, [isLogin]);
+
+  const sessionStorage = window.sessionStorage;
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const auth = {
+    authorization: sessionStorage.getItem("accessToken"),
+    refresh_token: sessionStorage.getItem("refreshToken")
+  };
+
+  const menus = [
+    { name: "식단게시판", path: "/" },
+    { name: "식단가이드", path: "/" },
+    { name: "기록하기", path: "/" }
+  ];
+  
   console.log(isLogin)
   
 
@@ -47,37 +53,40 @@ const Sidebar = () => {
     // console.log("프사 있어?", profile);
 
     const onClickLogin = () => {
-        navigate("/user/login");
+      navigate("/user/login");
     }
 
     const onhandleLogOut = async (e) => {
-        e.preventDefault()
+      e.preventDefault()
 
-        sessionStorage.clear()
-        window.alert("로그아웃!")
-        navigate("/");
-          }
+      sessionStorage.clear()
+      setIsLogin(false)
+      window.alert("로그아웃!")
+      navigate("/");
+    }
 
     return (
         <SideBar>
-            <Logo onClick={() => {
-          navigate("/")
-          }} style={{cursor: "pointer"}}>
-                밀핏LOGO
+            <Logo onClick={() => {navigate("/")}} style={{cursor: "pointer"}}>
+              밀핏LOGO
             </Logo>
 
             <SideBox>
-            {!isLogin ? (
-            <Info>
-                    <Profile src={"https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png"}></Profile>
-                    <span style={{ color: "white" }}>로그인 해주세요</span>
+            {
+              !isLogin ?
+              (
+                <Info>
+                  <Profile src={"https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png"}></Profile>
+                  <span style={{ color: "white" }}>로그인 해주세요</span>
                 </Info>
-                ) : (
-                    <Info>
-                    <Profile src={ProfileImage}></Profile>
-                    <span style={{ color: "white" }}>{nickname} 님, 환영합니다!</span>
+              ) :
+              (
+                <Info>
+                  <Profile src={ProfileImage}></Profile>
+                  <span style={{ color: "white" }}>{nickname} 님, 환영합니다!</span>
                 </Info>
-                )}
+              )
+            }
                 
                 <Menu>
                     {menus.map((menu, index) => {
@@ -92,15 +101,19 @@ const Sidebar = () => {
                     })}
                 </Menu>
 
-                {!isLogin ? (
-                <Button>
-                    <LogInBtn onClick={onClickLogin}>로그인</LogInBtn>
-                </Button>
-                ) : (
-                <Button>
-                    <LogOutBtn onClick={onhandleLogOut}>로그아웃</LogOutBtn>
-                </Button>
-                )}
+                {
+                  !isLogin ?
+                  (
+                    <Button>
+                        <LogInBtn onClick={onClickLogin}>로그인</LogInBtn>
+                    </Button>
+                  ) :
+                  (
+                    <Button>
+                        <LogOutBtn onClick={onhandleLogOut}>로그아웃</LogOutBtn>
+                    </Button>
+                  )
+                }
 
             </SideBox>
         </SideBar>

@@ -21,21 +21,23 @@ const SocialUserCheck = () => {
       try {
         const res = await axios.get("http://13.125.227.9:8080/user/info", {
           headers: {
-            Authorization: `Bearer ${auth.authorization}`,
-            refresh_token: `Bearer ${auth.refresh_token}`
+            Authorization: `Bearer ${ACCESS_TOKEN}`,
+            refresh_token: `Bearer ${REFRESH_TOKEN}`
           },
         })
         console.log(res.data)
-        if(res.data.userStatus === "FIRST_SOCIAL_LOGIN") {
+        if(res.data.userProfile.userStatus === "FIRST_SOCIAL_LOGIN") {
           window.location.href = "http://localhost:3000/user/signupsns"
-        } else if(res.data.userStatus === "NORMAL") {
+        } else if(res.data.userProfile.userStatus === "NORMAL") {
           window.location.href = "http://localhost:3000/"
         } else {
+          sessionStorage.clear();
           window.alert("잘못된 접근입니다. 메인으로 돌아갑니다.")
           window.location.href = "http://localhost:3000/"
         }
       } catch(error) {
         console.log(error)
+        sessionStorage.removeItem();
       }
     }
     getUser();

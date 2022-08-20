@@ -6,8 +6,6 @@ import { faCamera } from '@fortawesome/free-solid-svg-icons'
 const PostImgSelect = ({ files, setFiles }) => {
 
   const temp_img = "https://cdn.icon-icons.com/icons2/2828/PNG/512/images_photos_photo_image_icon_179766.png"
-  
-  
   const [prevFiles, setPrevFiles] = React.useState(temp_img);
 
   const previewImage = async (e) => {
