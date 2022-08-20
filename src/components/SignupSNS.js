@@ -100,12 +100,12 @@ const SignupSNS = () => {
     }
 
     const sessionStorage = window.sessionStorage;
-    const ACCESS_TOKEN = sessionStorage.getItem("ACCESS_TOKEN")
-    const REFRESH_TOKEN = sessionStorage.getItem("REFRESH_TOKEN")
+    const ACCESS_TOKEN = sessionStorage.getItem("accessToken")
+    const REFRESH_TOKEN = sessionStorage.getItem("refreshToken")
 
     await axios({
       baseURL: "http://13.125.227.9:8080/",
-      method: "PUT",
+      method: "POST",
       url: "/user/info",
       data: formData,
       headers: {

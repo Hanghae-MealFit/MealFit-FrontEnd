@@ -21,28 +21,48 @@ const Main = () => {
     };
 
   const GetUser = async () => {
-    try {
-      const res = await axios.get("http://13.125.227.9:8080/user/info",
-      {
-        headers: {
-          Authorization: `Bearer ${auth.authorization}`,
-          refresh_token: `Bearer ${auth.refresh_token}`
-        },
-      })
-      console.log(res)
-    } catch(error) {
-      console.log(error)
+    if(auth.authorization !== null && auth.refresh_token !== null) {
+      try {
+        const res = await axios.get("http://13.125.227.9:8080/user/info",
+        {
+          headers: {
+            Authorization: `Bearer ${auth.authorization}`,
+            refresh_token: `Bearer ${auth.refresh_token}`
+          },
+        })
+        console.log(res)
+      } catch(error) {
+        console.log(error)
+      }
     }
   }
+
+  const GetWeight = async () => {
+    if(auth.authorization !== null && auth.refresh_token !== null) {
+      try {
+        const res = await axios.get("http://13.125.227.9:8080/api/bodyInfo",
+        {
+          headers: {
+            Authorization: `Bearer ${auth.authorization}`,
+            refresh_token: `Bearer ${auth.refresh_token}`
+          },
+        })
+        console.log(res)
+      } catch(error) {
+        console.log(error)
+      }
+    }
+  }
+
   useEffect(() => {
     GetUser()
+    GetWeight()
   }, [])
 
   useEffect(() => {
     interval.current = setInterval(() => {
-
-        setTime(new Date());
-      }, 1000);
+      setTime(new Date());
+    }, 1000);
     return () => clearInterval(interval.current)
   }, []);
   const Year = time.getFullYear();
