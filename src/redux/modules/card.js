@@ -45,7 +45,7 @@ const initialState = {
     like: 5,
     likeCount: 2,
     commentCount: 2
-}
+},
     ]
   }
 

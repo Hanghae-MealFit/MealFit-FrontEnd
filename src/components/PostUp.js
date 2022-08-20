@@ -22,7 +22,7 @@ const PostUp = () => {
       content: content_ref.current.value
     };
   
-    formData.append("postImage", ImageFile);
+    formData.append("postImage", ImageFile);  
     formData.append("content", content_ref.current.value);
     console.log(formData);
     console.log(ImageFile);
@@ -30,7 +30,7 @@ const PostUp = () => {
     const auth = {
       authorization: sessionStorage.getItem("accessToken"),
       refresh_token: sessionStorage.getItem("refreshToken")
-    };
+    };  
 
     await axios({
       baseURL: "http://13.125.227.9:8080/",
@@ -225,4 +225,4 @@ position: absolute;
   }
 `
 
-  export default PostUp;
+export default PostUp;
