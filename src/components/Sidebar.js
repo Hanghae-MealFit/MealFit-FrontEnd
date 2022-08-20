@@ -36,7 +36,7 @@ const Sidebar = () => {
     refresh_token: sessionStorage.getItem("refreshToken")
   };
 
-  const menus = [
+  const menus = [  
     { name: "식단게시판", path: "/" },
     { name: "식단가이드", path: "/" },
     { name: "기록하기", path: "/" }
