@@ -30,7 +30,7 @@ const PostUp = () => {
     const auth = {
       authorization: sessionStorage.getItem("accessToken"),
       refresh_token: sessionStorage.getItem("refreshToken")
-    };
+    };  
 
     await axios({
       baseURL: "http://13.125.227.9:8080/",
