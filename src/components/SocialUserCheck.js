@@ -12,16 +12,18 @@ const SocialUserCheck = () => {
     const REFRESH_TOKEN = code.href.split('=')[2].split('&')[0];
     // console.log(REFRESH_TOKEN)
 
-    sessionStorage.setItem("ACCESS_TOKEN", ACCESS_TOKEN)
-    sessionStorage.setItem("REFRESH_TOKEN", REFRESH_TOKEN)
+    const auth = {
+      authorization: sessionStorage.setItem("accessToken", ACCESS_TOKEN),
+      refresh_token: sessionStorage.setItem("refreshToken", REFRESH_TOKEN)
+    };
 
     const getUser = async () => {
       try {
         const res = await axios.get("http://13.125.227.9:8080/user/info", {
           headers: {
-            Authorization: `Bearer ${ACCESS_TOKEN}`,
-            refresh_token: `Bearer ${REFRESH_TOKEN}`
-          }
+            Authorization: `Bearer ${auth.authorization}`,
+            refresh_token: `Bearer ${auth.refresh_token}`
+          },
         })
         console.log(res.data)
         if(res.data.userStatus === "FIRST_SOCIAL_LOGIN") {
