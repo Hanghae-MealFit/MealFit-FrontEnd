@@ -41,7 +41,7 @@ const Sidebar = () => {
     { name: "식단가이드", path: "/" },
     { name: "기록하기", path: "/" }
   ];
-  
+   
   console.log(isLogin)
   
 
