@@ -18,14 +18,14 @@ const Sidebar = () => {
       refresh_token: sessionStorage.getItem("refreshToken")
     }
     console.log(Token)
-    if(Token.authorization !== "" && Token.refresh_token !== "") {
+    if(Token.authorization !== null && Token.refresh_token !== null) {
       setIsLogin(true)
     }
   }
 
   React.useEffect(() => {
     LoginCheck()
-  }, [isLogin]);
+  }, []);
 
   const sessionStorage = window.sessionStorage;
   const dispatch = useDispatch();
