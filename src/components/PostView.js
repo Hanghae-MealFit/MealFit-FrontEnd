@@ -8,7 +8,7 @@ import Sidebar from "./Sidebar";
 import Modal from "../elements/Modal";
 import { loadPost } from "../redux/modules/card";
 
-const PostView = ({ _handleModal }) => {
+const PostView = () => {
     const [dataTest, setdataTest] = React.useState({
         postId: "1",
         nickname: "봄봄",
@@ -19,7 +19,64 @@ const PostView = ({ _handleModal }) => {
         likeNumber: 2,
         commentNumber: 2
     });
-    console.log(dataTest);
+    // console.log(dataTest);
+
+    const PostViewAX = async () => {
+        const data = {       
+        postId: "postId",
+        nickname: "nickname",
+        profileImage: "profileImage",
+        postImage: "postImage",
+        content: "content",
+        likeToggle: Boolean,
+        likeNumber: "likeNumber",
+        commentNumber: "commentNumber"
+     }
+    
+    const auth = {
+        authorization: sessionStorage.getItem("token"),
+        refresh_token: sessionStorage.getItem("refresh_token")
+    };
+
+    await axios({
+        baseURL: "http://13.125.227.9:8080/",
+        method: "get",
+        url: "/post/{postId}",
+        data: data,
+        headers: {
+          Authorization: `Bearer ${auth.authorization}`,
+          refresh_token: `Bearer ${auth.refresh_token}`
+        },
+      }).then((response) => {
+        console.log("반응", response)
+      }).catch((error) => {
+        console.log("에러", error)
+      });
+    };
+
+    // const loadPostAX = async() => {
+    //     const apiPost = axios.create({
+    //         baseURL: "http://13.125.227.9:8080/",
+    //         headers: {
+    //             Authorization: `Bearer ${auth.authorization}`,
+    //             refresh_token: `Bearer ${auth.refresh_token}`
+    //           },
+    //     });
+
+    //     const CreatePostAXImg = await apiPost
+    //         .get("/post/{postId}")
+    //         .then((response) => {
+    //             console.log("반응", response)
+    //             setdataTest(response.data)
+    //         })
+    //         .catch(function (error) {
+    //             console.log("에러", error)
+    //         });
+    // }
+
+    // React.useEffect(() => {
+    //     loadPostAX()
+    // }, []);
 
     let { postId } = useParams();
     const navigation = useNavigate();
@@ -29,36 +86,7 @@ const PostView = ({ _handleModal }) => {
     const ModifyPost = () => {
         navigation(`/post/${postId}`);
     }
-
-    const auth = {
-        authorization: sessionStorage.getItem("token"),
-        refresh_token: sessionStorage.getItem("refresh_token")
-    };
-
-    const loadPostAX = async() => {
-        const apiPost = axios.create({
-            baseURL: "http://13.125.227.9:8080/",
-            headers: {
-                Authorization: `Bearer ${auth.Authorization}`,
-                refresh_token: `Bearer ${auth.refresh_token}`,
-            }
-        });
-        const CreatePostAXImg = await apiPost
-            .get("/post/{postId}")
-            .then((response) => {
-                console.log("반응", response)
-                console.log('보내주신 data는', response.data)
-                setdataTest(response.data)
-            })
-            .catch(function (error) {
-                console.log("에러", error)
-            });
-    }
-
-    React.useEffect(() => {
-        loadPostAX()
-    }, []);
-
+    
     // 삭제 모달창
     const [modalOpen, setModalOpen] = React.useState(false);
 
@@ -76,14 +104,19 @@ const PostView = ({ _handleModal }) => {
     });
     // const onChange = event => setComment(event.target.value);
 
+    const auth = {
+        authorization: sessionStorage.getItem("token"),
+        refresh_token: sessionStorage.getItem("refresh_token")
+    };
+
     const onhandleComment = async (e) => {
         e.preventDefault()
         const CommentApi = axios.create({
             baseURL: "http://13.125.227.9:8080/",
             headers: {
-                Authorization: `Bearer ${auth.Authorization}`,
-                refresh_token: `Bearer ${auth.refresh_token}`,
-            }
+                Authorization: `Bearer ${auth.authorization}`,
+                refresh_token: `Bearer ${auth.refresh_token}`
+              },
         });
 
         // 댓글 보기

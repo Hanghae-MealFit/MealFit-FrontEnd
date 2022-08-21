@@ -10,6 +10,8 @@ import SignupSNS from './components/SignupSNS';
 import FindMyInfo from './components/FindMyInfo';
 import Login from './components/Login';
 import SocialUserCheck from './components/SocialUserCheck';
+import Record from './components/Record';
+import Post from './components/Post';
 import PostUp from './components/PostUp';
 import PostView from './components/PostView';
 
@@ -24,6 +26,9 @@ function App() {
         <Route path="user/login" element = { <Login /> } />
         <Route path="user/find" element = { <FindMyInfo /> } />
         <Route path="oauth2/redirect" element = { <SocialUserCheck /> } />
+        <Route path="record" element = { <Record /> } />
+        <Route path="post/all" element = { <Post /> } />
+        {/* 아직 정해지지 앉음 "post?sort=""&size=""&lastid="" */}
         <Route path="post" element = { <PostUp /> } />
         <Route path="post/:postId" element = { <PostView /> } />
       </Routes>
