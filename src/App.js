@@ -4,6 +4,7 @@ import styled from 'styled-components'
 
 import './App.css';
 import './fonts/fonts.css'
+import MyPage from './components/MyPage';
 import Main from './components/Main';
 import Signup from './components/Signup';
 import SignupSNS from './components/SignupSNS';
@@ -21,6 +22,7 @@ function App() {
     <Wrap>
       <Routes>
         <Route path="/" element = { <Main /> } />
+        <Route path="user/info" element = { <MyPage /> } />
         <Route path="user/signup" element = { <Signup /> } />
         <Route path="user/signupsns" element = { <SignupSNS /> } />
         <Route path="user/login" element = { <Login /> } />
