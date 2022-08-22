@@ -17,39 +17,39 @@ const Main = () => {
   const interval = React.useRef(null)
 
   const auth = {
-      authorization: sessionStorage.getItem("accessToken"),
-      refresh_token: sessionStorage.getItem("refreshToken")
-    };
+    authorization: sessionStorage.getItem("accessToken"),
+    refresh_token: sessionStorage.getItem("refreshToken")
+  };
 
   const GetUser = async () => {
-    if(auth.authorization !== null && auth.refresh_token !== null) {
+    if (auth.authorization !== null && auth.refresh_token !== null) {
       try {
         const res = await axios.get("http://13.125.227.9:8080/user/info",
-        {
-          headers: {
-            Authorization: `Bearer ${auth.authorization}`,
-            refresh_token: `Bearer ${auth.refresh_token}`
-          },
-        })
+          {
+            headers: {
+              Authorization: `Bearer ${auth.authorization}`,
+              refresh_token: `Bearer ${auth.refresh_token}`
+            },
+          })
         console.log(res)
-      } catch(error) {
+      } catch (error) {
         console.log(error)
       }
     }
   }
 
   const GetWeight = async () => {
-    if(auth.authorization !== null && auth.refresh_token !== null) {
+    if (auth.authorization !== null && auth.refresh_token !== null) {
       try {
         const res = await axios.get("http://13.125.227.9:8080/api/bodyInfo",
-        {
-          headers: {
-            Authorization: `Bearer ${auth.authorization}`,
-            refresh_token: `Bearer ${auth.refresh_token}`
-          },
-        })
+          {
+            headers: {
+              Authorization: `Bearer ${auth.authorization}`,
+              refresh_token: `Bearer ${auth.refresh_token}`
+            },
+          })
         console.log(res)
-      } catch(error) {
+      } catch (error) {
         console.log(error)
       }
     }
@@ -76,13 +76,29 @@ const Main = () => {
             </CircleWrap>
           </Item1>
           <GrapWrap>
-            <Item2>몸무게 변화량</Item2>
-            <Item3>체지방 변화량</Item3>
+            <Item2>
+              <Titlebar>
+                <Titletag>
+                  <p>몸무게 변화량</p>
+                </Titletag>
+              </Titlebar>
+            </Item2>
+            <Item3>
+              <Titlebar>
+                <Titletag>
+                  <p>체지방 변화량</p>
+                </Titletag>
+              </Titlebar>
+            </Item3>
           </GrapWrap>
         </div>
-        <div style={{ width: "100%", height: "45%"}}>
+        <div style={{ width: "100%", height: "45%" }}>
           <Item4>
-            <H2>오늘의 식단</H2>
+            <Titlebar>
+              <Titletag>
+                <p>오늘의 식단</p>
+              </Titletag>
+            </Titlebar>
             <CardList>
               {data.map((v, idx) => (
                 <CardsBox
@@ -106,6 +122,35 @@ const Wrap = styled.div`
   width: 100%;
   height: 100%;
   // background-color: yellow;
+`;
+
+const Titlebar = styled.div`
+  width: calc(100% - 260px);
+  height: 10%%;
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  // background-color: red;
+`;
+
+
+const Titletag = styled.div`
+  width: 130px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0px 0px 15px 0px;
+  background-color: #ccc;
+  p {
+  font-size: 18px;
+  font-weight: bold;
+  height: 12%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  }
 `;
 
 const Container = styled.div`
@@ -171,14 +216,6 @@ const Item4 = styled.div`
     // background-color: lightgray;
  `;
 
-const H2 = styled.div`
-  font-size: 20px;
-  height: 12%;
-  // margin: 40px 0px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
 
 const CircleWrap = styled.div`
   position: relative;
