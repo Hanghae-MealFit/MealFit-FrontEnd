@@ -26,6 +26,7 @@ const Sidebar = () => {
   React.useEffect(() => {
     LoginCheck()
   }, []);
+  console.log(isLogin)
 
   const sessionStorage = window.sessionStorage;
   const dispatch = useDispatch();
