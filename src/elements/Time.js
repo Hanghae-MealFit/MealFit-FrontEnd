@@ -5,7 +5,7 @@ const Time = ({time, setTime}) => {
   useEffect(() => {
     const timer = setInterval(() => {
       setTime(new Date());
-    }, 1000);
+    }, 60000);
 
     return () => {
       clearInterval(timer)
@@ -16,16 +16,17 @@ const Time = ({time, setTime}) => {
   const Day = time.getDate();
   const Hour = time.getHours();
   const Minute = time.getMinutes();
-  const Second = time.getSeconds();
   const TodaySecond = 86400;
-  const NowSecond = (((Hour * 60) + Minute) * 60) + Second
-  const TodayPer = ((NowSecond / TodaySecond) * 100).toFixed(1)
+  const NowSecond = (((Hour * 60) + Minute) * 60)
+  const TodayPer = Math.ceil(((NowSecond / TodaySecond) * 100))
+  console.log(NowSecond)
+  console.log(TodayPer)
 
   return (
     <>
       <TopText>
         <p>{Year}년 {Month < 10 ? '0' + Month : Month}월 {Day < 10 ? '0' + Day : Day}일</p>
-        <p>{Hour < 10 ? '0' + Hour : Hour} : {Minute < 10 ? '0' + Minute : Minute} : {Second < 10 ? '0' + Second : Second}</p>
+        <p>{Hour < 10 ? '0' + Hour : Hour}시 {Minute < 10 ? '0' + Minute : Minute}분</p>
         <p>지금은 단식시간 입니다.</p>
       </TopText>
       <BottomText>

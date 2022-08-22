@@ -26,7 +26,7 @@ const SocialUserCheck = () => {
           },
         })
         console.log(res.data)
-        if(res.data.userProfile.userStatus === "FIRST_SOCIAL_LOGIN") {
+        if(res.data.userProfile.userStatus === "FIRST_LOGIN") {
           window.location.href = "http://localhost:3000/user/signupsns"
         } else if(res.data.userProfile.userStatus === "NORMAL") {
           window.location.href = "http://localhost:3000/"
