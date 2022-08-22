@@ -53,6 +53,16 @@ const Post = () => {
   return (
     <Wrap>
       <Sidebar />
+
+      <Titlebar>
+        <Titletag>
+        <p>식단 게시판</p>
+        </Titletag>
+        <WriteButtom onClick={() => {
+                navigate("/post");
+              }}>작성하기</WriteButtom>
+        </Titlebar>
+
       <Container>
         <CardList>
           {data.map((v, idx) => (
@@ -89,6 +99,50 @@ const Container = styled.div`
   font-size: 20px;
   text-align: center;
   font-weight: bold;
+`;
+
+const Titlebar = styled.div`
+  width: calc(100% - 260px);
+  height: 10%%;
+  margin-top: 20px;
+  margin-left: 260px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  // background-color: red;
+`;
+
+
+const Titletag = styled.div`
+  width: 130px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0px 0px 15px 0px;
+  background-color: #ccc;
+  p {
+    font-size: 18px;
+    font-weight: bold;
+    height: 12%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    }
+`;
+
+const WriteButtom = styled.div`
+  position: relative;
+  width: 100px;
+  height: 40px;
+  margin-right: 45px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 15px;
+  color: #555;
+  border: 1px solid #555;
+  cursor: pointer;
 `;
 
 const CardList = styled.div`

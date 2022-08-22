@@ -18,7 +18,7 @@ const Sidebar = () => {
       refresh_token: sessionStorage.getItem("refreshToken")
     }
     console.log(Token)
-    if(Token.authorization !== null && Token.refresh_token !== null) {
+    if (Token.authorization !== null && Token.refresh_token !== null) {
       setIsLogin(true)
     }
   }
@@ -36,88 +36,98 @@ const Sidebar = () => {
     refresh_token: sessionStorage.getItem("refreshToken")
   };
 
-  const menus = [  
+  const menus = [
     { name: "식단게시판", path: "/post/all" },
     // 임시로 만든 url
     { name: "식단가이드", path: "/" },
     { name: "기록하기", path: "/record" }
   ];
-   
+
   // console.log(isLogin)
-  
-    //  닉네임과 프사는 어디서 받아오죵?
-    const nickname = sessionStorage.getItem("nickname")
-    // console.log("닉네임 있어?", nickname);
 
-    const ProfileImage = sessionStorage.getItem("ProfileImage")
-    // console.log("프사 있어?", profile);
+  //  닉네임과 프사는 어디서 받아오죵?
+  const nickname = sessionStorage.getItem("nickname")
+  // console.log("닉네임 있어?", nickname);
 
-    const onClickLogin = () => {
-      navigate("/user/login");
+  const ProfileImage = sessionStorage.getItem("ProfileImage")
+  // console.log("프사 있어?", profile);
+
+  const onClickLogin = () => {
+    navigate("/user/login");
+  }
+
+  const onhandleLogOut = async (e) => {
+    e.preventDefault()
+    try {
+      const response = await axios.post("http://13.125.227.9:8080/user/logout",
+        {
+          headers: {
+            Authorization: `Bearer ${auth.authorization}`,
+            refresh_token: `Bearer ${auth.refresh_token}`
+          }
+        })
+      if (response) {
+        console.log("반응", response)
+        sessionStorage.clear();
+        setIsLogin(false);
+        window.alert("로그아웃 하셨습니다. 밀핏을 찾아주셔서 감사합니다.");
+        navigate("/");
+      }
+    } catch (error) {
+      console.log("에러", error)
+      window.alert("로그아웃에 실패하였습니다. 다시 한번 시도해주십시오.");
     }
+  };
 
-    const onhandleLogOut = async (e) => {
-      e.preventDefault()
-
-      sessionStorage.clear()
-      setIsLogin(false)
-      window.alert("로그아웃!")
-      navigate("/");
-    }
-
-    return (
-        <SideBar>
-            <Logo onClick={() => {navigate("/")}} style={{cursor: "pointer"}}>
-              밀핏LOGO
-            </Logo>
-
-            <SideBox>
-            {
-              !isLogin ?
-              (
-                <Info>
-                  <Profile src={"https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png"}></Profile>
-                  <span style={{ color: "white" }}>로그인 해주세요</span>
-                </Info>
-              ) :
-              (
-                <Info>
-                  <Profile src={ProfileImage}></Profile>
-                  <span style={{ color: "white" }}>{nickname} 님, 환영합니다!</span>
-                </Info>
-              )
-            }
-                
-                <Menu>
-                    {menus.map((menu, index) => {
-                        return (
-                            <Link style={{ color: "white", textDecoration: "none" }}
-                                to={menu.path} key={index}>
-                                <SidebarItem
-                                    menu={menu}
-                                />
-                            </Link>
-                        );
-                    })}
-                </Menu>
-
-                {
-                  !isLogin ?
-                  (
-                    <Button>
-                        <LogInBtn onClick={onClickLogin}>로그인</LogInBtn>
-                    </Button>
-                  ) :
-                  (
-                    <Button>
-                        <LogOutBtn onClick={onhandleLogOut}>로그아웃</LogOutBtn>
-                    </Button>
-                  )
-                }
-
-            </SideBox>
-        </SideBar>
-    );
+  return (
+    <SideBar>
+      <Logo onClick={() => { navigate("/") }} style={{ cursor: "pointer" }}>
+        밀핏LOGO
+      </Logo>
+      <SideBox>
+        {
+          !isLogin ?
+            (
+              <Info>
+                <Profile src={"https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png"}></Profile>
+                <span style={{ color: "white" }}>로그인 해주세요</span>
+              </Info>
+            ) :
+            (
+              <Info>
+                <Profile onClick={() => { navigate("/user/info") }} />
+                <span style={{ color: "white" }}>{nickname} 님, 환영합니다!</span>
+              </Info>
+            )
+        }
+        <Menu>
+          {menus.map((menu, index) => {
+            return (
+              <Link style={{ color: "white", textDecoration: "none" }}
+                to={menu.path} key={index}>
+                <SidebarItem
+                  menu={menu}
+                />
+              </Link>
+            );
+          })}
+        </Menu>
+        {
+          !isLogin ?
+            (
+              <Button>
+                <LogInBtn onClick={onClickLogin}>로그인</LogInBtn>
+              </Button>
+            ) :
+            (
+              <Button>
+                <LogOutBtn onClick={onhandleLogOut}>로그아웃</LogOutBtn>
+              </Button>
+            )
+        }
+      </SideBox>
+    </SideBar>
+  );
 }
 
 const SideBar = styled.div`
@@ -151,7 +161,15 @@ const Profile = styled.img`
     border-radius: 100%;
     margin-right: 20px;
     background-color: #dddddd;
-`
+
+    &:hover {
+      background: #808080;
+      color: #555;
+      transition: 0.05s all ease-in;
+    }
+
+`;
+
 const Menu = styled.div`
     position: absolute;
     display: flex;
