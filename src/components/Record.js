@@ -8,17 +8,29 @@ const Record = () => {
     return (
         <Wrap>
             <Sidebar />
-            <div>기록하기</div>
+            <Container>
+                <div>기록하기</div>
+            </Container>
         </Wrap>
     )
 }
 
 const Wrap = styled.div`
+  // background-color: yellow;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  `;
+
+const Container = styled.div`
+  // border: 5px solid blue;
   position: absolute;
   width: 700px;
   height: 860px;
-  left: 40%;
-  margin: 0 auto;
+  margin-left: 260px;
   border-radius: 30px;
   background-color: white;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
@@ -26,6 +38,15 @@ const Wrap = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-`
+  font-size: 20px;
+  text-align: center;
+  font-weight: bold;
+  p {
+    position: relative;
+    bottom: -20px;
+    font-size: 16px;
+    color: #D9D9D9;
+  }
+  `;
 
 export default Record;

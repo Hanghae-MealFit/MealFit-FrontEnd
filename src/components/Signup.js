@@ -30,43 +30,43 @@ const Signup = () => {
   const hour_check_ref = React.useRef(null)
 
   // formData로 보낼 이미지 파일
-  const [ files, setFiles ] = React.useState(null);
+  const [files, setFiles] = React.useState(null);
 
   // 현재 체중 목표 체중 값
-  const [ curWeight, setCurWeight ] = React.useState();
-  const [ goWeight, setGoWeight ] = React.useState();
+  const [curWeight, setCurWeight] = React.useState();
+  const [goWeight, setGoWeight] = React.useState();
 
-  const [ curInfoMsg, SetCurInfoMsg ] = React.useState(false);
-  const [ goInfoMsg, SetGoInfoMsg ] = React.useState(false);
-  const [ curError, setCurError ] = React.useState("* 현재 체중을 입력해주세요.");
-  const [ goError, setGoError ] = React.useState("* 목표 체중을 입력해주세요.");
+  const [curInfoMsg, SetCurInfoMsg] = React.useState(false);
+  const [goInfoMsg, SetGoInfoMsg] = React.useState(false);
+  const [curError, setCurError] = React.useState("* 현재 체중을 입력해주세요.");
+  const [goError, setGoError] = React.useState("* 목표 체중을 입력해주세요.");
 
   // ID 중복확인 클릭 시, 유저에게 제공 될 값
-  const [ checkIdMsg, SetCheckIdMsg ] = React.useState("* 사용하실 아이디를 입력해주세요.");
+  const [checkIdMsg, SetCheckIdMsg] = React.useState("* 사용하실 아이디를 입력해주세요.");
 
   // 닉네임 중복확인 클릭 시, 유저에게 제공 될 값
-  const [ checkNickMsg, SetCheckNickMsg ] = React.useState("* 사용하실 닉네임을 입력해주세요.");
+  const [checkNickMsg, SetCheckNickMsg] = React.useState("* 사용하실 닉네임을 입력해주세요.");
 
   // 이메일 중복확인 클릭 시, 유저에게 제공 될 값
-  const [ checkEmailMsg, SetCheckEmailMsg ] = React.useState("* 이메일은 아이디 비밀번호를 찾을 때 사용됩니다.");
-  
-  // 입력된 비밀번호 값이 영어+숫자가 아닐 시, 유저에게 제공 될 값
-  const [ PwMsg, SetPwMsg ] = React.useState("* 비밀번호는 영어/숫자 조합으로 8자 이상 사용 가능합니다.");
+  const [checkEmailMsg, SetCheckEmailMsg] = React.useState("* 이메일은 아이디 비밀번호를 찾을 때 사용됩니다.");
 
   // 입력된 비밀번호 값이 영어+숫자가 아닐 시, 유저에게 제공 될 값
-  const [ checkPwMsg, SetPwCheckMsg ] = React.useState("* 입력하신 비밀번호를 다시 입력해주세요.");
+  const [PwMsg, SetPwMsg] = React.useState("* 비밀번호는 영어/숫자 조합으로 8자 이상 사용 가능합니다.");
+
+  // 입력된 비밀번호 값이 영어+숫자가 아닐 시, 유저에게 제공 될 값
+  const [checkPwMsg, SetPwCheckMsg] = React.useState("* 입력하신 비밀번호를 다시 입력해주세요.");
 
   // 단식 시간 설정하지 않았을 경우, 버튼 클릭 불가능하게 설정
-  const [ startHourCheck, SetStartHourCheck ] = React.useState("* 필수 선택값을 선택하세요.");
+  const [startHourCheck, SetStartHourCheck] = React.useState("* 필수 선택값을 선택하세요.");
 
   // 입력된 아이디 값이 4글자보다 적을 시, 버튼 클릭 불가능하게 설정
-  const [ idCheckDis, SetIdCheckDis ] = React.useState(true);
+  const [idCheckDis, SetIdCheckDis] = React.useState(true);
 
   // 입력된 닉네임 값이 2글자보다 적을 시, 버튼 클릭 불가능하게 설정
-  const [ nickCheckDis, SetNickCheckDis ] = React.useState(true);
+  const [nickCheckDis, SetNickCheckDis] = React.useState(true);
 
   // 입력된 이메일 값이 이메일 형식이 아닐 시, 버튼 클릭 불가능하게 설정
-  const [ emailCheckDis, SetEmailCheckDis ] = React.useState(true);
+  const [emailCheckDis, SetEmailCheckDis] = React.useState(true);
 
   const onhandleSignUp = async (e) => {
     e.preventDefault()
@@ -95,7 +95,7 @@ const Signup = () => {
     formData.append("goalWeight", SignupInfo.goalWeight);
     formData.append("startFasting", SignupInfo.startFasting);
     formData.append("endFasting", SignupInfo.endFasting);
-    if(SignupInfo.profileImage !== null) {
+    if (SignupInfo.profileImage !== null) {
       formData.append("profileImage", SignupInfo.profileImage);
     }
     console.log(formData)
@@ -109,8 +109,8 @@ const Signup = () => {
         "Content-Type": "multipart/form-data",
       },
     }).then((response) => {
-      if(response.status === 201 && response.data === "가입 완료!")
-      alert(`${nickname_ref.current.value}님 반갑습니다.\n밀핏 회원가입에 성공하셨습니다.`)
+      if (response.status === 201 && response.data === "가입 완료!")
+        alert(`${nickname_ref.current.value}님 반갑습니다.\n밀핏 회원가입에 성공하셨습니다.`)
       navigate("/user/login")
     }).catch((error) => {
       console.log("에러", error)
@@ -124,16 +124,16 @@ const Signup = () => {
     try {
       const username = username_ref.current.value
       const res = await axios.get(`http://13.125.227.9:8080/user/username?username=${username}`,
-      {
-        headers: {
-          "Content-Type": "application/json"
-        }
-      })
-      if(res.data === "검증완료!" && res.status === 200) {
+        {
+          headers: {
+            "Content-Type": "application/json"
+          }
+        })
+      if (res.data === "검증완료!" && res.status === 200) {
         SetCheckIdMsg("* 사용 가능 한 아이디입니다.")
         username_err_ref.current.style.color = "#81C147";
       }
-    } catch(error) {
+    } catch (error) {
       console.log(error)
       SetCheckIdMsg("* 사용 불가능 한 아이디입니다.")
       username_err_ref.current.style.color = "#FF0000";
@@ -147,16 +147,16 @@ const Signup = () => {
     try {
       const nickname = nickname_ref.current.value
       const res = await axios.get(`http://13.125.227.9:8080/user/nickname?nickname=${nickname}`,
-      {
-        headers: {
-          "Content-Type": "application/json"
-        }
-      })
-      if(res.data === "검증완료!" && res.status === 200) {
+        {
+          headers: {
+            "Content-Type": "application/json"
+          }
+        })
+      if (res.data === "검증완료!" && res.status === 200) {
         SetCheckNickMsg("* 사용 가능 한 닉네임입니다.")
         nickname_err_ref.current.style.color = "#81C147";
       }
-    } catch(error) {
+    } catch (error) {
       console.log(error)
       SetCheckNickMsg("* 사용 불가능 한 닉네임입니다.")
       nickname_err_ref.current.style.color = "#FF0000";
@@ -170,16 +170,16 @@ const Signup = () => {
     try {
       const email = email_ref.current.value
       const res = await axios.get(`http://13.125.227.9:8080/user/email?email=${email}`,
-      {
-        headers: {
-          "Content-Type": "application/json"
-        }
-      })
-      if(res.data === "검증완료!" && res.status === 200) {
+        {
+          headers: {
+            "Content-Type": "application/json"
+          }
+        })
+      if (res.data === "검증완료!" && res.status === 200) {
         SetCheckEmailMsg("* 사용 가능 한 이메일입니다.")
         email_err_ref.current.style.color = "#81C147";
       }
-    } catch(error) {
+    } catch (error) {
       console.log(error)
       SetCheckEmailMsg("* 사용 불가능 한 이메일 입니다.")
       email_err_ref.current.style.color = "#FF0000";
@@ -192,15 +192,15 @@ const Signup = () => {
     let regKor = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
     let regSpecial = /[.,~!@#$%^&*()_+|<>?:{}/\\]/;
     let regBlank = /[\s]/;
-    if(e.target.value.length === 0) {
+    if (e.target.value.length === 0) {
       SetIdCheckDis(true)
       SetCheckIdMsg("* 사용하실 아이디를 입력해주세요.")
       username_err_ref.current.style.color = "#D9D9D9";
-    } else if (!(regTxt.test(e.target.value)) || (regUpperTxt.test(e.target.value)) || (regKor.test(e.target.value)) || (regSpecial.test(e.target.value)) || (regBlank.test(e.target.value)) ) {
+    } else if (!(regTxt.test(e.target.value)) || (regUpperTxt.test(e.target.value)) || (regKor.test(e.target.value)) || (regSpecial.test(e.target.value)) || (regBlank.test(e.target.value))) {
       SetIdCheckDis(true)
       SetCheckIdMsg("* 영어 소문자 / 숫자를 제외한 다른 문자는 사용할 수 없습니다.")
       username_err_ref.current.style.color = "#FF7F00";
-    } else if(e.target.value.length < 4) {
+    } else if (e.target.value.length < 4) {
       SetIdCheckDis(true)
       SetCheckIdMsg("* 아이디는 4글자 이상 12글자 이하로 사용 가능합니다.")
       username_err_ref.current.style.color = "#FF7F00";
@@ -215,15 +215,15 @@ const Signup = () => {
     let regTxt = /[0-9a-zA-Zㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
     let regSpecial = /[.,~!@#$%^&*()_+|<>?:{}/\\]/;
     let regBlank = /[\s]/;
-    if(e.target.value.length === 0) {
+    if (e.target.value.length === 0) {
       SetNickCheckDis(true)
       SetCheckNickMsg("* 사용하실 닉네임을 입력해주세요.")
       nickname_err_ref.current.style.color = "#D9D9D9";
-    } else if (!(regTxt.test(e.target.value)) || (regSpecial.test(e.target.value)) || (regBlank.test(e.target.value)) ) {
+    } else if (!(regTxt.test(e.target.value)) || (regSpecial.test(e.target.value)) || (regBlank.test(e.target.value))) {
       SetNickCheckDis(true)
       SetCheckNickMsg("* 영어 / 한글 / 숫자를 제외한 다른 문자는 사용할 수 없습니다.")
       nickname_err_ref.current.style.color = "#FF7F00";
-    } else if(e.target.value.length < 2){
+    } else if (e.target.value.length < 2) {
       SetNickCheckDis(true)
       SetCheckNickMsg("* 닉네임은 2글자 이상 12글자 이하로 사용 가능합니다.")
       nickname_err_ref.current.style.color = "#FF7F00";
@@ -236,11 +236,11 @@ const Signup = () => {
 
   const EmailChange = (e) => {
     const regEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/g;
-    if(e.target.value.length === 0) {
+    if (e.target.value.length === 0) {
       SetEmailCheckDis(true)
       SetCheckEmailMsg("* 이메일은 아이디 비밀번호를 찾을 때 사용됩니다.")
       email_err_ref.current.style.color = "#D9D9D9";
-    } else if(regEmail.test(e.target.value) !== true) {
+    } else if (regEmail.test(e.target.value) !== true) {
       SetEmailCheckDis(true)
       SetCheckEmailMsg("* 이메일 형식으로 작성해주세요. ( ex) abc@naver.com )")
       email_err_ref.current.style.color = "#FF7F00";
@@ -253,10 +253,10 @@ const Signup = () => {
 
   const PwChange = (e) => {
     const regPw = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-    if(e.target.value.length === 0) {
+    if (e.target.value.length === 0) {
       SetPwMsg("* 비밀번호는 영어/숫자 조합으로 8자 이상 사용 가능합니다.")
       pw_err_ref.current.style.color = "#D9D9D9";
-    } else if(regPw.test(e.target.value) !== true) {
+    } else if (regPw.test(e.target.value) !== true) {
       SetPwMsg("* 비밀번호는 영어/숫자 조합으로 8자 이상 사용 가능합니다.")
       pw_err_ref.current.style.color = "#FF0000";
     } else {
@@ -266,11 +266,11 @@ const Signup = () => {
   }
 
   const PwCheckChange = (e) => {
-    if(e.target.value.length === 0) {
+    if (e.target.value.length === 0) {
       SetPwCheckMsg("* 입력하신 비밀번호를 다시 입력해주세요.")
       pw_check_err_ref.current.style.color = "#D9D9D9";
     }
-    else if(password_ref.current.value === e.target.value) {
+    else if (password_ref.current.value === e.target.value) {
       SetPwCheckMsg("* 비밀번호가 일치합니다.")
       pw_check_err_ref.current.style.color = "#81C147";
     } else {
@@ -284,13 +284,13 @@ const Signup = () => {
     setCurWeight(e.target.value.replace(/[^0-9.]/g, ''))
     const regDot = /[\.]/g
     const regNum = /^(\d{0,3})[\.]?(\d{1})?$/g
-    if(e.target.value.length === 0) {
+    if (e.target.value.length === 0) {
       setCurError("* 현재 체중을 입력해주세요.")
       current_weight_err_ref.current.style.color = "#D9D9D9"
-    } else if(!(regDot.test(e.target.value)) && e.target.value.length === 4) {
+    } else if (!(regDot.test(e.target.value)) && e.target.value.length === 4) {
       setCurError("* 양식에 맞춰 작성해주세요.")
       current_weight_err_ref.current.style.color = "#FF0000";
-    } else if(regNum.test(e.target.value) !== true) {
+    } else if (regNum.test(e.target.value) !== true) {
       setCurError("* 양식에 맞춰 작성해주세요.")
       current_weight_err_ref.current.style.color = "#FF0000";
     } else {
@@ -304,13 +304,13 @@ const Signup = () => {
     setGoWeight(e.target.value.replace(/[^0-9.]/g, ''))
     const regDot = /[\.]/g
     const regNum = /^(\d{0,3})[\.]?(\d{1})?$/g
-    if(e.target.value.length === 0) {
+    if (e.target.value.length === 0) {
       setGoError("* 현재 체중을 입력해주세요.")
       goal_weight_err_ref.current.style.color = "#D9D9D9"
-    } else if(!(regDot.test(e.target.value)) && e.target.value.length === 4) {
+    } else if (!(regDot.test(e.target.value)) && e.target.value.length === 4) {
       setGoError("* 양식에 맞춰 작성해주세요.")
       goal_weight_err_ref.current.style.color = "#FF0000";
-    } else if(regNum.test(e.target.value) !== true) {
+    } else if (regNum.test(e.target.value) !== true) {
       setGoError("* 양식에 맞춰 작성해주세요.")
       goal_weight_err_ref.current.style.color = "#FF0000";
     } else {
@@ -321,12 +321,12 @@ const Signup = () => {
 
   const maxLengthCheck = (object) => {
     if (object.target.value.length > object.target.maxLength) {
-     object.target.value = object.target.value.slice(0, object.target.maxLength)
+      object.target.value = object.target.value.slice(0, object.target.maxLength)
     }
   }
 
   const TimeChange = (e) => {
-    if(startFastingHour_ref.current.value && startFastingMinute_ref.current.value && endFastingHour_ref.current.value && endFastingMinute_ref.current.value !== "default") {
+    if (startFastingHour_ref.current.value && startFastingMinute_ref.current.value && endFastingHour_ref.current.value && endFastingMinute_ref.current.value !== "default") {
       SetStartHourCheck("")
       hour_check_ref.current.style.display = "none"
     } else {
@@ -367,7 +367,7 @@ const Signup = () => {
         </Contents>
         <WeightWrap>
           <div>
-            { curInfoMsg ? 
+            {curInfoMsg ?
               (
                 <HoverMsg>
                   정수 혹은 소수점 첫째자리까지 입력해주세요.<br />
@@ -378,12 +378,12 @@ const Signup = () => {
                 null
               )
             }
-            <input ref={currentWeight_ref} maxLength={5} type="number" onInput={maxLengthCheck} onMouseEnter={() => SetCurInfoMsg(true)} onMouseLeave={() => SetCurInfoMsg(false)} placeholder='현재 체중을 입력해주세요.' onChange={(e) => {CurrentWeightChange(e)}} value={curWeight || ''} />
+            <input ref={currentWeight_ref} maxLength={5} type="number" onInput={maxLengthCheck} onMouseEnter={() => SetCurInfoMsg(true)} onMouseLeave={() => SetCurInfoMsg(false)} placeholder='현재 체중을 입력해주세요.' onChange={(e) => { CurrentWeightChange(e) }} value={curWeight || ''} />
             <span className='weight'>(kg)</span>
             <p className="infomsg" ref={current_weight_err_ref}>{curError}</p>
           </div>
           <div>
-            { goInfoMsg ?
+            {goInfoMsg ?
               (
                 <HoverMsg>
                   정수 혹은 소수점 첫째자리까지 입력해주세요.<br />
@@ -394,7 +394,7 @@ const Signup = () => {
                 null
               )
             }
-            <input ref={goalWeight_ref} maxLength={5} type="number" onInput={maxLengthCheck} onMouseEnter={() => SetGoInfoMsg(true)} onMouseLeave={() => SetGoInfoMsg(false)} placeholder='목표 체중을 입력해주세요.' onChange={(e) => {GoalWeightChange(e)}} value={goWeight || ''} />
+            <input ref={goalWeight_ref} maxLength={5} type="number" onInput={maxLengthCheck} onMouseEnter={() => SetGoInfoMsg(true)} onMouseLeave={() => SetGoInfoMsg(false)} placeholder='목표 체중을 입력해주세요.' onChange={(e) => { GoalWeightChange(e) }} value={goWeight || ''} />
             <span className='weight'>(kg)</span>
             <p className="infomsg" ref={goal_weight_err_ref}>{goError}</p>
           </div>
@@ -406,17 +406,17 @@ const Signup = () => {
             <div>
               <Select ref={startFastingHour_ref} onChange={TimeChange} defaultValue="default" id="StartHour" name="StartHour">
                 <option value="default" disabled>시간</option>
-                { 
+                {
                   Array.from({ length: 24 }, (item, index) => {
-                  return <option value = {(index < 10 ? "0" + index : index)} key = {(index < 10 ? "0" + index : index) + "Hour"}> {index < 10 ? "0" + index : index}</option>
+                    return <option value={(index < 10 ? "0" + index : index)} key={(index < 10 ? "0" + index : index) + "Hour"}> {index < 10 ? "0" + index : index}</option>
                   })
                 }
               </Select> 시
               <Select ref={startFastingMinute_ref} onChange={TimeChange} defaultValue="default" id="StartMinute" name="StartMinute">
                 <option value="default" disabled>분</option>
-                { 
+                {
                   Array.from({ length: 60 }, (item, index) => {
-                  return <option value = {(index < 10 ? "0" + index : index)} key = {(index < 10 ? "0" + index : index) + "Minute"}> {index < 10 ? "0" + index : index}</option>
+                    return <option value={(index < 10 ? "0" + index : index)} key={(index < 10 ? "0" + index : index) + "Minute"}> {index < 10 ? "0" + index : index}</option>
                   })
                 }
               </Select> 분
@@ -427,17 +427,17 @@ const Signup = () => {
             <div>
               <Select ref={endFastingHour_ref} onChange={TimeChange} defaultValue="default" id="EndHour" name="EndHour">
                 <option value="default" disabled>시간</option>
-                { 
+                {
                   Array.from({ length: 24 }, (item, index) => {
-                  return <option value = {(index < 10 ? "0" + index : index)} key = {(index < 10 ? "0" + index : index) + "Hour"}> {index < 10 ? "0" + index : index}</option>
+                    return <option value={(index < 10 ? "0" + index : index)} key={(index < 10 ? "0" + index : index) + "Hour"}> {index < 10 ? "0" + index : index}</option>
                   })
                 }
               </Select> 시
               <Select ref={endFastingMinute_ref} onChange={TimeChange} defaultValue="default" id="EndMinute" name="EndMinute">
                 <option value="default" disabled>분</option>
-                { 
+                {
                   Array.from({ length: 60 }, (item, index) => {
-                  return <option value = {(index < 10 ? "0" + index : index)} key = {(index < 10 ? "0" + index : index) + "Minute"}> {index < 10 ? "0" + index : index}</option>
+                    return <option value={(index < 10 ? "0" + index : index)} key={(index < 10 ? "0" + index : index) + "Minute"}> {index < 10 ? "0" + index : index}</option>
                   })
                 }
               </Select> 분
@@ -451,14 +451,14 @@ const Signup = () => {
             disabled=
             {
               checkIdMsg === "* 사용 가능 한 아이디입니다." &&
-              checkNickMsg === "* 사용 가능 한 닉네임입니다." &&
-              checkEmailMsg === "* 사용 가능 한 이메일입니다." &&
-              PwMsg === "* 사용 가능한 비밀번호 입니다." &&
-              checkPwMsg === "* 비밀번호가 일치합니다." &&
-              curError === "* 양식에 맞게 작성되었습니다." &&
-              goError === "* 양식에 맞게 작성되었습니다." &&
-              startHourCheck === ""
-              ? false : true
+                checkNickMsg === "* 사용 가능 한 닉네임입니다." &&
+                checkEmailMsg === "* 사용 가능 한 이메일입니다." &&
+                PwMsg === "* 사용 가능한 비밀번호 입니다." &&
+                checkPwMsg === "* 비밀번호가 일치합니다." &&
+                curError === "* 양식에 맞게 작성되었습니다." &&
+                goError === "* 양식에 맞게 작성되었습니다." &&
+                startHourCheck === ""
+                ? false : true
             }>회원가입</SignUpBtn>
         </Button>
       </FormWrap>

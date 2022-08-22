@@ -22,36 +22,36 @@ const PostView = () => {
     // console.log(dataTest);
 
     const PostViewAX = async () => {
-        const data = {       
-        postId: "postId",
-        nickname: "nickname",
-        profileImage: "profileImage",
-        postImage: "postImage",
-        content: "content",
-        likeToggle: Boolean,
-        likeNumber: "likeNumber",
-        commentNumber: "commentNumber"
-     }
-    
-    const auth = {
-        authorization: sessionStorage.getItem("token"),
-        refresh_token: sessionStorage.getItem("refresh_token")
-    };
+        const data = {
+            postId: "postId",
+            nickname: "nickname",
+            profileImage: "profileImage",
+            postImage: "postImage",
+            content: "content",
+            likeToggle: Boolean,
+            likeNumber: "likeNumber",
+            commentNumber: "commentNumber"
+        }
 
-    await axios({
-        baseURL: "http://13.125.227.9:8080/",
-        method: "get",
-        url: "/post/{postId}",
-        data: data,
-        headers: {
-          Authorization: `Bearer ${auth.authorization}`,
-          refresh_token: `Bearer ${auth.refresh_token}`
-        },
-      }).then((response) => {
-        console.log("반응", response)
-      }).catch((error) => {
-        console.log("에러", error)
-      });
+        const auth = {
+            authorization: sessionStorage.getItem("token"),
+            refresh_token: sessionStorage.getItem("refresh_token")
+        };
+
+        await axios({
+            baseURL: "http://13.125.227.9:8080/",
+            method: "get",
+            url: "/post/{postId}",
+            data: data,
+            headers: {
+                Authorization: `Bearer ${auth.authorization}`,
+                refresh_token: `Bearer ${auth.refresh_token}`
+            },
+        }).then((response) => {
+            console.log("반응", response)
+        }).catch((error) => {
+            console.log("에러", error)
+        });
     };
 
     // const loadPostAX = async() => {
@@ -86,7 +86,7 @@ const PostView = () => {
     const ModifyPost = () => {
         navigation(`/post/${postId}`);
     }
-    
+
     // 삭제 모달창
     const [modalOpen, setModalOpen] = React.useState(false);
 
@@ -116,7 +116,7 @@ const PostView = () => {
             headers: {
                 Authorization: `Bearer ${auth.authorization}`,
                 refresh_token: `Bearer ${auth.refresh_token}`
-              },
+            },
         });
 
         // 댓글 보기
@@ -151,172 +151,243 @@ const PostView = () => {
     return (
         <Wrap>
             <Sidebar />
-            <ImgWrap src={dataTest.postImage} />
-            <ModifyDelBtn>
-                <button onClick={() => { setModalOpen(true) }}
-                    style={{ margin: "0px 10px 0px 0px" }} >
-                    삭제
-                </button>
-                {
-                    modalOpen === true? (
-                        <Modal setModalOpen={setModalOpen} />
-                    ) : (
-                        null
-                    )
-                }
-
-                <button onClick={ModifyPost}>
-                    수정
-                </button>
-            </ModifyDelBtn>
-
-            <div>
-                <div style={{ display: "flex", alignItems: "center", marginTop: "15px", marginLeft: "25px", marginBottom: "15px" }}>
-                    <img src={dataTest.profileImage}
-                        style={{ width: "50px", height: "50px", borderRadius: "25px", backgroundColor: "gray" }} />
-                    <span style={{ fontWeight: "bold", marginLeft: "10px" }}>{dataTest.nickname}</span>
+            <Container>
+                <ImgWrap src={dataTest.postImage} />
+                <ModifyDelBtn>
+                    <button style={{ margin: "0px 10px 0px 0px" }} onClick={() => { setModalOpen(true) }}>
+                        삭제
+                    </button>
+                    {
+                        modalOpen === true ? (
+                            <Modal setModalOpen={setModalOpen} />
+                        ) : (
+                            null
+                        )
+                    }
+                    <button onClick={ModifyPost}>
+                        수정
+                    </button>
+                </ModifyDelBtn>
+                <PostInfo>
+                    <img src={dataTest.profileImage} />
+                    <span>{dataTest.nickname}</span>
                     <Likecomment>좋아요 {dataTest.likeNumber} ∙ 댓글 {dataTest.commentNumber}</Likecomment>
-                </div>
-            </div>
-            <hr style={{ width: "640px", borderBottom: "1px solid #eeeeee" }} />
-            <Contents>{dataTest.content}</Contents>
-            <hr style={{ width: "640px", borderBottom: "1px solid #eeeeee" }} />
-            <p style={{ marginLeft: "40px", fontSize: "14px", color: "#9A9A9A" }}>댓글</p>
-
-            <CommentContainer onSubmit={onSubmit}>
-                <div style={{ display: "flex", alignItems: "center", marginTop: "15px", marginLeft: "35px", marginBottom: "15px" }}>
-                    <img src={comment.userProfile}
-                        style={{ width: "40px", height: "40px", borderRadius: "25px", backgroundColor: "gray" }} />
-                    <span style={{ fontWeight: "bold", marginLeft: "10px" }}>{comment.username}</span>
-                    <span style={{ marginLeft: "10px" }}>{comment.comment}</span>
-                </div>
-                {/* <div>{comment.likeToggle : Boolean}</div> */}
-                <CommentBox style={{ marginLeft: "45px" }}>
-                    <input type="text" placeholder="댓글을 입력해주세요."
-                    // value={comment} onChange={onChange}
-                    />
-                    <Button>
+                </PostInfo>
+                <Line />
+                <Contents>{dataTest.content}</Contents>
+                {/* <Line /> */}
+                <CommentContainer onSubmit={onSubmit}>
+                    <Titlebar>
+                        <Titletag>
+                            <p>댓글</p>
+                        </Titletag>
+                    </Titlebar>
+                    <CommentView>
+                        <CommentInfo>
+                        <img src={comment.userProfile} />
+                        <span style={{ fontWeight: "bold" }}>{comment.username}</span>
+                        <span>{comment.comment}</span>
+                        </CommentInfo>
+                    </CommentView>
+                    {/* <div>{comment.likeToggle : Boolean}</div> */}
+                    <CommentBox>
+                        <input type="text" placeholder="댓글을 입력해주세요."
+                        // value={comment} onChange={onChange}
+                        />
                         <CommentBtn onClick={onhandleComment}>댓글 작성하기</CommentBtn>
-                    </Button>
-                </CommentBox>
-            </CommentContainer>
+                    </CommentBox>
+                </CommentContainer>
+            </Container>
         </Wrap>
     )
 }
 
-
 const Wrap = styled.div`
-    width: 700px;
-    height: 95%;
-    border-radius: 30px;
-    background-color: white;
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
-`;
+  // background-color: yellow;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  `;
+
+const Container = styled.div`
+  // border: 5px solid blue;
+  position: absolute;
+  width: 700px;
+  height: 95%;
+  margin-left: 260px;
+  border-radius: 30px;
+  background-color: white;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  `;
 
 const ImgWrap = styled.img`
     position: relative;
-    width: 700px;
-    height: 420px;
+    width: 100%;
+    height: 60%;
     border-radius: 30px 30px 0px 0px;
-    // margin-top: 20px;
     overflow: hidden;
     object-fit: cover;
 `;
 
-// const profileInfo = styled.div`
-//     position: relative;
-//     display: flex;
-//     align-items: center;
-// `;
-
-const Contents = styled.div`
-    position: relative;
-    width: 600px;
-    height: 150px;
+const PostInfo = styled.div`
+    // background-color: red;
+    width: 90%;
+    height: 10%;
     display: flex;
-    // align-items: center;
     justify-content: center;
-    margin-left: 40px;
-    margin-right: 40px;
-    margin-bottom: 40px;
-    top: 10px;
-
-  p {
-    position: relative;
-    bottom: -20px;
-    font-size: 16px;
-    color: #808080;
-  }
-`;
-
-const Button = styled.div`
-position: absolute;
-  width: 120px;
-  height: 30px;
-  bottom: 0px;
-  right: -10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  button {
-    width: 500px;
-    height: 100%;
-    margin: 0 10px;
-    border: none;
-    border-radius: 30px;
-    color: #fff;
-    font-size: 12px;
-    font-weight: 900;
-    cursor: pointer;
-  }
-// background-color: red;
-`;
-
-const ModifyDelBtn = styled.div`
-    display: flex;
-    justify-content: right;
-    background-color: red;
-    margin-top: -400px;
-    margin-bottom: 380px;
-
-    button {
-    position: relative;
-    width: 60px;
-    height: 30px;
-    margin-right: 40px;
-    font-size: 12px;
-    font-weight: 900;
-    border-radius: 30px;
-    cursor: pointer;
-    border: 1px solid #555;
-    background-color: white;
+    align-items: center;
+    margin : 10px auto;
+    img {
+        width: 50px;
+        height: 50px;
+        border-radius: 25px;
+        background-color: gray;
+    }
+    span {
+        width: 100%;
+        height: 100%
+        font-weight: bold;
+        margin-left: 10px;
     }
 `;
 
-const CommentBtn = styled.button`
-  background-color: #555;
-  &:disabled {
-    background-color: #555;
-    cursor: default;
+const Likecomment = styled.div`
+    // background-color: red;
+    width: 90%;
+    height: 100%;
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    font-size: 14px;
+    color: #bbb;
+`;
+
+const Contents = styled.div`
+    position: relative;
+    width: 90%;
+    height: 20%;
+    display: flex;
+    // align-items: center;
+    justify-content: center;
+    margin : 10px auto;
+  p {
+        font-size: 16px;
+        color: #808080;
   }
 `;
 
-const CommentContainer = styled.div`
+const Line = styled.hr`
+    width: 90%;
+    border-bottom: 1px solid #eee;
+`;
 
+const ModifyDelBtn = styled.div`
+    // background-color: red;
+    position: absolute;
+    width: 90%;
+    height: 100%;
+    display: flex;
+    justify-content: right;
+    margin-top: 40px;
+    button {
+        position: relative;
+        width: 60px;
+        height: 30px;
+        font-size: 12px;
+        font-weight: 900;
+        border-radius: 30px;
+        cursor: pointer;
+        border: 1px solid #555;
+        background-color: white;
+    }
+`;
+
+const CommentContainer = styled.div`
+    // background-color: red;
+    width: 100%;
+    height: 30%;
+    display: flex;
+    flex-direction: column;
+    // justify-content: center;
+    align-items: center;
+    color: #555;
+`;
+
+const CommentView = styled.div`
+    // background-color: yellow;
+    width: 90%;
+    height: 30%;
+    display: flex;
+    // justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+`;
+
+const CommentInfo = styled.div`
+    // background-color: yellow;
+    width: 90%;
+    height: 100%;
+    display: flex;
+    // justify-content: center;
+    align-items: center;
+    img {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 25px;
+        background-color: gray;
+    }
+    span {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-left: 10px;
+        font-size: 14px;
+    }
+`;
+
+const Titlebar = styled.div`
+  width: 100%;
+  height: 30%;
+//   background-color: red;
+`;
+
+const Titletag = styled.div`
+  width: 100px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0px 0px 15px 0px;
+  background-color: #ccc;
+  p {
+  font-size: 14px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  }
 `;
 
 const CommentBox = styled.div`
-    position: absolute;
-    width: 600px;
+    // background-color: red;
+    position: relative;
+    width: 90%;
     height: 30px;
-    bottom: 40px;
-
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 30px;
     border: 1px solid #808080;
-
     input {
         width: 100%;
         margin-left: 10px;
@@ -326,11 +397,17 @@ const CommentBox = styled.div`
       }
 `;
 
-const Likecomment = styled.div`
-    font-size: 14px;
-    color: #bbb;
-    margin-left: 430px;
-    // background-color: red;
+const CommentBtn = styled.button`
+    position: relative;
+    width: 130px;
+    height: 30px;
+    font-size: 12px;
+    font-weight: 700;
+    border-radius: 30px;
+    cursor: pointer;
+    color: #fff;
+    border: 1px solid #808080;
+    background-color: #808080;
 `;
 
 export default PostView;
