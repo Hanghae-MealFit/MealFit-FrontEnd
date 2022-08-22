@@ -67,16 +67,16 @@ const Login = () => {
           }
         })
         console.log(res)
-        if(res.status === 200 && res.data.tokenBox.accessToken !== "" && res.data.tokenBox.refreshToken !== "") {
-          sessionStorage.setItem("accessToken", res.data.tokenBox.accessToken)
-          sessionStorage.setItem("refreshToken", res.data.tokenBox.refreshToken)
-          window.alert("로그인에 성공하였습니다. 밀핏을 찾아주셔서 감사합니다.")
-          navigate("/")
+        if(res.status === 200 && res.data.tokenBox.accessToken !== null && res.data.tokenBox.refreshToken !== null) {
+          // sessionStorage.setItem("accessToken", res.data.tokenBox.accessToken)
+          // sessionStorage.setItem("refreshToken", res.data.tokenBox.refreshToken)
+          // window.alert("로그인에 성공하였습니다. 밀핏을 찾아주셔서 감사합니다.")
+          // navigate("/")
         }
       } catch(error) {
         console.log(error)
-        window.alert("로그인에 실패하였습니다. 아이디 혹은 비밀번호를 다시 확인해주세요.")
-        username_ref.current.focus()
+        // window.alert("로그인에 실패하였습니다. 아이디 혹은 비밀번호를 다시 확인해주세요.")
+        // username_ref.current.focus()
       }
     }
 
