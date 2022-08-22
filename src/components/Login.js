@@ -67,11 +67,13 @@ const Login = () => {
           }
         })
         console.log(res)
-        if(res.status === 200 && res.data.tokenBox.accessToken !== null && res.data.tokenBox.refreshToken !== null) {
-          // sessionStorage.setItem("accessToken", res.data.tokenBox.accessToken)
-          // sessionStorage.setItem("refreshToken", res.data.tokenBox.refreshToken)
-          // window.alert("로그인에 성공하였습니다. 밀핏을 찾아주셔서 감사합니다.")
+        if(res.status === 200 && res.data.tokenBox.accessToken !== null && res.data.tokenBox.refreshToken !== null && res.data.userInfoDto.userStatus !== "NOT_VALID") {
+          sessionStorage.setItem("accessToken", res.data.tokenBox.accessToken)
+          sessionStorage.setItem("refreshToken", res.data.tokenBox.refreshToken)
+          window.alert(`${res.data.userInfoDto.nickname}님 안녕하세요.\n밀핏을 찾아주셔서 감사합니다.`)
           // navigate("/")
+        } else if(res.status === 200 && res.data.tokenBox.accessToken !== null && res.data.tokenBox.refreshToken !== null && res.data.userInfoDto.userStatus === "NOT_VALID") {
+          window.alert("회원가입 시 작성한 e-mail에서 인증 후 로그인 가능합니다.")
         }
       } catch(error) {
         console.log(error)
