@@ -3,7 +3,7 @@ import styled from "styled-components";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-import Sidebar from "./Sidebar";
+import { MemoizedSidebar } from "./Sidebar";
 import PostImgSelect from '../elements/PostImgSelect';
 
 const PostUp = () => {
@@ -111,14 +111,14 @@ const PostUp = () => {
 
     return (
       <Wrap>
-        <Sidebar />
+        <MemoizedSidebar />
         <Container>
           <PostImgSelect files={ImageFile} setFiles={setImageFile} />
           <Textarea ref={content_ref} placeholder='오늘 식단을 입력해주세요.' />
-        <Button>
-          <CancleBtn onClick={onhandleBack}>뒤로가기</CancleBtn>
-          <PostUpBtn onClick={PostUpAX}>올리기</PostUpBtn>
-        </Button>
+          <Button>
+            <CancleBtn onClick={onhandleBack}>뒤로가기</CancleBtn>
+            <PostUpBtn onClick={PostUpAX}>올리기</PostUpBtn>
+          </Button>
         </Container>
       </Wrap>
     );

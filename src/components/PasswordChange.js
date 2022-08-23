@@ -3,7 +3,7 @@ import styled from "styled-components";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'
 
-import Sidebar from "./Sidebar";
+import { MemoizedSidebar } from "./Sidebar";
 
 const PasswordChange = () => {
   const navigate = useNavigate();
@@ -90,7 +90,7 @@ const PasswordChange = () => {
 
   return (
     <Wrap>
-      <Sidebar />
+      <MemoizedSidebar />
       <Container>
         <h1>비밀번호 변경</h1>
         <ModInputWrap>

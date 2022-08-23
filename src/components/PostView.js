@@ -4,7 +4,7 @@ import axios from "axios";
 
 import { useNavigate, useParams } from "react-router-dom";
 
-import Sidebar from "./Sidebar";
+import { MemoizedSidebar } from "./Sidebar";
 import Modal from "../elements/Modal";
 import { loadPost } from "../redux/modules/card";
 
@@ -150,7 +150,7 @@ const PostView = () => {
 
     return (
         <Wrap>
-            <Sidebar />
+            <MemoizedSidebar />
             <Container>
                 <ImgWrap src={dataTest.postImage} />
                 <ModifyDelBtn>

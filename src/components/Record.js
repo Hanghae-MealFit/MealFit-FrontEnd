@@ -2,12 +2,12 @@ import React from "react";
 import styled from "styled-components";
 import axios from 'axios';
 
-import Sidebar from "./Sidebar";
+import { MemoizedSidebar } from "./Sidebar";
 
 const Record = () => {
     return (
         <Wrap>
-            <Sidebar />
+            <MemoizedSidebar />
             <Container>
                 <div>기록하기</div>
             </Container>
