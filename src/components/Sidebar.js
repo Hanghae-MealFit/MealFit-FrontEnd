@@ -5,8 +5,8 @@ import axios from "axios";
 import SidebarItem from "../elements/SidebarItem";
 
 import { Link } from "react-router-dom";
-import { useNavigate, useParams } from 'react-router-dom'
-import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from "react-redux";
 
 const Sidebar = () => {
 
@@ -26,7 +26,7 @@ const Sidebar = () => {
   React.useEffect(() => {
     LoginCheck()
   }, []);
-  console.log(isLogin)
+  console.log(isLogin);
 
   const sessionStorage = window.sessionStorage;
   const dispatch = useDispatch();
@@ -44,7 +44,7 @@ const Sidebar = () => {
     { name: "기록하기", path: "/record" }
   ];
 
-  // console.log(isLogin)
+  // console.log(isLogin);
 
   //  닉네임과 프사는 어디서 받아오죵?
   const nickname = sessionStorage.getItem("nickname")
@@ -96,7 +96,8 @@ const Sidebar = () => {
             ) :
             (
               <Info>
-                <Profile onClick={() => { navigate("/user/info") }} />
+                <Profile onClick={() => { navigate("/user/info") }}
+                alt="" />
                 <span style={{ color: "white" }}>{nickname} 님, 환영합니다!</span>
               </Info>
             )
@@ -168,7 +169,6 @@ const Profile = styled.img`
       color: #555;
       transition: 0.05s all ease-in;
     }
-
 `;
 
 const Menu = styled.div`
