@@ -5,9 +5,10 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import Sidebar from "./Sidebar";
+import { MemoizedSidebar } from "./Sidebar";
 import Cards from "../elements/Cards";
 import Time from "../elements/Time";
+import Circle from "../elements/Circle";
 
 const Main = () => {
   const data = useSelector((state) => state.card.post);
@@ -65,15 +66,11 @@ const Main = () => {
 
   return (
     <Wrap>
-      <Sidebar />
+      <MemoizedSidebar />
       <Container>
         <div style={{ display: "flex", width: "100%", height: "55%", backgroundColor: "#fff" }}>
           <Item1>
-            <CircleWrap>
-              <InsideCircle>
-                <Time time={time} setTime={setTime} />
-              </InsideCircle>
-            </CircleWrap>
+            <Circle time={time} setTime={setTime} />
           </Item1>
           <GrapWrap>
             <Item2>

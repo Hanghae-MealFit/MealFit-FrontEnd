@@ -3,7 +3,7 @@ import styled from "styled-components";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-import Sidebar from "./Sidebar";
+import { MemoizedSidebar } from "./Sidebar";
 
 const Password = () => {
   const password_ref = React.useRef(null);
@@ -63,7 +63,7 @@ const Password = () => {
 
   return (
     <Wrap>
-      <Sidebar />
+      <MemoizedSidebar />
       <Container>
         <h1>본인인증</h1>
         <ModInputWrap>
