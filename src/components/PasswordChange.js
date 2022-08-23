@@ -1,83 +1,112 @@
 import React from "react";
 import styled from "styled-components";
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom'
 
 import Sidebar from "./Sidebar";
 
-const Password = () => {
-  const password_ref = React.useRef(null);
-  const pw_err_ref = React.useRef(null);
-  const [pwMsg, SetPwMsg] = React.useState("")
-
-
-  const PwChange = (e) => {
-    const regPw = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-    if (e.target.value.length === 0) {
-      SetPwMsg("")
-    } else if (regPw.test(e.target.value) !== true) {
-      SetPwMsg("* 비밀번호는 영어/숫자 조합으로 8자 이상 사용 가능합니다.")
-      pw_err_ref.current.style.color = "#FF0000";
-    } else {
-      SetPwMsg(true)
-    }
-  }
-
+const PasswordChange = () => {
   const navigate = useNavigate();
 
-  const auth = {
-    authorization: sessionStorage.getItem("accessToken"),
-    refresh_token: sessionStorage.getItem("refreshToken")
-  };
+  const password_ref = React.useRef(null);
+  const passwordCheck_ref = React.useRef(null);
+  const pw_err_ref = React.useRef(null);
+  const pw_check_err_ref = React.useRef(null);
+
+  // 입력된 비밀번호 값이 영어+숫자가 아닐 시, 유저에게 제공 될 값
+  const [PwMsg, SetPwMsg] = React.useState("* 비밀번호는 영어/숫자 조합으로 8자 이상 사용 가능합니다.");
+
+  // 입력된 비밀번호 값이 영어+숫자가 아닐 시, 유저에게 제공 될 값
+  const [checkPwMsg, SetPwCheckMsg] = React.useState("* 입력하신 비밀번호를 다시 입력해주세요.");
 
   const onhandlePwChange = async (e) => {
     e.preventDefault()
 
-    const PwChange = {
+    const PasswordChange = {
       password: password_ref.current.value,
+      passwordCheck: passwordCheck_ref.current.value,
     }
-    try {
-      const res = await axios.post("http://13.125.227.9:8080/user/info/password",
-        {
-          password: PwChange.password
-        }, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${auth.authorization}`,
-          refresh_token: `Bearer ${auth.refresh_token}`
-        }
-      })
-      console.log(res)
-      if (res.status === 200 && res.data.tokenBox.accessToken !== null && res.data.tokenBox.refreshToken !== null && res.data.userInfoDto.userStatus !== "NOT_VALID") {
-        sessionStorage.setItem("accessToken", res.data.tokenBox.accessToken)
-        sessionStorage.setItem("refreshToken", res.data.tokenBox.refreshToken)
-        window.alert(`${res.data.userInfoDto.nickname}님, 인증되었습니다.`)
-        navigate("/user/info/password")
-      }
-    } catch (error) {
-      console.log(error)
-      // window.alert("비밀번호가 틀렸습니다. 비밀번호를 다시 확인해주세요.")
-      // username_ref.current.focus()
+    // console.log(PasswordChange)
+
+    // const formData = new FormData()
+    // formData.append("password", PasswordChange.password);
+    // formData.append("passwordCheck", PasswordChange.passwordCheck);
+    // console.log(formData)
+
+    const auth = {
+      authorization: sessionStorage.getItem("accessToken"),
+      refresh_token: sessionStorage.getItem("refreshToken")
+    };
+
+    await axios({
+      baseURL: "http://13.125.227.9:8080/",
+      method: "PUT",
+      url: "/user/signup",
+      data: PasswordChange,
+      headers: {
+        // "Content-Type": "multipart/form-data",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.authorization}`,
+        refresh_token: `Bearer ${auth.refresh_token}`
+      },
+    }).then((response) => {
+      if (response.status === 201 && response.data === "변경 완료!")
+        alert(`비밀번호가 변경되었습니다.`)
+      navigate("/user/login")
+    }).catch((error) => {
+      console.log("에러", error)
+      alert(`비밀번호 변경을 실패하셨습니다.`)
+    })
+  }
+
+  const PwChange = (e) => {
+    const regPw = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    if (e.target.value.length === 0) {
+      SetPwMsg("* 비밀번호는 영어/숫자 조합으로 8자 이상 사용 가능합니다.")
+      pw_err_ref.current.style.color = "#D9D9D9";
+    } else if (regPw.test(e.target.value) !== true) {
+      SetPwMsg("* 비밀번호는 영어/숫자 조합으로 8자 이상 사용 가능합니다.")
+      pw_err_ref.current.style.color = "#FF0000";
+    } else {
+      SetPwMsg("* 사용 가능한 비밀번호 입니다.")
+      pw_err_ref.current.style.color = "#81C147";
     }
   }
+
+  const PwCheckChange = (e) => {
+    if (e.target.value.length === 0) {
+      SetPwCheckMsg("* 입력하신 비밀번호를 다시 입력해주세요.")
+      pw_check_err_ref.current.style.color = "#D9D9D9";
+    }
+    else if (password_ref.current.value === e.target.value) {
+      SetPwCheckMsg("* 비밀번호가 일치합니다.")
+      pw_check_err_ref.current.style.color = "#81C147";
+    } else {
+      SetPwCheckMsg("* 입력하신 비밀번호와 값이 다릅니다. ")
+      pw_check_err_ref.current.style.color = "#FF0000";
+    }
+  }
+
 
   return (
     <Wrap>
       <Sidebar />
       <Container>
-        <h1>본인인증</h1>
+        <h1>비밀번호 변경</h1>
         <ModInputWrap>
-          <p>비밀번호 변경을 위해 현재 비밀번호를 입력해주세요.</p>
+          <p>새로운 비밀번호를 입력해주세요.</p>
           <InputTxt>
             <input ref={password_ref} onChange={PwChange}
-              type="password" placeholder='비밀번호를 입력해주세요.' />
+              type="password" placeholder='새 비밀번호' />
+            <input ref={passwordCheck_ref} onChange={PwCheckChange}
+              type="password" placeholder='비밀번호 확인' />
           </InputTxt>
         </ModInputWrap>
         <Button>
           <CancleBtn onClick={() => {
-            navigate("/user/info");
+            navigate("/user/password");
           }}>뒤로가기</CancleBtn>
-          <PwChangeBtn onClick={onhandlePwChange}>변경하기</PwChangeBtn>
+          <PwChangeBtn onClick={onhandlePwChange}>저장하기</PwChangeBtn>
         </Button>
       </Container>
     </Wrap>
@@ -216,4 +245,4 @@ const PwChangeBtn = styled.button`
   }
 `
 
-export default Password;
+export default PasswordChange;
