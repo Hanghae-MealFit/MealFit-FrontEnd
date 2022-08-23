@@ -96,7 +96,8 @@ const Sidebar = () => {
             ) :
             (
               <Info>
-                <Profile onClick={() => { navigate("/user/info") }} />
+                <Profile onClick={() => { navigate("/user/info") }}
+                alt="" />
                 <span style={{ color: "white" }}>{nickname} 님, 환영합니다!</span>
               </Info>
             )
@@ -168,7 +169,6 @@ const Profile = styled.img`
       color: #555;
       transition: 0.05s all ease-in;
     }
-
 `;
 
 const Menu = styled.div`
