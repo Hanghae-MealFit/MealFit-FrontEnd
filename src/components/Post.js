@@ -58,9 +58,9 @@ const Post = () => {
         <Titletag>
         <p>식단 게시판</p>
         </Titletag>
-        <WriteButtom onClick={() => {
+        <WriteBtn onClick={() => {
                 navigate("/post");
-              }}>작성하기</WriteButtom>
+              }}>작성하기</WriteBtn>
         </Titlebar>
 
       <Container>
@@ -131,7 +131,7 @@ const Titletag = styled.div`
     }
 `;
 
-const WriteButtom = styled.div`
+const WriteBtn = styled.div`
   position: relative;
   width: 100px;
   height: 40px;
@@ -139,7 +139,7 @@ const WriteButtom = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 15px;
+  border-radius: 10px;
   color: #555;
   border: 1px solid #555;
   cursor: pointer;

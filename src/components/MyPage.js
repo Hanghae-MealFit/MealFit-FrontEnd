@@ -323,6 +323,9 @@ const MyPage = () => {
 
     <MyPageInfoWrap>
       <h1>My Page</h1>
+      <PwModBtn onClick={() => {
+                navigate("/user/password");
+              }}>비밀번호 변경</PwModBtn>
       <FormWrap>
         <PicWrap>
           <PicSelect files={files} setFiles={setFiles} />
@@ -504,7 +507,7 @@ const MyPage = () => {
               goalProError === "" &&
               goalFatError === ""
               ? false : true
-            }>회원가입</MyPageInfoBtn>
+            }>수정하기</MyPageInfoBtn>
         </Button>
       </FormWrap>
     </MyPageInfoWrap>
@@ -544,6 +547,20 @@ const MyPageInfoWrap = styled.div`
     text-align: center;
   }
 `
+
+const PwModBtn = styled.div`
+  position: relative;
+  width: 120px;
+  height: 40px;
+  margin-left: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  color: #555;
+  border: 1px solid #555;
+  cursor: pointer;
+`;
 
 const FormWrap = styled.form`
   margin-top: 94px;

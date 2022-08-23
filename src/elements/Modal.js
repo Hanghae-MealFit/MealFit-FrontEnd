@@ -29,7 +29,7 @@ const Modal = ({setModalOpen}) => {
                 })
                 .catch(function (error) {
                     console.log("에러", error)
-                    window.alert("삭제 실패!.")
+                    window.alert("삭제 실패!")
                 });
             // console.log("삭제됨!", DeletPost) 
     }
