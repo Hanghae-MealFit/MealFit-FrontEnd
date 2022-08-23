@@ -87,7 +87,6 @@ const PasswordChange = () => {
     }
   }
 
-
   return (
     <Wrap>
       <Sidebar />

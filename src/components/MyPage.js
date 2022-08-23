@@ -516,16 +516,20 @@ const MyPage = () => {
 }
 
 const Wrap = styled.div`
+//   background-color: yellow;
   width: 100%;
   height: 100%;
-//   background-color: yellow;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 
 const MyPageInfoWrap = styled.div`
-  position: relative;
+  position: absolute;
   width: 700px;
   height: 920px;
-  margin: 0 auto;
+  margin-left: 260px;
   border-radius: 30px;
   background-color: white;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
@@ -533,6 +537,7 @@ const MyPageInfoWrap = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
   h1 {
     position: absolute;
     top: 0;
