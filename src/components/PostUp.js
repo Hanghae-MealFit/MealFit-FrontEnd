@@ -52,7 +52,6 @@ const PostUp = () => {
     });
   };
 
-
     // const apiImg = axios.create({
     //   baseURL: "http://13.125.227.9:8080/",
     //   headers: {
@@ -110,34 +109,37 @@ const PostUp = () => {
       navigate("/");
     };
 
-
     return (
       <Wrap>
         <MemoizedSidebar />
-        <PicWrap>
+        <Container>
           <PostImgSelect files={ImageFile} setFiles={setImageFile} />
-        </PicWrap>
-
-        <Contents>
           <Textarea ref={content_ref} placeholder='오늘 식단을 입력해주세요.' />
-        </Contents>
-
-        <Button>
-          <CancleBtn onClick={onhandleBack}>뒤로가기</CancleBtn>
-          <PostUpBtn onClick={PostUpAX}>올리기</PostUpBtn>
-        </Button>
+          <Button>
+            <CancleBtn onClick={onhandleBack}>뒤로가기</CancleBtn>
+            <PostUpBtn onClick={PostUpAX}>올리기</PostUpBtn>
+          </Button>
+        </Container>
       </Wrap>
-
     );
   };
 
-  const Wrap = styled.div`
+const Wrap = styled.div`
+  // background-color: yellow;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  `;
+
+const Container = styled.div`
+  // border: 5px solid blue;
   position: absolute;
   width: 700px;
   height: 860px;
-  left: 40%;
-  // top: 5%;
-  margin: 0 auto;
+  margin-left: 260px;
   border-radius: 30px;
   background-color: white;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
@@ -145,54 +147,34 @@ const PostUp = () => {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  h1 {
-    position: absolute;
-    top: 10px;
-    left: 0;
-    right: 0;
-    margin: 0 auto;
-    padding: 10px 0;
-    font-size: 26px;
-    color: #FE7770;
-    width: 540px;
-    border-bottom: 1px solid #E0E2E6;
-    text-align: center;
-  }
-`
-  const FormWrap = styled.form`
-  margin-top: 60px;
-`
-
-  const PicWrap = styled.div`
-  width: 100%;
-  margin: 0 auto;
-`
-
-  const Contents = styled.div`
-  position: absolute;
-  margin: 20px auto;
-  bottom: 70px;
+  font-size: 20px;
+  text-align: center;
+  font-weight: bold;
   p {
     position: relative;
     bottom: -20px;
     font-size: 16px;
     color: #D9D9D9;
   }
-`
+  `;
 
-  const Textarea = styled.textarea`
+const Textarea = styled.textarea`
+  // border: 1px solid #9A9A9A;
+    position: absolute;
+    margin: 20px auto;
+    bottom: 70px;
     width: 600px;
     height: 300px;
     border: none;
-    // border: 1px solid #9A9A9A;
-    // border-radius: 10px;
-    padding-left: 10px;
-    padding-right: 5px;
-    padding-top: 10px;
+    border-radius: 10px;
+    padding-left: 15px;
+    padding-right: 10px;
+    padding-top: 15px;
 `;
 
-  const Button = styled.div`
-position: absolute;
+const Button = styled.div`
+  // background-color: red;
+  position: absolute;
   width: 250px;
   height: 35px;
   bottom: 40px;
@@ -200,7 +182,7 @@ position: absolute;
   justify-content: center;
   align-items: center;
   button {
-    width: 500px;
+    width: 100%;
     height: 100%;
     margin: 0 10px;
     border: none;
@@ -210,14 +192,14 @@ position: absolute;
     font-weight: 900;
     cursor: pointer;
   }
-// background-color: red;
+
 `
 
-  const CancleBtn = styled.button`
+const CancleBtn = styled.button`
   background-color: #C2C2C2;
 `
 
-  const PostUpBtn = styled.button`
+const PostUpBtn = styled.button`
   background-color: #FE7770;
   &:disabled {
     background-color: #C2C2C2;
