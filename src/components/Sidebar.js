@@ -240,4 +240,5 @@ const LogInBtn = styled.button`
     position: absolute;
 `
 
-export default Sidebar;
+// export default Sidebar;
+export const MemoizedSidebar = React.memo(Sidebar)

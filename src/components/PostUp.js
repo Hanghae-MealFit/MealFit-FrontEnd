@@ -3,7 +3,7 @@ import styled from "styled-components";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-import Sidebar from "./Sidebar";
+import { MemoizedSidebar } from "./Sidebar";
 import PostImgSelect from '../elements/PostImgSelect';
 
 const PostUp = () => {
@@ -113,7 +113,7 @@ const PostUp = () => {
 
     return (
       <Wrap>
-        <Sidebar />
+        <MemoizedSidebar />
         <PicWrap>
           <PostImgSelect files={ImageFile} setFiles={setImageFile} />
         </PicWrap>

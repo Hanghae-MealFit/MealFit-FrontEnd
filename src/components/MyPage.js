@@ -2,12 +2,12 @@ import React from "react";
 import styled from "styled-components";
 import axios from 'axios';
 
-import Sidebar from "./Sidebar";
+import { MemoizedSidebar } from "./Sidebar";
 
 const MyPage = () => {
     return (
     <Wrap>
-        <Sidebar />
+        <MemoizedSidebar />
         <div>마이페이지</div>
     </Wrap>
 )

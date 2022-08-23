@@ -5,7 +5,7 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-import Sidebar from "./Sidebar";
+import { MemoizedSidebar } from "./Sidebar";
 import Cards from "../elements/Cards";
 
 const Post = () => {
@@ -52,7 +52,7 @@ const Post = () => {
 
   return (
     <Wrap>
-      <Sidebar />
+      <MemoizedSidebar />
 
       <Titlebar>
         <Titletag>
