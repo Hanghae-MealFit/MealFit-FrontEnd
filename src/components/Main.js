@@ -13,7 +13,7 @@ import { loadMainUserDB } from '../redux/modules/userinfo'
 import { loadUserWeightDB } from '../redux/modules/userweight';
 
 const Main = () => {
-  const data = useSelector((state) => state.card.post);
+  const data = useSelector((state) => state.post.post);
   const weight = useSelector((state) => state.userweight.data.data);
   console.log("Weight", weight)
 
@@ -105,7 +105,7 @@ const Wrap = styled.div`
 
 const Titlebar = styled.div`
   width: calc(100% - 260px);
-  height: 10%%;
+  height: 10%;
   margin-top: 20px;
   display: flex;
   justify-content: space-between;
