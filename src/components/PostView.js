@@ -6,7 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import { MemoizedSidebar } from "./Sidebar";
 import Modal from "../elements/Modal";
-import { loadPost } from "../redux/modules/card";
+import { loadPost } from "../redux/modules/post";
 
 const PostView = () => {
     const [dataTest, setdataTest] = React.useState({
@@ -89,10 +89,6 @@ const PostView = () => {
 
     // 삭제 모달창
     const [modalOpen, setModalOpen] = React.useState(false);
-
-    const closeModal = () => {
-        setModalOpen(false);
-    };
 
     // 댓글 입력값 State 저장
     // const [comment, setComment] = React.useState("");

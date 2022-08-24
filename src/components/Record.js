@@ -3,7 +3,7 @@ import styled from "styled-components";
 import axios from 'axios';
 
 import { MemoizedSidebar } from "./Sidebar";
-import FoodModal from "../elements/FoodModal";
+import RecordModal from "../elements/RecordModal";
 
 import Calendar from 'react-calendar';
 import moment from "moment";
@@ -11,12 +11,7 @@ import 'moment/locale/ko';
 
 const Record = () => {
   const [value, onChange] = React.useState(new Date());
-  const [modalOpen, setModalOpen] = React.useState(false);
-
-  const closeModal = () => {
-      setModalOpen(false);
-  };
-
+  const [recordModalOpen, setRecordModalOpen] = React.useState(false);
 
   return (
     <Wrap>
@@ -31,64 +26,63 @@ const Record = () => {
           </CalendarContainer>
         <Line />
         <RecordingBox>
-          <h1>
+          <h1 className="Title">
             <div className="text-gray-500 mt-4">
               {moment(value).format("YYYY년 MM월 DD일 dddd")}
             </div>
           </h1>
           <SelectBoxWrap>
             <SelectBox>
-              <Select defaultValue="default" name="Morning">
-                <option value="default" disabled>아침</option>
-                <option value="AddMorning">추가하기</option>
-              </Select>
-              <IconSVG
-                width="20"
-                height="20"
-                viewBox="0 0 20 20"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="M10 14L16 6H4L10 14Z"
-                  fill="#1A1A1A"
-                />
-              </IconSVG>
-            </SelectBox>
-            <SelectBox>
-              <Select defaultValue="default" name="Lunch">
-                <option value="default" disabled>점심</option>
-                <option value="AddLunch">추가하기</option>
-              </Select>
-              <IconSVG
-                width="20"
-                height="20"
-                viewBox="0 0 20 20"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="M10 14L16 6H4L10 14Z"
-                  fill="#1A1A1A"
-                />
-              </IconSVG>
-            </SelectBox>
-            <SelectBox>
-              <Select defaultValue="default" name="Dinner">
-                <option value="default" disabled>저녁</option>
-                <option onClick={() => { setModalOpen(true) }}
-                value="setModalOpen">추가하기</option>
+              <Select>
+                <div onClick={() => { setRecordModalOpen(true) }}
+                  >아침</div>
                 {
-                  modalOpen === true ? (
-                      <FoodModal setModalOpen={setModalOpen} />
+                  recordModalOpen === true ? (
+                      <RecordModal setRecordModalOpen={setRecordModalOpen} />
                   ) : (
                       null
                   )
               }
+              </Select>
+              <IconSVG
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M10 14L16 6H4L10 14Z"
+                  fill="#1A1A1A"
+                />
+              </IconSVG>
+            </SelectBox>
+            <SelectBox>
+              <Select>
+              <div onClick={() => { setRecordModalOpen(true) }}
+                  >점심</div>
+              </Select>
+              <IconSVG
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M10 14L16 6H4L10 14Z"
+                  fill="#1A1A1A"
+                />
+              </IconSVG>
+            </SelectBox>
+            <SelectBox>
+              <Select>
+              <div onClick={() => { setRecordModalOpen(true) }}
+                  >저녁</div>
               </Select>
               <IconSVG
                 width="20"
@@ -169,7 +163,7 @@ const RecordingBox = styled.div`
   justify-content: center;
   align-items: center;
 
-  h1 {
+  h1.Title {
     position: absolute;
     top: 10px;
     right: 30px;
@@ -206,7 +200,7 @@ const SelectBox = styled.div`
   align-items: center;
 `;
 
-const Select = styled.select`
+const Select = styled.div`
 	min-width: 0;
 	display: block;
 	width: 400px;
@@ -224,10 +218,6 @@ const Select = styled.select`
 		border-color: #333;
 	}
 `;
-
-// const Option = styled.option`
-//   background-color: FE7770;
-// `;
 
 const IconSVG = styled.svg`
 	margin-left: -30px;
