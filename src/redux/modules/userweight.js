@@ -5,18 +5,21 @@ const USER_WEIGHT_LOAD = "userweight/USER_WEIGHT_LOAD";
 
 //reducer이 사용할 initialState
 const initialState = {
-  data: [
-    {
-      id: "",
-      savedDate: "",
-      weight: "",
-    }
-  ]
+  data: {
+    data:
+    [
+      {
+        id: "",
+        savedDate: "",
+        weight: "",
+      }
+    ]
+  }
 }
 
 // Action Creators
-export function loadWeight(user) {
-  return { type: USER_WEIGHT_LOAD, user }
+export function loadWeight(data) {
+  return { type: USER_WEIGHT_LOAD, data }
 }
   
 // middlewares
@@ -48,8 +51,8 @@ export const loadUserWeightDB = () => {
 export default function reducer(state = initialState, action = {} ) {
   switch (action.type) {
     case "userweight/USER_WEIGHT_LOAD": {
-      console.log(state, action.user)
-      return { user: action.user }
+      console.log(state, action.data)
+      return { data: action.data }
     }
 
     default: return state;

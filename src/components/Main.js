@@ -14,7 +14,7 @@ import { loadUserWeightDB } from '../redux/modules/userweight';
 
 const Main = () => {
   const data = useSelector((state) => state.card.post);
-  const weight = useSelector((state) => state.userweight.user.data);
+  const weight = useSelector((state) => state.userweight.data.data);
   console.log("Weight", weight)
 
   const dispatch = useDispatch();
