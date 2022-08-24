@@ -1,14 +1,20 @@
 import React from "react";
 import styled from "styled-components";
 import axios from "axios";
+// FontAwesom Icon 사용
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faClipboardList, faBullhorn, faPenToSquare } from '@fortawesome/free-solid-svg-icons'
 
 import SidebarItem from "../elements/SidebarItem";
 
 import { Link } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 const Sidebar = () => {
+
+  const user = useSelector((state) => state.userinfo.user.userProfile)
+  // console.log("userProfile", user)
 
   const [isLogin, setIsLogin] = React.useState(false);
 
@@ -17,7 +23,7 @@ const Sidebar = () => {
       authorization: sessionStorage.getItem("accessToken"),
       refresh_token: sessionStorage.getItem("refreshToken")
     }
-    console.log(Token)
+    // console.log(Token)
     if (Token.authorization !== null && Token.refresh_token !== null) {
       setIsLogin(true)
     }
@@ -26,10 +32,9 @@ const Sidebar = () => {
   React.useEffect(() => {
     LoginCheck()
   }, []);
-  console.log(isLogin);
+  // console.log(isLogin);
 
   const sessionStorage = window.sessionStorage;
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const auth = {
@@ -38,24 +43,29 @@ const Sidebar = () => {
   };
 
   const menus = [
-    { name: "식단게시판", path: "/post/all" },
+    { 
+      icon: <FontAwesomeIcon icon={faClipboardList} />,
+      name: "식단게시판",
+      path: "/post/all"
+    },
     // 임시로 만든 url
-    { name: "식단가이드", path: "/" },
-    { name: "기록하기", path: "/record" }
+    { 
+      icon: <FontAwesomeIcon icon={faBullhorn} />,
+      name: "식단가이드",
+      path: "/" 
+    },
+    { 
+      icon: <FontAwesomeIcon icon={faPenToSquare} />,
+      name: "기록하기",
+      path: "/record" 
+    }
   ];
-
-  // console.log(isLogin);
-
-  //  닉네임과 프사는 어디서 받아오죵?
-  const nickname = sessionStorage.getItem("nickname")
-  // console.log("닉네임 있어?", nickname);
-
-  const ProfileImage = sessionStorage.getItem("ProfileImage")
-  // console.log("프사 있어?", profile);
 
   const onClickLogin = () => {
     navigate("/user/login");
   }
+
+  const temp_img = "https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png"
 
   const onhandleLogOut = async (e) => {
     e.preventDefault()
@@ -68,11 +78,11 @@ const Sidebar = () => {
           }
         })
       if (response) {
-        console.log("반응", response)
+        // console.log("반응", response)
         sessionStorage.clear();
         setIsLogin(false);
         window.alert("로그아웃 하셨습니다. 밀핏을 찾아주셔서 감사합니다.");
-        navigate("/");
+        window.location.reload();
       }
     } catch (error) {
       console.log("에러", error)
@@ -83,22 +93,26 @@ const Sidebar = () => {
   return (
     <SideBar>
       <Logo onClick={() => { navigate("/") }} style={{ cursor: "pointer" }}>
-        밀핏LOGO
+        밀핏
       </Logo>
       <SideBox>
         {
           !isLogin ?
             (
               <Info>
-                <Profile src={"https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png"}></Profile>
+                <Profile src={temp_img}></Profile>
                 <span style={{ color: "white" }}>로그인 해주세요</span>
               </Info>
             ) :
             (
               <Info>
                 <Profile onClick={() => { navigate("/user/info") }}
-                alt="" />
-                <span style={{ color: "white" }}>{nickname} 님, 환영합니다!</span>
+                src={user.profileImage === null ? temp_img : user.profileImage }
+                alt="User Profile Image" />
+                <span style={{ color: "white" }}>
+                  <span className="UserNick">{user.nickname} 님</span>
+                  <span className="Welcome">밀핏에 오신 걸 환영합니다!</span>
+                </span>
               </Info>
             )
         }
@@ -135,82 +149,97 @@ const Sidebar = () => {
 const SideBar = styled.div`
     position: fixed;
     top: 0;
+    bottom: 0;
     left: 0;
+    right: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     /* justify-content: center; */
     width: 260px;
-    height: 100%;
+    height: 100vh;
     background-color: #FE7770;
 `;
 
-const Info = styled.div`
-    margin: 20px auto;
+const Logo = styled.div`
+    width: 100%;
+    height: 44px;
+    font-family: 'Montserrat';
+    font-weight: 900;
+    font-size: 36px;
+    /* identical to box height */
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 18px;
+    margin: 40px auto;
+    color: #FFF;
+    cursor: pointer;
 `;
 
 const SideBox = styled.div`
-    margin-top: 100px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+`;
+
+const Info = styled.div`
+  width: 100%;
+  height: 100%;
+  padding: 20px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  border-top: 1px solid #fff;
+  border-bottom: 1px solid #fff;
+  span {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    margin: 2px 0;
+  }
+  span.UserNick {
+    font-size: 15px;
+    font-weight: 700;
+  }
+  span.Welcome {
+    font-size: 12px;
+  }
 `;
 
 const Profile = styled.img`
     width: 50px;
     height: 50px;
-    border-radius: 100%;
-    margin-right: 20px;
-    background-color: #dddddd;
-
+    border-radius: 50%;
+    margin-right: 14px;
+    background-color: #ddd;
+    transition: 0.4s;
+    cursor: pointer;
     &:hover {
-      background: #808080;
-      color: #555;
-      transition: 0.05s all ease-in;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+      /* background: #808080; */
+      transition: 0.4s;
     }
 `;
 
 const Menu = styled.div`
-    position: absolute;
+    width: 100%;
+    height: 180px;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    
-    margin-top: 50px;
-    margin-left: 20px;
-    width: 200px;
-    height: 60px;
-    left: 0px;
-    top: 250px;
     font-size: 16px;
-    line-height: 2.5;
-`;
-
-const Logo = styled.div`
-    position: absolute;
-    width: 200px;
-    height: 44px;
-    top: 35px;
-    // left: 100px;
-
-    font-family: 'Montserrat';
-    font-style: normal;
-    font-weight: 800;
-    font-size: 36px;
-    line-height: 44px;
-    /* identical to box height */
-
-    display: flex;
-    align-items: center;
-
-    color: #FFFFFF;
+    margin-top: 40px;
 `;
 
 const Button = styled.div`
-    width: 460px;
-    height: 40px;
+    width: 100%;
+    position: absolute;
+    bottom: 0px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -218,7 +247,6 @@ const Button = styled.div`
     width: 200px;
     height: 50px;
     margin-bottom: 40px;
-    bottom: 0px;
     border: none;
     border-radius: 30px;
     color: #FE7770;
@@ -232,12 +260,10 @@ const Button = styled.div`
 
 const LogOutBtn = styled.button`
     background-color: #FE7770;
-    position: absolute;
 `
 
 const LogInBtn = styled.button`
     background-color: #FE7770;
-    position: absolute;
 `
 
 // export default Sidebar;
