@@ -1,78 +1,60 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
-import axios from "axios";
 
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import { MemoizedSidebar } from "./Sidebar";
 import Cards from "../elements/Cards";
-import Time from "../elements/Time";
 import Circle from "../elements/Circle";
+import Dimmed from "../elements/DimmedLayer";
+
+import { loadMainUserDB } from '../redux/modules/userinfo'
+import { loadUserWeightDB } from '../redux/modules/userweight';
 
 const Main = () => {
   const data = useSelector((state) => state.card.post);
-  // console.log("나야나", data);
+  const weight = useSelector((state) => state.userweight.user.data);
+  console.log("Weight", weight)
 
-  const [time, setTime] = React.useState(new Date());
-  const interval = React.useRef(null)
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const auth = {
-    authorization: sessionStorage.getItem("accessToken"),
-    refresh_token: sessionStorage.getItem("refreshToken")
-  };
+  const [isLogin, setIsLogin] = React.useState(false);
 
-  const GetUser = async () => {
-    if (auth.authorization !== null && auth.refresh_token !== null) {
-      try {
-        const res = await axios.get("http://13.125.227.9:8080/user/info",
-          {
-            headers: {
-              Authorization: `Bearer ${auth.authorization}`,
-              refresh_token: `Bearer ${auth.refresh_token}`
-            },
-          })
-        console.log(res)
-      } catch (error) {
-        console.log(error)
-      }
+  const LoginCheck = () => {
+    const Token = {
+      authorization: sessionStorage.getItem("accessToken"),
+      refresh_token: sessionStorage.getItem("refreshToken")
     }
-  }
-
-  const GetWeight = async () => {
-    if (auth.authorization !== null && auth.refresh_token !== null) {
-      try {
-        const res = await axios.get("http://13.125.227.9:8080/api/bodyInfo",
-          {
-            headers: {
-              Authorization: `Bearer ${auth.authorization}`,
-              refresh_token: `Bearer ${auth.refresh_token}`
-            },
-          })
-        console.log(res)
-      } catch (error) {
-        console.log(error)
-      }
+    // console.log(Token)
+    if (Token.authorization !== null && Token.refresh_token !== null) {
+      setIsLogin(true)
     }
   }
 
   useEffect(() => {
-    GetUser()
-    GetWeight()
+    dispatch(loadMainUserDB())
+    dispatch(loadUserWeightDB())
+    LoginCheck()
   }, [])
-
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   return (
     <Wrap>
       <MemoizedSidebar />
       <Container>
-        <div style={{ display: "flex", width: "100%", height: "55%", backgroundColor: "#fff" }}>
-          <Item1>
-            <Circle time={time} setTime={setTime} />
+        <div style={{ display: "flex", width: "100%", height: "55%", backgroundColor: "#fff", position: "relative" }}>
+          {
+            !isLogin ? (
+              <Dimmed />
+            ) : (
+              null
+            )
+          }
+          <Item1 style={{ filter: !isLogin ? "blur(6px)" : "none" }}>
+            <Circle />
           </Item1>
-          <GrapWrap>
+          <GrapWrap style={{ filter: !isLogin ? "blur(6px)" : "none" }}>
             <Item2>
               <Titlebar>
                 <Titletag>
@@ -183,7 +165,6 @@ const GrapWrap = styled.div`
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
-
 `;
 
 const Item2 = styled.div`
