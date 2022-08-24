@@ -8,6 +8,7 @@ import { MemoizedSidebar } from "./Sidebar";
 import PicSelect from '../elements/PicSelect';
 
 import { loadMainUserDB } from '../redux/modules/userinfo'
+import { loadUserWeightDB } from '../redux/modules/userweight'
 
 const MyPage = () => {
 
@@ -16,11 +17,13 @@ const MyPage = () => {
 
   useEffect(() => {
     dispatch(loadMainUserDB())
+    dispatch(loadUserWeightDB())
   }, [])
 
   const user = useSelector((state) => state.userinfo.user.fastingInfo);
   const userInfo = useSelector((state) => state.userinfo.user.userProfile);
-  const weight = useSelector((state) => state.userweight.user.data);
+  const weight = useSelector((state) => state.userweight.data.data);
+  console.log(weight)
   const NowWeight = weight[weight.length - 1].weight
   const startHour = user.startFasting.split(":")[0]
   const startMinute = user.startFasting.split(":")[1]
