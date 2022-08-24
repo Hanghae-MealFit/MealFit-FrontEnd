@@ -15,4 +15,3 @@ const rootReducer = combineReducers({ card, userinfo, userweight });
 const store = createStore(rootReducer, enhancer)
 
 export default store;
-
