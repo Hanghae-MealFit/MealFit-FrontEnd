@@ -48,12 +48,12 @@ const Password = () => {
         }
       })
       console.log(res)
-      if (res.status === 200 && res.data.tokenBox.accessToken !== null && res.data.tokenBox.refreshToken !== null && res.data.userInfoDto.userStatus !== "NOT_VALID") {
-        sessionStorage.setItem("accessToken", res.data.tokenBox.accessToken)
-        sessionStorage.setItem("refreshToken", res.data.tokenBox.refreshToken)
-        window.alert(`${res.data.userInfoDto.nickname}님, 인증되었습니다.`)
-        navigate("/user/info/password")
-      }
+      // if (res.status === 200 && res.data.tokenBox.accessToken !== null && res.data.tokenBox.refreshToken !== null && res.data.userInfoDto.userStatus !== "NOT_VALID") {
+      //   sessionStorage.setItem("accessToken", res.data.tokenBox.accessToken)
+      //   sessionStorage.setItem("refreshToken", res.data.tokenBox.refreshToken)
+      //   window.alert(`${res.data.userInfoDto.nickname}님, 인증되었습니다.`)
+      //   navigate("/user/info/password")
+      // }
     } catch (error) {
       console.log(error)
       // window.alert("비밀번호가 틀렸습니다. 비밀번호를 다시 확인해주세요.")
@@ -69,8 +69,8 @@ const Password = () => {
         <ModInputWrap>
           <p>비밀번호 변경을 위해 현재 비밀번호를 입력해주세요.</p>
           <InputTxt>
-            <input ref={password_ref} onChange={PwChange}
-              type="password" placeholder='비밀번호를 입력해주세요.' />
+            <input ref={password_ref} onChange={PwChange} type="password" placeholder='비밀번호를 입력해주세요.' />
+            <p ref={pw_err_ref}>{pwMsg}</p>
           </InputTxt>
         </ModInputWrap>
         <Button>
