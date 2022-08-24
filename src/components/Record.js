@@ -7,6 +7,7 @@ import FoodModal from "../elements/FoodModal";
 
 import Calendar from 'react-calendar';
 import moment from "moment";
+import 'moment/locale/ko';
 
 const Record = () => {
   const [value, onChange] = React.useState(new Date());
@@ -32,7 +33,7 @@ const Record = () => {
         <RecordingBox>
           <h1>
             <div className="text-gray-500 mt-4">
-              {moment(value).format("YYYY년 MM월 DD일 ddd")}
+              {moment(value).format("YYYY년 MM월 DD일 dddd")}
             </div>
           </h1>
           <SelectBoxWrap>
