@@ -34,10 +34,10 @@ const PostView = () => {
             commentNumber: "commentNumber"
         }
 
-        const Token = {
+        const auth = {
             authorization: sessionStorage.getItem("accessToken"),
             refresh_token: sessionStorage.getItem("refreshToken")
-        }
+          };
 
         await axios({
             baseURL: "http://13.125.227.9:8080/",
@@ -102,9 +102,9 @@ const PostView = () => {
     // const onChange = event => setComment(event.target.value);
 
     const auth = {
-        authorization: sessionStorage.getItem("token"),
-        refresh_token: sessionStorage.getItem("refresh_token")
-    };
+        authorization: sessionStorage.getItem("accessToken"),
+        refresh_token: sessionStorage.getItem("refreshToken")
+      };
 
     const onhandleComment = async (e) => {
         e.preventDefault()
