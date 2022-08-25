@@ -6,7 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import { MemoizedSidebar } from "./Sidebar";
 import Modal from "../elements/Modal";
-import { loadPost } from "../redux/modules/card";
+import { loadPostDB } from "../redux/modules/post";
 
 const PostView = () => {
     const [dataTest, setdataTest] = React.useState({

@@ -1,11 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
-import axios from 'axios'
 
 const KakaoLogin = () => {
   const KAKAO_AUTH_URL = 'http://13.125.227.9:8080/oauth2/authorization/kakao'
 
-  const handleLogin = () => {
+  const handleLogin = (e) => {
+    e.preventDefault()
     window.location.href = KAKAO_AUTH_URL;
   }
 

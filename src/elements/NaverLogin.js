@@ -7,7 +7,8 @@ const NaverLogin = () => {
 
   const NAVER_AUTH_URL = 'http://13.125.227.9:8080/oauth2/authorization/naver'
 
-  const handleLogin = () => {
+  const handleLogin = (e) => {
+    e.preventDefault()
     window.location.href = NAVER_AUTH_URL;
   }
   // const { naver } = window;
