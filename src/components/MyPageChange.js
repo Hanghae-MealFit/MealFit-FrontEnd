@@ -3,10 +3,10 @@ import styled from 'styled-components'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 
+import { MemoizedSidebar } from "./Sidebar";
 import PicSelect from '../elements/PicSelect'
 
-const SignupSNS = () => {
-
+const MyPageChange = () => {
   const nickname_ref = React.useRef(null);
   const currentWeight_ref = React.useRef(null);
   const goalWeight_ref = React.useRef(null);
@@ -303,7 +303,8 @@ const SignupSNS = () => {
 
   return (
     <SignUpWrap>
-      <h1>회원정보 작성</h1>
+      <MemoizedSidebar />
+      <h1>내 정보 변경</h1>
       <FormWrap>
         <PicWrap>
           <PicSelect files={files} setFiles={setFiles} />
@@ -485,7 +486,7 @@ const SignupSNS = () => {
               goalProError === "" &&
               goalFatError === ""
               ? false : true
-            }>회원가입</SignUpBtn>
+            }>수정하기</SignUpBtn>
         </Button>
       </FormWrap>
     </SignUpWrap>
@@ -853,4 +854,4 @@ const GoalInfo = styled.div`
   }
 `
 
-export default SignupSNS
+export default MyPageChange

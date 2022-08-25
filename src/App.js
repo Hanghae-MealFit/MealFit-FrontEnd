@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import './App.css';
 import './fonts/fonts.css'
 import MyPage from './components/MyPage';
+import MyPageChange from './components/MyPageChange';
 import Password from './components/Password';
 import PasswordChange from './components/PasswordChange';
 import Main from './components/Main';
@@ -25,7 +26,8 @@ function App() {
       <Routes>
         <Route path="/" element = { <Main /> } />
         <Route path="user/info" element = { <MyPage /> } />
-        <Route path="/user/password" element = { <Password /> } />
+        <Route path="user/info/edit" element = { <MyPageChange /> } />
+        <Route path="user/password" element = { <Password /> } />
         <Route path="user/info/password" element = { <PasswordChange /> } />
         <Route path="user/signup" element = { <Signup /> } />
         <Route path="user/signupsns" element = { <SignupSNS /> } />

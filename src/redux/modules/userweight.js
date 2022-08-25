@@ -38,7 +38,7 @@ export const loadUserWeightDB = () => {
               refresh_token: `Bearer ${auth.refresh_token}`
             },
           })
-        console.log(res.data)
+        console.log(res)
         dispatch(loadWeight(res.data))
       } catch (error) {
         console.log(error)

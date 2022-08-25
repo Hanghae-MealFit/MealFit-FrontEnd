@@ -92,7 +92,7 @@ const Login = () => {
           <p ref={username_err_ref}>{checkIdMsg}</p>
         </Contents>
         <Contents>
-          <input ref={password_ref} type="password" placeholder='비밀번호를 입력해주세요.' onChange={PwChange} />
+          <input ref={password_ref} type="password" placeholder='비밀번호를 입력해주세요.' autoComplete="off" onChange={PwChange} />
           <p ref={pw_err_ref}>{pwMsg}</p>
         </Contents>
         <Button>
@@ -140,7 +140,7 @@ const LoginWrap = styled.div`
   }
 `
 
-const ConWrap = styled.div`
+const ConWrap = styled.form`
   width: 100%;
   height: 100%;
   margin: 94px auto 0;

@@ -6,10 +6,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faClipboardList, faBullhorn, faPenToSquare } from '@fortawesome/free-solid-svg-icons'
 
 import SidebarItem from "../elements/SidebarItem";
+import { loadMainUserDB } from "../redux/modules/userinfo";
 
 import { Link } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 const Sidebar = () => {
 
@@ -17,12 +18,17 @@ const Sidebar = () => {
   // console.log("userProfile", user)
 
   const [isLogin, setIsLogin] = React.useState(false);
+  const sessionStorage = window.sessionStorage;
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
+  const Token = {
+    authorization: sessionStorage.getItem("accessToken"),
+    refresh_token: sessionStorage.getItem("refreshToken")
+  }
+  console.log(Token)
+  
   const LoginCheck = () => {
-    const Token = {
-      authorization: sessionStorage.getItem("accessToken"),
-      refresh_token: sessionStorage.getItem("refreshToken")
-    }
     // console.log(Token)
     if (Token.authorization !== null && Token.refresh_token !== null) {
       setIsLogin(true)
@@ -30,17 +36,10 @@ const Sidebar = () => {
   }
 
   React.useEffect(() => {
+    dispatch(loadMainUserDB())
     LoginCheck()
   }, []);
   // console.log(isLogin);
-
-  const sessionStorage = window.sessionStorage;
-  const navigate = useNavigate();
-
-  const auth = {
-    authorization: sessionStorage.getItem("accessToken"),
-    refresh_token: sessionStorage.getItem("refreshToken")
-  };
 
   const menus = [
     { 
@@ -69,12 +68,13 @@ const Sidebar = () => {
 
   const onhandleLogOut = async (e) => {
     e.preventDefault()
+
     try {
       const response = await axios.post("http://13.125.227.9:8080/user/logout",
         {
           headers: {
-            Authorization: `Bearer ${auth.authorization}`,
-            refresh_token: `Bearer ${auth.refresh_token}`
+            Authorization: `Bearer ${Token.authorization}`,
+            refresh_token: `Bearer ${Token.refresh_token}`
           }
         })
       if (response) {
@@ -82,10 +82,12 @@ const Sidebar = () => {
         sessionStorage.clear();
         setIsLogin(false);
         window.alert("로그아웃 하셨습니다. 밀핏을 찾아주셔서 감사합니다.");
+        navigate("/")
         window.location.reload();
       }
     } catch (error) {
       console.log("에러", error)
+      console.log(Token)
       window.alert("로그아웃에 실패하였습니다. 다시 한번 시도해주십시오.");
     }
   };
