@@ -17,7 +17,7 @@ const Post = () => {
   // let { postId } = useParams();
   // console.log(postId);
 
-  const data = useSelector((state) => state.post.post.content)
+  const data = useSelector((state) => state.card.post);
   console.log(data);
 
   useEffect(() => {

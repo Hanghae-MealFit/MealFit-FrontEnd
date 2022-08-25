@@ -9,34 +9,6 @@ const RecordModal = ({ setRecordModalOpen }) => {
         setRecordModalOpen(false);
     };
 
-    const [data, setData] = React.useState({ hits: [] })
-    // api 검색 키워드 (쿼리 스트링)
-    const [query, setQuery] = React.useState('react')
-
-    // 랜더링이 업데이트가 되었을 때 effct 구문 실행
-    // 리액트에서 랜더링
-    React.useEffect(() => {
-        // useEffect는 비동기적으로 실행된다.
-        // query에 대한 검색 결과가 완료 되었는지를 검사할 변수 필요
-        let completed = false;
-
-        async function get() {
-            const result = await axios(`https://hn.algolia.com/api/v1/search?query=${query}`)
-            if (!completed) {
-                setData(result.data);
-            }
-        }
-
-        get()
-        return () => {
-            // 다른 비동기 작업이 또 실행되지 않도록
-            completed = true
-        }
-        // 두 번째 파라미터 []는 리액트 랜더링 조건
-        // 배열이 비어있다 -> 검사할 요소가 없다는 것
-        // 즉 이펙트를 실행할지 안 할지를 검사하는 변수
-        // 현재 상황에선 query가 바뀌는 시점이 된다.
-    }, [query])
 
     // const [foodModalOpen, setFoodModalOpen] = React.useState(false);
 
@@ -72,6 +44,10 @@ const RecordModal = ({ setRecordModalOpen }) => {
         // console.log("음식 검색", FoodSearch)
     }
 
+    const FoodRecord = () => {
+        // 식단 추가하기
+    }
+
     return (
         <Container>
             <Background />
@@ -79,22 +55,15 @@ const RecordModal = ({ setRecordModalOpen }) => {
                 <Contents>
                     <h1>추가하기</h1>
                     <InputTxt>
-                        {/* <input type="text" placeholder='검색어를 입력하세요.' /> */}
-                        <>
-                            <input value={query} placeholder='검색어를 입력하세요.'
-                                onChange={e => setQuery(e.target.value)} />
-                            <ul>
-                                {data.hits.map(item => (
-                                    <li key={item.objectId}>
-                                        <a href={item.url}>{item.title}</a>
-                                    </li>
-                                ))}
-                            </ul>
-                        </>
+                        <input type="text" placeholder='검색어를 입력하세요.' />
+                        <button onClick={FoodSearch}>검색하기</button>
                     </InputTxt>
+                    <div>
+                        불러온 데이터
+                    </div>
                     <div style={{ width: "50%" }}>
                         <button onClick={handleClose}>뒤로가기</button>
-                        <button onClick={FoodSearch}>검색하기</button>
+                        <button onClick={FoodRecord}>기록하기</button>
                         {/* <button onClick={() => { setFoodModalOpen(true) }}
                         >검색하기</button> */}
                         {/* {
@@ -138,7 +107,7 @@ const Background = styled.div`
 
 const ModalBlock = styled.div`
     width: 100%;
-    height: 70%;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -191,7 +160,7 @@ align-items: center;
         display: flex;
         align-items: center;
         justify-content: space-evenly;
-        width: 100%;
+        width: 60%;
         height: 100%;
     }
     button {
@@ -209,30 +178,39 @@ align-items: center;
 `;
 
 const InputTxt = styled.div`
+    // background-color: red;
     position: relative;
     text-align: center;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
     input {
-        width: 400px;
+        width: 250px;
         background-color: transparent;
         border: none;
         border-bottom: 1px solid #808080;
-        margin-top: 40px;
         padding: 12px 0 12px 6px;
         box-sizing: border-box;
         outline: none;
     }
     p {
-        margin: 0;
+        // margin: 0;
         position: absolute;
-        left: 6px;
-        bottom: -6px;
         font-size: 10px;
         color: #808080;
     }
+    button {
+        // position: relative;
+        width: 100px;
+        height: 30px;
+        font-size: 12px;
+        font-weight: 900;
+        border-radius: 30px;
+        cursor: pointer;
+        border: 1px solid #555;
+        background-color: white;
+        }
 `;
 
 export default RecordModal;

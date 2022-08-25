@@ -22,6 +22,7 @@ const PostView = () => {
     });
     // console.log(dataTest);
 
+    // 식단 게시글 상세조회
     const PostViewAX = async () => {
         const data = {
             postId: "postId",
@@ -35,9 +36,9 @@ const PostView = () => {
         }
 
         const auth = {
-            authorization: sessionStorage.getItem("token"),
-            refresh_token: sessionStorage.getItem("refresh_token")
-        };
+            authorization: sessionStorage.getItem("accessToken"),
+            refresh_token: sessionStorage.getItem("refreshToken")
+          };
 
         await axios({
             baseURL: "http://13.125.227.9:8080/",
@@ -102,9 +103,9 @@ const PostView = () => {
     // const onChange = event => setComment(event.target.value);
 
     const auth = {
-        authorization: sessionStorage.getItem("token"),
-        refresh_token: sessionStorage.getItem("refresh_token")
-    };
+        authorization: sessionStorage.getItem("accessToken"),
+        refresh_token: sessionStorage.getItem("refreshToken")
+      };
 
     const onhandleComment = async (e) => {
         e.preventDefault()
@@ -117,7 +118,6 @@ const PostView = () => {
         });
 
         // 댓글 보기
-
 
 
 
