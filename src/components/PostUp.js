@@ -13,9 +13,10 @@ const PostUp = () => {
   const [ShowImg, setShowImg] = React.useState(null);
   const UpdateformData = new FormData();
   const formData = new FormData();
+  const postId_ref = React.useRef(null);
   const content_ref = React.useRef(null);
 
-
+  // 작성
   const PostUpAX = async () => {
     const data = {
       postImage: ImageFile,
@@ -52,59 +53,45 @@ const PostUp = () => {
     });
   };
 
-    // const apiImg = axios.create({
-    //   baseURL: "http://13.125.227.9:8080/",
-    //   headers: {
-    //     Authorization: `Bearer ${auth.authorization}`,
-    //     refresh_token: `Bearer ${auth.refresh_token}`,
-    //   }
-    // });
+  // 수정
+  const PostUpdateAX = async () => {
+    const data = {
+      postId: postId_ref.current.value,
+      postImage: ImageFile,
+      content: content_ref.current.value
+    };
 
-    // const CreatePostAX = await apiImg
-    //   .post("/post", formData)
-    //   .then((response) => {
-    //     console.log("반응", response)
-    //     window.alert("식단 작성 성공!");
-    //     navigate("/")
-    //   }).catch((error) => {
-    //     console.log("에러", error)
-    //     window.alert("식단 작성 실패!");
-    //   });
+    UpdateformData.append("postId", postId_ref.current.value);
+    UpdateformData.append("postImage", ImageFile);  
+    UpdateformData.append("content", content_ref.current.value);
+    console.log(UpdateformData);
+    console.log(ImageFile);
 
-    // const UpdatePostAX = async () => {
-    //   const data = {
-    //     newFile: ImageFile,
-    //     content: content_ref.content
-    //   };
-    //   console.log("file 안에서 data의 형식 및 이름은", data);
+    const auth = {
+      authorization: sessionStorage.getItem("accessToken"),
+      refresh_token: sessionStorage.getItem("refreshToken")
+    };  
 
-    //   const auth = {
-    //     authorization: sessionStorage.getItem("token"),
-    //     refresh_token: sessionStorage.getItem("refresh_token")
-    //   };
-    //   console.log(auth);
+    const apiImg = axios.create({
+      baseURL: "http://13.125.227.9:8080/",
+      headers: {
+        Authorization: `Bearer ${auth.authorization}`,
+        refresh_token: `Bearer ${auth.refresh_token}`,
+      }
+    });
 
-    //   const apiPost = axios.create({
-    //     baseURL: "http://13.125.227.9:8080/",
-    //     headers: {
-    //       Authorization: `Bearer ${auth.authorization}`,
-    //       refresh_token: `Bearer ${auth.refresh_token}`,
-    //     }
-    //   });
+    const UpdatePostAX = await apiImg
+      .put("/post", UpdateformData)
+      .then((response) => {
+        console.log("반응", response)
+        window.alert("식단 수정 성공!");
+        navigate("/")
+      }).catch((error) => {
+        console.log("에러", error)
+        window.alert("식단 수정 실패!");
+      });
+    }
 
-    //   const CreatePostAXImg = await apiPost
-    //     .put("/api/post/1", data)
-
-    //     .then((response) => {
-    //       console.log("반응", response)
-    //       window.alert("식단 수정 성공!");
-    //       navigate("/")
-    //     }).catch((error) => {
-    //       console.log("에러", error)
-    //       window.alert("식단 수정 실패!");
-    //     });
-
-  
     const onhandleBack = () => {
       navigate("/");
     };

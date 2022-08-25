@@ -21,6 +21,7 @@ const PostView = () => {
     });
     // console.log(dataTest);
 
+    // 식단 게시글 상세조회
     const PostViewAX = async () => {
         const data = {
             postId: "postId",
@@ -33,10 +34,10 @@ const PostView = () => {
             commentNumber: "commentNumber"
         }
 
-        const auth = {
-            authorization: sessionStorage.getItem("token"),
-            refresh_token: sessionStorage.getItem("refresh_token")
-        };
+        const Token = {
+            authorization: sessionStorage.getItem("accessToken"),
+            refresh_token: sessionStorage.getItem("refreshToken")
+        }
 
         await axios({
             baseURL: "http://13.125.227.9:8080/",
@@ -116,7 +117,6 @@ const PostView = () => {
         });
 
         // 댓글 보기
-
 
 
 
