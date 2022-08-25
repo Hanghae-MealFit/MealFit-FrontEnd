@@ -108,7 +108,7 @@ const Wrap = styled.div`
 
 const Titlebar = styled.div`
   width: calc(100% - 260px);
-  height: 10%%;
+  height: 10%;
   margin-top: 20px;
   display: flex;
   justify-content: space-between;
