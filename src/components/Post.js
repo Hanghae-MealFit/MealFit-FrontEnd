@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import axios from "axios";
 
@@ -8,47 +8,21 @@ import { useDispatch, useSelector } from "react-redux";
 import { MemoizedSidebar } from "./Sidebar";
 import Cards from "../elements/Cards";
 
+import { loadPostDB } from "../redux/modules/post";
+
 const Post = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  let { postId } = useParams();
-  console.log(postId);
+  // let { postId } = useParams();
+  // console.log(postId);
 
-  const data = useSelector((state) => state.post.post);
+  const data = useSelector((state) => state.card.post);
   console.log(data);
 
-  // const PostViewAX = async () => {
-  //     const data = {       
-  //     postId: "postId",
-  //     nickname: "nickname",
-  //     profileImage: "profileImage",
-  //     postImage: "postImage",
-  //     content: "content",
-  //     likeToggle: Boolean,
-  //     likeNumber: "likeNumber",
-  //     commentNumber: "commentNumber"
-  //  }
-
-  // const auth = {
-  //     authorization: sessionStorage.getItem("token"),
-  //     refresh_token: sessionStorage.getItem("refresh_token")
-  // };
-
-  // await axios({
-  //     baseURL: "http://13.125.227.9:8080/",
-  //     method: "get",
-  //     url: "/post/{postId}",
-  //     data: data,
-  //     headers: {
-  //       Authorization: `Bearer ${auth.authorization}`,
-  //       refresh_token: `Bearer ${auth.refresh_token}`
-  //     },
-  //   }).then((response) => {
-  //     console.log("반응", response)
-  //   }).catch((error) => {
-  //     console.log("에러", error)
-  //   });
-  // };
+  useEffect(() => {
+    dispatch(loadPostDB())
+  }, [])
 
   return (
     <Wrap>
@@ -56,12 +30,10 @@ const Post = () => {
 
       <Titlebar>
         <Titletag>
-        <p>식단 게시판</p>
+          <p>식단 게시판</p>
         </Titletag>
-        <WriteBtn onClick={() => {
-                navigate("/post");
-              }}>작성하기</WriteBtn>
-        </Titlebar>
+          <WriteBtn onClick={() => {navigate("/post");}}>작성하기</WriteBtn>
+      </Titlebar>
 
       <Container>
         <CardList>

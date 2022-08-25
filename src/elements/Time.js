@@ -34,6 +34,7 @@ const Time = ({time, setTime, EatTime, EatTimeCheck, StartTimeTotal, EndTimeTota
   const EndTimeCheck = (EndTimeTotal - NowSecond) * 1000
   const EndTimeHour = Math.floor(EndTimeCheck / (1000 * 60 * 60));
   const EndTimeMinute = Math.floor((EndTimeCheck % (1000 * 60 * 60)) / (1000 * 60));
+  // console.log(NowSecond, StartTimeTotal)
 
   return (
     <TimeWrap>

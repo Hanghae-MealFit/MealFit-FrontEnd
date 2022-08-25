@@ -26,6 +26,8 @@ const Circle = () => {
   const EndTime = user.endFasting.split(":")
   const EndTimeTotal = ((parseInt(EndTime[0] * 60) + parseInt(EndTime[1])) * 60) + parseInt(EndTime[2])
   const EndPer = ((EndTimeTotal / TodaySecond) * 100).toFixed(1)
+  // console.log(StartPer, NowPer, EndPer)
+  // console.log(StartTimeTotal, EndTimeTotal)
 
   useEffect(() => {
     if(StartPer < NowPer && NowPer < EndPer) {

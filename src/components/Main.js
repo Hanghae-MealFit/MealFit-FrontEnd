@@ -11,11 +11,13 @@ import Dimmed from "../elements/DimmedLayer";
 
 import { loadMainUserDB } from '../redux/modules/userinfo'
 import { loadUserWeightDB } from '../redux/modules/userweight';
+import { loadPostDB } from "../redux/modules/post";
 
 const Main = () => {
-  const data = useSelector((state) => state.post.post);
+  const data = useSelector((state) => state.post.post.content);
   const weight = useSelector((state) => state.userweight.data.data);
-  console.log("Weight", weight)
+  const weight2 = useSelector((state) => state);
+  console.log("Weight", data)
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -36,6 +38,7 @@ const Main = () => {
   useEffect(() => {
     dispatch(loadMainUserDB())
     dispatch(loadUserWeightDB())
+    dispatch(loadPostDB())
     LoginCheck()
   }, [])
 
@@ -79,7 +82,7 @@ const Main = () => {
               </Titletag>
             </Titlebar>
             <CardList>
-              {data.map((v, idx) => (
+              {/* {data.map((v, idx) => (
                 <CardsBox
                   onClick={() => {
                     navigate(`/post/${v.postId}`);
@@ -88,7 +91,7 @@ const Main = () => {
                 >
                   <Cards post={v} />
                 </CardsBox>
-              ))}
+              ))} */}
             </CardList>
           </Item4>
         </div>

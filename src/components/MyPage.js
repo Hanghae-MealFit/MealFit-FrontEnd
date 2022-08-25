@@ -116,7 +116,7 @@ const MyPage = () => {
           </IntakeWrap>
           <Button>
             <CancleBtn onClick={() => {navigate("/")}}>뒤로가기</CancleBtn>
-            <MyPageInfoBtn>수정하기</MyPageInfoBtn>
+            <MyPageInfoBtn onClick={() => {navigate("/user/info/edit")}}>수정하기</MyPageInfoBtn>
           </Button>
         </FormWrap>
       </MyPageInfoWrap>

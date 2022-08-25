@@ -4,9 +4,10 @@ import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { useNavigate } from 'react-router-dom'
 
-const Cards = (props) => {
+const Cards = ({post}) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  console.log(post)
 
   // const image = React.useRef()
   // const content = React.useRef()
@@ -26,7 +27,7 @@ const Cards = (props) => {
               <p>신선한 채소와 다양한 토핑들을 추가해서 먹는 포만감 만점, 다이어트 불가능한 샐러드 래시피!</p>
             </CardText>
             <TextLabel>
-              좋아요 2 ∙ 댓글 2
+              좋아요 {post.like} ∙ 댓글 2 ∙ 조회수 {post.view}
             </TextLabel>
           </TextBox>
 
