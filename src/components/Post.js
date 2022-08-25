@@ -14,7 +14,7 @@ const Post = () => {
   let { postId } = useParams();
   console.log(postId);
 
-  const data = useSelector((state) => state.card.post);
+  const data = useSelector((state) => state.post.post);
   console.log(data);
 
   // const PostViewAX = async () => {
