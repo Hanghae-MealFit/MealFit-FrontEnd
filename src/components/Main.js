@@ -82,7 +82,7 @@ const Main = () => {
               </Titletag>
             </Titlebar>
             <CardList>
-              {/* {data.map((v, idx) => (
+              {data.map((v, idx) => (
                 <CardsBox
                   onClick={() => {
                     navigate(`/post/${v.postId}`);
@@ -91,7 +91,7 @@ const Main = () => {
                 >
                   <Cards post={v} />
                 </CardsBox>
-              ))} */}
+              ))}
             </CardList>
           </Item4>
         </div>

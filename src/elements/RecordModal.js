@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 
 // import FoodModal from "../elements/FoodModal";
 
@@ -9,14 +10,14 @@ const RecordModal = ({ setRecordModalOpen }) => {
         setRecordModalOpen(false);
     };
 
-
-    // const [foodModalOpen, setFoodModalOpen] = React.useState(false);
-
-    // const foodName_ref = React.useRef(null);
-
-    // const FoodName = {
-    //     foodname: foodName_ref.current.value,
-    //   }
+    const navigate = useNavigate();
+    const foodId_ref = React.useRef(null);
+    const foodName_ref = React.useRef(null);
+    const oneServing_ref = React.useRef(null);
+    const kcal_ref = React.useRef(null);
+    const carbs_ref = React.useRef(null);
+    const protein_ref = React.useRef(null);
+    const fat_ref = React.useRef(null);
 
     const auth = {
         authorization: sessionStorage.getItem("token"),
@@ -24,30 +25,74 @@ const RecordModal = ({ setRecordModalOpen }) => {
     }
 
     // 검색
-    const FoodSearch = () => {
-        // axios.get("http://13.125.227.9:8080/food?name=음식명", 
-        // {
-        //     name: FoodName
-        // }, {
-        //         headers: {
-        //             Authorization: `Bearer ${auth.Authorization}`,
-        //             refresh_token: `Bearer ${auth.refresh_token}`,
-        //         }
-        //     })
-        //     .then(function (response) {
-        //         console.log("반응", response)
-        //         setModalOpen(false)
-        //     })
-        //     .catch(function (error) {
-        //         console.log("에러", error)
-        //     });
-        // console.log("음식 검색", FoodSearch)
-    }
+    const FoodSearch = async () => {
+        const data = {
+            foodId: foodId_ref.current.value,
+            foodName: foodName_ref.current.value,
+            oneServing: oneServing_ref.current.value,
+            kcal: kcal_ref.current.value,
+            carbs: carbs_ref.current.value,
+            protein: protein_ref.current.value,
+            fat: fat_ref.current.value
+        }
 
-    const FoodRecord = () => {
-        // 식단 추가하기
-    }
+        const auth = {
+            authorization: sessionStorage.getItem("accessToken"),
+            refresh_token: sessionStorage.getItem("refreshToken")
+          };
 
+        await axios({
+            baseURL: "http://13.125.227.9:8080/",
+            method: "get",
+            url: "/food?name=음식명",
+            data: data,
+            headers: {
+                Authorization: `Bearer ${auth.authorization}`,
+                refresh_token: `Bearer ${auth.refresh_token}`
+            },
+        }).then((response) => {
+            console.log("반응", response)
+        }).catch((error) => {
+            console.log("에러", error)
+        });
+    };
+
+
+// 식단 추가하기
+    const FoodRecord = async () => {
+        const data = {
+            foodName: foodName_ref.current.value,
+            oneServing: oneServing_ref.current.value,
+            kcal: kcal_ref.current.value,
+            carbs: carbs_ref.current.value,
+            protein: protein_ref.current.value,
+            fat: fat_ref.current_ref.value
+        };
+
+        const auth = {
+            authorization: sessionStorage.getItem("accessToken"),
+            refresh_token: sessionStorage.getItem("refreshToken")
+        };  
+    
+        await axios({
+            baseURL: "http://13.125.227.9:8080/",
+            method: "POST",
+            url: "/food",
+            data: data,
+            headers: {
+            Authorization: `Bearer ${auth.authorization}`,
+            refresh_token: `Bearer ${auth.refresh_token}`
+            },
+        }).then((response) => {
+            console.log("반응", response)
+            window.alert("식단 작성 성공!");
+            navigate("/")
+        }).catch((error) => {
+            console.log("에러", error)
+            window.alert("식단 작성 실패!");
+        });
+    };
+    
     return (
         <Container>
             <Background />
@@ -58,9 +103,15 @@ const RecordModal = ({ setRecordModalOpen }) => {
                         <input type="text" placeholder='검색어를 입력하세요.' />
                         <button onClick={FoodSearch}>검색하기</button>
                     </InputTxt>
-                    <div>
-                        불러온 데이터
-                    </div>
+                        <InputContainer>
+                        <p>직접입력</p>
+                        <input type="text" placeholder='음식이름' />
+                        <input type="text" placeholder='1회 제공량' />
+                        <input type="text" placeholder='칼로리' />
+                        <input type="text" placeholder='탄수화물' />
+                        <input type="text" placeholder='단백질' />
+                        <input type="text" placeholder='지방' />
+                        </InputContainer>
                     <div style={{ width: "50%" }}>
                         <button onClick={handleClose}>뒤로가기</button>
                         <button onClick={FoodRecord}>기록하기</button>
@@ -82,7 +133,7 @@ const RecordModal = ({ setRecordModalOpen }) => {
 
 const Container = styled.div`
     width: 100%;
-    height: 80%;
+    height: 100%;
     position: absolute;
     top: 0;
     left: 0;
@@ -140,7 +191,7 @@ const Contents = styled.div`
 position: relative;
 width: 100%;
 height: 100%;
-margin: 0 auto;
+// margin: 0 auto;
 border-radius: 30px;
 background-color: white;
 display: flex;
@@ -211,6 +262,25 @@ const InputTxt = styled.div`
         border: 1px solid #555;
         background-color: white;
         }
+`;
+
+const InputContainer = styled.div`
+    // background-color: red;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-flow : row wrap;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    input {
+        background-color: transparent;
+        border: none;
+        border-bottom: 1px solid #808080;
+        padding: 12px 0 12px 6px;
+        box-sizing: border-box;
+        outline: none;
+    }
 `;
 
 export default RecordModal;

@@ -13,6 +13,8 @@ const Record = () => {
   const [value, onChange] = React.useState(new Date());
   const [recordModalOpen, setRecordModalOpen] = React.useState(false);
 
+  
+
   return (
     <Wrap>
       <MemoizedSidebar />
@@ -59,6 +61,7 @@ const Record = () => {
                 />
               </IconSVG>
             </SelectBox>
+            <div>값</div> 
             <SelectBox>
               <Select>
               <div onClick={() => { setRecordModalOpen(true) }}
@@ -198,6 +201,7 @@ const SelectBox = styled.div`
 	display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: row;
 `;
 
 const Select = styled.div`

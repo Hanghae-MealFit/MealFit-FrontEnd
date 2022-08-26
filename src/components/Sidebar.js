@@ -95,7 +95,9 @@ const Sidebar = () => {
   return (
     <SideBar>
       <Logo onClick={() => { navigate("/") }} style={{ cursor: "pointer" }}>
-        밀핏
+        <img className="logo"
+          alt="logo"
+          src="/logo/mealft_1.png" />
       </Logo>
       <SideBox>
         {
@@ -165,7 +167,7 @@ const SideBar = styled.div`
 
 const Logo = styled.div`
     width: 100%;
-    height: 44px;
+    height: 40px;
     font-family: 'Montserrat';
     font-weight: 900;
     font-size: 36px;
@@ -176,6 +178,9 @@ const Logo = styled.div`
     margin: 40px auto;
     color: #FFF;
     cursor: pointer;
+    img {
+      height: 100%;
+    }
 `;
 
 const SideBox = styled.div`
