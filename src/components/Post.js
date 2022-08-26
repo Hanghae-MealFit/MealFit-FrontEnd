@@ -6,7 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import { MemoizedSidebar } from "./Sidebar";
-import Cards from "../elements/Cards";
+import CardsAll from "../elements/CardsAll";
 
 import { loadPostDB } from "../redux/modules/post";
 
@@ -44,7 +44,7 @@ const Post = () => {
               }}
               key={idx}
             >
-              <Cards post={v} />
+              <CardsAll post={v} />
             </CardsBox>
           ))}
         </CardList>

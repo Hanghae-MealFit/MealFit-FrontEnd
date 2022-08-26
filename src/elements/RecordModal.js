@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 
 // import FoodModal from "../elements/FoodModal";
 
@@ -127,7 +128,7 @@ const RecordModal = ({ setRecordModalOpen }) => {
 
 const Container = styled.div`
     width: 100%;
-    height: 80%;
+    height: 100%;
     position: absolute;
     top: 0;
     left: 0;
@@ -185,7 +186,7 @@ const Contents = styled.div`
 position: relative;
 width: 100%;
 height: 100%;
-margin: 0 auto;
+// margin: 0 auto;
 border-radius: 30px;
 background-color: white;
 display: flex;
@@ -256,6 +257,25 @@ const InputTxt = styled.div`
         border: 1px solid #555;
         background-color: white;
         }
+`;
+
+const InputContainer = styled.div`
+    // background-color: red;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-flow : row wrap;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    input {
+        background-color: transparent;
+        border: none;
+        border-bottom: 1px solid #808080;
+        padding: 12px 0 12px 6px;
+        box-sizing: border-box;
+        outline: none;
+    }
 `;
 
 export default RecordModal;

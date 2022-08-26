@@ -107,6 +107,8 @@ const PostView = () => {
     // 삭제 모달창
     const [modalOpen, setModalOpen] = React.useState(false);
 
+
+
     // 댓글 입력값 State 저장
     // const [comment, setComment] = React.useState("");
     const [comment, setComment] = React.useState({
@@ -133,8 +135,35 @@ const PostView = () => {
         });
 
         // 댓글 보기
+        const CommentViewAX = async () => {
+            const data = {
+                username: "username",
+                userProfile: "userProfile",
+                comment: "comment",
+                likeToggle: Boolean,
+            }
 
-
+            const auth = {
+                authorization: sessionStorage.getItem("accessToken"),
+                refresh_token: sessionStorage.getItem("refreshToken")
+              };
+    
+            await axios({
+                baseURL: "http://13.125.227.9:8080/",
+                method: "get",
+                url: "/post/{postId}/comment",
+                data: data,
+                headers: {
+                    Authorization: `Bearer ${auth.authorization}`,
+                    refresh_token: `Bearer ${auth.refresh_token}`
+                },
+            }).then((response) => {
+                console.log("반응", response)
+            }).catch((error) => {
+                console.log("에러", error)
+            });
+        };
+        
 
         // 댓글 쓰기
         const CommentUp = await CommentApi
