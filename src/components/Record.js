@@ -12,12 +12,21 @@ import 'moment/locale/ko';
 const Record = () => {
   const [value, onChange] = React.useState(new Date());
   const [recordModalOpen, setRecordModalOpen] = React.useState(false);
+  // const [open, setOpen] = React.useState(false);
+  const [breakfestOpen, breakfestSetOpen] = React.useState(false);
+  const [lunchOpen, lunchSetOpen] = React.useState(false);
+  const [dinnerOpen, dinnerSetOpen] = React.useState(false);
+
+  // status
+  // 아침: BREAKFAST
+  // 점심: LUNCH
+  // 저녁: DINNER
 
   const auth = {
     authorization: sessionStorage.getItem("accessToken"),
     refresh_token: sessionStorage.getItem("refreshToken")
   };
-  
+
   const SelectDay = moment(value).format("YYYY-MM-DD")
   const getFood = async () => {
     try {
@@ -43,13 +52,13 @@ const Record = () => {
     <Wrap>
       <MemoizedSidebar />
       <Container>
-          <CalendarContainer>
+        <CalendarContainer>
           <MyCalendar
-              onChange={onChange} value={value}
-              calendarType="US" // 요일을 일요일부터 시작하도록 설정
-              formatDay={(locale, date) => moment(date).format("D")} // '일' 제외하고 숫자만 보이도록 설정
-            />
-          </CalendarContainer>
+            onChange={onChange} value={value}
+            calendarType="US" // 요일을 일요일부터 시작하도록 설정
+            formatDay={(locale, date) => moment(date).format("D")} // '일' 제외하고 숫자만 보이도록 설정
+          />
+        </CalendarContainer>
         <Line />
         <RecordingBox>
           <h1 className="Title">
@@ -59,71 +68,183 @@ const Record = () => {
           </h1>
           <SelectBoxWrap>
             <SelectBox>
-              <Select>
-                <div onClick={() => { setRecordModalOpen(true) }}
-                  >아침</div>
-                {
-                  recordModalOpen === true ? (
-                      <RecordModal setRecordModalOpen={setRecordModalOpen} />
-                  ) : (
-                      null
+              {
+                breakfestOpen  === true ?
+                  (
+                    <>
+                      <Select onClick={() => breakfestSetOpen(false)}>
+                        <div>아침</div>
+                        <IconSVG
+                          width="20"
+                          height="20"
+                          viewBox="0 0 20 20"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            clipRule="evenodd"
+                            d="M10 14L16 6H4L10 14Z"
+                            fill="#1A1A1A"
+                          />
+                        </IconSVG>
+                      </Select>
+                      <SelectContent>
+                        <div>아침 뭐 먹었니?</div>
+                        <Button onClick={() => { setRecordModalOpen(true) }}
+                        >추가하기</Button>
+                        {
+                          recordModalOpen === true ? (
+                            <RecordModal setRecordModalOpen={setRecordModalOpen} />
+                          ) : (
+                            null
+                          )
+                        }
+                      </SelectContent>
+                    </>
+                  ) :
+                  (
+                    <>
+                    <Select onClick={() => breakfestSetOpen(true)}>
+                      <div>아침</div>
+                      <IconSVG
+                        width="20"
+                        height="20"
+                        viewBox="0 0 20 20"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          clipRule="evenodd"
+                          d="M10 14L16 6H4L10 14Z"
+                          fill="#1A1A1A"
+                        />
+                      </IconSVG>
+                    </Select>
+                  </>
                   )
-                }
-              </Select>
-              <IconSVG
-                width="20"
-                height="20"
-                viewBox="0 0 20 20"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fillRule="evenodd"
-                  clipRule="evenodd"
-                  d="M10 14L16 6H4L10 14Z"
-                  fill="#1A1A1A"
-                />
-              </IconSVG>
+              }
             </SelectBox>
+
             <SelectBox>
-              <Select>
-              <div onClick={() => { setRecordModalOpen(true) }}
-                  >점심</div>
-              </Select>
-              <IconSVG
-                width="20"
-                height="20"
-                viewBox="0 0 20 20"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fillRule="evenodd"
-                  clipRule="evenodd"
-                  d="M10 14L16 6H4L10 14Z"
-                  fill="#1A1A1A"
-                />
-              </IconSVG>
+              {
+                lunchOpen  === true ?
+                  (
+                    <>
+                      <Select onClick={() => lunchSetOpen(false)}>
+                        <div>점심</div>
+                        <IconSVG
+                          width="20"
+                          height="20"
+                          viewBox="0 0 20 20"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            clipRule="evenodd"
+                            d="M10 14L16 6H4L10 14Z"
+                            fill="#1A1A1A"
+                          />
+                        </IconSVG>
+                      </Select>
+                      <SelectContent>
+                        <div>점심 뭐 먹었니?</div>
+                        <Button onClick={() => { setRecordModalOpen(true) }}
+                        >추가하기</Button>
+                        {
+                          recordModalOpen === true ? (
+                            <RecordModal setRecordModalOpen={setRecordModalOpen} />
+                          ) : (
+                            null
+                          )
+                        }
+                      </SelectContent>
+                    </>
+                  ) :
+                  (
+                    <>
+                    <Select onClick={() => lunchSetOpen(true)}>
+                      <div>점심</div>
+                      <IconSVG
+                        width="20"
+                        height="20"
+                        viewBox="0 0 20 20"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          clipRule="evenodd"
+                          d="M10 14L16 6H4L10 14Z"
+                          fill="#1A1A1A"
+                        />
+                      </IconSVG>
+                    </Select>
+                  </>
+                  )
+              }
             </SelectBox>
+
             <SelectBox>
-              <Select>
-              <div onClick={() => { setRecordModalOpen(true) }}
-                  >저녁</div>
-              </Select>
-              <IconSVG
-                width="20"
-                height="20"
-                viewBox="0 0 20 20"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fillRule="evenodd"
-                  clipRule="evenodd"
-                  d="M10 14L16 6H4L10 14Z"
-                  fill="#1A1A1A"
-                />
-              </IconSVG>
+              {
+                dinnerOpen  === true ?
+                  (
+                    <>
+                      <Select onClick={() => dinnerSetOpen(false)}>
+                        <div>저녁</div>
+                        <IconSVG
+                          width="20"
+                          height="20"
+                          viewBox="0 0 20 20"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            clipRule="evenodd"
+                            d="M10 14L16 6H4L10 14Z"
+                            fill="#1A1A1A"
+                          />
+                        </IconSVG>
+                      </Select>
+                      <SelectContent>
+                        <div>저녁 뭐 먹었니?</div>
+                        <Button onClick={() => { setRecordModalOpen(true) }}
+                        >추가하기</Button>
+                        {
+                          recordModalOpen === true ? (
+                            <RecordModal setRecordModalOpen={setRecordModalOpen} />
+                          ) : (
+                            null
+                          )
+                        }
+                      </SelectContent>
+                    </>
+                  ) :
+                  (
+                    <>
+                    <Select onClick={() => dinnerSetOpen(true)}>
+                      <div>저녁</div>
+                      <IconSVG
+                        width="20"
+                        height="20"
+                        viewBox="0 0 20 20"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          clipRule="evenodd"
+                          d="M10 14L16 6H4L10 14Z"
+                          fill="#1A1A1A"
+                        />
+                      </IconSVG>
+                    </Select>
+                  </>
+                  )
+              }
             </SelectBox>
           </SelectBoxWrap>
         </RecordingBox>
@@ -166,7 +287,7 @@ const Container = styled.div`
   }
   `;
 
-  const CalendarContainer = styled.div`
+const CalendarContainer = styled.div`
   // background-color: yellow;
   // border: 5px solid yellow;
 
@@ -210,39 +331,63 @@ const Line = styled.hr`
 
 const SelectBoxWrap = styled.div`
   // background-color: pink;
-  width: 70%;
+  width: 75%;
   height: 50%;
-  margin-bottom: 100px;
   font-size: 18px;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
+  // justify-content: space-around;
+  // align-items: center;
+  overflow: auto;
 `;
 
 const SelectBox = styled.div`
-	display: flex;
+  // background-color: hotpink;
+  width: 100%;
+  height: 100%;
+  margin-bottom: 10px;
+  display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 `;
 
 const Select = styled.div`
-	min-width: 0;
-	display: block;
-	width: 400px;
-	padding: 8px 8px;
-	font-size: inherit;
-	line-height: inherit;
-	border: 1px solid;
-	border-radius: 5px;
-	color: #555;
-	background-color: transparent;
+  // background-color: gray;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+  min-width: 0;
+  width: 400px;
+  padding: 8px 8px;
+  font-size: inherit;
+  line-height: inherit;
+  border: 1px solid;
+  border-radius: 5px;
+  color: #555;
+  // background-color: transparent;
   -webkit-appearance: none;
-	-moz-appearance: none;
-	appearance: none;
-	&:focus {
-		border-color: #333;
-	}
+  -moz-appearance: none;
+  appearance: none;
+  &:focus {
+    border-color: #333;
+  }
+    cursor: pointer;
+`;
+
+const SelectContent = styled.div`
+display: flex;
+justify-content: center;
+align-items: center;
+flex-direction: column;
+div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
 `;
 
 const IconSVG = styled.svg`
@@ -250,6 +395,23 @@ const IconSVG = styled.svg`
 	align-self: center;
 	width: 24px;
 	height: 24px;
+`;
+
+const Button = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 400px;
+  height: 40px;
+  margin-top: 20px;
+  border: none;
+  border-radius: 30px;
+  color: #fff;
+  background-color: #FE7770;
+  font-size: 16px;
+  // font-weight: 900;
+  cursor: pointer;
 `;
 
 const MyCalendar = styled(Calendar)`

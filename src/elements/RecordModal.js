@@ -77,34 +77,36 @@ const RecordModal = ({ setRecordModalOpen }) => {
     <Container>
       <Background />
       <ModalBlock>
+      <h1>추가하기</h1>
         <Contents>
-          <h1>추가하기</h1>
           <InputTxt>
               <input ref={search_food_ref} type="text" placeholder='검색어를 입력하세요.' />
               <button onClick={FoodSearch}>검색하기</button>
           </InputTxt>
-          <div>
+          <Search>
               <p>검색 결과가 없습니다. 직접 입력해주세요.</p>
               <button onClick={NotFoundSearchBtn}>직접 입력</button>
-          </div>
+          </Search>
           {
             foodInputModal === true ? 
             (
-              <div>
+              <Direct>
                 <input ref={foodName_ref} type="text" placeholder='음식이름' />
                 <input ref={serving_ref} type="text" placeholder='1회 제공량' />
                 <input ref={kcal_ref} type="text" placeholder='칼로리' />
                 <input ref={carbs_ref} type="text" placeholder='탄수화물' />
                 <input ref={pro_ref} type="text" placeholder='단백질' />
                 <input ref={fat_ref} type="text" placeholder='지방' />
+                <div style={{ width: "80%" }}>
                 <button onClick={() => {setFoodInputModal(false)}}>취소하기</button>
                 <button onClick={FoodInsert}>입력하기</button>
-              </div>
+                </div>
+              </Direct>
             ) : 
             (
-              <div>
-                불러온 데이터
-              </div>
+              <FoodData>
+                <p>불러온 데이터</p>
+              </FoodData>
             )
           }
           <div style={{ width: "50%" }}>
@@ -152,16 +154,28 @@ const Background = styled.div`
 `;
 
 const ModalBlock = styled.div`
-    width: 100%;
-    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     position: absolute;
-    border-radius: 15px;
+    border-radius: 30px;
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
     background-color: #fff;
     width: 35rem;
+    height: 100%;
+    h1 {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      margin: 0 auto;
+      padding: 30px 0;
+      font-size: 26px;
+      color: #FE7770;
+      width: 540px;
+      border-bottom: 1px solid #E0E2E6;
+      text-align: center;
+    }
     @media (max-width: 1120px) {
         width: 50rem;
     }
@@ -183,54 +197,42 @@ const ModalBlock = styled.div`
 `;
 
 const Contents = styled.div`
-position: relative;
-width: 100%;
-height: 100%;
-// margin: 0 auto;
-border-radius: 30px;
-background-color: white;
-display: flex;
-flex-direction: column;
-justify-content: center;
-align-items: center;
-    h1 {
-        width: 90%;
-        font-size: 26px;
-        margin: 0 auto;
-        padding: 30px 0;
-        color: #FE7770;
-        border-bottom: 1px solid #E0E2E6;
-        text-align: center;
-         }
-    div {
-        display: flex;
-        align-items: center;
-        justify-content: space-evenly;
-        width: 60%;
-        height: 100%;
+  position: relative;
+  width: 100%;
+  height: 80%;
+  position: absolute;
+  bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  flex-direction: column;
+  p {
+      font-size: 17px;
+      font-weight: 100;
+      color: #bbb;
     }
-    button {
-        position: relative;
-        margin: 0px;
-        width: 100px;
-        height: 30px;
-        font-size: 12px;
-        font-weight: 900;
-        border-radius: 30px;
-        cursor: pointer;
-        border: 1px solid #555;
-        background-color: white;
-        }
+  div {
+      display: flex;
+      align-items: center;
+      justify-content: space-evenly;
+      width: 60%;
+  }
+  button {
+      position: relative;
+      // margin: 0px;
+      width: 100px;
+      height: 30px;
+      font-size: 12px;
+      font-weight: 900;
+      border-radius: 30px;
+      cursor: pointer;
+      border: 1px solid #555;
+      background-color: white;
+      }
 `;
 
 const InputTxt = styled.div`
     // background-color: red;
-    position: relative;
-    text-align: center;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
     input {
         width: 250px;
         background-color: transparent;
@@ -239,12 +241,6 @@ const InputTxt = styled.div`
         padding: 12px 0 12px 6px;
         box-sizing: border-box;
         outline: none;
-    }
-    p {
-        // margin: 0;
-        position: absolute;
-        font-size: 10px;
-        color: #808080;
     }
     button {
         // position: relative;
@@ -259,12 +255,25 @@ const InputTxt = styled.div`
         }
 `;
 
-const InputContainer = styled.div`
-    // background-color: red;
+const Search = styled.div`
+    // background-color: pink;
+    position: relative;
     width: 100%;
-    height: 100%;
+    height: 25%;
     display: flex;
-    flex-flow : row wrap;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    p {
+      margin-bottom: 40px;
+    }
+`;
+
+const Direct = styled.div`
+    // background-color: hotpink;
+    width: 100%;
+    height: 70%;
+    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -272,9 +281,25 @@ const InputContainer = styled.div`
         background-color: transparent;
         border: none;
         border-bottom: 1px solid #808080;
-        padding: 12px 0 12px 6px;
+        padding: 6px 0 6px 3px;
         box-sizing: border-box;
         outline: none;
+    }
+`;
+
+const FoodData = styled.div`
+    // background-color: hotpink;
+    width: 100%;
+    height: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    p {
+      font-size: 17px;
+      font-weight: 100;
+      color: #bbb;
+      margin-bottom: 50px;
     }
 `;
 
