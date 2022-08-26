@@ -12,20 +12,29 @@ import 'moment/locale/ko';
 const Record = () => {
   const [value, onChange] = React.useState(new Date());
   const [recordModalOpen, setRecordModalOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
+      //toggle accordion function
+      let toggleHandler = (e) => {
+        //switch state
+        setOpen(!open);
+    };
 
-  
+  // status
+  // 아침: BREAKFAST
+  // 점심: LUNCH
+  // 저녁: DINNER
 
   return (
     <Wrap>
       <MemoizedSidebar />
       <Container>
-          <CalendarContainer>
+        <CalendarContainer>
           <MyCalendar
-              onChange={onChange} value={value}
-              calendarType="US" // 요일을 일요일부터 시작하도록 설정
-              formatDay={(locale, date) => moment(date).format("D")} // '일' 제외하고 숫자만 보이도록 설정
-            />
-          </CalendarContainer>
+            onChange={onChange} value={value}
+            calendarType="US" // 요일을 일요일부터 시작하도록 설정
+            formatDay={(locale, date) => moment(date).format("D")} // '일' 제외하고 숫자만 보이도록 설정
+          />
+        </CalendarContainer>
         <Line />
         <RecordingBox>
           <h1 className="Title">
@@ -34,10 +43,27 @@ const Record = () => {
             </div>
           </h1>
           <SelectBoxWrap>
-            <SelectBox>
-              <Select>
-                <div onClick={() => { setRecordModalOpen(true) }}
-                  >아침</div>
+              <SelectBox>
+              <Select onClick={() => setOpen(!open)}>
+              <div>아침</div>
+                    <IconSVG
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <path
+                        fillRule="evenodd"
+                        clipRule="evenodd"
+                        d="M10 14L16 6H4L10 14Z"
+                        fill="#1A1A1A"
+                    />
+                </IconSVG>
+                </Select>
+                <div>아침 뭐 먹었니?</div>
+                <Button onClick={() => { setRecordModalOpen(true) }}
+                >추가하기</Button>
                 {
                   recordModalOpen === true ? (
                       <RecordModal setRecordModalOpen={setRecordModalOpen} />
@@ -45,63 +71,22 @@ const Record = () => {
                       null
                   )
               }
-              </Select>
-              <IconSVG
-                width="20"
-                height="20"
-                viewBox="0 0 20 20"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fillRule="evenodd"
-                  clipRule="evenodd"
-                  d="M10 14L16 6H4L10 14Z"
-                  fill="#1A1A1A"
-                />
-              </IconSVG>
-            </SelectBox>
-            <div>값</div> 
-            <SelectBox>
-              <Select>
-              <div onClick={() => { setRecordModalOpen(true) }}
-                  >점심</div>
-              </Select>
-              <IconSVG
-                width="20"
-                height="20"
-                viewBox="0 0 20 20"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fillRule="evenodd"
-                  clipRule="evenodd"
-                  d="M10 14L16 6H4L10 14Z"
-                  fill="#1A1A1A"
-                />
-              </IconSVG>
-            </SelectBox>
-            <SelectBox>
-              <Select>
-              <div onClick={() => { setRecordModalOpen(true) }}
-                  >저녁</div>
-              </Select>
-              <IconSVG
-                width="20"
-                height="20"
-                viewBox="0 0 20 20"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fillRule="evenodd"
-                  clipRule="evenodd"
-                  d="M10 14L16 6H4L10 14Z"
-                  fill="#1A1A1A"
-                />
-              </IconSVG>
-            </SelectBox>
+              </SelectBox>
+
+{/* 
+              <Accordion>
+              <SelectBox>
+                <div>점심 뭐 먹었니?</div>
+                <Button>추가하기</Button>
+              </SelectBox>
+              </Accordion>
+
+              <Accordion>
+              <SelectBox>
+                <div>저녁 뭐 먹었니?</div>
+                <Button>추가하기</Button>
+              </SelectBox>
+              </Accordion> */}
           </SelectBoxWrap>
         </RecordingBox>
       </Container>
@@ -143,7 +128,7 @@ const Container = styled.div`
   }
   `;
 
-  const CalendarContainer = styled.div`
+const CalendarContainer = styled.div`
   // background-color: yellow;
   // border: 5px solid yellow;
 
@@ -187,24 +172,27 @@ const Line = styled.hr`
 
 const SelectBoxWrap = styled.div`
   // background-color: pink;
-  width: 70%;
-  height: 50%;
-  margin-bottom: 100px;
+  width: 100%;
+  height: 80%;
+  margin-top: 120px;
   font-size: 18px;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
+  // justify-content: center;
   align-items: center;
+  overflow: auto;
 `;
 
 const SelectBox = styled.div`
+  // background-color: hotpink;
 	display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: row;
+  flex-direction: column;
 `;
 
 const Select = styled.div`
+  // background-color: gray;
 	min-width: 0;
 	display: block;
 	width: 400px;
@@ -228,6 +216,23 @@ const IconSVG = styled.svg`
 	align-self: center;
 	width: 24px;
 	height: 24px;
+`;
+
+const Button = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 400px;
+  height: 40px;
+  border: none;
+  border-radius: 30px;
+  color: #fff;
+  background-color: #FE7770;
+  font-size: 16px;
+  // font-weight: 900;
+  cursor: pointer;
+
 `;
 
 const MyCalendar = styled(Calendar)`
@@ -327,6 +332,6 @@ const MyCalendar = styled(Calendar)`
       max-width: initial !important;
     }
   }
-`
+`;
 
 export default Record;
