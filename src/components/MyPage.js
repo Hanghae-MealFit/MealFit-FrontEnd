@@ -28,7 +28,6 @@ const MyPage = () => {
   const startMinute = user.startFasting.split(":")[1]
   const endHour = user.endFasting.split(":")[0]
   const endMinute = user.endFasting.split(":")[1]
-  console.log(userInfo)
 
   return (
     <Wrap>
