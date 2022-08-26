@@ -17,7 +17,7 @@ const Main = () => {
   const data = useSelector((state) => state.post.post.content);
   const weight = useSelector((state) => state.userweight.data.data);
   const weight2 = useSelector((state) => state);
-  console.log("Weight", data)
+  // console.log("Weight", data)
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -82,7 +82,7 @@ const Main = () => {
               </Titletag>
             </Titlebar>
             <CardList>
-              {/* {data.map((v, idx) => (
+              {data.map((v, idx) => (
                 <CardsBox
                   onClick={() => {
                     navigate(`/post/${v.postId}`);
@@ -91,7 +91,7 @@ const Main = () => {
                 >
                   <Cards post={v} />
                 </CardsBox>
-              ))} */}
+              ))}
             </CardList>
           </Item4>
         </div>

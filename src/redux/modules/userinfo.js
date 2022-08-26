@@ -35,14 +35,14 @@ export const loadMainUserDB = () => {
   return async function (dispatch) {
     if (auth.authorization !== null && auth.refresh_token !== null) {
       try {
-        const res = await axios.get("http://13.125.227.9:8080/user/info",
+        const res = await axios.get("http://43.200.174.111:8080/user/info",
           {
             headers: {
               Authorization: `Bearer ${auth.authorization}`,
               refresh_token: `Bearer ${auth.refresh_token}`
             },
           })
-        console.log(res)
+        // console.log(res)
         dispatch(loadUser(res.data))
       } catch (error) {
         console.log(error)

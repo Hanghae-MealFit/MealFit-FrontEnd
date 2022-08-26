@@ -101,7 +101,7 @@ const Signup = () => {
     console.log(formData)
 
     await axios({
-      baseURL: "http://13.125.227.9:8080/",
+      baseURL: "http://43.200.174.111:8080/",
       method: "POST",
       url: "/user/signup",
       data: formData,
@@ -123,7 +123,7 @@ const Signup = () => {
 
     try {
       const username = username_ref.current.value
-      const res = await axios.get(`http://13.125.227.9:8080/user/username?username=${username}`,
+      const res = await axios.get(`http://43.200.174.111:8080/user/username?username=${username}`,
         {
           headers: {
             "Content-Type": "application/json"
@@ -146,7 +146,7 @@ const Signup = () => {
 
     try {
       const nickname = nickname_ref.current.value
-      const res = await axios.get(`http://13.125.227.9:8080/user/nickname?nickname=${nickname}`,
+      const res = await axios.get(`http://43.200.174.111:8080/user/nickname?nickname=${nickname}`,
         {
           headers: {
             "Content-Type": "application/json"
@@ -169,7 +169,7 @@ const Signup = () => {
 
     try {
       const email = email_ref.current.value
-      const res = await axios.get(`http://13.125.227.9:8080/user/email?email=${email}`,
+      const res = await axios.get(`http://43.200.174.111:8080/user/email?email=${email}`,
         {
           headers: {
             "Content-Type": "application/json"
@@ -445,7 +445,7 @@ const Signup = () => {
           </FastTime>
         </FastTimeWrap>
         <Button>
-          <CancleBtn>취소</CancleBtn>
+          <CancleBtn onClick={() => navigate("/")}>취소</CancleBtn>
           <SignUpBtn
             onClick={onhandleSignUp}
             disabled=

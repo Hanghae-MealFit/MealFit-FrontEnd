@@ -16,7 +16,7 @@ const FindMyInfo = () => {
 
   const FindId = async () => {
     try {
-      const res = await axios.post("http://13.125.227.9:8080/user/find/username", {
+      const res = await axios.post("http://43.200.174.111:8080/user/find/username", {
         "email": id_email_ref.current.value
       }, {
         headers: {
@@ -31,7 +31,7 @@ const FindMyInfo = () => {
 
   const FindPw = async () => {
     try {
-      const res = await axios.post("http://13.125.227.9:8080/user/find/password", {
+      const res = await axios.post("http://43.200.174.111:8080/user/find/password", {
         "username": pw_id_ref.current.value,
         "email": pw_email_ref.current.value
       }, {
