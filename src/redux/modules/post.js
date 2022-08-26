@@ -49,7 +49,6 @@ const initialState = {
 
 // Action Creators
 export function loadPost(post) {
-  console.log(post)
   return { type: POST_LOAD, post }
 }
   
@@ -70,8 +69,8 @@ export function delPost(post) {
 export const loadPostDB = () => {
   return async function (dispatch) {
     try {
-      const res = await axios.get('http://13.125.227.9:8080/post?size=6')
-      console.log(res)
+      const res = await axios.get('http://43.200.174.111:8080/post?size=6')
+      console.log(res.data)
       dispatch(loadPost(res.data))
     } catch(error) {
       console.log(error);
@@ -103,7 +102,7 @@ export default function reducer(state = initialState, action = {} ) {
         state.post = new_post
         return { ...state }
       }
-      
+
       default: return state;
     }
   }

@@ -26,7 +26,7 @@ const Sidebar = () => {
     authorization: sessionStorage.getItem("accessToken"),
     refresh_token: sessionStorage.getItem("refreshToken")
   }
-  console.log(Token)
+  // console.log(Token)
   
   const LoginCheck = () => {
     // console.log(Token)
@@ -70,7 +70,7 @@ const Sidebar = () => {
     e.preventDefault()
 
     try {
-      const response = await axios.post("http://13.125.227.9:8080/user/logout",
+      const response = await axios.post("http://43.200.174.111:8080/user/logout",
         {
           headers: {
             Authorization: `Bearer ${Token.authorization}`,

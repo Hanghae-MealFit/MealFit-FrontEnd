@@ -22,6 +22,10 @@ const PostView = () => {
     });
     // console.log(dataTest);
 
+    let { postId } = useParams();
+    const navigation = useNavigate();
+    console.log(postId);
+
     // 식단 게시글 상세조회
     const PostViewAX = async () => {
         const data = {
@@ -40,21 +44,36 @@ const PostView = () => {
             refresh_token: sessionStorage.getItem("refreshToken")
           };
 
-        await axios({
-            baseURL: "http://13.125.227.9:8080/",
-            method: "get",
-            url: "/post/{postId}",
-            data: data,
+        try {
+          const res = await axios.get(`http://43.200.174.111:8080/post/${postId}`, {
             headers: {
                 Authorization: `Bearer ${auth.authorization}`,
                 refresh_token: `Bearer ${auth.refresh_token}`
-            },
-        }).then((response) => {
-            console.log("반응", response)
-        }).catch((error) => {
-            console.log("에러", error)
-        });
+            }
+          })
+          console.log(res)
+        } catch(error) {
+          console.log(error)
+        }
+        // await axios({
+        //     baseURL: "http://52.79.240.128",
+        //     method: "get",
+        //     url: `/post/${postId}`,
+        //     data: data,
+        //     headers: {
+        //         Authorization: `Bearer ${auth.authorization}`,
+        //         refresh_token: `Bearer ${auth.refresh_token}`
+        //     },
+        // }).then((response) => {
+        //     console.log("반응", response)
+        // }).catch((error) => {
+        //     console.log("에러", error)
+        // });
     };
+
+    React.useEffect(() => {
+      PostViewAX()
+    }, [])
 
     // const loadPostAX = async() => {
     //     const apiPost = axios.create({
@@ -79,10 +98,6 @@ const PostView = () => {
     // React.useEffect(() => {
     //     loadPostAX()
     // }, []);
-
-    let { postId } = useParams();
-    const navigation = useNavigate();
-    console.log(postId);
 
     // 수정
     const ModifyPost = () => {

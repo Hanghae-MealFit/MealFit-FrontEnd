@@ -14,7 +14,7 @@ const Modal = ({setModalOpen}) => {
 
      // 삭제 axios
      const DeletPost = () => {
-            axios.delete("http://13.125.227.9:8080/post/{postId}",
+            axios.delete("http://43.200.174.111:8080/post/{postId}",
                 {
                     headers: {
                         Authorization: `Bearer ${auth.Authorization}`,

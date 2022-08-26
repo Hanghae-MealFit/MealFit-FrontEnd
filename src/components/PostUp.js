@@ -34,7 +34,7 @@ const PostUp = () => {
     };  
 
     await axios({
-      baseURL: "http://13.125.227.9:8080/",
+      baseURL: "http://43.200.174.111:8080/",
       method: "POST",
       url: "/post",
       data: formData,
@@ -73,7 +73,7 @@ const PostUp = () => {
     };  
 
     const apiImg = axios.create({
-      baseURL: "http://13.125.227.9:8080/",
+      baseURL: "http://43.200.174.111:8080/",
       headers: {
         Authorization: `Bearer ${auth.authorization}`,
         refresh_token: `Bearer ${auth.refresh_token}`,

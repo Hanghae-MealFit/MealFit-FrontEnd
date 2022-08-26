@@ -5,7 +5,7 @@ import { IconWrap } from './KakaoLogin'
 
 const NaverLogin = () => {
 
-  const NAVER_AUTH_URL = 'http://13.125.227.9:8080/oauth2/authorization/naver'
+  const NAVER_AUTH_URL = 'http://43.200.174.111:8080/oauth2/authorization/naver'
 
   const handleLogin = (e) => {
     e.preventDefault()

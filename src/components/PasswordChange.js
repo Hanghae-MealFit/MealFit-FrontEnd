@@ -39,7 +39,7 @@ const PasswordChange = () => {
     };
 
     await axios({
-      baseURL: "http://13.125.227.9:8080/",
+      baseURL: "http://43.200.174.111:8080/",
       method: "PUT",
       url: "/user/signup",
       data: PasswordChange,

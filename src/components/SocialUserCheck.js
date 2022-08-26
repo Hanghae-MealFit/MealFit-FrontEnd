@@ -19,7 +19,7 @@ const SocialUserCheck = () => {
 
     const getUser = async () => {
       try {
-        const res = await axios.get("http://13.125.227.9:8080/user/info", {
+        const res = await axios.get("http://43.200.174.111:8080/user/info", {
           headers: {
             Authorization: `Bearer ${ACCESS_TOKEN}`,
             refresh_token: `Bearer ${REFRESH_TOKEN}`
