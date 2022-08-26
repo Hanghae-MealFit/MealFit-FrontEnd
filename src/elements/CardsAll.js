@@ -25,6 +25,9 @@ const CardsAll = ({post}) => {
           <TextBox>
           <img src={post.profileImage} />
           <span>{post.nickname}</span>
+            <CardText>
+              <p>{post.content}</p>
+            </CardText>
             <TextLabel>
               좋아요 {post.like} ∙ 댓글 2 ∙ 조회수 {post.view}
             </TextLabel>
@@ -74,6 +77,23 @@ const TextBox = styled.div`
     align-items: center;
     flex-direction: column;
     `;
+
+const CardText = styled.div`
+    // background: pink;
+    font-size: 14px;
+    width: 90%;
+    height: 60%;
+    border-bottom: 1px solid #ddd;
+    p {
+        height: 100%;
+        text-overflow: ellipsis;
+        word-wrap: break-word;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden
+    }
+`;
 
 const TextLabel = styled.div`
     // background: green;

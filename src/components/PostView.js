@@ -22,9 +22,30 @@ const PostView = () => {
     });
     // console.log(dataTest);
 
+    const [contentData, setContentData] = React.useState({
+      content: "",
+      createdAt: null,
+      image: [],
+      like: 0,
+      liked: null,
+      postId: 18,
+      updatedAt: null,
+      userDto: {
+        nickname: "",
+        profile: null
+      },
+      view: 1
+    })
+
     let { postId } = useParams();
     const navigation = useNavigate();
     console.log(postId);
+    const comment_ref = React.useRef(null)
+
+    const auth = {
+      authorization: sessionStorage.getItem("accessToken"),
+      refresh_token: sessionStorage.getItem("refreshToken")
+    };
 
     // 식단 게시글 상세조회
     const PostViewAX = async () => {
@@ -39,11 +60,6 @@ const PostView = () => {
             commentNumber: "commentNumber"
         }
 
-        const auth = {
-            authorization: sessionStorage.getItem("accessToken"),
-            refresh_token: sessionStorage.getItem("refreshToken")
-          };
-
         try {
           const res = await axios.get(`http://43.200.174.111:8080/post/${postId}`, {
             headers: {
@@ -52,52 +68,11 @@ const PostView = () => {
             }
           })
           console.log(res)
+          setContentData(res.data)
         } catch(error) {
           console.log(error)
         }
-        // await axios({
-        //     baseURL: "http://52.79.240.128",
-        //     method: "get",
-        //     url: `/post/${postId}`,
-        //     data: data,
-        //     headers: {
-        //         Authorization: `Bearer ${auth.authorization}`,
-        //         refresh_token: `Bearer ${auth.refresh_token}`
-        //     },
-        // }).then((response) => {
-        //     console.log("반응", response)
-        // }).catch((error) => {
-        //     console.log("에러", error)
-        // });
     };
-
-    React.useEffect(() => {
-      PostViewAX()
-    }, [])
-
-    // const loadPostAX = async() => {
-    //     const apiPost = axios.create({
-    //         baseURL: "http://13.125.227.9:8080/",
-    //         headers: {
-    //             Authorization: `Bearer ${auth.authorization}`,
-    //             refresh_token: `Bearer ${auth.refresh_token}`
-    //           },
-    //     });
-
-    //     const CreatePostAXImg = await apiPost
-    //         .get("/post/{postId}")
-    //         .then((response) => {
-    //             console.log("반응", response)
-    //             setdataTest(response.data)
-    //         })
-    //         .catch(function (error) {
-    //             console.log("에러", error)
-    //         });
-    // }
-
-    // React.useEffect(() => {
-    //     loadPostAX()
-    // }, []);
 
     // 수정
     const ModifyPost = () => {
@@ -106,8 +81,6 @@ const PostView = () => {
 
     // 삭제 모달창
     const [modalOpen, setModalOpen] = React.useState(false);
-
-
 
     // 댓글 입력값 State 저장
     // const [comment, setComment] = React.useState("");
@@ -119,63 +92,62 @@ const PostView = () => {
     });
     // const onChange = event => setComment(event.target.value);
 
-    const auth = {
-        authorization: sessionStorage.getItem("accessToken"),
-        refresh_token: sessionStorage.getItem("refreshToken")
-      };
+    // 댓글 불러오기
+    const CommentLoad = async () => {
+      try {
+        const res = await axios.get(`http://43.200.174.111:8080/post/${postId}/comment`, {
+          headers: {
+            Authorization: `Bearer ${auth.authorization}`,
+            refresh_token: `Bearer ${auth.refresh_token}`
+          }
+        })
+        console.log(res)
+      } catch(error) {
+        console.log(error)
+      }
+    }
 
-    const onhandleComment = async (e) => {
-        e.preventDefault()
-        const CommentApi = axios.create({
-            baseURL: "http://13.125.227.9:8080/",
-            headers: {
-                Authorization: `Bearer ${auth.authorization}`,
-                refresh_token: `Bearer ${auth.refresh_token}`
-            },
-        });
+    // 댓글 작성하기
+    const CommentWrite = async () => {
+      try {
+        const res = await axios.post(`http://43.200.174.111:8080/post/${postId}/comment`, {
+          postId: postId,
+          comment: comment_ref.current.value
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${auth.authorization}`,
+            refresh_token: `Bearer ${auth.refresh_token}`
+          }
+        })
+        console.log(res)
+      } catch(error) {
+        console.log(error)
+      }
+    }
 
-        // 댓글 보기
-        const CommentViewAX = async () => {
-            const data = {
-                username: "username",
-                userProfile: "userProfile",
-                comment: "comment",
-                likeToggle: Boolean,
-            }
-
-            const auth = {
-                authorization: sessionStorage.getItem("accessToken"),
-                refresh_token: sessionStorage.getItem("refreshToken")
-              };
-    
-            await axios({
-                baseURL: "http://13.125.227.9:8080/",
-                method: "get",
-                url: "/post/{postId}/comment",
-                data: data,
-                headers: {
-                    Authorization: `Bearer ${auth.authorization}`,
-                    refresh_token: `Bearer ${auth.refresh_token}`
-                },
-            }).then((response) => {
-                console.log("반응", response)
-            }).catch((error) => {
-                console.log("에러", error)
-            });
-        };
+    // const onhandleComment = async (e) => {
+    //     e.preventDefault()
+    //     const CommentApi = axios.create({
+    //         baseURL: "http://13.125.227.9:8080/",
+    //         headers: {
+    //             Authorization: `Bearer ${auth.authorization}`,
+    //             refresh_token: `Bearer ${auth.refresh_token}`
+    //         },
+    //     });
         
 
-        // 댓글 쓰기
-        const CommentUp = await CommentApi
-            .post("/post/{postId}/comment")
-            .then((response) => {
-                console.log("반응", response)
-                window.alert("댓글 작성 성공!")
-            }).catch((error) => {
-                console.log("에러", error)
-                window.alert("댓글 작성 실패!")
-            });
-    }
+    //     // 댓글 쓰기
+    //     const CommentUp = await CommentApi
+    //         .post("/post/{postId}/comment")
+    //         .then((response) => {
+    //             console.log("반응", response)
+    //             window.alert("댓글 작성 성공!")
+    //         }).catch((error) => {
+    //             console.log("에러", error)
+    //             window.alert("댓글 작성 실패!")
+    //         });
+    // }
 
 
     // 댓글 입력값 저장되는 곳 지정
@@ -189,6 +161,11 @@ const PostView = () => {
         setComment('');
     };
 
+    React.useEffect(() => {
+      PostViewAX()
+      CommentLoad()
+    }, [])
+
     return (
         <Wrap>
             <MemoizedSidebar />
@@ -200,7 +177,7 @@ const PostView = () => {
                     </button>
                     {
                         modalOpen === true ? (
-                            <Modal setModalOpen={setModalOpen} />
+                            <Modal setModalOpen={setModalOpen} postId={postId} />
                         ) : (
                             null
                         )
@@ -215,7 +192,7 @@ const PostView = () => {
                     <Likecomment>좋아요 {dataTest.likeNumber} ∙ 댓글 {dataTest.commentNumber}</Likecomment>
                 </PostInfo>
                 <Line />
-                <Contents>{dataTest.content}</Contents>
+                <Contents>{contentData.content}</Contents>
                 {/* <Line /> */}
                 <CommentContainer onSubmit={onSubmit}>
                     <Titlebar>
@@ -232,10 +209,10 @@ const PostView = () => {
                     </CommentView>
                     {/* <div>{comment.likeToggle : Boolean}</div> */}
                     <CommentBox>
-                        <input type="text" placeholder="댓글을 입력해주세요."
+                        <input ref={comment_ref} type="text" placeholder="댓글을 입력해주세요."
                         // value={comment} onChange={onChange}
                         />
-                        <CommentBtn onClick={onhandleComment}>댓글 작성하기</CommentBtn>
+                        <CommentBtn onClick={CommentWrite}>댓글 작성하기</CommentBtn>
                     </CommentBox>
                 </CommentContainer>
             </Container>

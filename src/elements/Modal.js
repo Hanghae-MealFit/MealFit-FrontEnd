@@ -2,33 +2,34 @@ import React from 'react';
 import styled from 'styled-components';
 import axios from "axios";
 
-const Modal = ({setModalOpen}) => {
+const Modal = ({setModalOpen, postId}) => {
     const handleClose = () => {
         setModalOpen(false);
     };
+    console.log(postId)
 
     const auth = {
-        authorization: sessionStorage.getItem("token"),
-        refresh_token: sessionStorage.getItem("refresh_token")
+        authorization: sessionStorage.getItem("accessToken"),
+        refresh_token: sessionStorage.getItem("refreshToken")
     }
 
      // 삭제 axios
      const DeletPost = () => {
-            axios.delete("http://43.200.174.111:8080/post/{postId}",
+            axios.delete(`http://43.200.174.111:8080/post/${postId}`,
                 {
                     headers: {
-                        Authorization: `Bearer ${auth.Authorization}`,
+                        Authorization: `Bearer ${auth.authorization}`,
                         refresh_token: `Bearer ${auth.refresh_token}`,
                     }
                 })
                 .then(function (response) {
                     console.log("반응", response)
-                    window.alert("삭제되었습니다.")
-                    setModalOpen(false)
+                    // window.alert("삭제되었습니다.")
+                    // setModalOpen(false)
                 })
                 .catch(function (error) {
                     console.log("에러", error)
-                    window.alert("삭제 실패!")
+                    // window.alert("삭제 실패!")
                 });
             // console.log("삭제됨!", DeletPost) 
     }
@@ -39,11 +40,11 @@ const Modal = ({setModalOpen}) => {
             <Background onClick={handleClose}/>
             <ModalBlock>
                 <Contents>
-                <p>게시글이 삭제됩니다. 삭제하시겠습니까?</p>
-                <div>
-                <button onClick={handleClose}>NO</button>
-                <button onClick={DeletPost}>YES</button>
-                </div>
+                  <p>게시글이 삭제됩니다. 삭제하시겠습니까?</p>
+                  <div>
+                    <button onClick={handleClose}>NO</button>
+                    <button onClick={DeletPost}>YES</button>
+                  </div>
                 </Contents>
             </ModalBlock>
         </Container>
