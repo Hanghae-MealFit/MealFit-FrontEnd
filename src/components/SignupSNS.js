@@ -104,7 +104,7 @@ const SignupSNS = () => {
     const REFRESH_TOKEN = sessionStorage.getItem("refreshToken")
 
     await axios({
-      baseURL: "http://13.125.227.9:8080/",
+      baseURL: "http://43.200.174.111:8080/",
       method: "POST",
       url: "/user/info",
       data: formData,
@@ -130,7 +130,7 @@ const SignupSNS = () => {
 
     try {
       const nickname = nickname_ref.current.value
-      const res = await axios.get(`http://13.125.227.9:8080/user/nickname?nickname=${nickname}`,
+      const res = await axios.get(`http://43.200.174.111:8080/user/nickname?nickname=${nickname}`,
       {
         headers: {
           "Content-Type": "application/json"

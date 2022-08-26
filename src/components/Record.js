@@ -13,6 +13,32 @@ const Record = () => {
   const [value, onChange] = React.useState(new Date());
   const [recordModalOpen, setRecordModalOpen] = React.useState(false);
 
+  const auth = {
+    authorization: sessionStorage.getItem("accessToken"),
+    refresh_token: sessionStorage.getItem("refreshToken")
+  };
+  
+  const SelectDay = moment(value).format("YYYY-MM-DD")
+  const getFood = async () => {
+    try {
+      const res = await axios.get(`http://43.200.174.111:8080/diet?date=${SelectDay}`,
+        {
+          headers: {
+            Authorization: `Bearer ${auth.authorization}`,
+            refresh_token: `Bearer ${auth.refresh_token}`
+          },
+        })
+      console.log(res)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  console.log(SelectDay)
+
+  React.useEffect(() => {
+    getFood()
+  }, [SelectDay])
+
   return (
     <Wrap>
       <MemoizedSidebar />
@@ -42,7 +68,7 @@ const Record = () => {
                   ) : (
                       null
                   )
-              }
+                }
               </Select>
               <IconSVG
                 width="20"

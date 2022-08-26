@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 const KakaoLogin = () => {
-  const KAKAO_AUTH_URL = 'http://13.125.227.9:8080/oauth2/authorization/kakao'
+  const KAKAO_AUTH_URL = 'http://43.200.174.111:8080/oauth2/authorization/kakao'
 
   const handleLogin = (e) => {
     e.preventDefault()

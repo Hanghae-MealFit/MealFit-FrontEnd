@@ -57,7 +57,7 @@ const Login = () => {
         password: password_ref.current.value,
       }
       try {
-        const res = await axios.post("http://13.125.227.9:8080/login",
+        const res = await axios.post("http://43.200.174.111:8080/login",
         {
           username: LoginInfo.username,
           password: LoginInfo.password

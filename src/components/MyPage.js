@@ -23,12 +23,12 @@ const MyPage = () => {
   const user = useSelector((state) => state.userinfo.user.fastingInfo);
   const userInfo = useSelector((state) => state.userinfo.user.userProfile);
   const weight = useSelector((state) => state.userweight.data.data);
-  console.log(weight)
   const NowWeight = weight[weight.length - 1].weight
   const startHour = user.startFasting.split(":")[0]
   const startMinute = user.startFasting.split(":")[1]
   const endHour = user.endFasting.split(":")[0]
   const endMinute = user.endFasting.split(":")[1]
+  console.log(userInfo)
 
   return (
     <Wrap>
@@ -36,9 +36,13 @@ const MyPage = () => {
       <div>마이페이지</div>
       <MyPageInfoWrap>
         <h1>My Page</h1>
-        <PwModBtn onClick={() => {
-                  navigate("/user/password");
-                }}>비밀번호 변경</PwModBtn>
+        {
+          userInfo.providerType === "LOCAL" ? (
+            <PwModBtn onClick={() => {navigate("/user/password")}}>비밀번호 변경</PwModBtn>
+          ) : (
+            null
+          )
+        }
         <FormWrap>
           <PicWrap>
             <PicSelect />

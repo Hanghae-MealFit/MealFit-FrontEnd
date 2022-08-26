@@ -5,79 +5,124 @@ import axios from "axios";
 // import FoodModal from "../elements/FoodModal";
 
 const RecordModal = ({ setRecordModalOpen }) => {
-    const handleClose = () => {
-        setRecordModalOpen(false);
-    };
+  const handleClose = () => {
+      setRecordModalOpen(false);
+  };
 
+  const [foodInputModal, setFoodInputModal] = React.useState(false)
 
-    // const [foodModalOpen, setFoodModalOpen] = React.useState(false);
+  const search_food_ref = React.useRef(null);
+  const foodName_ref = React.useRef(null);
+  const serving_ref = React.useRef(null);
+  const kcal_ref = React.useRef(null);
+  const carbs_ref = React.useRef(null);
+  const pro_ref = React.useRef(null);
+  const fat_ref = React.useRef(null);
 
-    // const foodName_ref = React.useRef(null);
+  const NotFoundSearchBtn = () => {
+    setFoodInputModal(true)
+  }
+  console.log(foodInputModal)
 
-    // const FoodName = {
-    //     foodname: foodName_ref.current.value,
-    //   }
+  const auth = {
+    authorization: sessionStorage.getItem("accessToken"),
+    refresh_token: sessionStorage.getItem("refreshToken")
+  }
 
-    const auth = {
-        authorization: sessionStorage.getItem("token"),
-        refresh_token: sessionStorage.getItem("refresh_token")
+  const FoodInsert = async () => {
+    try {
+      const res = await axios.post("http://43.200.174.111:8080/food",
+        {
+          foodName: foodName_ref.current.value,
+          oneServing: serving_ref.current.value,
+          kcal: kcal_ref.current.value,
+          carbs: carbs_ref.current.value,
+          protein: pro_ref.current.value,
+          fat: fat_ref.current.value
+        }, {
+          headers: {
+            Authorization: `Bearer ${auth.authorization}`,
+            refresh_token: `Bearer ${auth.refresh_token}`
+          },
+        })
+      console.log(res)
+    } catch (error) {
+      console.log(error)
     }
+  }
 
-    // 검색
-    const FoodSearch = () => {
-        // axios.get("http://13.125.227.9:8080/food?name=음식명", 
-        // {
-        //     name: FoodName
-        // }, {
-        //         headers: {
-        //             Authorization: `Bearer ${auth.Authorization}`,
-        //             refresh_token: `Bearer ${auth.refresh_token}`,
-        //         }
-        //     })
-        //     .then(function (response) {
-        //         console.log("반응", response)
-        //         setModalOpen(false)
-        //     })
-        //     .catch(function (error) {
-        //         console.log("에러", error)
-        //     });
-        // console.log("음식 검색", FoodSearch)
+  // 검색
+  const FoodSearch = async () => {
+    const SearchName = search_food_ref.current.value
+    try {
+      const res = await axios.get(`http://43.200.174.111:8080/food?name=${SearchName}`,
+        {
+          headers: {
+            Authorization: `Bearer ${auth.authorization}`,
+            refresh_token: `Bearer ${auth.refresh_token}`
+          },
+        })
+        console.log(res)
+    } catch (error) {
+        console.log(error)
     }
+  }
 
-    const FoodRecord = () => {
-        // 식단 추가하기
-    }
+  const FoodRecord = () => {
+    // 식단 추가하기
+  }
 
-    return (
-        <Container>
-            <Background />
-            <ModalBlock>
-                <Contents>
-                    <h1>추가하기</h1>
-                    <InputTxt>
-                        <input type="text" placeholder='검색어를 입력하세요.' />
-                        <button onClick={FoodSearch}>검색하기</button>
-                    </InputTxt>
-                    <div>
-                        불러온 데이터
-                    </div>
-                    <div style={{ width: "50%" }}>
-                        <button onClick={handleClose}>뒤로가기</button>
-                        <button onClick={FoodRecord}>기록하기</button>
-                        {/* <button onClick={() => { setFoodModalOpen(true) }}
-                        >검색하기</button> */}
-                        {/* {
-                  foodModalOpen === true ? (
-                      <FoodModal setFoodModalOpen={setFoodModalOpen} />
-                  ) : (
-                      null
-                  )
-              } */}
-                    </div>
-                </Contents>
-            </ModalBlock>
-        </Container>
-    );
+  return (
+    <Container>
+      <Background />
+      <ModalBlock>
+        <Contents>
+          <h1>추가하기</h1>
+          <InputTxt>
+              <input ref={search_food_ref} type="text" placeholder='검색어를 입력하세요.' />
+              <button onClick={FoodSearch}>검색하기</button>
+          </InputTxt>
+          <div>
+              <p>검색 결과가 없습니다. 직접 입력해주세요.</p>
+              <button onClick={NotFoundSearchBtn}>직접 입력</button>
+          </div>
+          {
+            foodInputModal === true ? 
+            (
+              <div>
+                <input ref={foodName_ref} type="text" placeholder='음식이름' />
+                <input ref={serving_ref} type="text" placeholder='1회 제공량' />
+                <input ref={kcal_ref} type="text" placeholder='칼로리' />
+                <input ref={carbs_ref} type="text" placeholder='탄수화물' />
+                <input ref={pro_ref} type="text" placeholder='단백질' />
+                <input ref={fat_ref} type="text" placeholder='지방' />
+                <button onClick={() => {setFoodInputModal(false)}}>취소하기</button>
+                <button onClick={FoodInsert}>입력하기</button>
+              </div>
+            ) : 
+            (
+              <div>
+                불러온 데이터
+              </div>
+            )
+          }
+          <div style={{ width: "50%" }}>
+              <button onClick={handleClose}>뒤로가기</button>
+              <button>기록하기</button>
+              {/* <button onClick={() => { setFoodModalOpen(true) }}
+              >검색하기</button> */}
+              {/* {
+        foodModalOpen === true ? (
+            <FoodModal setFoodModalOpen={setFoodModalOpen} />
+        ) : (
+            null
+        )
+    } */}
+          </div>
+        </Contents>
+      </ModalBlock>
+    </Container>
+  );
 };
 
 const Container = styled.div`

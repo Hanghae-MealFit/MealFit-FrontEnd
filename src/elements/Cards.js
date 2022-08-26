@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom'
 const Cards = ({post}) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  console.log(post)
+  // console.log(post)
 
   // const image = React.useRef()
   // const content = React.useRef()
