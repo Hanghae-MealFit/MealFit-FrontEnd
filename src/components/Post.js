@@ -134,8 +134,8 @@ const CardList = styled.div`
 
 const CardsBox = styled.div`
   // width: 320px;
-  width: 22%;
-  height: 35%;
+  width: 15%;
+  height: 33%;
   display: flex;
   justify-content: center;
   align-items: center;
