@@ -49,17 +49,6 @@ const PostView = () => {
 
     // 식단 게시글 상세조회
     const PostViewAX = async () => {
-        const data = {
-            postId: "postId",
-            nickname: "nickname",
-            profileImage: "profileImage",
-            postImage: "postImage",
-            content: "content",
-            likeToggle: Boolean,
-            likeNumber: "likeNumber",
-            commentNumber: "commentNumber"
-        }
-
         try {
           const res = await axios.get(`http://43.200.174.111:8080/post/${postId}`, {
             headers: {
@@ -188,8 +177,8 @@ const PostView = () => {
                 </ModifyDelBtn>
                 <PostInfo>
                     <img src={dataTest.profileImage} />
-                    <span>{dataTest.nickname}</span>
-                    <Likecomment>좋아요 {dataTest.likeNumber} ∙ 댓글 {dataTest.commentNumber}</Likecomment>
+                    <span>{contentData.userDto.nickname}</span>
+                    <Likecomment>좋아요 {contentData.like} ∙ 댓글 {dataTest.commentNumber} ∙ 조회수 {contentData.view}</Likecomment>
                 </PostInfo>
                 <Line />
                 <Contents>{contentData.content}</Contents>

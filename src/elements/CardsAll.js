@@ -23,8 +23,8 @@ const CardsAll = ({post}) => {
         <CardInner>
           <CardImg src="https://images.unsplash.com/photo-1571047399553-603e2138b646?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" />
           <TextBox>
-          <img src={post.profileImage} />
-          <span>{post.nickname}</span>
+          <img src={post?.image} />
+          {/* <span>{post.nickname}</span> */}
             <CardText>
               <p>{post.content}</p>
             </CardText>
