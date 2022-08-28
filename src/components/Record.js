@@ -13,9 +13,16 @@ const Record = () => {
   const [value, onChange] = React.useState(new Date());
   const [recordModalOpen, setRecordModalOpen] = React.useState(false);
   // const [open, setOpen] = React.useState(false);
-  const [breakfestOpen, breakfestSetOpen] = React.useState(false);
-  const [lunchOpen, lunchSetOpen] = React.useState(false);
-  const [dinnerOpen, dinnerSetOpen] = React.useState(false);
+  const [breakfastOpen, setBreakfastOpen] = React.useState(false);
+  const [lunchOpen, setLunchOpen] = React.useState(false);
+  const [dinnerOpen, setDinnerOpen] = React.useState(false);
+
+  const [selectTime, setSelectTime] = React.useState("");
+  // console.log("타임", selectTime)
+  
+  const morning_ref = React.useRef(null);
+  const lunch_ref = React.useRef(null);
+  const dinner_ref = React.useRef(null);
 
   // status
   // 아침: BREAKFAST
@@ -42,7 +49,7 @@ const Record = () => {
       console.log(error)
     }
   }
-  console.log(SelectDay)
+  // console.log(SelectDay)
 
   React.useEffect(() => {
     getFood()
@@ -69,11 +76,11 @@ const Record = () => {
           <SelectBoxWrap>
             <SelectBox>
               {
-                breakfestOpen  === true ?
+                breakfastOpen  === true ?
                   (
                     <>
-                      <Select onClick={() => breakfestSetOpen(false)}>
-                        <div>아침</div>
+                      <Select onClick={() => setBreakfastOpen(false)}>
+                        <div ref={morning_ref}>아침</div>
                         <IconSVG
                           width="20"
                           height="20"
@@ -91,11 +98,14 @@ const Record = () => {
                       </Select>
                       <SelectContent>
                         <div>아침 뭐 먹었니?</div>
-                        <Button onClick={() => { setRecordModalOpen(true) }}
+                        <Button onClick={() => {
+                          setRecordModalOpen(true)
+                          setSelectTime(morning_ref.current.innerHTML)
+                        }}
                         >추가하기</Button>
                         {
                           recordModalOpen === true ? (
-                            <RecordModal setRecordModalOpen={setRecordModalOpen} />
+                            <RecordModal setRecordModalOpen={setRecordModalOpen} selectTime={selectTime} SelectDay={SelectDay} />
                           ) : (
                             null
                           )
@@ -105,7 +115,7 @@ const Record = () => {
                   ) :
                   (
                     <>
-                    <Select onClick={() => breakfestSetOpen(true)}>
+                    <Select onClick={() => setBreakfastOpen(true)}>
                       <div>아침</div>
                       <IconSVG
                         width="20"
@@ -132,8 +142,8 @@ const Record = () => {
                 lunchOpen  === true ?
                   (
                     <>
-                      <Select onClick={() => lunchSetOpen(false)}>
-                        <div>점심</div>
+                      <Select onClick={() => setLunchOpen(false)}>
+                        <div ref={lunch_ref}>점심</div>
                         <IconSVG
                           width="20"
                           height="20"
@@ -151,11 +161,14 @@ const Record = () => {
                       </Select>
                       <SelectContent>
                         <div>점심 뭐 먹었니?</div>
-                        <Button onClick={() => { setRecordModalOpen(true) }}
+                        <Button onClick={() => {
+                          setRecordModalOpen(true)
+                          setSelectTime(lunch_ref.current.innerHTML)
+                        }}
                         >추가하기</Button>
                         {
                           recordModalOpen === true ? (
-                            <RecordModal setRecordModalOpen={setRecordModalOpen} />
+                            <RecordModal setRecordModalOpen={setRecordModalOpen} selectTime={selectTime} SelectDay={SelectDay} />
                           ) : (
                             null
                           )
@@ -165,7 +178,7 @@ const Record = () => {
                   ) :
                   (
                     <>
-                    <Select onClick={() => lunchSetOpen(true)}>
+                    <Select onClick={() => setLunchOpen(true)}>
                       <div>점심</div>
                       <IconSVG
                         width="20"
@@ -192,8 +205,8 @@ const Record = () => {
                 dinnerOpen  === true ?
                   (
                     <>
-                      <Select onClick={() => dinnerSetOpen(false)}>
-                        <div>저녁</div>
+                      <Select onClick={() => setDinnerOpen(false)}>
+                        <div ref={dinner_ref}>저녁</div>
                         <IconSVG
                           width="20"
                           height="20"
@@ -211,11 +224,14 @@ const Record = () => {
                       </Select>
                       <SelectContent>
                         <div>저녁 뭐 먹었니?</div>
-                        <Button onClick={() => { setRecordModalOpen(true) }}
+                        <Button onClick={() => {
+                          setRecordModalOpen(true)
+                          setSelectTime(dinner_ref.current.innerHTML)
+                        }}
                         >추가하기</Button>
                         {
                           recordModalOpen === true ? (
-                            <RecordModal setRecordModalOpen={setRecordModalOpen} />
+                            <RecordModal setRecordModalOpen={setRecordModalOpen} selectTime={selectTime} SelectDay={SelectDay} />
                           ) : (
                             null
                           )
@@ -225,7 +241,7 @@ const Record = () => {
                   ) :
                   (
                     <>
-                    <Select onClick={() => dinnerSetOpen(true)}>
+                    <Select onClick={() => setDinnerOpen(true)}>
                       <div>저녁</div>
                       <IconSVG
                         width="20"
