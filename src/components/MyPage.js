@@ -29,6 +29,9 @@ const MyPage = () => {
   const endHour = user.endFasting.split(":")[0]
   const endMinute = user.endFasting.split(":")[1]
 
+  const data2 = useSelector((state) => state);
+  console.log(data2)
+
   return (
     <Wrap>
       <MemoizedSidebar />

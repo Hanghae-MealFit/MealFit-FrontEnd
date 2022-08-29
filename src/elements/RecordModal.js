@@ -5,12 +5,16 @@ import { useNavigate } from 'react-router-dom';
 
 // import FoodModal from "../elements/FoodModal";
 
-const RecordModal = ({ setRecordModalOpen }) => {
+const RecordModal = ({ setRecordModalOpen, selectTime, SelectDay }) => {
   const handleClose = () => {
       setRecordModalOpen(false);
   };
 
+  const [notFoundSearch, setNotFoundSarch] = React.useState(false)
   const [foodInputModal, setFoodInputModal] = React.useState(false)
+  const [searchList, setSearchList] = React.useState()
+  const [selectMenu, setSelectMenu] = React.useState()
+  const [selectMenuCheck, setSelectMenuCheck] = React.useState(false)
 
   const search_food_ref = React.useRef(null);
   const foodName_ref = React.useRef(null);
@@ -19,10 +23,8 @@ const RecordModal = ({ setRecordModalOpen }) => {
   const carbs_ref = React.useRef(null);
   const pro_ref = React.useRef(null);
   const fat_ref = React.useRef(null);
+  const eating_ref = React.useRef(null);
 
-  const NotFoundSearchBtn = () => {
-    setFoodInputModal(true)
-  }
   console.log(foodInputModal)
 
   const auth = {
@@ -63,14 +65,45 @@ const RecordModal = ({ setRecordModalOpen }) => {
             refresh_token: `Bearer ${auth.refresh_token}`
           },
         })
-        console.log(res)
+        console.log(res.data)
+        if(res.data.length === 0) {
+          setNotFoundSarch(true)
+        } else {
+          setSearchList(res.data)
+          setNotFoundSarch(false)
+        }
     } catch (error) {
         console.log(error)
     }
   }
 
-  const FoodRecord = () => {
-    // 식단 추가하기
+  // 식단 추가하기
+  const DietInsert = async () => {
+    try {
+      const res = await axios.post(`http://43.200.174.111:8080/diet`,{
+          foodId: selectMenu.foodId,
+          foodWeight: eating_ref.current.value,
+          status: selectTime === "아침" ? "BREAKFAST" : selectTime === "점심" ? "LUNCH" : "DINNER",
+          date: SelectDay
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${auth.authorization}`,
+            refresh_token: `Bearer ${auth.refresh_token}`
+          },
+        })
+        console.log(res)
+        // console.log(selectMenu.foodId, eating_ref.current.value, selectTime, SelectDay)
+    } catch (error) {
+        console.log(error)
+        // console.log(selectMenu.foodId, eating_ref.current.value, selectTime, SelectDay)
+    }
+  }
+
+  const SelectFood = (e, value) => {
+    console.log(e)
+    setSelectMenu(value)
+    setSelectMenuCheck(true)
   }
 
   return (
@@ -83,12 +116,19 @@ const RecordModal = ({ setRecordModalOpen }) => {
               <input ref={search_food_ref} type="text" placeholder='검색어를 입력하세요.' />
               <button onClick={FoodSearch}>검색하기</button>
           </InputTxt>
-          <Search>
-              <p>검색 결과가 없습니다. 직접 입력해주세요.</p>
-              <button onClick={NotFoundSearchBtn}>직접 입력</button>
-          </Search>
           {
-            foodInputModal === true ? 
+            notFoundSearch ? (
+              <Search>
+                <p>검색 결과가 없습니다. 직접 입력해주세요.</p>
+                <button onClick={() => setFoodInputModal(true)}>직접 입력</button>
+              </Search>
+            ) :
+            (
+              null
+            )
+          }
+          {
+            foodInputModal ?
             (
               <Direct>
                 <input ref={foodName_ref} type="text" placeholder='음식이름' />
@@ -104,14 +144,33 @@ const RecordModal = ({ setRecordModalOpen }) => {
               </Direct>
             ) : 
             (
-              <FoodData>
-                <p>불러온 데이터</p>
-              </FoodData>
+              !notFoundSearch ? (
+                <>
+                  <FoodData>
+                    {searchList?.map((v, idx) => (
+                      <div style={{
+                        cursor: "pointer",
+                        backgroundColor: selectMenuCheck && v.foodId === selectMenu.foodId ? "black" : "transparent"
+                      }} onClick={(e) => {SelectFood(e, v)}} key={idx}>
+                        <p>{v.foodName}</p>
+                        <p>{v.oneServing}</p>
+                        <p>{v.kcal}</p>
+                        <p>{v.carbs}</p>
+                        <p>{v.protein}</p>
+                        <p>{v.fat}</p>
+                      </div>
+                    ))}
+                  </FoodData>
+                  <input ref={eating_ref} type="text" placeholder='섭취량 입력' />
+                </>
+              ) : (
+                null
+              )
             )
           }
           <div style={{ width: "50%" }}>
               <button onClick={handleClose}>뒤로가기</button>
-              <button>기록하기</button>
+              <button onClick={DietInsert}>기록하기</button>
               {/* <button onClick={() => { setFoodModalOpen(true) }}
               >검색하기</button> */}
               {/* {
@@ -139,6 +198,7 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    z-index: 5000;
 `;
 
 const Background = styled.div`
@@ -277,6 +337,8 @@ const Direct = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    border: 1px solid #555;
+    border-radius: 8px;
     input {
         background-color: transparent;
         border: none;
@@ -295,6 +357,8 @@ const FoodData = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    border: 1px solid #555;
+    border-radius: 8px;
     p {
       font-size: 17px;
       font-weight: 100;

@@ -15,9 +15,9 @@ import { loadPostDB } from "../redux/modules/post";
 
 const Main = () => {
   const data = useSelector((state) => state.post.post.content);
+  const MainData = data.sort((a,b) => (b.view - a.view)).slice(0, 4)
+
   const weight = useSelector((state) => state.userweight.data.data);
-  const weight2 = useSelector((state) => state);
-  // console.log("Weight", data)
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -82,7 +82,7 @@ const Main = () => {
               </Titletag>
             </Titlebar>
             <CardList>
-              {data.map((v, idx) => (
+              {MainData.map((v, idx) => (
                 <CardsBox
                   onClick={() => {
                     navigate(`/post/${v.postId}`);

@@ -46,7 +46,7 @@ const PostUp = () => {
     }).then((response) => {
       console.log("반응", response)
       window.alert("식단 작성 성공!");
-      navigate("/")
+      navigate("/post/all")
     }).catch((error) => {
       console.log("에러", error)
       window.alert("식단 작성 실패!");
