@@ -1,11 +1,13 @@
-import React, {useEffect} from 'react'
-import styled, {keyframes} from 'styled-components'
+import React, { useEffect } from 'react'
+import styled, { keyframes } from 'styled-components'
+import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 import { MemoizedTime } from './Time'
 
 const Circle = () => {
 
+  const navigate = useNavigate();
   const [time, setTime] = React.useState(new Date());
 
   const Hour = time.getHours();
@@ -17,6 +19,8 @@ const Circle = () => {
   const [ todayPer, setTodayPer ] = React.useState();
   const [ eatTime, setEatTime ] = React.useState(true);
   const [ eatTimeCheck, setEatTimeCheck ] = React.useState(true);
+  const [ hoverClickPlus, setHoverClickPlus ] = React.useState(false)
+  const [ changeEatTime, setChangeEatTime ] = React.useState(false)
 
   const user = useSelector((state) => state.userinfo.user.fastingInfo);
   const StartTime = user.startFasting.split(":")
@@ -28,6 +32,40 @@ const Circle = () => {
   const EndPer = ((EndTimeTotal / TodaySecond) * 100).toFixed(1)
   // console.log(StartPer, NowPer, EndPer)
   // console.log(StartTimeTotal, EndTimeTotal)
+
+  const [ startHourCheck, SetStartHourCheck ] = React.useState("* 필수 선택값을 모두 선택하세요.");
+  const hour_check_ref = React.useRef(null);
+  const startFastingHour_ref = React.useRef(null);
+  const startFastingMinute_ref = React.useRef(null);
+  const endFastingHour_ref = React.useRef(null);
+  const endFastingMinute_ref = React.useRef(null);
+
+  const TimeChange = (e) => {
+    if(startFastingHour_ref.current.value && startFastingMinute_ref.current.value && endFastingHour_ref.current.value && endFastingMinute_ref.current.value !== "default") {
+      SetStartHourCheck("")
+      hour_check_ref.current.style.display = "none"
+    } else {
+      SetStartHourCheck("* 필수 선택값을 모두 선택하세요.")
+      hour_check_ref.current.style.color = "#FF0000"
+    }
+  }
+
+  const ShowHoverDesc = () => {
+    setHoverClickPlus(true)
+  }
+
+  const HideHoverDesc = () => {
+    setHoverClickPlus(false)
+  }
+
+  const ChangeTimeOpen = () => {
+    setChangeEatTime(true)
+    setHoverClickPlus(false)
+  }
+
+  const ChangeTimeClose = () => {
+    setChangeEatTime(false)
+  }
 
   useEffect(() => {
     if(StartPer < NowPer && NowPer < EndPer) {
@@ -44,9 +82,9 @@ const Circle = () => {
   }, [time]);
 
   return (
-    <div style={{display:"flex", justifyContent:"center", alignItems:"center"}}>
+    <div style={{display:"flex", justifyContent:"center", alignItems:"center", position: "relative"}}>
       <Percent>
-        <Dot TodayPer={todayPer} EatTime={eatTime}></Dot>
+        <Dot TodayPer={todayPer} EatTime={eatTime} onMouseEnter={ShowHoverDesc} onMouseLeave={HideHoverDesc} onClick={ChangeTimeOpen}></Dot>
         <svg>
           <circle style={{
             fill: eatTime === true ? "#dcff95" : "#FFB0AC"
@@ -58,7 +96,79 @@ const Circle = () => {
           }} cx="195" cy="195" r="170"></circle>
         </svg>
         <MemoizedTime time={time} setTime={setTime} EatTime={eatTime} EatTimeCheck={eatTimeCheck} StartTimeTotal={StartTimeTotal} EndTimeTotal={EndTimeTotal} />
+        {
+          changeEatTime ? (
+            <Modal>
+              <h2>단식시간 수정</h2>
+              <FastTimeWrap>
+                <span ref={hour_check_ref}>{startHourCheck}</span>
+                <FastTime>
+                  <p>단식 시작시간</p>
+                  <div>
+                    <Select ref={startFastingHour_ref} onChange={TimeChange} defaultValue="default" id="StartHour" name="StartHour">
+                      <option value="default" disabled>시간</option>
+                      { 
+                        Array.from({ length: 24 }, (item, index) => {
+                        return <option value = {(index < 10 ? "0" + index : index)} key = {(index < 10 ? "0" + index : index) + "Hour"}> {index < 10 ? "0" + index : index}</option>
+                        })
+                      }
+                    </Select> 시
+                    <Select ref={startFastingMinute_ref} onChange={TimeChange} defaultValue="default" id="StartMinute" name="StartMinute">
+                      <option value="default" disabled>분</option>
+                      { 
+                        Array.from({ length: 60 }, (item, index) => {
+                        return <option value = {(index < 10 ? "0" + index : index)} key = {(index < 10 ? "0" + index : index) + "Minute"}> {index < 10 ? "0" + index : index}</option>
+                        })
+                      }
+                    </Select> 분
+                  </div>
+                </FastTime>
+                <FastTime>
+                  <p>단식 종료시간</p>
+                  <div>
+                    <Select ref={endFastingHour_ref} onChange={TimeChange} defaultValue="default" id="EndHour" name="EndHour">
+                      <option value="default" disabled>시간</option>
+                      { 
+                        Array.from({ length: 24 }, (item, index) => {
+                        return <option value = {(index < 10 ? "0" + index : index)} key = {(index < 10 ? "0" + index : index) + "Hour"}> {index < 10 ? "0" + index : index}</option>
+                        })
+                      }
+                    </Select> 시
+                    <Select ref={endFastingMinute_ref} onChange={TimeChange} defaultValue="default" id="EndMinute" name="EndMinute">
+                      <option value="default" disabled>분</option>
+                      { 
+                        Array.from({ length: 60 }, (item, index) => {
+                        return <option value = {(index < 10 ? "0" + index : index)} key = {(index < 10 ? "0" + index : index) + "Minute"}> {index < 10 ? "0" + index : index}</option>
+                        })
+                      }
+                    </Select> 분
+                  </div>
+                </FastTime>
+              </FastTimeWrap>
+              <Button>
+                <CancleBtn onClick={ChangeTimeClose}>취소하기</CancleBtn>
+                <SignUpBtn onClick={ChangeTimeClose}
+                  disabled=
+                  {
+                    startHourCheck === ""
+                    ? false : true
+                  }>수정하기</SignUpBtn>
+              </Button>
+            </Modal>
+          ) : (
+            null
+          )
+        }
+        
       </Percent>
+      {
+        hoverClickPlus ? (
+          <HoverMsg>+ 버튼을 클릭 시, 단식시간을 변경할 수 있습니다.</HoverMsg>
+        ) :
+        (
+          null
+        )
+      }
     </div>
   )
 }
@@ -106,7 +216,6 @@ const Percent = styled.div`
     stroke: #f3f3f3;
   }
   svg circle:last-child {
-    /* stroke: #FE7770; */
     opacity: 0;
     animation: ${fadeIn} 0.5s linear forwards;
     animation-delay: 1.5s;
@@ -115,7 +224,7 @@ const Percent = styled.div`
 
 const animateDot = keyframes`
 	0%{
-    	transform: rotate(0deg);
+    transform: rotate(0deg);
     }
   100%{
     transform: ${(props) => `rotate(${props.TodayPer}deg)`};
@@ -124,6 +233,7 @@ const animateDot = keyframes`
 
 const Dot = styled.div`
   position: absolute;
+  border-radius: 50%;
   inset: 0px;
   z-index: 10;
   transform: ${(props) => `rotate(${props.TodayPer}deg)`};
@@ -151,6 +261,117 @@ const Dot = styled.div`
   &:hover:before {
     cursor: pointer;
   }
+`
+
+const Modal = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  border: 2px solid #333;
+  background-color: white;
+  z-index: 20;
+  h2 {
+    margin: 0;
+    font-size: 24px;
+  }
+`
+
+const FastTimeWrap = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 80%;
+  height: 120px;
+  padding: 10px;
+  box-sizing: border-box;
+  border: 1px solid #9A9A9A;
+  border-radius: 20px;
+  margin: 30px auto;
+  font-size: 16px;
+  span {
+    position: absolute;
+    bottom: -20px;
+    left: 6px;
+    font-size: 10px;
+    color: #D9D9D9;
+  }
+`
+
+const FastTime = styled.div`
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin: 10px 0;
+  p {
+    margin: 0;
+  }
+`
+
+const Select = styled.select`
+  width: 60px;
+  height: 30px;
+  border: none;
+  border-bottom: 1px solid #9A9A9A;
+  outline: none;
+  padding: 0 4px;
+  box-sizing: border-box;
+  font-family: 'GmarketM', 'sans-serif';
+  font-size: 12px;
+  text-align: center;
+`
+
+const Button = styled.div`
+  width: 80%;
+  height: 40px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  button {
+    width: 46%;
+    height: 100%;
+    margin: 0;
+    border: none;
+    border-radius: 30px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 900;
+    font-family: 'GmarketM', 'sans-serif';
+    cursor: pointer;
+  }
+`
+
+const CancleBtn = styled.button`
+  background-color: #C2C2C2;
+`
+
+const SignUpBtn = styled.button`
+  background-color: #FE7770;
+  &:disabled {
+    background-color: #C2C2C2;
+    cursor: default;
+  }
+`
+
+const HoverMsg = styled.div`
+  position: absolute;
+  bottom: -50px;
+  width: 80%;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid #FFB0AC;
+  font-size: 14px;
+  border-radius: 6px;
 `
 
 export default Circle
