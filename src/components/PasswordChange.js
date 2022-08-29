@@ -8,10 +8,16 @@ import { MemoizedSidebar } from "./Sidebar";
 const PasswordChange = () => {
   const navigate = useNavigate();
 
+  const cur_password_ref = React.useRef(null);
   const password_ref = React.useRef(null);
   const passwordCheck_ref = React.useRef(null);
+
+  const cur_pw_err_ref = React.useRef(null);
   const pw_err_ref = React.useRef(null);
   const pw_check_err_ref = React.useRef(null);
+
+  // 현재 비밀번호 입력 값이 영어+숫자가 아닐 시, 유저에게 제공 될 값
+  const [curPwMsg, setCurPwMsg] = React.useState("* 비밀번호는 영어/숫자 조합으로 8자 이상 사용 가능합니다.");
 
   // 입력된 비밀번호 값이 영어+숫자가 아닐 시, 유저에게 제공 될 값
   const [PwMsg, SetPwMsg] = React.useState("* 비밀번호는 영어/숫자 조합으로 8자 이상 사용 가능합니다.");
@@ -22,41 +28,41 @@ const PasswordChange = () => {
   const onhandlePwChange = async (e) => {
     e.preventDefault()
 
-    const PasswordChange = {
-      password: password_ref.current.value,
-      passwordCheck: passwordCheck_ref.current.value,
-    }
-    // console.log(PasswordChange)
-
-    // const formData = new FormData()
-    // formData.append("password", PasswordChange.password);
-    // formData.append("passwordCheck", PasswordChange.passwordCheck);
-    // console.log(formData)
-
     const auth = {
       authorization: sessionStorage.getItem("accessToken"),
       refresh_token: sessionStorage.getItem("refreshToken")
     };
 
-    await axios({
-      baseURL: "http://43.200.174.111:8080/",
-      method: "PUT",
-      url: "/user/signup",
-      data: PasswordChange,
-      headers: {
-        // "Content-Type": "multipart/form-data",
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${auth.authorization}`,
-        refresh_token: `Bearer ${auth.refresh_token}`
-      },
-    }).then((response) => {
-      if (response.status === 201 && response.data === "변경 완료!")
-        alert(`비밀번호가 변경되었습니다.`)
-      navigate("/user/login")
-    }).catch((error) => {
-      console.log("에러", error)
-      alert(`비밀번호 변경을 실패하셨습니다.`)
-    })
+    try {
+      const res = await axios.put("http://43.200.174.111:8080/user/password", {
+        password: cur_password_ref,
+        changePassword: password_ref,
+        passwordCheck: passwordCheck_ref
+      }, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${auth.authorization}`,
+          refresh_token: `Bearer ${auth.refresh_token}`
+        }
+      })
+      console.log(res)
+    } catch(err) {
+      console.log(err)
+    }
+  }
+
+  const CurPw = (e) => {
+    const regPw = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    if (e.target.value.length === 0) {
+      setCurPwMsg("* 비밀번호는 영어/숫자 조합으로 8자 이상 사용 가능합니다.")
+      cur_pw_err_ref.current.style.color = "#D9D9D9";
+    } else if (regPw.test(e.target.value) !== true) {
+      setCurPwMsg("* 비밀번호는 영어/숫자 조합으로 8자 이상 사용 가능합니다.")
+      cur_pw_err_ref.current.style.color = "#FF0000";
+    } else {
+      setCurPwMsg("* 양식에 맞게 작성되었습니다.")
+      cur_pw_err_ref.current.style.color = "#81C147";
+    }
   }
 
   const PwChange = (e) => {
@@ -73,7 +79,7 @@ const PasswordChange = () => {
     }
   }
 
-  const PwCheckChange = (e) => {
+  const PwCheck = (e) => {
     if (e.target.value.length === 0) {
       SetPwCheckMsg("* 입력하신 비밀번호를 다시 입력해주세요.")
       pw_check_err_ref.current.style.color = "#D9D9D9";
@@ -95,17 +101,29 @@ const PasswordChange = () => {
         <ModInputWrap>
           <p>새로운 비밀번호를 입력해주세요.</p>
           <InputTxt>
-            <input ref={password_ref} onChange={PwChange}
-              type="password" placeholder='새 비밀번호' />
-            <input ref={passwordCheck_ref} onChange={PwCheckChange}
-              type="password" placeholder='비밀번호 확인' />
+            <input ref={cur_password_ref} onChange={CurPw} type="password" placeholder='현재 비밀번호를 입력하세요.' />
+            <p ref={cur_pw_err_ref}>{curPwMsg}</p>
+          </InputTxt>
+          <InputTxt>
+            <input ref={password_ref} onChange={PwChange} type="password" placeholder='새로운 비밀번호를 입력하세요.' />
+            <p ref={pw_err_ref}>{PwMsg}</p>
+          </InputTxt>
+          <InputTxt>
+            <input ref={passwordCheck_ref} onChange={PwCheck} type="password" placeholder='새로운 비밀번호 다시 한번 입력해주세요.' />
+            <p ref={pw_check_err_ref}>{checkPwMsg}</p>
           </InputTxt>
         </ModInputWrap>
         <Button>
           <CancleBtn onClick={() => {
-            navigate("/user/password");
+            navigate("/user/info");
           }}>뒤로가기</CancleBtn>
-          <PwChangeBtn onClick={onhandlePwChange}>저장하기</PwChangeBtn>
+          <PwChangeBtn onClick={onhandlePwChange} disabled=
+            {
+              curPwMsg === "* 양식에 맞게 작성되었습니다." &&
+              PwMsg === "* 사용 가능한 비밀번호 입니다." &&
+              checkPwMsg === "* 비밀번호가 일치합니다."
+              ? false : true
+            }>저장하기</PwChangeBtn>
         </Button>
       </Container>
     </Wrap>
@@ -190,7 +208,7 @@ p {
   left: 6px;
   bottom: -6px;
   font-size: 10px;
-  color: #808080;
+  color: #D9D9D9;
 }
 button {
   width: 400px;

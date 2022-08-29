@@ -40,7 +40,7 @@ const MyPage = () => {
         <h1>My Page</h1>
         {
           userInfo.providerType === "LOCAL" ? (
-            <PwModBtn onClick={() => {navigate("/user/password")}}>비밀번호 변경</PwModBtn>
+            <PwModBtn onClick={() => {navigate("/user/info/password")}}>비밀번호 변경</PwModBtn>
           ) : (
             null
           )

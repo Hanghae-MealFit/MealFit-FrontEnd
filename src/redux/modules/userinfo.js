@@ -42,7 +42,7 @@ export const loadMainUserDB = () => {
               refresh_token: `Bearer ${auth.refresh_token}`
             },
           })
-        // console.log(res)
+        console.log(res)
         dispatch(loadUser(res.data))
       } catch (error) {
         console.log(error)
