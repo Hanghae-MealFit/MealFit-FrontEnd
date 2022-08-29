@@ -1,13 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 
-const Modal = ({setModalOpen, postId}) => {
+const DelPostModal = ({setModalOpen, postId}) => {
+    const navigate = useNavigate();
+
     const handleClose = () => {
         setModalOpen(false);
     };
-    console.log(postId)
-
+    // console.log(postId)
+    
     const auth = {
         authorization: sessionStorage.getItem("accessToken"),
         refresh_token: sessionStorage.getItem("refreshToken")
@@ -24,17 +27,20 @@ const Modal = ({setModalOpen, postId}) => {
                 })
                 .then(function (response) {
                     console.log("반응", response)
+                    if(response.status == '200'){
+                    alert('삭제에 성공하였습니다');
+                    setModalOpen(false)
+                    navigate("/post/all")
+                }
                     // window.alert("삭제되었습니다.")
-                    // setModalOpen(false)
                 })
                 .catch(function (error) {
                     console.log("에러", error)
-                    // window.alert("삭제 실패!")
+                    alert("삭제 실패!")
                 });
             // console.log("삭제됨!", DeletPost) 
     }
-
-    
+ 
     return (
         <Container>
             <Background onClick={handleClose}/>
@@ -146,4 +152,4 @@ const Contents = styled.div`
         }
 `;
 
-export default Modal;
+export default DelPostModal;

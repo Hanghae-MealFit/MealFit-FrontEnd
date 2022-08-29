@@ -5,103 +5,101 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { MemoizedSidebar } from "./Sidebar";
-import Modal from "../elements/Modal";
+import DelPostModal from "../elements/DelPostModal";
 import { loadPostDB } from "../redux/modules/post";
 import { loadPost } from "../redux/modules/post";
 
 const PostView = () => {
-    const [dataTest, setdataTest] = React.useState({
-        postId: "1",
-        nickname: "봄봄",
-        profileImage: "https://images.unsplash.com/photo-1660632531779-b363f16acdbd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
-        postImage: "https://images.unsplash.com/photo-1571047399553-603e2138b646?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
-        content: "신선한 채소와 다양한 토핑들을 추가해서 먹는 포만감 만점, 다이어트 불가능한 샐러드 래시피!",
-        likeToggle: Boolean,
-        likeNumber: 2,
-        commentNumber: 2
-    });
-    // console.log(dataTest);
+  const navigation = useNavigate();
+  const { postId } = useParams();
+  // console.log(postId);
 
-    const [contentData, setContentData] = React.useState({
-      content: "",
-      createdAt: null,
-      image: [],
-      like: 0,
-      liked: null,
-      postId: 18,
-      updatedAt: null,
-      userDto: {
-        nickname: "",
-        profile: null
-      },
-      view: 1
-    })
+  const [contentData, setContentData] = React.useState({
+    content: "",
+    createdAt: null,
+    image: [],
+    like: 0,
+    liked: null,
+    postId: 18,
+    updatedAt: null,
+    userDto: {
+      nickname: "",
+      profile: null
+    },
+    view: 1
+  })
 
-    let { postId } = useParams();
-    const navigation = useNavigate();
-    console.log(postId);
-    const comment_ref = React.useRef(null)
-
-    const auth = {
-      authorization: sessionStorage.getItem("accessToken"),
-      refresh_token: sessionStorage.getItem("refreshToken")
-    };
+  const auth = {
+    authorization: sessionStorage.getItem("accessToken"),
+    refresh_token: sessionStorage.getItem("refreshToken")
+  };
 
     // 식단 게시글 상세조회
     const PostViewAX = async () => {
         try {
-          const res = await axios.get(`http://43.200.174.111:8080/post/${postId}`, {
+          const response = await axios.get(`http://43.200.174.111:8080/post/${postId}`, {
             headers: {
                 Authorization: `Bearer ${auth.authorization}`,
                 refresh_token: `Bearer ${auth.refresh_token}`
             }
           })
-          console.log(res)
-          setContentData(res.data)
+          console.log("게시글 불러오기", response)
+          setContentData(response.data)
         } catch(error) {
           console.log(error)
         }
     };
 
-    // 수정
-    const ModifyPost = () => {
-        navigation(`/post/${postId}`);
+  // 삭제 모달창
+  const [modalOpen, setModalOpen] = React.useState(false);
+
+  // 댓글 입력값 저장되는 곳 지정
+  const [comments, setComments] = React.useState([
+    {
+    content: "",
+    commentId: 31,
+    like: 0,
+    postId: 31,
+    userDto: {
+      nickname: "",
+      profileImage: null
+      }
     }
+  ]);
 
-    // 삭제 모달창
-    const [modalOpen, setModalOpen] = React.useState(false);
+  const onChange = event => setComments(event.target.value);
 
-    // 댓글 입력값 State 저장
-    // const [comment, setComment] = React.useState("");
-    const [comment, setComment] = React.useState({
-        username: "봄봄",
-        userProfile: "https://images.unsplash.com/photo-1660632531779-b363f16acdbd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
-        comment: "여러분 무플방지 환영합니다! 댓글 달아주세용!",
-        likeToggle: Boolean
-    });
-    // const onChange = event => setComment(event.target.value);
+  const onSubmit = event => {
+      event.preventDefault();
+      if (comments === '') {
+          return;
+      }
+      setComments(commentValueList => [comments, ...commentValueList]);
+      setComments('');
+  };
 
+  
     // 댓글 불러오기
     const CommentLoad = async () => {
       try {
-        const res = await axios.get(`http://43.200.174.111:8080/post/${postId}/comment`, {
+        const response = await axios.get(`http://43.200.174.111:8080/post/${postId}/comment`, {
           headers: {
             Authorization: `Bearer ${auth.authorization}`,
             refresh_token: `Bearer ${auth.refresh_token}`
           }
         })
-        console.log(res)
+        console.log("댓글 불러오기", response.data)
       } catch(error) {
-        console.log(error)
+        console.log("댓글 불러오기 실페", error)
       }
     }
 
     // 댓글 작성하기
     const CommentWrite = async () => {
       try {
-        const res = await axios.post(`http://43.200.174.111:8080/post/${postId}/comment`, {
+        const response = await axios.post(`http://43.200.174.111:8080/post/${postId}/comment`, {
           postId: postId,
-          comment: comment_ref.current.value
+          comment: comments.current.value
         },
         {
           headers: {
@@ -109,46 +107,11 @@ const PostView = () => {
             refresh_token: `Bearer ${auth.refresh_token}`
           }
         })
-        console.log(res)
+        console.log("댓글 작성하기", response)
       } catch(error) {
-        console.log(error)
+        console.log("댓글 작성 실패", error)
       }
     }
-
-    // const onhandleComment = async (e) => {
-    //     e.preventDefault()
-    //     const CommentApi = axios.create({
-    //         baseURL: "http://13.125.227.9:8080/",
-    //         headers: {
-    //             Authorization: `Bearer ${auth.authorization}`,
-    //             refresh_token: `Bearer ${auth.refresh_token}`
-    //         },
-    //     });
-        
-
-    //     // 댓글 쓰기
-    //     const CommentUp = await CommentApi
-    //         .post("/post/{postId}/comment")
-    //         .then((response) => {
-    //             console.log("반응", response)
-    //             window.alert("댓글 작성 성공!")
-    //         }).catch((error) => {
-    //             console.log("에러", error)
-    //             window.alert("댓글 작성 실패!")
-    //         });
-    // }
-
-
-    // 댓글 입력값 저장되는 곳 지정
-    const [commentArray, setCommentArray] = React.useState([]);
-    const onSubmit = event => {
-        event.preventDefault();
-        if (comment === '') {
-            return;
-        }
-        setCommentArray(commentValueList => [comment, ...commentValueList]);
-        setComment('');
-    };
 
     React.useEffect(() => {
       PostViewAX()
@@ -159,26 +122,26 @@ const PostView = () => {
         <Wrap>
             <MemoizedSidebar />
             <Container>
-                <ImgWrap src={dataTest.postImage} />
+                <ImgWrap src={contentData.image} />
                 <ModifyDelBtn>
                     <button style={{ margin: "0px 10px 0px 0px" }} onClick={() => { setModalOpen(true) }}>
                         삭제
                     </button>
                     {
                         modalOpen === true ? (
-                            <Modal setModalOpen={setModalOpen} postId={postId} />
+                            <DelPostModal setModalOpen={setModalOpen} postId={postId} />
                         ) : (
                             null
                         )
                     }
-                    <button onClick={ModifyPost}>
+                    <button onClick={() => { navigation(`/post/${postId}`) }}>
                         수정
                     </button>
                 </ModifyDelBtn>
                 <PostInfo>
-                    <img src={dataTest.profileImage} />
+                    <img src={contentData.userDto.profile} />
                     <span>{contentData.userDto.nickname}</span>
-                    <Likecomment>좋아요 {contentData.like} ∙ 댓글 {dataTest.commentNumber} ∙ 조회수 {contentData.view}</Likecomment>
+                    <Likecomment>좋아요 {contentData.like} ∙ 댓글 {contentData.commentNumber} ∙ 조회수 {contentData.view}</Likecomment>
                 </PostInfo>
                 <Line />
                 <Contents>{contentData.content}</Contents>
@@ -191,15 +154,16 @@ const PostView = () => {
                     </Titlebar>
                     <CommentView>
                         <CommentInfo>
-                        <img src={comment.userProfile} />
-                        <span style={{ fontWeight: "bold" }}>{comment.username}</span>
-                        <span>{comment.comment}</span>
+                        <img src={contentData.userDto.profileImage} />
+                        <span style={{ fontWeight: "bold" }}>{contentData.userDto.nickname}</span>
+                        <span>{comments.comment}</span>
                         </CommentInfo>
                     </CommentView>
                     {/* <div>{comment.likeToggle : Boolean}</div> */}
                     <CommentBox>
-                        <input ref={comment_ref} type="text" placeholder="댓글을 입력해주세요."
-                        // value={comment} onChange={onChange}
+                        <input ref={comments} type="text" placeholder="댓글을 입력해주세요."
+                        // value={comments}
+                        // onChange={onChange}
                         />
                         <CommentBtn onClick={CommentWrite}>댓글 작성하기</CommentBtn>
                     </CommentBox>
@@ -241,6 +205,7 @@ const ImgWrap = styled.img`
     border-radius: 30px 30px 0px 0px;
     overflow: hidden;
     object-fit: cover;
+    background-color: #ddd;
 `;
 
 const PostInfo = styled.div`
