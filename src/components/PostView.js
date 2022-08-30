@@ -29,18 +29,28 @@ const PostView = () => {
     view: 1
   })
 
-  const auth = {
+  const [ isLogin, setIsLogin ] = React.useState(false);
+
+  const Token = {
     authorization: sessionStorage.getItem("accessToken"),
     refresh_token: sessionStorage.getItem("refreshToken")
-  };
+  }
+
+  const isLoginCheck = () => {  
+    // console.log(Token)
+    if (Token.authorization !== null && Token.refresh_token !== null) {
+      setIsLogin(true)
+    }
+    // if (userDto.nickname === response.data.userDto.nickname)
+  }
 
     // 식단 게시글 상세조회
     const PostViewAX = async () => {
         try {
           const response = await axios.get(`http://43.200.174.111:8080/post/${postId}`, {
             headers: {
-                Authorization: `Bearer ${auth.authorization}`,
-                refresh_token: `Bearer ${auth.refresh_token}`
+                Authorization: `Bearer ${Token.authorization}`,
+                refresh_token: `Bearer ${Token.refresh_token}`
             }
           })
           console.log("게시글 불러오기", response)
@@ -84,8 +94,8 @@ const PostView = () => {
       try {
         const response = await axios.get(`http://43.200.174.111:8080/post/${postId}/comment`, {
           headers: {
-            Authorization: `Bearer ${auth.authorization}`,
-            refresh_token: `Bearer ${auth.refresh_token}`
+            Authorization: `Bearer ${Token.authorization}`,
+            refresh_token: `Bearer ${Token.refresh_token}`
           }
         })
         console.log("댓글 불러오기", response.data)
@@ -103,8 +113,8 @@ const PostView = () => {
         },
         {
           headers: {
-            Authorization: `Bearer ${auth.authorization}`,
-            refresh_token: `Bearer ${auth.refresh_token}`
+            Authorization: `Bearer ${Token.authorization}`,
+            refresh_token: `Bearer ${Token.refresh_token}`
           }
         })
         console.log("댓글 작성하기", response)
@@ -123,7 +133,9 @@ const PostView = () => {
             <MemoizedSidebar />
             <Container>
                 <ImgWrap src={contentData.image} />
-                <ModifyDelBtn>
+                {
+                  !isLogin === true ? (
+                    <ModifyDelBtn>
                     <button style={{ margin: "0px 10px 0px 0px" }} onClick={() => { setModalOpen(true) }}>
                         삭제
                     </button>
@@ -138,6 +150,10 @@ const PostView = () => {
                         수정
                     </button>
                 </ModifyDelBtn>
+                  ) : (
+                    null
+                  )
+                }
                 <PostInfo>
                     <img src={contentData.userDto.profile} />
                     <span>{contentData.userDto.nickname}</span>
@@ -217,9 +233,9 @@ const PostInfo = styled.div`
     align-items: center;
     margin : 10px auto;
     img {
-        width: 50px;
+        width: 105px;
         height: 50px;
-        border-radius: 25px;
+        border-radius: 50px;
         background-color: gray;
     }
     span {

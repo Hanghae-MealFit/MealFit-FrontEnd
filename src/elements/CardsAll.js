@@ -9,11 +9,6 @@ const CardsAll = ({post}) => {
   const navigate = useNavigate();
   console.log(post)
 
-  // const image = React.useRef()
-  // const content = React.useRef()
-  // const likeCount = React.useRef()
-  // const commentCount = React.useRef()
-
   const [dataTest, setdataTest] = React.useState({
     postId: "1",
     nickname: "봄봄",
@@ -34,7 +29,7 @@ const CardsAll = ({post}) => {
           <ImgWrap src={dataTest.profileImage} />
           <span>{dataTest.nickname}</span>
             <TextLabel>
-              좋아요 {post.like} ∙ 댓글 2 ∙ 조회수 {post.view}
+              {/* 좋아요 {post.like} ∙ 댓글 2 ∙ 조회수 {post.view} */}
             </TextLabel>
           </TextBox>
         </CardInner>
