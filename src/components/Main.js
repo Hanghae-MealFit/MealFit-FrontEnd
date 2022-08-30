@@ -24,7 +24,7 @@ const Main = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [isLogin, setIsLogin] = React.useState(false);
+  const [ isLogin, setIsLogin ] = React.useState(false);
   const [ myWeightHover, setMyWeightHover ] = React.useState(false)
   const [ changeMyWeight, setChangeMyWeight ] = React.useState(false)
   const [ curWeight, setCurWeight ] = React.useState();

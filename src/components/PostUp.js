@@ -10,7 +10,7 @@ const PostUp = () => {
   const navigate = useNavigate();
 
   const [ImageFile, setImageFile] = React.useState([]);
-  const [ShowImg, setShowImg] = React.useState(null);
+  // const [ShowImg, setShowImg] = React.useState(null);
   const UpdateformData = new FormData();
   const formData = new FormData();
   const postId_ref = React.useRef(null);
@@ -25,8 +25,8 @@ const PostUp = () => {
   
     formData.append("postImage", ImageFile);  
     formData.append("content", content_ref.current.value);
-    console.log(formData);
-    console.log(ImageFile);
+    // console.log(formData);
+    // console.log(ImageFile);
 
     const auth = {
       authorization: sessionStorage.getItem("accessToken"),
@@ -44,11 +44,11 @@ const PostUp = () => {
         refresh_token: `Bearer ${auth.refresh_token}`
       },
     }).then((response) => {
-      console.log("반응", response)
+      // console.log("반응", response)
       window.alert("식단 작성 성공!");
       navigate("/post/all")
     }).catch((error) => {
-      console.log("에러", error)
+      // console.log("에러", error)
       window.alert("식단 작성 실패!");
     });
   };
@@ -64,8 +64,8 @@ const PostUp = () => {
     UpdateformData.append("postId", postId_ref.current.value);
     UpdateformData.append("postImage", ImageFile);  
     UpdateformData.append("content", content_ref.current.value);
-    console.log(UpdateformData);
-    console.log(ImageFile);
+    console.log("수정 데이터", UpdateformData);
+    console.log("수정 이미지", ImageFile);
 
     const auth = {
       authorization: sessionStorage.getItem("accessToken"),
@@ -83,12 +83,13 @@ const PostUp = () => {
     const UpdatePostAX = await apiImg
       .put("/post", UpdateformData)
       .then((response) => {
-        console.log("반응", response)
-        window.alert("식단 수정 성공!");
+        if(response.status == '200'){
+          alert("식단 수정 성공!")}
         navigate("/")
+        console.log("반응", response)
       }).catch((error) => {
         console.log("에러", error)
-        window.alert("식단 수정 실패!");
+        alert("식단 수정 실패!");
       });
     }
 
