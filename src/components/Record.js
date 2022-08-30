@@ -18,11 +18,31 @@ const Record = () => {
   const [dinnerOpen, setDinnerOpen] = React.useState(false);
 
   const [selectTime, setSelectTime] = React.useState("");
+  const [breakfastEatItem, setBreakfastEatItem] = React.useState("아침 식단을 입력하세요.");
+
+  const [selectEatItem, setSelectEatItem] = React.useState("");
+  const [selectEatItemCheck, setSelectEatItemCheck] = React.useState(false);
+
+  const [editEatItem, setEditEatItem] = React.useState(false);
+
   // console.log("타임", selectTime)
   
   const morning_ref = React.useRef(null);
   const lunch_ref = React.useRef(null);
   const dinner_ref = React.useRef(null);
+
+  const SelectItem = (value) => {
+    setSelectEatItem(value)
+    setSelectEatItemCheck(true)
+  }
+
+  console.log(selectEatItem, selectEatItemCheck)
+
+  const EditItem = () => {
+    setEditEatItem(true)
+    setRecordModalOpen(true)
+  }
+  console.log(editEatItem)
 
   // status
   // 아침: BREAKFAST
@@ -44,12 +64,31 @@ const Record = () => {
             refresh_token: `Bearer ${auth.refresh_token}`
           },
         })
-      console.log(res)
+      console.log(res.data.dietResponseDto)
+      setBreakfastEatItem(res.data.dietResponseDto)
     } catch (error) {
       console.log(error)
     }
   }
-  // console.log(SelectDay)
+  console.log(breakfastEatItem)
+
+  console.log("why",selectEatItem)
+
+  const DeleteItem = async () => {
+    try {
+      const res = await axios.delete(`http://43.200.174.111:8080/diet/${selectEatItem.dietId}`,{
+        headers: {
+          Authorization: `Bearer ${auth.authorization}`,
+          refresh_token: `Bearer ${auth.refresh_token}`
+        },
+      })
+      console.log(res)
+      console.log(selectEatItem.dietId)
+    } catch(error) {
+      console.log(error)
+      console.log(selectEatItem.dietId)
+    }
+  }
 
   React.useEffect(() => {
     getFood()
@@ -97,7 +136,23 @@ const Record = () => {
                         </IconSVG>
                       </Select>
                       <SelectContent>
-                        <div>아침 뭐 먹었니?</div>
+                          {
+                            breakfastEatItem.length === 0 ? (
+                              <div>아침 식단을 입력하세요.</div>
+                            ) :
+                            (
+                              breakfastEatItem.map((v,idx) => (
+                                <div style={{
+                                  cursor: "pointer",
+                                  backgroundColor: selectEatItemCheck && v.foodId === selectEatItem.foodId ? "gray" : "transparent"
+                                }} onClick={(e) => {SelectItem(v)}} key={idx}>
+                                  {v.foodName}
+                                  <span onClick={EditItem}>수정</span>
+                                  <span onClick={DeleteItem}>삭제</span>
+                                </div>
+                              ))
+                            )
+                          }
                         <Button onClick={() => {
                           setRecordModalOpen(true)
                           setSelectTime(morning_ref.current.innerHTML)
@@ -105,7 +160,15 @@ const Record = () => {
                         >추가하기</Button>
                         {
                           recordModalOpen === true ? (
-                            <RecordModal setRecordModalOpen={setRecordModalOpen} selectTime={selectTime} SelectDay={SelectDay} />
+                            <RecordModal
+                            setRecordModalOpen={setRecordModalOpen}
+                            selectTime={selectTime}
+                            SelectDay={SelectDay}
+                            setBreakfastEatItem={setBreakfastEatItem}
+                            setEditEatItem={setEditEatItem}
+                            selectEatItem={selectEatItem}
+                            editEatItem={editEatItem}
+                            />
                           ) : (
                             null
                           )

@@ -30,6 +30,7 @@ const PostView = () => {
   })
 
   const [ isLogin, setIsLogin ] = React.useState(false);
+  const comment_ref = React.useRef(null);
 
   const Token = {
     authorization: sessionStorage.getItem("accessToken"),
@@ -106,6 +107,10 @@ const PostView = () => {
 
     // 댓글 작성하기
     const CommentWrite = async () => {
+      const formData = new FormData()
+      formData.append("postId", postId)
+      formData.append("comment", comment_ref.current.value)
+
       try {
         const response = await axios.post(`http://43.200.174.111:8080/post/${postId}/comment`, {
           postId: postId,
@@ -177,7 +182,7 @@ const PostView = () => {
                     </CommentView>
                     {/* <div>{comment.likeToggle : Boolean}</div> */}
                     <CommentBox>
-                        <input ref={comments} type="text" placeholder="댓글을 입력해주세요."
+                        <input ref={comment_ref} type="text" placeholder="댓글을 입력해주세요."
                         // value={comments}
                         // onChange={onChange}
                         />
