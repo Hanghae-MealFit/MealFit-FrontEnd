@@ -66,7 +66,7 @@ const Login = () => {
             "Content-Type": "application/json"
           }
         })
-        console.log(res)
+        console.log(res.data)
         if(res.status === 200 && res.data.tokenBox.accessToken !== null && res.data.tokenBox.refreshToken !== null && res.data.userInfoDto.userStatus !== "NOT_VALID") {
           sessionStorage.setItem("accessToken", res.data.tokenBox.accessToken)
           sessionStorage.setItem("refreshToken", res.data.tokenBox.refreshToken)

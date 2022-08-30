@@ -5,7 +5,17 @@ import { useNavigate } from 'react-router-dom';
 
 // import FoodModal from "../elements/FoodModal";
 
-const RecordModal = ({ setRecordModalOpen, selectTime, SelectDay }) => {
+const RecordModal = (
+  {
+    setRecordModalOpen,
+    selectTime,
+    SelectDay,
+    setBreakfastEatItem,
+    editEatItem,
+    setEditEatItem,
+    selectEatItem 
+  }) => {
+
   const handleClose = () => {
       setRecordModalOpen(false);
   };
@@ -23,9 +33,7 @@ const RecordModal = ({ setRecordModalOpen, selectTime, SelectDay }) => {
   const carbs_ref = React.useRef(null);
   const pro_ref = React.useRef(null);
   const fat_ref = React.useRef(null);
-  const eating_ref = React.useRef(null);
-
-  console.log(foodInputModal)
+  const eating_weight_ref = React.useRef(null);
 
   const auth = {
     authorization: sessionStorage.getItem("accessToken"),
@@ -82,7 +90,7 @@ const RecordModal = ({ setRecordModalOpen, selectTime, SelectDay }) => {
     try {
       const res = await axios.post(`http://43.200.174.111:8080/diet`,{
           foodId: selectMenu.foodId,
-          foodWeight: eating_ref.current.value,
+          foodWeight: eating_weight_ref.current.value,
           status: selectTime === "아침" ? "BREAKFAST" : selectTime === "점심" ? "LUNCH" : "DINNER",
           date: SelectDay
         },
@@ -100,17 +108,59 @@ const RecordModal = ({ setRecordModalOpen, selectTime, SelectDay }) => {
     }
   }
 
+  // 선택 된 음식의 정보 가져오기
   const SelectFood = (e, value) => {
-    console.log(e)
     setSelectMenu(value)
     setSelectMenuCheck(true)
   }
+
+  // 식단 수정하기
+  const DietEdit = async () => {
+    try {
+      const res = await axios.put(`http://43.200.174.111:8080/diet`,{
+          dietId: selectEatItem.dietId,
+          foodId: selectEatItem.foodId,
+          changeTo: selectMenu.foodId,
+          foodWeight: eating_weight_ref.current.value
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${auth.authorization}`,
+            refresh_token: `Bearer ${auth.refresh_token}`
+          },
+        })
+        console.log(res)
+        console.log(
+          "dietId", selectEatItem.dietId,
+          "foodId", selectEatItem.foodId,
+          "changeTo", selectMenu.foodId,
+          "foodWeight", eating_weight_ref.current.value)
+        console.log(selectMenu.foodId, eating_weight_ref.current.value, selectEatItem.dietId, selectMenu.foodId)
+    } catch (error) {
+      console.log(error)
+      console.log(
+        "dietId", selectEatItem.dietId,
+        "foodId", selectEatItem.foodId,
+        "changeTo", selectMenu.foodId,
+        "foodWeight", eating_weight_ref.current.value)
+    }
+  }
+  console.log(selectEatItem, selectMenu)
+
+  console.log("edit", editEatItem)
 
   return (
     <Container>
       <Background />
       <ModalBlock>
-      <h1>추가하기</h1>
+        {
+          editEatItem ? (
+            <h1>수정하기</h1>
+          ) :
+          (
+            <h1>추가하기</h1>
+          )
+        }
         <Contents>
           <InputTxt>
               <input ref={search_food_ref} type="text" placeholder='검색어를 입력하세요.' />
@@ -161,7 +211,7 @@ const RecordModal = ({ setRecordModalOpen, selectTime, SelectDay }) => {
                       </div>
                     ))}
                   </FoodData>
-                  <input ref={eating_ref} type="text" placeholder='섭취량 입력' />
+                  <input ref={eating_weight_ref} type="text" placeholder='섭취량 입력' />
                 </>
               ) : (
                 null
@@ -170,7 +220,14 @@ const RecordModal = ({ setRecordModalOpen, selectTime, SelectDay }) => {
           }
           <div style={{ width: "50%" }}>
               <button onClick={handleClose}>뒤로가기</button>
-              <button onClick={DietInsert}>기록하기</button>
+              {
+                editEatItem ? (
+                  <button onClick={DietEdit}>수정하기</button>
+                ) :
+                (
+                  <button onClick={DietInsert}>기록하기</button>
+                )
+              }
               {/* <button onClick={() => { setFoodModalOpen(true) }}
               >검색하기</button> */}
               {/* {
