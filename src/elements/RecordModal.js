@@ -131,6 +131,7 @@ const RecordModal = (
         })
         console.log(res)
         console.log(
+          "dd", selectEatItem,
           "dietId", selectEatItem.dietId,
           "foodId", selectEatItem.foodId,
           "changeTo", selectMenu.foodId,
@@ -139,6 +140,7 @@ const RecordModal = (
     } catch (error) {
       console.log(error)
       console.log(
+        "dd", selectEatItem,
         "dietId", selectEatItem.dietId,
         "foodId", selectEatItem.foodId,
         "changeTo", selectMenu.foodId,

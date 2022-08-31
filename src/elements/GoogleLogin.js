@@ -4,7 +4,7 @@ import { IconWrap } from './KakaoLogin'
 
 const GoogleLogin = () => {
 
-  const GOOGLE_AUTH_URL = 'http://ec2-13-125-227-9.ap-northeast-2.compute.amazonaws.com:8080/oauth2/authorization/google'
+  const GOOGLE_AUTH_URL = 'http://ec2-43-200-174-111.ap-northeast-2.compute.amazonaws.com:8080/oauth2/authorization/google'
 
   const handleLogin = (e) => {
     e.preventDefault()

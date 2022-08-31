@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 import './App.css';
 import './fonts/fonts.css'
+import { MemoizedSidebar } from './components/Sidebar';
 import MyPage from './components/MyPage';
 import MyPageChange from './components/MyPageChange';
 import PasswordChange from './components/PasswordChange';
@@ -22,6 +23,7 @@ import PostView from './components/PostView';
 function App() {
   return (
     <Wrap>
+      <MemoizedSidebar />
       <Routes>
         <Route path="/" element = { <Main /> } />
         <Route path="user/info" element = { <MyPage /> } />

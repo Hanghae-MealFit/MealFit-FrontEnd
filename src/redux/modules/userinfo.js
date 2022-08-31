@@ -10,13 +10,19 @@ const initialState = {
       startFasting: "",
       endFasting: "",
     },
+    nutritionGoal: {
+      carbs: "",
+      fat: "",
+      kcal: "",
+      protein: "",
+    },
     userID: "",
     userProfile: {
       goalWeight: "",
       nickname: "",
-      profileImage: "",
+      profileImage: null,
+      providerType: "",
       userStatus: "",
-      username: "",
     }
   }
 }
@@ -42,7 +48,7 @@ export const loadMainUserDB = () => {
               refresh_token: `Bearer ${auth.refresh_token}`
             },
           })
-        console.log(res)
+        // console.log(res)
         dispatch(loadUser(res.data))
       } catch (error) {
         console.log(error)

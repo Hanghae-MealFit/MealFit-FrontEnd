@@ -5,31 +5,28 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import { MemoizedSidebar } from "./Sidebar";
 import Cards from "../elements/Cards";
 import Circle from "../elements/Circle";
 import Dimmed from "../elements/DimmedLayer";
 import Rechart from "../elements/Rechart";
 
-import { loadMainUserDB } from '../redux/modules/userinfo'
 import { loadUserWeightDB } from '../redux/modules/userweight';
 import { loadPostDB } from "../redux/modules/post";
 
 const Main = () => {
   const data = useSelector((state) => state.post.post.content);
   const MainData = data.sort((a,b) => (b.view - a.view)).slice(0, 4)
-
   const weight = useSelector((state) => state.userweight.data.data);
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [ isLogin, setIsLogin ] = React.useState(false);
-  const [ myWeightHover, setMyWeightHover ] = React.useState(false)
-  const [ changeMyWeight, setChangeMyWeight ] = React.useState(false)
+  const [ myWeightHover, setMyWeightHover ] = React.useState(false);
+  const [ changeMyWeight, setChangeMyWeight ] = React.useState(false);
   const [ curWeight, setCurWeight ] = React.useState();
   const [ curInfoMsg, SetCurInfoMsg ] = React.useState(false);
   const [ curError, setCurError ] = React.useState("* 현재 체중을 입력해주세요.");
+  const [ weightCheck, setWeightCheck ] = React.useState(false);
 
   const currentWeight_ref = React.useRef(null);
   const current_weight_err_ref = React.useRef(null);
@@ -110,21 +107,28 @@ const Main = () => {
         },
       })
       console.log(res)
+      if(res.status === 200 && res.data === "입력 완료!") {
+        setCurWeight('')
+        setChangeMyWeight(false)
+        setWeightCheck(!weightCheck)
+      }
     } catch (error) {
       console.log(error)
+      currentWeight_ref.current.focus()
     }
   }
 
   useEffect(() => {
-    dispatch(loadMainUserDB())
     dispatch(loadUserWeightDB())
+  }, [weightCheck])
+
+  useEffect(() => {
     dispatch(loadPostDB())
     LoginCheck()
   }, [])
 
   return (
     <Wrap>
-      <MemoizedSidebar />
       <Container>
         <div style={{ display: "flex", width: "100%", height: "55%", backgroundColor: "#fff", position: "relative" }}>
           {

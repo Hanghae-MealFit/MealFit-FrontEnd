@@ -38,7 +38,7 @@ export const loadUserWeightDB = () => {
               refresh_token: `Bearer ${auth.refresh_token}`
             },
           })
-        console.log(res)
+        // console.log(res)
         dispatch(loadWeight(res.data))
       } catch (error) {
         console.log(error)
@@ -46,12 +46,12 @@ export const loadUserWeightDB = () => {
     }
   }
 }
-  
+
 // Reducer
 export default function reducer(state = initialState, action = {} ) {
   switch (action.type) {
     case "userweight/USER_WEIGHT_LOAD": {
-      console.log(state, action.data)
+      // console.log(state, action.data)
       return { data: action.data }
     }
 
