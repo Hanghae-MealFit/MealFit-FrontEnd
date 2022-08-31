@@ -1,14 +1,18 @@
 import React, {useEffect} from 'react'
 import styled from 'styled-components'
+import { useSelector, useDispatch } from 'react-redux'
+import { loadMainUserDB } from '../redux/modules/userinfo'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCamera } from '@fortawesome/free-solid-svg-icons'
 
-const PicSelect = ( { files, setFiles } ) => {
+const PicSelect = ( { setFiles, myPageIn } ) => {
 
-  const temp_img = "https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png"
+  const userInfo = useSelector((state) => state.userinfo.user.userProfile);
+
+  const temp_img = "/logo/profile.png"
+  const mypage_img = userInfo.profileImage
   const [ prevFiles, setPrevFiles ] = React.useState(temp_img);
-
-  const previewImage = async (e) => {
+  const previewImage = (e) => {
 
     e.preventDefault();
 
@@ -25,10 +29,19 @@ const PicSelect = ( { files, setFiles } ) => {
   return (
     <Wrap>
       <ImgWrap>
-        <Img>
-          <img src={prevFiles} alt="" />
-        </Img>
-        <IconWrap htmlFor="file">
+        {
+          myPageIn ? (
+            <Img>
+              <img src={mypage_img === null ? temp_img : mypage_img} alt="" />
+            </Img>
+          ) : (
+            <Img>
+              <img src={prevFiles} alt="" />
+            </Img>
+          )
+        }
+        
+        <IconWrap htmlFor="file" style={{ display: myPageIn ? "none" : "flex" }}>
           <FontAwesomeIcon icon={faCamera} />
         </IconWrap>
         <input type="file" id="file" onChange={previewImage} style={{ display: "none" }} />

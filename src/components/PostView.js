@@ -101,7 +101,7 @@ const PostView = () => {
         })
         console.log("댓글 불러오기", response.data)
       } catch(error) {
-        console.log("댓글 불러오기 실페", error)
+        console.log("댓글 불러오기 실패", error)
       }
     }
 
@@ -114,7 +114,7 @@ const PostView = () => {
       try {
         const response = await axios.post(`http://43.200.174.111:8080/post/${postId}/comment`, {
           postId: postId,
-          comment: comments.current.value
+          comment: comment_ref.current.value
         },
         {
           headers: {

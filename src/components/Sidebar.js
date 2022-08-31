@@ -15,7 +15,6 @@ import { useSelector, useDispatch } from "react-redux";
 const Sidebar = () => {
 
   const user = useSelector((state) => state.userinfo.user.userProfile)
-  // console.log("userProfile", user)
 
   const [isLogin, setIsLogin] = React.useState(false);
   const sessionStorage = window.sessionStorage;
@@ -26,20 +25,33 @@ const Sidebar = () => {
     authorization: sessionStorage.getItem("accessToken"),
     refresh_token: sessionStorage.getItem("refreshToken")
   }
-  // console.log(Token)
-  
+  let code = new URL(window.location.href);
+  const USER_CHECK = code.href
+
   const LoginCheck = () => {
-    // console.log(Token)
-    if (Token.authorization !== null && Token.refresh_token !== null) {
+    if (Token.authorization !== null && Token.refresh_token !== null && USER_CHECK !== "http://localhost:3000/user/signupsns") {
       setIsLogin(true)
     }
   }
 
+  const LogoClick = () => {
+    if(!isLogin) {
+      sessionStorage.clear()
+      navigate("/")
+    } else {
+      navigate("/")
+    }
+  }
+
   React.useEffect(() => {
-    dispatch(loadMainUserDB())
     LoginCheck()
   }, []);
-  // console.log(isLogin);
+
+  React.useEffect(() => {
+    if(isLogin) {
+      dispatch(loadMainUserDB())
+    }
+  }, [isLogin])
 
   const menus = [
     { 
@@ -61,6 +73,7 @@ const Sidebar = () => {
   ];
 
   const onClickLogin = () => {
+    sessionStorage.clear()
     navigate("/user/login");
   }
 
@@ -94,10 +107,8 @@ const Sidebar = () => {
 
   return (
     <SideBar>
-      <Logo onClick={() => { navigate("/") }} style={{ cursor: "pointer" }}>
-        <img className="logo"
-          alt="logo"
-          src="/logo/mealft_1.png" />
+      <Logo onClick={LogoClick} style={{ cursor: "pointer" }}>
+        <img className="logo" src="/logo/mealft_1.png" alt="logo" />
       </Logo>
       <SideBox>
         {
@@ -126,7 +137,7 @@ const Sidebar = () => {
               <Link style={{ color: "white", textDecoration: "none" }}
                 to={menu.path} key={index}>
                 <SidebarItem
-                  menu={menu}
+                  menu={menu} isLogin={isLogin}
                 />
               </Link>
             );
@@ -163,6 +174,7 @@ const SideBar = styled.div`
     width: 260px;
     height: 100vh;
     background-color: #FE7770;
+    z-index: 20000;
 `;
 
 const Logo = styled.div`

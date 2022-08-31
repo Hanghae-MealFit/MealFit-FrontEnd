@@ -15,22 +15,28 @@ const MyPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    dispatch(loadMainUserDB())
-    dispatch(loadUserWeightDB())
-  }, [])
+  let code = new URL(window.location.href);
+  const MYPAGE_CHECK = code.href
+  const [ myPageIn, setMyPageIn ] = React.useState(false)
+  const [ files, setFiles ] = React.useState(null);
 
   const user = useSelector((state) => state.userinfo.user.fastingInfo);
   const userInfo = useSelector((state) => state.userinfo.user.userProfile);
+  const userGoal = useSelector((state) => state.userinfo.user.nutritionGoal);
   const weight = useSelector((state) => state.userweight.data.data);
-  const NowWeight = weight[weight.length - 1].weight
+  const NowWeight = (weight.sort((a,b) => (b.id - a.id))).slice(0, 1)[0].weight
   const startHour = user.startFasting.split(":")[0]
   const startMinute = user.startFasting.split(":")[1]
   const endHour = user.endFasting.split(":")[0]
   const endMinute = user.endFasting.split(":")[1]
 
-  const data2 = useSelector((state) => state);
-  console.log(data2)
+  useEffect(() => {
+    if(MYPAGE_CHECK === "http://localhost:3000/user/info") {
+      setMyPageIn(true)
+    } else {
+      setMyPageIn(false)
+    }
+  }, [myPageIn])
 
   return (
     <Wrap>
@@ -47,7 +53,7 @@ const MyPage = () => {
         }
         <FormWrap>
           <PicWrap>
-            <PicSelect />
+            <PicSelect files={files} setFiles={setFiles} myPageIn={myPageIn} />
           </PicWrap>
           <Contents>
             <p>닉네임</p>
@@ -94,28 +100,28 @@ const MyPage = () => {
             <GoalInfoWrap>
               <GoalTitle>칼로리</GoalTitle>
               <GoalInfo>
-                <input type="number" readOnly value={""} />
+                <input type="number" readOnly value={userGoal.kcal} />
                 <span className='unit'>(Kcal)</span>
               </GoalInfo>
             </GoalInfoWrap>
             <GoalInfoWrap>
               <GoalTitle>탄수화물</GoalTitle>
               <GoalInfo>
-                <input type="number" readOnly value={""} />
+                <input type="number" readOnly value={userGoal.carbs} />
                 <span className='unit'>(g)</span>
               </GoalInfo>
             </GoalInfoWrap>
             <GoalInfoWrap>
               <GoalTitle>단백질</GoalTitle>
               <GoalInfo>
-                <input type="number" readOnly value={""} />
+                <input type="number" readOnly value={userGoal.protein} />
                 <span className='unit'>(g)</span>
               </GoalInfo>
             </GoalInfoWrap>
             <GoalInfoWrap>
               <GoalTitle>지방</GoalTitle>
               <GoalInfo>
-                <input type="number" readOnly value={""} />
+                <input type="number" readOnly value={userGoal.fat} />
                 <span className='unit'>(g)</span>
               </GoalInfo>
             </GoalInfoWrap>

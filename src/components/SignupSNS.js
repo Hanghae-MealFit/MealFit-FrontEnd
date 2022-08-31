@@ -68,6 +68,10 @@ const SignupSNS = () => {
   const [ goalFat, setGoalFat ] = React.useState();
   const [ goalFatError, setGoalFatError ] = React.useState("* 값을 입력해주세요.");
 
+  const sessionStorage = window.sessionStorage;
+  const ACCESS_TOKEN = sessionStorage.getItem("accessToken")
+  const REFRESH_TOKEN = sessionStorage.getItem("refreshToken")
+
   const onhandleSignUpSNS = async (e) => {
     e.preventDefault()
 
@@ -99,14 +103,10 @@ const SignupSNS = () => {
       formData.append("profileImage", SignupSNSInfo.profileImage);
     }
 
-    const sessionStorage = window.sessionStorage;
-    const ACCESS_TOKEN = sessionStorage.getItem("accessToken")
-    const REFRESH_TOKEN = sessionStorage.getItem("refreshToken")
-
     await axios({
       baseURL: "http://43.200.174.111:8080/",
       method: "POST",
-      url: "/user/info",
+      url: "/user/social/signup",
       data: formData,
       headers: {
         "Content-Type": "multipart/form-data",
@@ -125,12 +125,17 @@ const SignupSNS = () => {
     })
   }
 
+  const BackToCancle = () => {
+    sessionStorage.clear()
+    navigate("/")
+  }
+
   const CheckNickname = async (e) => {
     e.preventDefault()
 
     try {
       const nickname = nickname_ref.current.value
-      const res = await axios.get(`http://43.200.174.111:8080/user/nickname?nickname=${nickname}`,
+      const res = await axios.get(`http://43.200.174.111:8080/user/nickname/${nickname}`,
       {
         headers: {
           "Content-Type": "application/json"
@@ -472,7 +477,7 @@ const SignupSNS = () => {
           </GoalInfoWrap>
         </IntakeWrap>
         <Button>
-          <CancleBtn onClick={() => {navigate("/")}}>뒤로가기</CancleBtn>
+          <CancleBtn onClick={BackToCancle}>뒤로가기</CancleBtn>
           <SignUpBtn onClick={onhandleSignUpSNS}
             disabled=
             {
@@ -496,7 +501,7 @@ const SignUpWrap = styled.div`
   position: relative;
   width: 700px;
   height: 920px;
-  margin: 0 auto;
+  margin-left: 260px;
   border-radius: 30px;
   background-color: white;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);

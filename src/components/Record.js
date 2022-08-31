@@ -10,6 +10,8 @@ import moment from "moment";
 import 'moment/locale/ko';
 
 const Record = () => {
+  const [ isLogin, setIsLogin ] = React.useState(false);
+
   const [value, onChange] = React.useState(new Date());
   const [recordModalOpen, setRecordModalOpen] = React.useState(false);
   // const [open, setOpen] = React.useState(false);
@@ -26,19 +28,34 @@ const Record = () => {
   const [editEatItem, setEditEatItem] = React.useState(false);
 
   // console.log("타임", selectTime)
+
+  const Token = {
+    authorization: sessionStorage.getItem("accessToken"),
+    refresh_token: sessionStorage.getItem("refreshToken")
+  }
+
+  const LoginCheck = () => {
+    if (Token.authorization !== null && Token.refresh_token !== null) {
+      setIsLogin(true)
+    } else {
+      setIsLogin(false)
+    }
+  }
   
   const morning_ref = React.useRef(null);
   const lunch_ref = React.useRef(null);
   const dinner_ref = React.useRef(null);
 
   const SelectItem = (value) => {
+    console.log("select")
     setSelectEatItem(value)
     setSelectEatItemCheck(true)
   }
 
   console.log(selectEatItem, selectEatItemCheck)
 
-  const EditItem = () => {
+  const EditItem = (value) => {
+    setSelectEatItem(value)
     setEditEatItem(true)
     setRecordModalOpen(true)
   }
@@ -56,27 +73,29 @@ const Record = () => {
 
   const SelectDay = moment(value).format("YYYY-MM-DD")
   const getFood = async () => {
-    try {
-      const res = await axios.get(`http://43.200.174.111:8080/diet?date=${SelectDay}`,
-        {
-          headers: {
-            Authorization: `Bearer ${auth.authorization}`,
-            refresh_token: `Bearer ${auth.refresh_token}`
-          },
-        })
-      console.log(res.data.dietResponseDto)
-      setBreakfastEatItem(res.data.dietResponseDto)
-    } catch (error) {
-      console.log(error)
+    if(isLogin) {
+      try {
+        const res = await axios.get(`http://43.200.174.111:8080/diet?date=${SelectDay}`,
+          {
+            headers: {
+              Authorization: `Bearer ${auth.authorization}`,
+              refresh_token: `Bearer ${auth.refresh_token}`
+            },
+          })
+        console.log(res.data.dietResponseDto)
+        setBreakfastEatItem(res.data.dietResponseDto)
+      } catch (error) {
+        console.log(error)
+      }
     }
   }
   console.log(breakfastEatItem)
 
   console.log("why",selectEatItem)
 
-  const DeleteItem = async () => {
+  const DeleteItem = async (value) => {
     try {
-      const res = await axios.delete(`http://43.200.174.111:8080/diet/${selectEatItem.dietId}`,{
+      const res = await axios.delete(`http://43.200.174.111:8080/diet/${value}`,{
         headers: {
           Authorization: `Bearer ${auth.authorization}`,
           refresh_token: `Bearer ${auth.refresh_token}`
@@ -91,14 +110,29 @@ const Record = () => {
   }
 
   React.useEffect(() => {
+    LoginCheck()
+  }, [isLogin])
+
+  React.useEffect(() => {
     getFood()
   }, [SelectDay])
+
+  React.useEffect(() => {
+  }, [selectEatItem])
 
   return (
     <Wrap>
       <MemoizedSidebar />
       <Container>
-        <CalendarContainer>
+        {
+          isLogin ? (
+            null
+          ) :
+          (
+            <NotLogin>LoginPlease</NotLogin>
+          )
+        }
+        <CalendarContainer style={{ filter: !isLogin ? "blur(6px)" : "none" }}>
           <MyCalendar
             onChange={onChange} value={value}
             calendarType="US" // 요일을 일요일부터 시작하도록 설정
@@ -106,7 +140,7 @@ const Record = () => {
           />
         </CalendarContainer>
         <Line />
-        <RecordingBox>
+        <RecordingBox style={{ filter: !isLogin ? "blur(6px)" : "none" }}>
           <h1 className="Title">
             <div className="text-gray-500 mt-4">
               {moment(value).format("YYYY년 MM월 DD일 dddd")}
@@ -142,14 +176,16 @@ const Record = () => {
                             ) :
                             (
                               breakfastEatItem.map((v,idx) => (
-                                <div style={{
-                                  cursor: "pointer",
-                                  backgroundColor: selectEatItemCheck && v.foodId === selectEatItem.foodId ? "gray" : "transparent"
-                                }} onClick={(e) => {SelectItem(v)}} key={idx}>
-                                  {v.foodName}
-                                  <span onClick={EditItem}>수정</span>
-                                  <span onClick={DeleteItem}>삭제</span>
-                                </div>
+                                <>
+                                  <div style={{
+                                    cursor: "pointer",
+                                    backgroundColor: selectEatItemCheck && v.foodId === selectEatItem.foodId ? "gray" : "transparent"
+                                  }} onClick={() => {SelectItem(v)}} key={idx}>
+                                    {v.foodName}
+                                  </div>
+                                  <span onClick={() => EditItem(v)} key={"Edit" + idx}>수정</span>
+                                  <span onClick={() => {DeleteItem(v.dietId)}} key={"Delete" + idx}>삭제</span>
+                                </>
                               ))
                             )
                           }
@@ -364,7 +400,19 @@ const Container = styled.div`
     font-size: 16px;
     color: #D9D9D9;
   }
-  `;
+`;
+
+const NotLogin = styled.div`
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 500;
+`
 
 const CalendarContainer = styled.div`
   // background-color: yellow;

@@ -70,7 +70,7 @@ export const loadPostDB = () => {
   return async function (dispatch) {
     try {
       const res = await axios.get('http://43.200.174.111:8080/post?size=6')
-      console.log(res.data)
+      // console.log(res.data)
       dispatch(loadPost(res.data))
     } catch(error) {
       console.log(error);

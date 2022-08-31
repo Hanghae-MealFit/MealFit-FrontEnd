@@ -98,7 +98,7 @@ const FindMyInfo = () => {
     <FindWrap>
       <h1>아이디/비밀번호 찾기</h1>
       <InputWrap>
-        <FindInputWrap>
+        <FindIdInputWrap>
           <p>아이디를 찾기 위해 이메일을 입력해주세요.</p>
           <Find>
             <InputTxt>
@@ -107,8 +107,8 @@ const FindMyInfo = () => {
             </InputTxt>
             <button onClick={FindId} disabled={idEmailMsg === "* 올바른 양식으로 작성하였습니다." ? false : true}>아이디 찾기</button>
           </Find>
-        </FindInputWrap>
-        <FindInputWrap>
+        </FindIdInputWrap>
+        <FindPwInputWrap>
           <p>비밀번호를 찾기 위해 아이디와 이메일을 입력해주세요.</p>
           <Find>
             <InputTxt>
@@ -121,7 +121,7 @@ const FindMyInfo = () => {
             </InputTxt>
             <button onClick={FindPw} disabled={pwIdMsg === "* 올바른 양식으로 작성하였습니다." && pwEmailMsg === "* 올바른 양식으로 작성하였습니다." ? false : true}>비밀번호 찾기</button>
           </Find>
-        </FindInputWrap>
+        </FindPwInputWrap>
       </InputWrap>
     </FindWrap>
   )
@@ -131,7 +131,7 @@ const FindWrap = styled.div`
   position: relative;
   width: 600px;
   height: 740px;
-  margin: 0 auto;
+  margin-left: 260px;
   border-radius: 30px;
   background-color: white;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
@@ -168,9 +168,22 @@ const InputWrap = styled.div`
   }
 `
 
-const FindInputWrap = styled.div`
+const FindIdInputWrap = styled.div`
   width: 100%;
-  height: 50%;
+  height: 45%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  p {
+    font-size: 17px;
+  }
+`
+
+const FindPwInputWrap = styled.div`
+  width: 100%;
+  height: 55%;
   margin: 0 auto;
   display: flex;
   flex-direction: column;

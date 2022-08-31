@@ -1,10 +1,19 @@
 import React from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
-function SidebarItem({ menu }) {
+function SidebarItem({ menu, isLogin }) {
   // console.log(menu.icon)
+  const navigate = useNavigate();
+
+  const MenuClick = () => {
+    if(!isLogin) {
+      sessionStorage.clear()
+    }
+  }
+
   return (
-    <MenuWrap className="sidebar-item">
+    <MenuWrap className="sidebar-item" onClick={MenuClick}>
       <span>{menu.icon}</span>
       <p>{menu.name}</p>
     </MenuWrap>

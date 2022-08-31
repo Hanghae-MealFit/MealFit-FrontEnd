@@ -66,13 +66,13 @@ const Login = () => {
             "Content-Type": "application/json"
           }
         })
-        console.log(res.data)
-        if(res.status === 200 && res.data.tokenBox.accessToken !== null && res.data.tokenBox.refreshToken !== null && res.data.userInfoDto.userStatus !== "NOT_VALID") {
+        console.log(res)
+        if(res.status === 200 & res.data.tokenBox.accessToken !== null && res.data.tokenBox.refreshToken !== null && res.data.userStatus !== "NOT_VALID") {
           sessionStorage.setItem("accessToken", res.data.tokenBox.accessToken)
           sessionStorage.setItem("refreshToken", res.data.tokenBox.refreshToken)
-          window.alert(`${res.data.userInfoDto.nickname}님 안녕하세요.\n밀핏을 찾아주셔서 감사합니다.`)
+          window.alert(`안녕하세요.\n밀핏을 찾아주셔서 감사합니다.`)
           navigate("/")
-        } else if(res.status === 200 && res.data.tokenBox.accessToken !== null && res.data.tokenBox.refreshToken !== null && res.data.userInfoDto.userStatus === "NOT_VALID") {
+        } else if(res.status === 200 && res.data.tokenBox.accessToken !== null && res.data.tokenBox.refreshToken !== null && res.data.userStatus === "NOT_VALID") {
           window.alert("회원가입 시 작성한 e-mail에서 인증 후 로그인 가능합니다.")
           username_ref.current.focus()
         }
@@ -84,32 +84,34 @@ const Login = () => {
     }
 
   return (
-    <LoginWrap>
-      <h1>로그인</h1>
-      <ConWrap>
-        <Contents>
-          <input ref={username_ref} type="text" placeholder='아이디를 입력해주세요.' onChange={IdChange} maxLength={12} />
-          <p ref={username_err_ref}>{checkIdMsg}</p>
-        </Contents>
-        <Contents>
-          <input ref={password_ref} type="password" placeholder='비밀번호를 입력해주세요.' autoComplete="off" onChange={PwChange} />
-          <p ref={pw_err_ref}>{pwMsg}</p>
-        </Contents>
-        <Button>
-          <LoginBtn onClick={onhandleLogin} disabled={checkIdMsg === true && pwMsg === true ? false : true}>로그인</LoginBtn>
-        </Button>
-        <LoginTxt>
-          <span onClick={() => {navigate("/user/signup")}}>회원가입 하기</span>
-          <span onClick={() => {navigate("/user/find")}}>아이디/비밀번호 찾기</span>
-        </LoginTxt>
-        <SocialTxt>소셜 로그인</SocialTxt>
-        <SocialBtnWrap>
-          <KakaoLogin />
-          <NaverLogin />
-          <GoogleLogin />
-        </SocialBtnWrap>
-      </ConWrap>
-    </LoginWrap>
+    <div>
+      <LoginWrap>
+        <h1>로그인</h1>
+        <ConWrap>
+          <Contents>
+            <input ref={username_ref} type="text" placeholder='아이디를 입력해주세요.' onChange={IdChange} maxLength={12} />
+            <p ref={username_err_ref}>{checkIdMsg}</p>
+          </Contents>
+          <Contents>
+            <input ref={password_ref} type="password" placeholder='비밀번호를 입력해주세요.' autoComplete="off" onChange={PwChange} />
+            <p ref={pw_err_ref}>{pwMsg}</p>
+          </Contents>
+          <Button>
+            <LoginBtn onClick={onhandleLogin} disabled={checkIdMsg === true && pwMsg === true ? false : true}>로그인</LoginBtn>
+          </Button>
+          <LoginTxt>
+            <span onClick={() => {navigate("/user/signup")}}>회원가입 하기</span>
+            <span onClick={() => {navigate("/user/find")}}>아이디/비밀번호 찾기</span>
+          </LoginTxt>
+          <SocialTxt>소셜 로그인</SocialTxt>
+          <SocialBtnWrap>
+            <KakaoLogin />
+            <NaverLogin />
+            <GoogleLogin />
+          </SocialBtnWrap>
+        </ConWrap>
+      </LoginWrap>
+    </div>
   )
 }
 
@@ -118,6 +120,7 @@ const LoginWrap = styled.div`
   width: 700px;
   height: 640px;
   margin: 0 auto;
+  margin-left: 260px;
   border-radius: 30px;
   background-color: white;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);

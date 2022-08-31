@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 
 import { MemoizedSidebar } from "./Sidebar";
 import PicSelect from '../elements/PicSelect'
@@ -29,8 +30,20 @@ const MyPageChange = () => {
 
   const navigate = useNavigate();
 
-  //
+  let code = new URL(window.location.href);
+  const MYPAGE_CHANGE_CHECK = code.href
+  const [ myPageChangeIn, setMyPageChangeIn ] = React.useState(false)
   const [ files, setFiles ] = React.useState(null);
+  const data = useSelector((state) => state)
+  console.log(data)
+
+  // useEffect(() => {
+  //   if(MYPAGE_CHANGE_CHECK === "http://localhost:3000/user/info/edit") {
+  //     setMyPageChangeIn(true)
+  //   } else {
+  //     myPageChangeIn(false)
+  //   }
+  // }, [])
 
   // 현재 체중 목표 체중 값
   const [ curWeight, setCurWeight ] = React.useState();
@@ -130,7 +143,7 @@ const MyPageChange = () => {
 
     try {
       const nickname = nickname_ref.current.value
-      const res = await axios.get(`http://43.200.174.111:8080/user/nickname?nickname=${nickname}`,
+      const res = await axios.get(`http://43.200.174.111:8080/user/nickname/${nickname}`,
       {
         headers: {
           "Content-Type": "application/json"
@@ -307,7 +320,7 @@ const MyPageChange = () => {
       <h1>내 정보 변경</h1>
       <FormWrap>
         <PicWrap>
-          <PicSelect files={files} setFiles={setFiles} />
+          <PicSelect files={files} setFiles={setFiles} myPageChangeIn={myPageChangeIn} />
         </PicWrap>
         <Contents>
           <input ref={nickname_ref} type="text" placeholder='닉네임를 입력해주세요.' onChange={NickChange} maxLength='12' />
@@ -497,7 +510,7 @@ const SignUpWrap = styled.div`
   position: relative;
   width: 700px;
   height: 920px;
-  margin: 0 auto;
+  margin-left: 260px;
   border-radius: 30px;
   background-color: white;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);

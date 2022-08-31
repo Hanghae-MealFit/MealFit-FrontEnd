@@ -123,7 +123,7 @@ const Signup = () => {
 
     try {
       const username = username_ref.current.value
-      const res = await axios.get(`http://43.200.174.111:8080/user/username?username=${username}`,
+      const res = await axios.get(`http://43.200.174.111:8080/user/username/${username}`,
         {
           headers: {
             "Content-Type": "application/json"
@@ -133,6 +133,7 @@ const Signup = () => {
         SetCheckIdMsg("* 사용 가능 한 아이디입니다.")
         username_err_ref.current.style.color = "#81C147";
       }
+      console.log(res)
     } catch (error) {
       console.log(error)
       SetCheckIdMsg("* 사용 불가능 한 아이디입니다.")
@@ -146,7 +147,7 @@ const Signup = () => {
 
     try {
       const nickname = nickname_ref.current.value
-      const res = await axios.get(`http://43.200.174.111:8080/user/nickname?nickname=${nickname}`,
+      const res = await axios.get(`http://43.200.174.111:8080/user/nickname/${nickname}`,
         {
           headers: {
             "Content-Type": "application/json"
@@ -156,6 +157,7 @@ const Signup = () => {
         SetCheckNickMsg("* 사용 가능 한 닉네임입니다.")
         nickname_err_ref.current.style.color = "#81C147";
       }
+      console.log(res)
     } catch (error) {
       console.log(error)
       SetCheckNickMsg("* 사용 불가능 한 닉네임입니다.")
@@ -169,7 +171,7 @@ const Signup = () => {
 
     try {
       const email = email_ref.current.value
-      const res = await axios.get(`http://43.200.174.111:8080/user/email?email=${email}`,
+      const res = await axios.get(`http://43.200.174.111:8080/user/email/${email}`,
         {
           headers: {
             "Content-Type": "application/json"
@@ -179,6 +181,7 @@ const Signup = () => {
         SetCheckEmailMsg("* 사용 가능 한 이메일입니다.")
         email_err_ref.current.style.color = "#81C147";
       }
+      console.log(res)
     } catch (error) {
       console.log(error)
       SetCheckEmailMsg("* 사용 불가능 한 이메일 입니다.")
@@ -462,9 +465,9 @@ const Signup = () => {
             }>회원가입</SignUpBtn>
         </Button>
       </FormWrap>
-      <LoginTxt>
+      {/* <LoginTxt>
         이미 회원이신가요? <span onClick={() => navigate("/user/login")}>밀핏 계정으로 로그인하기</span>
-      </LoginTxt>
+      </LoginTxt> */}
     </SignUpWrap>
   )
 }
@@ -472,10 +475,11 @@ const Signup = () => {
 const SignUpWrap = styled.div`
   position: relative;
   width: 700px;
-  height: 960px;
+  height: 940px;
   border-radius: 30px;
   background-color: white;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+  margin-left: 260px;
   display: flex;
   flex-direction: column;
   justify-content: center;
