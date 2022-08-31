@@ -20,7 +20,7 @@ const SocialUserCheck = () => {
     };
 
     const getUser = async () => {
-      if(USER_CHECK) {
+      if(USER_CHECK === "true") {
         window.location.href = "http://localhost:3000/user/signupsns"
       } else {
         window.location.href = "http://localhost:3000/"

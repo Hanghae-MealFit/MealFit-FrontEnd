@@ -10,7 +10,7 @@ import { loadPostDB } from "../redux/modules/post";
 import { loadPost } from "../redux/modules/post";
 
 const PostView = () => {
-  const navigation = useNavigate();
+  const navigate = useNavigate();
   const { postId } = useParams();
   // console.log(postId);
 
@@ -65,20 +65,16 @@ const PostView = () => {
   const [modalOpen, setModalOpen] = React.useState(false);
 
   // 댓글 입력값 저장되는 곳 지정
-  const [comments, setComments] = React.useState([
-    {
-    content: "",
-    commentId: 31,
-    like: 0,
-    postId: 31,
-    userDto: {
-      nickname: "",
-      profileImage: null
-      }
-    }
-  ]);
+  const [comments, setComments] = React.useState("");
+  // const [feedComments, setFeedComments] = React.useState([]);
 
-  const onChange = event => setComments(event.target.value);
+  // const CommentPost = e => {
+  //   const copyFeedComments =
+  //   [...feedComments];
+  //   copyFeedComments.push(comments);
+  //   setFeedComments(copyFeedComments);
+  //   setComments("");
+  // };
 
   const onSubmit = event => {
       event.preventDefault();
@@ -108,16 +104,14 @@ const PostView = () => {
     // 댓글 작성하기
     const CommentWrite = async () => {
       const formData = new FormData()
-      formData.append("postId", postId)
-      formData.append("comment", comment_ref.current.value)
+      formData.append("content", comment_ref.current.value)
 
       try {
-        const response = await axios.post(`http://43.200.174.111:8080/post/${postId}/comment`, {
-          postId: postId,
-          comment: comment_ref.current.value
-        },
+        const response = await axios.post(`http://43.200.174.111:8080/post/${postId}/comment`,
+          comment_ref.current.value,
         {
           headers: {
+            "Content-Type": "application/json",
             Authorization: `Bearer ${Token.authorization}`,
             refresh_token: `Bearer ${Token.refresh_token}`
           }
@@ -151,7 +145,7 @@ const PostView = () => {
                             null
                         )
                     }
-                    <button onClick={() => { navigation(`/post/${postId}`) }}>
+                    <button onClick={() => { navigate(`/post/${postId}`) }}>
                         수정
                     </button>
                 </ModifyDelBtn>
@@ -160,7 +154,7 @@ const PostView = () => {
                   )
                 }
                 <PostInfo>
-                    <img src={contentData.userDto.profile} />
+                    <img src={contentData.userDto.profileImage} />
                     <span>{contentData.userDto.nickname}</span>
                     <Likecomment>좋아요 {contentData.like} ∙ 댓글 {contentData.commentNumber} ∙ 조회수 {contentData.view}</Likecomment>
                 </PostInfo>
@@ -174,6 +168,15 @@ const PostView = () => {
                         </Titletag>
                     </Titlebar>
                     <CommentView>
+                      {/* {feedComments.map((commentArr, i) => {
+                        return (
+                          <CommentInfo
+                          nickname={comments.userDto.nickname}
+                          comments={comments.comment}
+                          key={i}
+                          />
+                        )
+                      })} */}
                         <CommentInfo>
                         <img src={contentData.userDto.profileImage} />
                         <span style={{ fontWeight: "bold" }}>{contentData.userDto.nickname}</span>
@@ -183,8 +186,10 @@ const PostView = () => {
                     {/* <div>{comment.likeToggle : Boolean}</div> */}
                     <CommentBox>
                         <input ref={comment_ref} type="text" placeholder="댓글을 입력해주세요."
-                        // value={comments}
-                        // onChange={onChange}
+                        onChange={e => {
+                          setComments(e.target.value);
+                        }}
+                        value={comments}
                         />
                         <CommentBtn onClick={CommentWrite}>댓글 작성하기</CommentBtn>
                     </CommentBox>
