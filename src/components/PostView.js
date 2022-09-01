@@ -6,6 +6,8 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import { MemoizedSidebar } from "./Sidebar";
 import DelPostModal from "../elements/DelPostModal";
+import CommentList from "../elements/CommentList";
+
 import { loadPostDB } from "../redux/modules/post";
 import { loadPost } from "../redux/modules/post";
 
@@ -66,15 +68,15 @@ const PostView = () => {
 
   // 댓글 입력값 저장되는 곳 지정
   const [comments, setComments] = React.useState("");
-  // const [feedComments, setFeedComments] = React.useState([]);
+  const [feedComments, setFeedComments] = React.useState([]);
+  const [isValid, setIsValid] = React.useState(false);
 
-  // const CommentPost = e => {
-  //   const copyFeedComments =
-  //   [...feedComments];
-  //   copyFeedComments.push(comments);
-  //   setFeedComments(copyFeedComments);
-  //   setComments("");
-  // };
+  const CommentPost = e => {
+    const copyFeedComments = [...feedComments];
+    copyFeedComments.push(comments);
+    setFeedComments(copyFeedComments);
+    setComments("");
+  };
 
   const onSubmit = event => {
       event.preventDefault();
@@ -168,30 +170,37 @@ const PostView = () => {
                         </Titletag>
                     </Titlebar>
                     <CommentView>
-                      {/* {feedComments.map((commentArr, i) => {
+                      {feedComments.map((commentArr, i) => {
                         return (
-                          <CommentInfo
-                          nickname={comments.userDto.nickname}
-                          comments={comments.comment}
+                          <CommentList
+                          nickname={contentData.userDto.nickname}
+                          comments={commentArr}
                           key={i}
                           />
-                        )
-                      })} */}
-                        <CommentInfo>
-                        <img src={contentData.userDto.profileImage} />
-                        <span style={{ fontWeight: "bold" }}>{contentData.userDto.nickname}</span>
-                        <span>{comments.comment}</span>
-                        </CommentInfo>
+                        );
+                      })}
                     </CommentView>
                     {/* <div>{comment.likeToggle : Boolean}</div> */}
                     <CommentBox>
-                        <input ref={comment_ref} type="text" placeholder="댓글을 입력해주세요."
+                        <input type="text"
+                        ref={comment_ref}
+                        placeholder="댓글 달기..."
                         onChange={e => {
                           setComments(e.target.value);
                         }}
+                        onKeyUp = { e => {
+                          e.target.value.length > 0
+                          ? setIsValid(true)
+                          : setIsValid(false);
+                        }}
                         value={comments}
                         />
-                        <CommentBtn onClick={CommentWrite}>댓글 작성하기</CommentBtn>
+                        <CommentBtn
+                        onClick={CommentWrite}
+                        disabled = {isValid ? false : true }
+                        >
+                        댓글 작성하기
+                        </CommentBtn>
                     </CommentBox>
                 </CommentContainer>
             </Container>
