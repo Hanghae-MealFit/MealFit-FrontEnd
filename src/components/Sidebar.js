@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components";
+import styled, {css} from "styled-components";
 import axios from "axios";
 // FontAwesom Icon 사용
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -20,6 +20,10 @@ const Sidebar = () => {
   const sessionStorage = window.sessionStorage;
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const board_ref = React.useRef(null);
+  const record_ref = React.useRef(null);
+  const guide_ref = React.useRef(null);
 
   const Token = {
     authorization: sessionStorage.getItem("accessToken"),
@@ -45,7 +49,7 @@ const Sidebar = () => {
 
   React.useEffect(() => {
     LoginCheck()
-  }, []);
+  }, [USER_CHECK]);
 
   React.useEffect(() => {
     if(isLogin) {
@@ -53,31 +57,28 @@ const Sidebar = () => {
     }
   }, [isLogin])
 
-  const menus = [
-    { 
-      icon: <FontAwesomeIcon icon={faClipboardList} />,
-      name: "식단게시판",
-      path: "/post/all"
-    },
-    // 임시로 만든 url
-    { 
-      icon: <FontAwesomeIcon icon={faBullhorn} />,
-      name: "식단가이드",
-      path: "/" 
-    },
-    { 
-      icon: <FontAwesomeIcon icon={faPenToSquare} />,
-      name: "기록하기",
-      path: "/record" 
+  const MenuClick = (e) => {
+    if(!isLogin) {
+      sessionStorage.clear()
     }
-  ];
+    console.log("OnClick", e.target.innerText)
+    if(e.target.innerText === "식단게시판") {
+      navigate("/post/all")
+    } else if (e.target.innerText === "기록하기") {
+      navigate("/record")
+    } else if (e.target.innerText === "식단가이드") {
+      navigate("/")
+    }
+  }
+
+  console.log(USER_CHECK.includes("post"))
 
   const onClickLogin = () => {
     sessionStorage.clear()
     navigate("/user/login");
   }
 
-  const temp_img = "https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png"
+  const temp_img = "/logo/profile.png"
 
   const onhandleLogOut = async (e) => {
     e.preventDefault()
@@ -132,16 +133,18 @@ const Sidebar = () => {
             )
         }
         <Menu>
-          {menus.map((menu, index) => {
-            return (
-              <Link style={{ color: "white", textDecoration: "none" }}
-                to={menu.path} key={index}>
-                <SidebarItem
-                  menu={menu} isLogin={isLogin}
-                />
-              </Link>
-            );
-          })}
+          <MenuWrap className="sidebar-item" onClick={MenuClick} ref={board_ref} checkMenu={USER_CHECK.includes("post") ? true : false}>
+            <span><FontAwesomeIcon icon={faClipboardList} /></span>
+            <p>식단게시판</p>
+          </MenuWrap>
+          <MenuWrap className="sidebar-item" onClick={MenuClick} ref={record_ref} checkMenu={USER_CHECK.includes("record") ? true : false}>
+            <span><FontAwesomeIcon icon={faPenToSquare} /></span>
+            <p>기록하기</p>
+          </MenuWrap>
+          {/* <MenuWrap className="sidebar-item" onClick={MenuClick} ref={guide_ref} checkMenu={USER_CHECK.includes("guide") ? true : false}>
+            <span><FontAwesomeIcon icon={faBullhorn} /></span>
+            <p>식단가이드</p>
+          </MenuWrap> */}
         </Menu>
         {
           !isLogin ?
@@ -254,6 +257,31 @@ const Menu = styled.div`
     font-size: 16px;
     margin-top: 40px;
 `;
+
+const MenuWrap = styled.div`
+  width: 260px;
+  height: 50px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 6px 0;
+  padding-left: 70px;
+  box-sizing: border-box;
+  cursor: pointer;
+  ${({checkMenu}) => {
+    return css`
+      background-color: ${checkMenu ? "#F6EAE0" : "transparent"};
+      color: ${checkMenu ? "#333" : "white" };
+    `
+  }};
+  span {
+    margin: 0;
+    margin-right: 14px;
+  }
+  p {
+    margin: 0;
+  }
+`
 
 const Button = styled.div`
     width: 100%;

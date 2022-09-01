@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { MemoizedSidebar } from "./Sidebar";
 import PicSelect from '../elements/PicSelect';
 
-import { loadMainUserDB } from '../redux/modules/userinfo'
 import { loadUserWeightDB } from '../redux/modules/userweight'
 
 const MyPage = () => {
@@ -37,6 +36,10 @@ const MyPage = () => {
       setMyPageIn(false)
     }
   }, [myPageIn])
+
+  useEffect(() => {
+    dispatch(loadUserWeightDB())
+  }, [])
 
   return (
     <Wrap>

@@ -7,9 +7,10 @@ import { useNavigate } from "react-router-dom";
 
 import Cards from "../elements/Cards";
 import Circle from "../elements/Circle";
-import Dimmed from "../elements/DimmedLayer";
+import DimmedLayer from "../elements/DimmedLayer";
 import Rechart from "../elements/Rechart";
 
+import { loadMainUserDB } from "../redux/modules/userinfo";
 import { loadUserWeightDB } from '../redux/modules/userweight';
 import { loadPostDB } from "../redux/modules/post";
 
@@ -123,6 +124,7 @@ const Main = () => {
   }, [weightCheck])
 
   useEffect(() => {
+    dispatch(loadMainUserDB())
     dispatch(loadPostDB())
     LoginCheck()
   }, [])
@@ -133,7 +135,7 @@ const Main = () => {
         <div style={{ display: "flex", width: "100%", height: "55%", backgroundColor: "#fff", position: "relative" }}>
           {
             !isLogin ? (
-              <Dimmed />
+              <DimmedLayer />
             ) : (
               null
             )
@@ -277,8 +279,8 @@ const PlusBtn = styled.div`
 
 const WeightModal = styled.div`
   position: absolute;
-  left: -90px;
-  width: 80px;
+  left: -100px;
+  width: 90px;
   height: 30px;
   border-radius: 4px;
   font-size: 12px;
@@ -405,7 +407,7 @@ const WeightWrap = styled.div`
 
 const HoverMsg = styled.p`
   position: absolute;
-  top: 35px;
+  top: 90px;
   left: 0;
   display: flex;
   flex-direction: column;
