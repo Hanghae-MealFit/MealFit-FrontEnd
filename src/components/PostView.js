@@ -76,7 +76,17 @@ const PostView = (props) => {
   const [modalOpen, setModalOpen] = React.useState(false);
 
   // 댓글 입력값 저장되는 곳 지정
-  const [comments, setComments] = React.useState("");
+  const [comments, setComments] = React.useState([{
+    comment: "",
+    commentId: 2,
+    like: 0,
+    postId: 7,
+    userDto: {
+      nickname: "",
+      profileImage: "null"
+    }
+  },
+]);
   const [feedComments, setFeedComments] = React.useState([]);
   const [isValid, setIsValid] = React.useState(false);
 
@@ -172,30 +182,27 @@ const PostView = (props) => {
           )
         }
         <PostInfo>
-          <img src={contentData.userDto.profileImage} />
-          <span>{contentData.userDto.nickname}</span>
+          <img src={contentData.profileImage} />
+          <span>{contentData.nickname}</span>
           <Likecomment>
             <div>
-            <img
-              src={
-                liked
+            <img src={ 
+              liked
                   ? "/images/HeartImg.png"
                   : "/images/EmptyHeartImg.png"
               }
-              alt="like"
-            />&nbsp;
+              alt="like" />
+              {/* &nbsp; */}
             {contentData.like}
             </div>
             <div>
-            <img
-              src={"/images/CommentImg.png"}
-            />&nbsp;
+            <img src={"/images/CommentImg.png"} />
+              {/* &nbsp; */}
             {contentData.commentNumber}
             </div>
             <div>
-            <img
-              src={"/images/ClickImg.png"}
-            />&nbsp;
+            <img src={"/images/ClickImg.png"} />
+            {/* &nbsp; */}
             {contentData.view}
             </div>
           </Likecomment>
@@ -213,7 +220,7 @@ const PostView = (props) => {
             {feedComments.map((commentArr, i) => {
               return (
                 <CommentList
-                  nickname={contentData.userDto.nickname}
+                  nickname={comments.userDto.nickname}
                   comments={commentArr}
                   key={i}
                 />
