@@ -2,11 +2,11 @@ import React from 'react'
 import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom'
 
-const Dimmed = () => {
+const DimmedLayer = () => {
   const navigate = useNavigate();
   return (
     <>
-      <DimmedLayer></DimmedLayer>
+      <Dimmed></Dimmed>
       <LoginWrap>
         <p>로그인 후 이용해주세요</p>
         <Button onClick={() => {navigate("/user/login")}}>로그인</Button>
@@ -16,7 +16,7 @@ const Dimmed = () => {
 }
 
 
-const DimmedLayer = styled.div`
+const Dimmed = styled.div`
   position: absolute;
   top: 0;
   left: 0;
@@ -28,8 +28,9 @@ const DimmedLayer = styled.div`
 
 const LoginWrap = styled.div`
   position: absolute;
-  top: calc(50% - 200px);
-  left: calc(50% - 200px);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   width: 400px;
   height: 400px;
   background-color: transparent;
@@ -58,4 +59,4 @@ const Button = styled.div`
   cursor: pointer;
 `
 
-export default Dimmed
+export default DimmedLayer

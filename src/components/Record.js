@@ -4,14 +4,14 @@ import axios from 'axios';
 
 import { MemoizedSidebar } from "./Sidebar";
 import RecordModal from "../elements/RecordModal";
+import DimmedLayer from "../elements/DimmedLayer";
 
 import Calendar from 'react-calendar';
 import moment from "moment";
 import 'moment/locale/ko';
 
 const Record = () => {
-  const [ isLogin, setIsLogin ] = React.useState(false);
-
+  const [isLogin, setIsLogin] = React.useState(false)
   const [value, onChange] = React.useState(new Date());
   const [recordModalOpen, setRecordModalOpen] = React.useState(false);
   // const [open, setOpen] = React.useState(false);
@@ -19,8 +19,12 @@ const Record = () => {
   const [lunchOpen, setLunchOpen] = React.useState(false);
   const [dinnerOpen, setDinnerOpen] = React.useState(false);
 
+  const [ breakfastEatItem, setBreakfastEatItem] = React.useState([])
+  const [ lunchEatItem, setLunchEatItem] = React.useState([])
+  const [ dinnerEatItem, setDinnerEatItem] = React.useState([])
+
   const [selectTime, setSelectTime] = React.useState("");
-  const [breakfastEatItem, setBreakfastEatItem] = React.useState("아침 식단을 입력하세요.");
+  const [todayEatItem, setTodayEatItem] = React.useState("");
 
   const [selectEatItem, setSelectEatItem] = React.useState("");
   const [selectEatItemCheck, setSelectEatItemCheck] = React.useState(false);
@@ -59,7 +63,6 @@ const Record = () => {
     setEditEatItem(true)
     setRecordModalOpen(true)
   }
-  console.log(editEatItem)
 
   // status
   // 아침: BREAKFAST
@@ -72,8 +75,10 @@ const Record = () => {
   };
 
   const SelectDay = moment(value).format("YYYY-MM-DD")
+  console.log(SelectDay)
+
   const getFood = async () => {
-    if(isLogin) {
+    if (Token.authorization !== null && Token.refresh_token !== null) {
       try {
         const res = await axios.get(`http://43.200.174.111:8080/diet?date=${SelectDay}`,
           {
@@ -83,13 +88,27 @@ const Record = () => {
             },
           })
         console.log(res.data.dietResponseDto)
-        setBreakfastEatItem(res.data.dietResponseDto)
+        const data = res.data.dietResponseDto;
+        console.log(data)
+        setBreakfastEatItem(data.filter((value) => value.dietStatus === "BREAKFAST"))
+        setLunchEatItem(data.filter((value) => value.dietStatus === "LUNCH"))
+        setDinnerEatItem(data.filter((value) => value.dietStatus === "DINNER"))
       } catch (error) {
         console.log(error)
       }
     }
   }
   console.log(breakfastEatItem)
+  console.log(lunchEatItem)
+  console.log(dinnerEatItem)
+
+  React.useEffect(() => {
+    LoginCheck()
+}, [])
+
+  React.useEffect(() => {
+    getFood()
+  }, [SelectDay])
 
   console.log("why",selectEatItem)
 
@@ -108,18 +127,7 @@ const Record = () => {
       console.log(selectEatItem.dietId)
     }
   }
-
-  React.useEffect(() => {
-    LoginCheck()
-  }, [isLogin])
-
-  React.useEffect(() => {
-    getFood()
-  }, [SelectDay])
-
-  React.useEffect(() => {
-  }, [selectEatItem])
-
+  
   return (
     <Wrap>
       <MemoizedSidebar />
@@ -129,7 +137,7 @@ const Record = () => {
             null
           ) :
           (
-            <NotLogin>LoginPlease</NotLogin>
+            <DimmedLayer />
           )
         }
         <CalendarContainer style={{ filter: !isLogin ? "blur(6px)" : "none" }}>
@@ -170,25 +178,25 @@ const Record = () => {
                         </IconSVG>
                       </Select>
                       <SelectContent>
-                          {
-                            breakfastEatItem.length === 0 ? (
-                              <div>아침 식단을 입력하세요.</div>
-                            ) :
-                            (
-                              breakfastEatItem.map((v,idx) => (
-                                <>
-                                  <div style={{
-                                    cursor: "pointer",
-                                    backgroundColor: selectEatItemCheck && v.foodId === selectEatItem.foodId ? "gray" : "transparent"
-                                  }} onClick={() => {SelectItem(v)}} key={idx}>
-                                    {v.foodName}
-                                  </div>
-                                  <span onClick={() => EditItem(v)} key={"Edit" + idx}>수정</span>
-                                  <span onClick={() => {DeleteItem(v.dietId)}} key={"Delete" + idx}>삭제</span>
-                                </>
-                              ))
-                            )
-                          }
+                        {
+                          breakfastEatItem.length === 0 ? (
+                            <div>아침 식단을 입력하세요.</div>
+                          ) :
+                          (
+                            breakfastEatItem.map((v,idx) => (
+                              <div key={"item" + idx}>
+                                <div style={{
+                                  cursor: "pointer",
+                                  backgroundColor: selectEatItemCheck && v.foodId === selectEatItem.foodId ? "gray" : "transparent"
+                                }} onClick={() => {SelectItem(v)}}>
+                                  {v.foodName}
+                                </div>
+                                <span onClick={() => EditItem(v)}>수정</span>
+                                <span onClick={() => {DeleteItem(v.dietId)}}>삭제</span>
+                              </div>
+                            ))
+                          )
+                        }
                         <Button onClick={() => {
                           setRecordModalOpen(true)
                           setSelectTime(morning_ref.current.innerHTML)
@@ -200,8 +208,6 @@ const Record = () => {
                             setRecordModalOpen={setRecordModalOpen}
                             selectTime={selectTime}
                             SelectDay={SelectDay}
-                            setBreakfastEatItem={setBreakfastEatItem}
-                            setEditEatItem={setEditEatItem}
                             selectEatItem={selectEatItem}
                             editEatItem={editEatItem}
                             />
@@ -259,7 +265,25 @@ const Record = () => {
                         </IconSVG>
                       </Select>
                       <SelectContent>
-                        <div>점심 뭐 먹었니?</div>
+                        {
+                          lunchEatItem.length === 0 ? (
+                            <div>점심 식단을 입력하세요.</div>
+                          ) :
+                          (
+                            lunchEatItem.map((v,idx) => (
+                              <div key={"item" + idx}>
+                                <div style={{
+                                  cursor: "pointer",
+                                  backgroundColor: selectEatItemCheck && v.foodId === selectEatItem.foodId ? "gray" : "transparent"
+                                }} onClick={() => {SelectItem(v)}}>
+                                  {v.foodName}
+                                </div>
+                                <span onClick={() => EditItem(v)}>수정</span>
+                                <span onClick={() => {DeleteItem(v.dietId)}}>삭제</span>
+                              </div>
+                            ))
+                          )
+                        }
                         <Button onClick={() => {
                           setRecordModalOpen(true)
                           setSelectTime(lunch_ref.current.innerHTML)
@@ -267,7 +291,13 @@ const Record = () => {
                         >추가하기</Button>
                         {
                           recordModalOpen === true ? (
-                            <RecordModal setRecordModalOpen={setRecordModalOpen} selectTime={selectTime} SelectDay={SelectDay} />
+                            <RecordModal
+                            setRecordModalOpen={setRecordModalOpen}
+                            selectTime={selectTime}
+                            SelectDay={SelectDay}
+                            selectEatItem={selectEatItem}
+                            editEatItem={editEatItem}
+                            />
                           ) : (
                             null
                           )
@@ -322,7 +352,25 @@ const Record = () => {
                         </IconSVG>
                       </Select>
                       <SelectContent>
-                        <div>저녁 뭐 먹었니?</div>
+                        {
+                          dinnerEatItem.length === 0 ? (
+                            <div>저녁 식단을 입력하세요.</div>
+                          ) :
+                          (
+                            dinnerEatItem.map((v,idx) => (
+                              <div key={"item" + idx}>
+                                <div style={{
+                                  cursor: "pointer",
+                                  backgroundColor: selectEatItemCheck && v.foodId === selectEatItem.foodId ? "gray" : "transparent"
+                                }} onClick={() => {SelectItem(v)}}>
+                                  {v.foodName}
+                                </div>
+                                <span onClick={() => EditItem(v)}>수정</span>
+                                <span onClick={() => {DeleteItem(v.dietId)}}>삭제</span>
+                              </div>
+                            ))
+                          )
+                        }
                         <Button onClick={() => {
                           setRecordModalOpen(true)
                           setSelectTime(dinner_ref.current.innerHTML)
@@ -330,7 +378,13 @@ const Record = () => {
                         >추가하기</Button>
                         {
                           recordModalOpen === true ? (
-                            <RecordModal setRecordModalOpen={setRecordModalOpen} selectTime={selectTime} SelectDay={SelectDay} />
+                            <RecordModal
+                            setRecordModalOpen={setRecordModalOpen}
+                            selectTime={selectTime}
+                            SelectDay={SelectDay}
+                            selectEatItem={selectEatItem}
+                            editEatItem={editEatItem}
+                            />
                           ) : (
                             null
                           )
@@ -394,12 +448,13 @@ const Container = styled.div`
   font-size: 20px;
   text-align: center;
   font-weight: bold;
-  p {
+  overflow: hidden;
+  /* p {
     position: relative;
     bottom: -20px;
     font-size: 16px;
     color: #D9D9D9;
-  }
+  } */
 `;
 
 const NotLogin = styled.div`

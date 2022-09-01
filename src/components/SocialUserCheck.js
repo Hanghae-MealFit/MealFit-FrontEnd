@@ -10,9 +10,6 @@ const SocialUserCheck = () => {
     const ACCESS_TOKEN = code.href.split('=')[1].split('&')[0];
     const REFRESH_TOKEN = code.href.split('=')[2].split('&')[0];
     const USER_CHECK = code.href.split('=')[3].split('&')[0];
-    console.log(ACCESS_TOKEN)
-    console.log(REFRESH_TOKEN)
-    console.log(USER_CHECK)
 
     const auth = {
       authorization: sessionStorage.setItem("accessToken", ACCESS_TOKEN),

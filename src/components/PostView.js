@@ -117,9 +117,15 @@ const PostView = (props) => {
     const formData = new FormData()
     formData.append("content", comment_ref.current.value)
 
-    try {
-      const response = await axios.post(`http://43.200.174.111:8080/post/${postId}/comment`,
-        comment_ref.current.value,
+    // 댓글 작성하기
+    const CommentWrite = async () => {
+      const formData = new FormData()
+      formData.append("comment", comment_ref.current.value)
+
+      try {
+        const response = await axios.post(`http://43.200.174.111:8080/post/${postId}/comment`, {
+          comment: comment_ref.current.value
+        },
         {
           headers: {
             "Content-Type": "application/json",
@@ -246,6 +252,7 @@ const PostView = (props) => {
       </Container>
     </Wrap>
   )
+}
 }
 
 const Wrap = styled.div`

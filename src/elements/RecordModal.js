@@ -10,10 +10,8 @@ const RecordModal = (
     setRecordModalOpen,
     selectTime,
     SelectDay,
-    setBreakfastEatItem,
     editEatItem,
-    setEditEatItem,
-    selectEatItem 
+    selectEatItem
   }) => {
 
   const handleClose = () => {
@@ -119,8 +117,7 @@ const RecordModal = (
     try {
       const res = await axios.put(`http://43.200.174.111:8080/diet`,{
           dietId: selectEatItem.dietId,
-          foodId: selectEatItem.foodId,
-          changeTo: selectMenu.foodId,
+          foodId: selectMenu.foodId,
           foodWeight: eating_weight_ref.current.value
         },
         {
@@ -133,8 +130,7 @@ const RecordModal = (
         console.log(
           "dd", selectEatItem,
           "dietId", selectEatItem.dietId,
-          "foodId", selectEatItem.foodId,
-          "changeTo", selectMenu.foodId,
+          "foodId", selectMenu.foodId,
           "foodWeight", eating_weight_ref.current.value)
         console.log(selectMenu.foodId, eating_weight_ref.current.value, selectEatItem.dietId, selectMenu.foodId)
     } catch (error) {
