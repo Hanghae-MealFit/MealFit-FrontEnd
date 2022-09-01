@@ -30,20 +30,8 @@ const MyPageChange = () => {
 
   const navigate = useNavigate();
 
-  let code = new URL(window.location.href);
-  const MYPAGE_CHANGE_CHECK = code.href
   const [ myPageChangeIn, setMyPageChangeIn ] = React.useState(false)
   const [ files, setFiles ] = React.useState(null);
-  const data = useSelector((state) => state)
-  console.log(data)
-
-  // useEffect(() => {
-  //   if(MYPAGE_CHANGE_CHECK === "http://localhost:3000/user/info/edit") {
-  //     setMyPageChangeIn(true)
-  //   } else {
-  //     myPageChangeIn(false)
-  //   }
-  // }, [])
 
   // 현재 체중 목표 체중 값
   const [ curWeight, setCurWeight ] = React.useState();

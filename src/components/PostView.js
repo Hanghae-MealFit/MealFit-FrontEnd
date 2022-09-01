@@ -108,12 +108,10 @@ const PostView = () => {
     // 댓글 작성하기
     const CommentWrite = async () => {
       const formData = new FormData()
-      formData.append("postId", postId)
       formData.append("comment", comment_ref.current.value)
 
       try {
         const response = await axios.post(`http://43.200.174.111:8080/post/${postId}/comment`, {
-          postId: postId,
           comment: comment_ref.current.value
         },
         {
