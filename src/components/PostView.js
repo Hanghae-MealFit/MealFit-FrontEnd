@@ -6,11 +6,13 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import { MemoizedSidebar } from "./Sidebar";
 import DelPostModal from "../elements/DelPostModal";
+import CommentList from "../elements/CommentList";
+
 import { loadPostDB } from "../redux/modules/post";
 import { loadPost } from "../redux/modules/post";
 
-const PostView = () => {
-  const navigation = useNavigate();
+const PostView = (props) => {
+  const navigate = useNavigate();
   const { postId } = useParams();
   // console.log(postId);
 
@@ -29,7 +31,15 @@ const PostView = () => {
     view: 1
   })
 
-  const [ isLogin, setIsLogin ] = React.useState(false);
+  const [isLogin, setIsLogin] = React.useState(false);
+
+  // 좋아요 버튼
+  const [liked, setLiked] = React.useState(false);
+
+  // 댓글 좋아요
+  const [commentLiked, setCommentLiked] = React.useState(false);
+
+  // 댓글 입력
   const comment_ref = React.useRef(null);
 
   const Token = {
@@ -37,7 +47,8 @@ const PostView = () => {
     refresh_token: sessionStorage.getItem("refreshToken")
   }
 
-  const isLoginCheck = () => {  
+  // 작성자 확인 - ?
+  const isLoginCheck = () => {
     // console.log(Token)
     if (Token.authorization !== null && Token.refresh_token !== null) {
       setIsLogin(true)
@@ -45,65 +56,66 @@ const PostView = () => {
     // if (userDto.nickname === response.data.userDto.nickname)
   }
 
-    // 식단 게시글 상세조회
-    const PostViewAX = async () => {
-        try {
-          const response = await axios.get(`http://43.200.174.111:8080/post/${postId}`, {
-            headers: {
-                Authorization: `Bearer ${Token.authorization}`,
-                refresh_token: `Bearer ${Token.refresh_token}`
-            }
-          })
-          console.log("게시글 불러오기", response)
-          setContentData(response.data)
-        } catch(error) {
-          console.log(error)
+  // 식단 게시글 상세조회
+  const PostViewAX = async () => {
+    try {
+      const response = await axios.get(`http://43.200.174.111:8080/post/${postId}`, {
+        headers: {
+          Authorization: `Bearer ${Token.authorization}`,
+          refresh_token: `Bearer ${Token.refresh_token}`
         }
-    };
+      })
+      console.log("게시글 불러오기", response)
+      setContentData(response.data)
+    } catch (error) {
+      console.log(error)
+    }
+  };
 
   // 삭제 모달창
   const [modalOpen, setModalOpen] = React.useState(false);
 
   // 댓글 입력값 저장되는 곳 지정
-  const [comments, setComments] = React.useState([
-    {
-    content: "",
-    commentId: 31,
-    like: 0,
-    postId: 31,
-    userDto: {
-      nickname: "",
-      profileImage: null
-      }
-    }
-  ]);
+  const [comments, setComments] = React.useState("");
+  const [feedComments, setFeedComments] = React.useState([]);
+  const [isValid, setIsValid] = React.useState(false);
 
-  const onChange = event => setComments(event.target.value);
-
-  const onSubmit = event => {
-      event.preventDefault();
-      if (comments === '') {
-          return;
-      }
-      setComments(commentValueList => [comments, ...commentValueList]);
-      setComments('');
+  const CommentPost = e => {
+    const copyFeedComments = [...feedComments];
+    copyFeedComments.push(comments);
+    setFeedComments(copyFeedComments);
+    setComments("");
   };
 
-  
-    // 댓글 불러오기
-    const CommentLoad = async () => {
-      try {
-        const response = await axios.get(`http://43.200.174.111:8080/post/${postId}/comment`, {
-          headers: {
-            Authorization: `Bearer ${Token.authorization}`,
-            refresh_token: `Bearer ${Token.refresh_token}`
-          }
-        })
-        console.log("댓글 불러오기", response.data)
-      } catch(error) {
-        console.log("댓글 불러오기 실패", error)
-      }
+  const onSubmit = event => {
+    event.preventDefault();
+    if (comments === '') {
+      return;
     }
+    setComments(commentValueList => [comments, ...commentValueList]);
+    setComments('');
+  };
+
+
+  // 댓글 불러오기
+  const CommentLoad = async () => {
+    try {
+      const response = await axios.get(`http://43.200.174.111:8080/post/${postId}/comment`, {
+        headers: {
+          Authorization: `Bearer ${Token.authorization}`,
+          refresh_token: `Bearer ${Token.refresh_token}`
+        }
+      })
+      console.log("댓글 불러오기", response.data)
+    } catch (error) {
+      console.log("댓글 불러오기 실패", error)
+    }
+  }
+
+  // 댓글 작성하기
+  const CommentWrite = async () => {
+    const formData = new FormData()
+    formData.append("content", comment_ref.current.value)
 
     // 댓글 작성하기
     const CommentWrite = async () => {
@@ -116,80 +128,131 @@ const PostView = () => {
         },
         {
           headers: {
+            "Content-Type": "application/json",
             Authorization: `Bearer ${Token.authorization}`,
             refresh_token: `Bearer ${Token.refresh_token}`
           }
         })
-        console.log("댓글 작성하기", response)
-      } catch(error) {
-        console.log("댓글 작성 실패", error)
-      }
+      console.log("댓글 작성하기", response)
+    } catch (error) {
+      console.log("댓글 작성 실패", error)
     }
+  }
 
-    React.useEffect(() => {
-      PostViewAX()
-      CommentLoad()
-    }, [])
+  React.useEffect(() => {
+    const fetchData = async () => {
+      // 현 포스트 가져오기
+      await PostViewAX();
+      // 댓글들 가져오기
+      await CommentLoad();
+      // state 값 다 셋팅 완료
+      // setStateLoaded(true);
+    };
+    fetchData();
+  }, [])
 
-    return (
-        <Wrap>
-            <MemoizedSidebar />
-            <Container>
-                <ImgWrap src={contentData.image} />
-                {
-                  !isLogin === true ? (
-                    <ModifyDelBtn>
-                    <button style={{ margin: "0px 10px 0px 0px" }} onClick={() => { setModalOpen(true) }}>
-                        삭제
-                    </button>
-                    {
-                        modalOpen === true ? (
-                            <DelPostModal setModalOpen={setModalOpen} postId={postId} />
-                        ) : (
-                            null
-                        )
-                    }
-                    <button onClick={() => { navigation(`/post/${postId}`) }}>
-                        수정
-                    </button>
-                </ModifyDelBtn>
-                  ) : (
-                    null
-                  )
-                }
-                <PostInfo>
-                    <img src={contentData.userDto.profile} />
-                    <span>{contentData.userDto.nickname}</span>
-                    <Likecomment>좋아요 {contentData.like} ∙ 댓글 {contentData.commentNumber} ∙ 조회수 {contentData.view}</Likecomment>
-                </PostInfo>
-                <Line />
-                <Contents>{contentData.content}</Contents>
-                {/* <Line /> */}
-                <CommentContainer onSubmit={onSubmit}>
-                    <Titlebar>
-                        <Titletag>
-                            <p>댓글</p>
-                        </Titletag>
-                    </Titlebar>
-                    <CommentView>
-                        <CommentInfo>
-                        <img src={contentData.userDto.profileImage} />
-                        <span style={{ fontWeight: "bold" }}>{contentData.userDto.nickname}</span>
-                        <span>{comments.comment}</span>
-                        </CommentInfo>
-                    </CommentView>
-                    {/* <div>{comment.likeToggle : Boolean}</div> */}
-                    <CommentBox>
-                        <input ref={comment_ref} type="text" placeholder="댓글을 입력해주세요."
-                        // value={comments}
-                        // onChange={onChange}
-                        />
-                        <CommentBtn onClick={CommentWrite}>댓글 작성하기</CommentBtn>
-                    </CommentBox>
-                </CommentContainer>
-            </Container>
-        </Wrap>
-    )
+  return (
+    <Wrap>
+      <MemoizedSidebar />
+      <Container>
+        <ImgWrap src={contentData.image} />
+        {
+          !isLogin === true ? (
+            <ModifyDelBtn>
+              <button style={{ margin: "0px 10px 0px 0px" }} onClick={() => { setModalOpen(true) }}>
+                삭제
+              </button>
+              {
+                modalOpen === true ? (
+                  <DelPostModal setModalOpen={setModalOpen} postId={postId} />
+                ) : (
+                  null
+                )
+              }
+              <button onClick={() => { navigate(`/post/${postId}`) }}>
+                수정
+              </button>
+            </ModifyDelBtn>
+          ) : (
+            null
+          )
+        }
+        <PostInfo>
+          <img src={contentData.userDto.profileImage} />
+          <span>{contentData.userDto.nickname}</span>
+          <Likecomment>
+            <div>
+            <img
+              src={
+                liked
+                  ? "/images/HeartImg.png"
+                  : "/images/EmptyHeartImg.png"
+              }
+              alt="like"
+            />&nbsp;
+            {contentData.like}
+            </div>
+            <div>
+            <img
+              src={"/images/CommentImg.png"}
+            />&nbsp;
+            {contentData.commentNumber}
+            </div>
+            <div>
+            <img
+              src={"/images/ClickImg.png"}
+            />&nbsp;
+            {contentData.view}
+            </div>
+          </Likecomment>
+        </PostInfo>
+        <Line />
+        <Contents>{contentData.content}</Contents>
+        {/* <Line /> */}
+        <CommentContainer onSubmit={onSubmit}>
+          <Titlebar>
+            <Titletag>
+              <p>댓글</p>
+            </Titletag>
+          </Titlebar>
+          <CommentView>
+            {feedComments.map((commentArr, i) => {
+              return (
+                <CommentList
+                  nickname={contentData.userDto.nickname}
+                  comments={commentArr}
+                  key={i}
+                />
+              );
+            })}
+          </CommentView>
+          {/* <div>{comment.likeToggle : Boolean}</div> */}
+          <CommentBox>
+            <input type="text"
+              ref={comment_ref}
+              placeholder="댓글 달기..."
+              onChange={e => {
+                setComments(e.target.value);
+              }}
+              onKeyUp={e => {
+                e.target.value.length > 0
+                  ? setIsValid(true)
+                  : setIsValid(false);
+              }}
+              value={comments}
+            />
+            <CommentBtn
+              onClick={CommentWrite}
+              disabled={isValid ? false : true}
+            >
+              댓글 작성하기
+            </CommentBtn>
+          </CommentBox>
+        </CommentContainer>
+      </Container>
+    </Wrap>
+  )
+}
 }
 
 const Wrap = styled.div`
@@ -236,7 +299,7 @@ const PostInfo = styled.div`
     align-items: center;
     margin : 10px auto;
     img {
-        width: 105px;
+        width: 50px;
         height: 50px;
         border-radius: 50px;
         background-color: gray;
@@ -251,16 +314,28 @@ const PostInfo = styled.div`
 
 const Likecomment = styled.div`
     // background-color: red;
-    width: 90%;
+    width: 25%;
     height: 100%;
     display: flex;
-    justify-content: right;
+    justify-content: space-between;
     align-items: center;
     font-size: 14px;
     color: #bbb;
+    img {
+      width: 22px;
+      height: 22px;
+      background-color: #fff;
+      border-radius: 0px;
+    }
+    div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    }
 `;
 
 const Contents = styled.div`
+    // background-color: red;
     position: relative;
     width: 90%;
     height: 20%;
@@ -303,7 +378,7 @@ const ModifyDelBtn = styled.div`
 const CommentContainer = styled.div`
     // background-color: red;
     width: 100%;
-    height: 30%;
+    height: 20%;
     display: flex;
     flex-direction: column;
     // justify-content: center;
@@ -314,7 +389,7 @@ const CommentContainer = styled.div`
 const CommentView = styled.div`
     // background-color: yellow;
     width: 90%;
-    height: 30%;
+    height: 15%;
     display: flex;
     // justify-content: center;
     align-items: center;
