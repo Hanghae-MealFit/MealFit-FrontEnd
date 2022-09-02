@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { MemoizedSidebar } from "./Sidebar";
 import PostImgSelect from '../elements/PostImgSelect';
+import Header from "../elements/Header";
 
 const PostUp = () => {
   const navigate = useNavigate();
@@ -100,6 +101,7 @@ const PostUp = () => {
     return (
       <Wrap>
         <MemoizedSidebar />
+        <Header />
         <Container>
           <PostImgSelect files={ImageFile} setFiles={setImageFile} />
           <Textarea ref={content_ref} placeholder='오늘 식단을 입력해주세요.' />
@@ -120,6 +122,7 @@ const Wrap = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-top: 180px;
   `;
 
 const Container = styled.div`

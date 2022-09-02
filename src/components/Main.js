@@ -245,7 +245,8 @@ const Titlebar = styled.div`
   justify-content: center;
   align-items: center;
   border-radius: 0px 0px 15px 0px;
-  background-color: #ccc;
+  background-color: #ffc81e;
+  color: #333;
   p {
     font-size: 16px;
     font-weight: bold;
@@ -267,12 +268,13 @@ const PlusBtn = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #333;
-  font-size: 18px;
+  color: #FE7770;
+  font-size: 20px;
   box-sizing: border-box;
   &:hover {
     background-color: #FFB0AC;
     color: #fff;
+    border: none;
     cursor: pointer;
   }
 `
@@ -343,7 +345,6 @@ const Item2 = styled.div`
     justify-content: center;
     align-items: center;
     border-radius: 8px;
-    overflow: hidden;
     background-color: #F6EAE0;
  `;
 
@@ -495,19 +496,15 @@ const Item4 = styled.div`
 
 const CardList = styled.div`
   width: 100%;
-  height: 88%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: space-evenly;
-// flex-basis: 33.3%;
-// flex-wrap : wrap;
-// border: 5px solid red;
-// background-color: blue;
 `;
 
 const CardsBox = styled.div`
-  width: 320px;
-  height: 80%;
+  width: 300px;
+  height: 75%;
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
