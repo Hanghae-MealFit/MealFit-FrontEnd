@@ -1,121 +1,129 @@
 import React from "react";
 import styled from "styled-components";
 
-import { useDispatch } from "react-redux";
-import { useNavigate } from 'react-router-dom'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faHeart, faEye } from '@fortawesome/free-solid-svg-icons'
 
 const CardsAll = ({post}) => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
   console.log(post)
 
-  const [dataTest, setdataTest] = React.useState({
-    postId: "1",
-    nickname: "봄봄",
-    profileImage: "https://images.unsplash.com/photo-1660632531779-b363f16acdbd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
-    postImage: "https://images.unsplash.com/photo-1571047399553-603e2138b646?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
-    content: "신선한 채소와 다양한 토핑들을 추가해서 먹는 포만감 만점, 다이어트 불가능한 샐러드 래시피!",
-    likeToggle: Boolean,
-    likeNumber: 2,
-    commentNumber: 2
-});
+  const temp_img = "/logo/writebasicimage.png"
 
   return (
-    <>
-      <Card>
-        <CardInner>
-          <CardImg src="https://images.unsplash.com/photo-1571047399553-603e2138b646?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" />
-          <TextBox>
-          <ImgWrap src={dataTest.profileImage} />
-          <span>{dataTest.nickname}</span>
-            <TextLabel>
-              {/* 좋아요 {post.like} ∙ 댓글 2 ∙ 조회수 {post.view} */}
-            </TextLabel>
-          </TextBox>
-        </CardInner>
-      </Card>
-    </>
+    <Card>
+      <CardInner>
+        <CardImg post={post.images.length}>
+          <img src={post.images.length === 0 ? temp_img : post.images} alt="Content Img" />
+        </CardImg>
+        <Content>
+          <p>{post.content}</p>
+        </Content>
+        <TextBox>
+          <UserInfo>
+            <img src={post.profileImage} alt="Writer Profile Img" />
+            <p>{post.nickname}</p>
+          </UserInfo>
+          <TextLabel>
+            <div>
+              <span><FontAwesomeIcon icon={faHeart} /></span>{post.like}
+            </div>
+            <div>
+              <span><FontAwesomeIcon icon={faEye} /></span>{post.view}
+            </div>
+          </TextLabel>
+        </TextBox>
+      </CardInner>
+    </Card>
   );
 };
 
 const Card = styled.div`
-  display: block;
   width: 100%;
   height: 100%;
-  &:nth-child(5n) {
-      margin-right: 10px;
-}
+  background-color: #fff;
 `;
 
-const CardInner = styled.a`
-  // border: 3px solid green;
+const CardInner = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-start;
+  align-items: flex-start;
   flex-direction: column;
 `;
 
-const CardImg = styled.img`
+const CardImg = styled.div`
   width: 100%;
-  height: 100%;
-  max-height: 220px;
+  height: 60%;
   overflow: hidden;
-  object-fit: contain;
-  background-scolor: rgba(255, 255, 255, 0.5);
-  // background: yellow;
+  background-color: ${(props) => props.post === 0 ? "#b0cee6" : "rgba(0, 0, 0, 1)"};
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
 `;
 
-const TextBox = styled.div`
-  // background: pink;
-  background: #fff;
+const Content = styled.div`
   width: 100%;
-  height: 20%;
+  height: 25%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 10px 20px;
+  box-sizing: border-box;
+  p {
+    margin: 0;
+    font-size: 14px;
+  }
+`
+
+const TextBox = styled.div`
+  width: 100%;
+  height: 15%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 14px;
+  box-sizing: border-box;
+  border-top: 1px solid #D9D9D9;
+`;
+    
+const UserInfo = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: row;
-  span {
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding-left: 5px;
-  }
   img {
-    width: 30px;
-    height: 30px;
-    border-radius: 25px;
-    background-color: gray;
-}
-    `;
-    
-const ImgWrap = styled.img`
-  // background: pink;
-  position: relative;
-  width: 100%;
-  height: 60%;
-  border-radius: 30px 30px 0px 0px;
-  overflow: hidden;
-  object-fit: cover;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+  p {
+    margin: 0;
+    margin-left: 6px;
+    font-size: 13px;
+  }
 `;
 
 const TextLabel = styled.div`
-  // background: green;
   color: #808080;
   font-size: 12px;
-  width: 68%;
-  height: 40%;
   display: flex;
-  justify-content: center; // flex-end
+  justify-content: center;
   align-items: center;
-  // flex-direction: column;
+  div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 6px;
+  }
+  div > span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 4px;
+    font-size: 17px;
+  }
 `;
-
-// const CardContents = styled.div`
-//   padding: 15px 10px;
-//   height: 50px;
-// `;
 
 export default CardsAll;
