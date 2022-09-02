@@ -9,6 +9,7 @@ import { useInView } from "react-intersection-observer"
 
 import { MemoizedSidebar } from "./Sidebar";
 import CardsAll from "../elements/CardsAll";
+import Header from "../elements/Header";
 
 import { loadPostDB } from "../redux/modules/post";
 
@@ -26,13 +27,6 @@ const Post = () => {
   const Token = {
     authorization: sessionStorage.getItem("accessToken"),
     refresh_token: sessionStorage.getItem("refreshToken")
-  }
-
-  const PostWrite = () => {
-    // console.log(Token)
-    if (Token.authorization !== null && Token.refresh_token !== null) {
-      navigate("/post")
-    }
   }
 
   const [items, setItems] = React.useState([])
@@ -64,56 +58,19 @@ const Post = () => {
 
   useEffect(() => {
     dispatch(loadPostDB())
+    if(Token.authorization !== null && Token.refresh_token !== null) {
+      setIsLogin(true)
+    }
   }, [])
   
   return (
     <Wrap>
       <MemoizedSidebar />
-
-      <Titlebar>
-        <Titletag>
-          <p>식단 게시판</p>
-        </Titletag>
-        {
-            !isLogin  === true ? (
-              <WriteBtn onClick={PostWrite}>작성하기</WriteBtn>
-            ) : (
-              null
-            )
-          }
-          {/* <WriteBtn onClick={() => {
-            navigate("/post")
-          }}>작성하기</WriteBtn> */}
-      </Titlebar>
-
+      <Header isLogin={isLogin} />
       <Container>
-      {/* <CardList>
-      {data.map((v, idx) => (
-        <CardsBox
-        onClick={() => {
-          navigate(`/post/${v.postId}`);
-        }}
-        key={idx}>
-          {data.length - 1 == idx ? (
-            <CardsAll ref={ref}>
-              {v.content}
-            </CardsAll>
-          ) : (
-            <CardsAll>
-              {v.content}
-            </CardsAll>
-          )}
-        </CardsBox>
-      ))}
-      </CardList> */}
-
         <CardList>
           {data.map((v, idx) => (
-            <CardsBox
-              onClick={() => {
-                navigate(`/post/${v.postId}`);
-              }}
-              key={idx}>
+            <CardsBox onClick={() => {navigate(`/post/${v.postId}`)}} key={idx}>
               <CardsAll post={v} />
             </CardsBox>
           ))}
@@ -126,14 +83,13 @@ const Post = () => {
 const Wrap = styled.div`
   width: 100%;
   height: 100%;
-//   background-color: yellow;
 `;
 
 const Container = styled.div`
-  // border: 5px solid blue;
   width: calc(100% - 260px);
   height: 100%;
   margin-left: 260px;
+  margin-top: 180px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -143,80 +99,27 @@ const Container = styled.div`
   font-weight: bold;
 `;
 
-const Titlebar = styled.div`
-  width: calc(100% - 260px);
-  height: 10%%;
-  margin-top: 20px;
-  margin-left: 260px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  // background-color: red;
-`;
-
-
-const Titletag = styled.div`
-  width: 130px;
-  height: 50px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 0px 0px 15px 0px;
-  background-color: #ccc;
-  p {
-    font-size: 18px;
-    font-weight: bold;
-    height: 12%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    }
-`;
-
-const WriteBtn = styled.div`
-  position: relative;
-  width: 100px;
-  height: 40px;
-  margin-right: 45px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 10px;
-  color: #555;
-  border: 1px solid #555;
-  cursor: pointer;
-`;
-
 const CardList = styled.div`
-  width: 100%;
-  height: 88%;
+  width: 1080px;
+  height: 100%;
   display: flex;
-  align-items: center;
-  justify-content: space-evenly;
-  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 60px;
   flex-wrap : wrap;
-
-// flex-basis: 33.3%;
-// flex-wrap : wrap;
-// border: 5px solid red;
-// background-color: blue;
 `;
 
 const CardsBox = styled.div`
-  // width: 320px;
-  width: 15%;
-  height: 33%;
+  width: 320px;
+  height: 400px;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 2%;
+  flex-wrap: wrap;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
   box-sizing: border-box;
-
-  // border: 5px solid red;
-  // background-color: blue;
 `;
 
 export default Post;

@@ -12,37 +12,17 @@ const initialState = {
   post: {
     content: [
       {
-          postId: 1,
-          image: "https://images.unsplash.com/photo-1571047399553-603e2138b646?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
-          contents: "신선한 채소와 다양한 토핑들을 추가해서 먹는 포만감 만점, 다이어트 불가능한 샐러드 래시피!",
-          like: 5,
-          likeCount: 2,
-          commentCount: 2
+        content: "",
+        createdAt: "",
+        images: [],
+        like: "",
+        liked: "",
+        nickname: "",
+        postId: "",
+        profileImage: "",
+        updatedAt: "",
+        view: ""
       },
-      {
-        postId: 2,
-        image: "https://images.unsplash.com/photo-1571047399553-603e2138b646?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
-        contents: "신선한 채소와 다양한 토핑들을 추가해서 먹는 포만감 만점, 다이어트 불가능한 샐러드 래시피!",
-        like: 5,
-        likeCount: 2,
-        commentCount: 2
-      },
-      {
-        postId: 3,
-        image: "https://images.unsplash.com/photo-1571047399553-603e2138b646?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
-        contents: "신선한 채소와 다양한 토핑들을 추가해서 먹는 포만감 만점, 다이어트 불가능한 샐러드 래시피!",
-        like: 5,
-        likeCount: 2,
-        commentCount: 2
-      },
-      {
-        postId: 4,
-        image: "https://images.unsplash.com/photo-1571047399553-603e2138b646?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
-        contents: "신선한 채소와 다양한 토핑들을 추가해서 먹는 포만감 만점, 다이어트 불가능한 샐러드 래시피!",
-        like: 5,
-        likeCount: 2,
-        commentCount: 2
-      }
     ]
   }
 }

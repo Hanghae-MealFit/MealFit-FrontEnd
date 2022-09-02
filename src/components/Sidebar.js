@@ -5,10 +5,8 @@ import axios from "axios";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faClipboardList, faBullhorn, faPenToSquare } from '@fortawesome/free-solid-svg-icons'
 
-import SidebarItem from "../elements/SidebarItem";
 import { loadMainUserDB } from "../redux/modules/userinfo";
 
-import { Link } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from "react-redux";
 
@@ -71,7 +69,7 @@ const Sidebar = () => {
     }
   }
 
-  console.log(USER_CHECK.includes("post"))
+  // console.log(USER_CHECK.includes("post"))
 
   const onClickLogin = () => {
     sessionStorage.clear()
@@ -242,7 +240,6 @@ const Profile = styled.img`
     cursor: pointer;
     &:hover {
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
-      /* background: #808080; */
       transition: 0.4s;
     }
 `;
@@ -271,7 +268,7 @@ const MenuWrap = styled.div`
   ${({checkMenu}) => {
     return css`
       background-color: ${checkMenu ? "#F6EAE0" : "transparent"};
-      color: ${checkMenu ? "#333" : "white" };
+      color: ${checkMenu ? "#FE7770" : "white" };
     `
   }};
   span {

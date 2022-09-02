@@ -1,20 +1,26 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import axios from "axios";
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faHeart, faEye } from '@fortawesome/free-solid-svg-icons'
 
 import { useNavigate, useParams } from "react-router-dom";
 
 import { MemoizedSidebar } from "./Sidebar";
 import DelPostModal from "../elements/DelPostModal";
 import CommentList from "../elements/CommentList";
+import Header from "../elements/Header";
 
 import { loadPostDB } from "../redux/modules/post";
 import { loadPost } from "../redux/modules/post";
+import { useSelector } from "react-redux";
 
 const PostView = (props) => {
   const navigate = useNavigate();
   const { postId } = useParams();
-  // console.log(postId);
+
+  const user = useSelector((state) => state.userinfo.user.userProfile)
 
   const [contentData, setContentData] = React.useState({
     content: "",
@@ -31,6 +37,19 @@ const PostView = (props) => {
     view: 1
   })
 
+  const [commentData, setCommentData] = React.useState(
+    [{
+      comment: "",
+      commentId: "",
+      like: "",
+      postId: "",
+      userDto: "",
+      nickname: "",
+      profileImage: null
+    }]
+  )
+  console.log("Comment",commentData)
+
   const [isLogin, setIsLogin] = React.useState(false);
 
   // 좋아요 버튼
@@ -39,8 +58,38 @@ const PostView = (props) => {
   // 댓글 좋아요
   const [commentLiked, setCommentLiked] = React.useState(false);
 
-  // 댓글 입력
   const comment_ref = React.useRef(null);
+
+  // 사용자 입력 저장 
+  const [checkItemContent, setCheckItemContent] = React.useState('');
+  // 줄바꿈 위치를 저장하는 Dictionary
+  const [lineBreakIndexDict, setLineBreakIndexDict] = React.useState({});
+  // 줄 수 (높이)
+  const [lineHeight, setLineHeight] = React.useState(0);
+
+  // 사용자 입력 업데이트 및 줄바꿈 감지
+  const checkItemChangeHandler = (event) => {
+    setCheckItemContent(event.target.value);
+    // Scroll이 생기면 line break
+    if (event.target.scrollHeight !== event.target.clientHeight) {
+      setLineHeight(prev => prev+1);	// textarea 높이 늘리고
+      setLineBreakIndexDict({...lineBreakIndexDict, [event.target.value.length-1]: 1});	// 줄바꿈 위치 저장
+    }
+    else {
+    // 다시 줄바꿈 지점으로 오면 line break 취소
+      if (lineBreakIndexDict[event.target.value.length]) {
+        setLineHeight(prev => prev-1);	// textarea 높이 줄이고
+        setLineBreakIndexDict({...lineBreakIndexDict, [event.target.value.length]: 0});	// Dictionary에서 삭제
+      }
+    }
+  }
+  // 너비 초과로 인한 줄바꿈 말고 사용자가 엔터를 입력했을 때의 줄바꿈 처리
+  const checkItemEnterHandler = (event) => {
+    if (event.key === 'Enter') {
+      // textarea 높이는 checkItemChangeHandler에서 변경됨
+      setLineBreakIndexDict({...lineBreakIndexDict, [event.target.value.length]: 1}); // 줄바꿈 위치 저장
+    }
+  }
 
   const Token = {
     authorization: sessionStorage.getItem("accessToken"),
@@ -49,7 +98,6 @@ const PostView = (props) => {
 
   // 작성자 확인 - ?
   const isLoginCheck = () => {
-    // console.log(Token)
     if (Token.authorization !== null && Token.refresh_token !== null) {
       setIsLogin(true)
     }
@@ -65,12 +113,14 @@ const PostView = (props) => {
           refresh_token: `Bearer ${Token.refresh_token}`
         }
       })
-      console.log("게시글 불러오기", response)
+      // console.log("게시글 불러오기", response)
       setContentData(response.data)
     } catch (error) {
       console.log(error)
     }
   };
+
+  console.log("contentData", contentData)
 
   // 삭제 모달창
   const [modalOpen, setModalOpen] = React.useState(false);
@@ -116,7 +166,8 @@ const PostView = (props) => {
           refresh_token: `Bearer ${Token.refresh_token}`
         }
       })
-      console.log("댓글 불러오기", response.data)
+      // console.log("댓글 불러오기", response.data)
+      setCommentData(response.data.comments)
     } catch (error) {
       console.log("댓글 불러오기 실패", error)
     }
@@ -124,148 +175,105 @@ const PostView = (props) => {
 
   // 댓글 작성하기
   const CommentWrite = async () => {
-    const formData = new FormData()
-    formData.append("content", comment_ref.current.value)
-
-    // 댓글 작성하기
-    const CommentWrite = async () => {
-      const formData = new FormData()
-      formData.append("comment", comment_ref.current.value)
-
-      try {
-        const response = await axios.post(`http://43.200.174.111:8080/post/${postId}/comment`, {
-          comment: comment_ref.current.value
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${Token.authorization}`,
-            refresh_token: `Bearer ${Token.refresh_token}`
-          }
-        })
+    try {
+      const response = await axios.post(`http://43.200.174.111:8080/post/${postId}/comment`, {
+        content: comment_ref.current.value
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${Token.authorization}`,
+          refresh_token: `Bearer ${Token.refresh_token}`
+        }
+      })
       console.log("댓글 작성하기", response)
     } catch (error) {
       console.log("댓글 작성 실패", error)
     }
   }
 
-  React.useEffect(() => {
-    const fetchData = async () => {
-      // 현 포스트 가져오기
-      await PostViewAX();
-      // 댓글들 가져오기
-      await CommentLoad();
-      // state 값 다 셋팅 완료
-      // setStateLoaded(true);
-    };
-    fetchData();
+  useEffect(() => {
+    console.log("??")
+    isLoginCheck()
+    PostViewAX()
+    CommentLoad()
   }, [])
 
   return (
     <Wrap>
       <MemoizedSidebar />
+      <Header isLogin={isLogin} />
       <Container>
-        <ImgWrap src={contentData.image} />
-        {
-          !isLogin === true ? (
-            <ModifyDelBtn>
-              <button style={{ margin: "0px 10px 0px 0px" }} onClick={() => { setModalOpen(true) }}>
-                삭제
-              </button>
-              {
-                modalOpen === true ? (
-                  <DelPostModal setModalOpen={setModalOpen} postId={postId} />
-                ) : (
-                  null
-                )
-              }
-              <button onClick={() => { navigate(`/post/${postId}`) }}>
-                수정
-              </button>
-            </ModifyDelBtn>
-          ) : (
-            null
-          )
-        }
-        <PostInfo>
-          <img src={contentData.profileImage} />
-          <span>{contentData.nickname}</span>
-          <Likecomment>
+        <CardImg>
+          <img src={contentData.images} alt="Content Img" />
+        </CardImg>
+        <BoardInfo>
+          <UserInfo>
+            <img src={contentData.profileImage} alt="Writer User Img" />
+            <BoardText>
+              <p>{contentData.nickname}</p>
+              <WriteTime>
+                <p>{contentData.createdAt?.split("T")[0]}</p>
+                <p>{contentData.createdAt?.split("T")[1].split(":").slice(0, 2).join(":")}</p>
+              </WriteTime>
+            </BoardText>
+          </UserInfo>
+          <IconWrap>
             <div>
-            <img src={ 
-              liked
-                  ? "/images/HeartImg.png"
-                  : "/images/EmptyHeartImg.png"
-              }
-              alt="like" />
-              {/* &nbsp; */}
-            {contentData.like}
+              <span><FontAwesomeIcon icon={faHeart} /></span>{contentData.like}
             </div>
             <div>
-            <img src={"/images/CommentImg.png"} />
-              {/* &nbsp; */}
-            {contentData.commentNumber}
+              <span><FontAwesomeIcon icon={faEye} /></span>{contentData.view}
             </div>
-            <div>
-            <img src={"/images/ClickImg.png"} />
-            {/* &nbsp; */}
-            {contentData.view}
-            </div>
-          </Likecomment>
-        </PostInfo>
-        <Line />
-        <Contents>{contentData.content}</Contents>
-        {/* <Line /> */}
-        <CommentContainer onSubmit={onSubmit}>
-          <Titlebar>
-            <Titletag>
-              <p>댓글</p>
-            </Titletag>
-          </Titlebar>
-          <CommentView>
-            {feedComments.map((commentArr, i) => {
-              return (
-                <CommentList
-                  nickname={comments.userDto.nickname}
-                  comments={commentArr}
-                  key={i}
-                />
-              );
-            })}
-          </CommentView>
-          {/* <div>{comment.likeToggle : Boolean}</div> */}
-          <CommentBox>
-            <input type="text"
-              ref={comment_ref}
-              placeholder="댓글 달기..."
-              onChange={e => {
-                setComments(e.target.value);
-              }}
-              onKeyUp={e => {
-                e.target.value.length > 0
-                  ? setIsValid(true)
-                  : setIsValid(false);
-              }}
-              value={comments}
-            />
-            <CommentBtn
-              onClick={CommentWrite}
-              disabled={isValid ? false : true}
-            >
-              댓글 작성하기
-            </CommentBtn>
-          </CommentBox>
-        </CommentContainer>
+          </IconWrap>
+        </BoardInfo>
+        <Content>
+          <p>{contentData.content}</p>
+        </Content>
+        <CommentTitle>댓글</CommentTitle>
+        <CommentWrap>
+          {commentData.map((value, idx) => (
+            <CommentInfo key={idx}>
+              <div className="CommentProfile">
+                <img src={value.userDto.profileImage} alt="Comment Writer Img" />
+              </div>
+              <div className="CommentWrap">
+                <p>{value.userDto.nickname}</p>
+                <p>{value.comment}</p>
+              </div>
+            </CommentInfo>
+          ))}
+        </CommentWrap>
+        <Comment>
+          <CommentWriter>
+            <WriterInfo>
+              <img src={user.profileImage} alt="Comment Writer Img" />
+              <p>{user.nickname}</p>
+            </WriterInfo>
+            <WriteInput>
+              <textarea type='text'
+                value={checkItemContent}
+                placeholder='댓글을 남겨보세요'
+                onChange={checkItemChangeHandler}
+                onKeyDown={checkItemEnterHandler}
+                style={{height: ((lineHeight * 20) + 20) + 'px'}} />
+            </WriteInput>
+            <WriteBtnWrap>
+              <WriteBtn disabled={checkItemContent.length === 0 ? true : false }>작성</WriteBtn>
+            </WriteBtnWrap>
+          </CommentWriter>
+        </Comment>
       </Container>
     </Wrap>
   )
 }
-}
 
 const Wrap = styled.div`
-  // background-color: yellow;
   width: 100%;
   height: 100%;
+  margin-left: 260px;
+  margin-top: 180px;
+  margin-bottom: 40px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -273,214 +281,231 @@ const Wrap = styled.div`
   `;
 
 const Container = styled.div`
-  // border: 5px solid blue;
-  position: absolute;
   width: 700px;
-  height: 95%;
-  margin-left: 260px;
   border-radius: 30px;
   background-color: white;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   `;
 
-const ImgWrap = styled.img`
-    position: relative;
+const CardImg = styled.div`
+  width: 100%;
+  height: 600px;
+  border-radius: 30px 30px 0px 0px;
+  overflow: hidden;
+  background-color: #ddd;
+  img {
     width: 100%;
-    height: 60%;
-    border-radius: 30px 30px 0px 0px;
-    overflow: hidden;
-    object-fit: cover;
-    background-color: #ddd;
+    height: 100%;
+    object-fit: contain;
+  }
 `;
 
-const PostInfo = styled.div`
-    // background-color: red;
+const BoardInfo = styled.div`
     width: 90%;
-    height: 10%;
+    height: 80px;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    margin : 10px auto;
+    margin : 0 auto;
+    border-bottom: 1px solid #D9D9D9;
+    padding: 0px 20px;
+    box-sizing: border-box;
     img {
         width: 50px;
         height: 50px;
         border-radius: 50px;
         background-color: gray;
     }
-    span {
-        width: 100%;
-        height: 100%
-        font-weight: bold;
-        margin-left: 10px;
-    }
 `;
 
-const Likecomment = styled.div`
-    // background-color: red;
-    width: 25%;
-    height: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 14px;
-    color: #bbb;
-    img {
-      width: 22px;
-      height: 22px;
-      background-color: #fff;
-      border-radius: 0px;
-    }
-    div {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    }
-`;
+const UserInfo = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
 
-const Contents = styled.div`
-    // background-color: red;
-    position: relative;
-    width: 90%;
-    height: 20%;
-    display: flex;
-    // align-items: center;
-    justify-content: center;
-    margin : 10px auto;
+const BoardText = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  margin-left: 10px;
   p {
-        font-size: 16px;
-        color: #808080;
+    margin: 0;
+    font-size: 20px;
+  }
+`
+
+const WriteTime = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  p {
+    margin: 0 2px;
+    font-size: 10px;
+  }
+`
+
+const IconWrap = styled.div`
+  color: #808080;
+  font-size: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 6px;
+  }
+  div:hover {
+    cursor: pointer;
+  }
+  div > span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 4px;
+    font-size: 17px;
   }
 `;
 
-const Line = styled.hr`
-    width: 90%;
-    border-bottom: 1px solid #eee;
-`;
+const Content = styled.div`
+  width: 90%;
+  min-height: 240px;
+  padding: 0 20px;
+  box-sizing: border-box;
+  border-bottom: 1px solid #D9D9D9;
+`
 
-const ModifyDelBtn = styled.div`
-    // background-color: red;
-    position: absolute;
-    width: 90%;
-    height: 100%;
-    display: flex;
-    justify-content: right;
-    margin-top: 40px;
-    button {
-        position: relative;
-        width: 60px;
-        height: 30px;
-        font-size: 12px;
-        font-weight: 900;
-        border-radius: 30px;
-        cursor: pointer;
-        border: 1px solid #555;
-        background-color: white;
-    }
-`;
+const CommentTitle = styled.div`
+  margin: 14px 0;
+  width: 90%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  box-sizing: border-box;
+  padding-left: 10px;
+  font-size: 18px;
+  color: #333;
+`
 
-const CommentContainer = styled.div`
-    // background-color: red;
-    width: 100%;
-    height: 20%;
-    display: flex;
-    flex-direction: column;
-    // justify-content: center;
-    align-items: center;
-    color: #555;
-`;
-
-const CommentView = styled.div`
-    // background-color: yellow;
-    width: 90%;
-    height: 15%;
-    display: flex;
-    // justify-content: center;
-    align-items: center;
-    margin-bottom: 10px;
-`;
+const CommentWrap = styled.div`
+  width: 85%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+`
 
 const CommentInfo = styled.div`
-    // background-color: yellow;
-    width: 90%;
-    height: 100%;
-    display: flex;
-    // justify-content: center;
-    align-items: center;
-    img {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 40px;
-        height: 40px;
-        border-radius: 25px;
-        background-color: gray;
-    }
-    span {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-left: 10px;
-        font-size: 14px;
-    }
-`;
-
-const Titlebar = styled.div`
   width: 100%;
-  height: 30%;
-//   background-color: red;
-`;
-
-const Titletag = styled.div`
-  width: 100px;
-  height: 30px;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
-  border-radius: 0px 0px 15px 0px;
-  background-color: #ccc;
-  p {
-  font-size: 14px;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #D9D9D9;
+  &:last-child {
+    border: none;
+    margin-bottom: 14px;
   }
-`;
-
-const CommentBox = styled.div`
-    // background-color: red;
-    position: relative;
-    width: 90%;
-    height: 30px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 30px;
-    border: 1px solid #808080;
-    input {
-        width: 100%;
-        margin-left: 10px;
-        border: none;
-        box-sizing: border-box;
-        outline: none;
-      }
-`;
-
-const CommentBtn = styled.button`
-    position: relative;
-    width: 130px;
-    height: 30px;
+  div.CommentProfile {
+    width: 40px;
+    height: 40px;
+  }
+  div.CommentProfile img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+  }
+  div.CommentWrap p {
+    margin: 0;
+    margin-left: 12px;
     font-size: 12px;
-    font-weight: 700;
-    border-radius: 30px;
-    cursor: pointer;
-    color: #fff;
-    border: 1px solid #808080;
-    background-color: #808080;
-`;
+    font-weight: 500;
+  }
+  div.CommentWrap p:first-child {
+    font-size: 15px;
+    font-weight: 600;
+  }
+`
+
+const Comment = styled.div`
+  width: 90%;
+  margin-bottom: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`
+
+const CommentWriter = styled.div`
+  width: 100%;
+  min-height: 120px;
+  border: 2px solid #D9D9D9;
+  border-radius: 6px;
+  padding: 20px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+`
+const WriterInfo = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 12px;
+  img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+  p {
+    margin: 0;
+    margin-left: 6px;
+  }
+`
+
+const WriteInput = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  textarea {
+    width: 100%;
+    overflow: hidden;
+    overflow-wrap: break-word;
+    resize: none;
+    border: none;
+    outline: none;
+  }
+`
+
+const WriteBtnWrap = styled.div`
+  width: 100%;
+  margin-top: 12px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+`
+
+const WriteBtn = styled.button`
+  width: 40px;
+  height: 30px;
+  border-radius: 6px;
+  border: none;
+  color: white;
+  background-color: #FE7770;
+  font-weight: 500;
+  &:disabled {
+    background-color: transparent;
+    color: #D9D9D9;
+  }
+`
 
 export default PostView;
