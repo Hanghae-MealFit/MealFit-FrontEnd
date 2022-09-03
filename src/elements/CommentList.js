@@ -2,13 +2,13 @@ import React from "react";
 import styled from "styled-components";
 import axios from 'axios';
 
-const CommentList = (props) => {
-    console.log(props)
+const CommentList = (comments) => {
+    console.log(comments)
     return (
         <CommentInfo>
-            <img src={props.profileImage} />
-            <span style={{ fontWeight: "bold" }}>{props.nickname}</span>
-            <span>{props.comment}</span>
+            <img src={comments.userDto.profileImage} />
+            <span style={{ fontWeight: "bold" }}>{comments.userDto.nickname}</span>
+            <span>{comments.comment}</span>
         </CommentInfo>
     )
 }
