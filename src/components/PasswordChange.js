@@ -95,43 +95,53 @@ const PasswordChange = () => {
 
   return (
     <Wrap>
-      <MemoizedSidebar />
-      <Container>
-        <h1>비밀번호 변경</h1>
-        <ModInputWrap>
-          <p>새로운 비밀번호를 입력해주세요.</p>
-          <InputTxt>
-            <input ref={cur_password_ref} onChange={CurPw} type="password" placeholder='현재 비밀번호를 입력하세요.' />
-            <p ref={cur_pw_err_ref}>{curPwMsg}</p>
-          </InputTxt>
-          <InputTxt>
-            <input ref={password_ref} onChange={PwChange} type="password" placeholder='새로운 비밀번호를 입력하세요.' />
-            <p ref={pw_err_ref}>{PwMsg}</p>
-          </InputTxt>
-          <InputTxt>
-            <input ref={passwordCheck_ref} onChange={PwCheck} type="password" placeholder='새로운 비밀번호 다시 한번 입력해주세요.' />
-            <p ref={pw_check_err_ref}>{checkPwMsg}</p>
-          </InputTxt>
-        </ModInputWrap>
-        <Button>
-          <CancleBtn onClick={() => {
-            navigate("/user/info");
-          }}>뒤로가기</CancleBtn>
-          <PwChangeBtn onClick={onhandlePwChange} disabled=
-            {
-              curPwMsg === "* 양식에 맞게 작성되었습니다." &&
-              PwMsg === "* 사용 가능한 비밀번호 입니다." &&
-              checkPwMsg === "* 비밀번호가 일치합니다."
-              ? false : true
-            }>저장하기</PwChangeBtn>
-        </Button>
-      </Container>
+      <PwChangeWrap>
+        <MemoizedSidebar />
+        <Container>
+          <h1>비밀번호 변경</h1>
+          <ModInputWrap>
+            <p>새로운 비밀번호를 입력해주세요.</p>
+            <InputTxt>
+              <input ref={cur_password_ref} onChange={CurPw} type="password" placeholder='현재 비밀번호를 입력하세요.' />
+              <p ref={cur_pw_err_ref}>{curPwMsg}</p>
+            </InputTxt>
+            <InputTxt>
+              <input ref={password_ref} onChange={PwChange} type="password" placeholder='새로운 비밀번호를 입력하세요.' />
+              <p ref={pw_err_ref}>{PwMsg}</p>
+            </InputTxt>
+            <InputTxt>
+              <input ref={passwordCheck_ref} onChange={PwCheck} type="password" placeholder='새로운 비밀번호 다시 한번 입력해주세요.' />
+              <p ref={pw_check_err_ref}>{checkPwMsg}</p>
+            </InputTxt>
+          </ModInputWrap>
+          <Button>
+            <CancleBtn onClick={() => {
+              navigate("/user/info");
+            }}>뒤로가기</CancleBtn>
+            <PwChangeBtn onClick={onhandlePwChange} disabled=
+              {
+                curPwMsg === "* 양식에 맞게 작성되었습니다." &&
+                PwMsg === "* 사용 가능한 비밀번호 입니다." &&
+                checkPwMsg === "* 비밀번호가 일치합니다."
+                ? false : true
+              }>저장하기</PwChangeBtn>
+          </Button>
+        </Container>
+      </PwChangeWrap>
     </Wrap>
   );
 };
 
 const Wrap = styled.div`
-  // background-color: yellow;
+  width: 100%;
+  height: 100vh;
+  margin-left: 260px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+
+const PwChangeWrap = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
@@ -141,11 +151,9 @@ const Wrap = styled.div`
   `;
 
 const Container = styled.div`
-  // border: 5px solid blue;
   position: relative;
   width: 700px;
   height: 640px;
-  margin-left: 260px;
   border-radius: 30px;
   background-color: white;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);

@@ -5,7 +5,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart, faEye } from '@fortawesome/free-solid-svg-icons'
 
 const CardsAll = ({post}) => {
-  console.log(post)
 
   const temp_img = "/logo/writebasicimage.png"
 
@@ -75,6 +74,12 @@ const Content = styled.div`
   p {
     margin: 0;
     font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
   }
 `
 

@@ -13,14 +13,14 @@ const CardsAll = ({post}) => {
     <Card>
       <CardInner>
         <CardImg post={post.images.length}>
-          <img src={post.images.length === 0 ? temp_img : post.images} alt="Content Image" />
+          <img src={post.images.length === 0 ? temp_img : post.images} alt="Content Img" />
         </CardImg>
         <Content>
           <p>{post.content}</p>
         </Content>
         <TextBox>
           <UserInfo>
-            <img src={post.profileImage} alt="Writer Profile Image" />
+            <img src={post.profileImage} alt="Writer Profile Img" />
             <p>{post.nickname}</p>
           </UserInfo>
           <TextLabel>
@@ -75,6 +75,12 @@ const Content = styled.div`
   p {
     margin: 0;
     font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
   }
 `
 
@@ -127,9 +133,3 @@ const TextLabel = styled.div`
 `;
 
 export default CardsAll;
-
-// text-overflow: ellipsis;
-// word-wrap: break-word;
-// display: -webkit-box;
-// -webkit-line-clamp: 2;
-// -webkit-box-orient: vertical;

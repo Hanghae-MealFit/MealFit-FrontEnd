@@ -3,21 +3,15 @@ import styled from "styled-components";
 import axios from "axios";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHeart, faEye } from '@fortawesome/free-solid-svg-icons'
+import { faHeart, faEye, faPen, faXmark } from '@fortawesome/free-solid-svg-icons'
 
 import { useNavigate, useParams } from "react-router-dom";
-
-import { MemoizedSidebar } from "./Sidebar";
-import DelPostModal from "../elements/DelPostModal";
-import CommentList from "../elements/CommentList";
-import Header from "../elements/Header";
-
-import { loadPostDB } from "../redux/modules/post";
-import { loadPost } from "../redux/modules/post";
 import { useSelector } from "react-redux";
 
+import { MemoizedSidebar } from "./Sidebar";
+import Header from "../elements/Header";
+
 const PostView = (props) => {
-  const navigate = useNavigate();
   const { postId } = useParams();
 
   const user = useSelector((state) => state.userinfo.user.userProfile)
@@ -48,9 +42,11 @@ const PostView = (props) => {
       profileImage: null
     }]
   )
-  console.log("Comment",commentData)
 
   const [isLogin, setIsLogin] = React.useState(false);
+  const [commentUserCheck, setCommentUserCheck] = React.useState('')
+  const [commentEditCheck, setCommentEditCheck] = React.useState('')
+  const [commetEditOpen, setCommentEditOpen] = React.useState(false)
 
   // 좋아요 버튼
   const [liked, setLiked] = React.useState(false);
@@ -120,42 +116,8 @@ const PostView = (props) => {
     }
   };
 
-  console.log("contentData", contentData)
-
-  // 삭제 모달창
-  const [modalOpen, setModalOpen] = React.useState(false);
-
-  // 댓글 입력값 저장되는 곳 지정
-  const [comments, setComments] = React.useState([{
-    comment: "",
-    commentId: 2,
-    like: 0,
-    postId: 7,
-    userDto: {
-      nickname: "",
-      profileImage: "null"
-    }
-  },
-]);
-  const [feedComments, setFeedComments] = React.useState([]);
-  const [isValid, setIsValid] = React.useState(false);
-
-  const CommentPost = e => {
-    const copyFeedComments = [...feedComments];
-    copyFeedComments.push(comments);
-    setFeedComments(copyFeedComments);
-    setComments("");
-  };
-
-  const onSubmit = event => {
-    event.preventDefault();
-    if (comments === '') {
-      return;
-    }
-    setComments(commentValueList => [comments, ...commentValueList]);
-    setComments('');
-  };
-
+  // 댓글 작성 후, 리렌더링 진행될 수 있도록 설정
+  const [commentCheck, setCommentCheck] = React.useState(false);
 
   // 댓글 불러오기
   const CommentLoad = async () => {
@@ -187,25 +149,74 @@ const PostView = (props) => {
         }
       })
       console.log("댓글 작성하기", response)
+      setCommentCheck(!commentCheck)
+      setCheckItemContent('')
     } catch (error) {
       console.log("댓글 작성 실패", error)
     }
   }
 
+  // 댓글 삭제하기
+  const CommentDelete = async (commentId) => {
+    try {
+      const response = await axios.delete(`http://43.200.174.111:8080//post/comment/${commentId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${Token.authorization}`,
+          refresh_token: `Bearer ${Token.refresh_token}`
+        }
+      })
+      console.log("댓글 삭제하기", response)
+    } catch (error) {
+      console.log("댓글 작성 실패", error)
+    }
+  }
+
+  // 댓글 수정하기
+  const CommentEditModal = (value) => {
+    setCommentEditCheck(value)
+    setCommentEditOpen(true)
+  }
+
+  const edit_ref = React.useRef(null)
+
+  const CommentEdit = async () => {
+    try {
+      const res = await axios.put("http://43.200.174.111:8080/post/comment", {
+        commentId: commentEditCheck.commentId,
+        comment: edit_ref.current.value
+      }, {
+        headers: {
+          Authorization: `Bearer ${Token.authorization}`,
+          refresh_token: `Bearer ${Token.refresh_token}`
+        }
+      })
+      console.log(res)
+    } catch(err) {
+      console.log(err)
+      console.log(commentEditCheck.commentId, edit_ref.current.value)
+    }
+  }
+
   useEffect(() => {
-    console.log("??")
     isLoginCheck()
     PostViewAX()
     CommentLoad()
   }, [])
 
+  useEffect(() => {
+    CommentLoad()
+  }, [commentCheck])
+
+  const temp_img = "/logo/writebasicimage.png"
+
   return (
     <Wrap>
       <MemoizedSidebar />
-      <Header isLogin={isLogin} />
+      <Header isLogin={isLogin} postId={postId} user={user.nickname} conuser={contentData.nickname}  />
       <Container>
-        <CardImg>
-          <img src={contentData.images} alt="Content Img" />
+        <CardImg conImg={contentData.images}>
+          <img src={contentData.images?.length === 0 ? temp_img : contentData.images} alt="Content Img" />
         </CardImg>
         <BoardInfo>
           <UserInfo>
@@ -232,15 +243,52 @@ const PostView = (props) => {
         </Content>
         <CommentTitle>댓글</CommentTitle>
         <CommentWrap>
-          {commentData.map((value, idx) => (
-            <CommentInfo key={idx}>
+          {commentData.map((v, idx) => (
+            <CommentInfo key={idx}
+              onMouseEnter={() => setCommentUserCheck(v)}
+              onMouseLeave={() => setCommentUserCheck('')}>
               <div className="CommentProfile">
-                <img src={value.userDto.profileImage} alt="Comment Writer Img" />
+                <img src={v.userDto.profileImage} alt="Comment Writer Img" />
               </div>
               <div className="CommentWrap">
-                <p>{value.userDto.nickname}</p>
-                <p>{value.comment}</p>
+                <p>{v.userDto.nickname}</p>
+                {
+                  commentEditCheck.commentId === v.commentId && commetEditOpen ? (
+                    <input type="text" defaultValue={v.comment} ref={edit_ref} />
+                  ) :
+                  (
+                    <p>{v.comment}</p>
+                  )
+                }
               </div>
+              {
+                commentEditCheck.commentId === v.commentId && commetEditOpen ? (
+                  <div className="EditBtn">
+                    <div className="cancle" onClick={() => setCommentEditOpen(false)}>취소</div>
+                    <div className="edit" onClick={CommentEdit}>수정</div>
+                  </div>
+                ) : (
+                  commentUserCheck.userDto?.nickname === user?.nickname &&
+                  commentUserCheck?.commentId === v?.commentId ? (
+                    <div className="BtnWrap">
+                      <div>
+                        <FontAwesomeIcon icon={faHeart} />
+                      </div>
+                      <div onClick={() => CommentEditModal(v)}>
+                        <FontAwesomeIcon icon={faPen} />
+                      </div>
+                      <div onClick={() => CommentDelete(v.commentId)}>
+                        <FontAwesomeIcon icon={faXmark} />
+                      </div>
+                    </div>
+                  ) :
+                  (
+                    <div className="BtnWrap">
+                      <div><FontAwesomeIcon icon={faHeart} /></div>
+                    </div>
+                  )
+                )
+              }
             </CommentInfo>
           ))}
         </CommentWrap>
@@ -252,6 +300,7 @@ const PostView = (props) => {
             </WriterInfo>
             <WriteInput>
               <textarea type='text'
+                ref={comment_ref}
                 value={checkItemContent}
                 placeholder='댓글을 남겨보세요'
                 onChange={checkItemChangeHandler}
@@ -259,7 +308,10 @@ const PostView = (props) => {
                 style={{height: ((lineHeight * 20) + 20) + 'px'}} />
             </WriteInput>
             <WriteBtnWrap>
-              <WriteBtn disabled={checkItemContent.length === 0 ? true : false }>작성</WriteBtn>
+              <WriteBtn
+                disabled={checkItemContent.length === 0 ? true : false }
+                onClick={CommentWrite}
+              >작성</WriteBtn>
             </WriteBtnWrap>
           </CommentWriter>
         </Comment>
@@ -296,7 +348,7 @@ const CardImg = styled.div`
   height: 600px;
   border-radius: 30px 30px 0px 0px;
   overflow: hidden;
-  background-color: #ddd;
+  background-color: ${(props) => props.conImg?.length === 0 ? "#b1cfe7" : "black" };
   img {
     width: 100%;
     height: 100%;
@@ -403,6 +455,7 @@ const CommentWrap = styled.div`
 `
 
 const CommentInfo = styled.div`
+  position: relative;
   width: 100%;
   display: flex;
   justify-content: flex-start;
@@ -421,16 +474,80 @@ const CommentInfo = styled.div`
     width: 100%;
     height: 100%;
     border-radius: 50%;
+    object-fit: cover;
+    flex-basis: 100%;
+  }
+  div.CommentWrap {
+    width: 90%;
+    margin-left: 12px;
   }
   div.CommentWrap p {
     margin: 0;
-    margin-left: 12px;
     font-size: 12px;
     font-weight: 500;
   }
   div.CommentWrap p:first-child {
     font-size: 15px;
     font-weight: 600;
+  }
+  div.CommentWrap p:last-child {
+    padding-top: 5px;
+  }
+  div.CommentWrap input {
+    width: 70%;
+    font-size: 12px;
+    font-weight: 500;
+    border: none;
+    border-bottom: 1px solid #333;
+    padding-bottom: 4px;
+    outline: none;
+  }
+  div.EditBtn {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  div.EditBtn .cancle,
+  div.EditBtn .edit {
+    width: 40px;
+    height: 20px;
+    border: 1px solid #D9D9D9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 6px;
+    font-size: 12px;
+    margin: 0 3px;
+    cursor: pointer;
+    color: #aaa;
+  }
+  div.EditBtn .cancle:hover {
+    background-color: gray;
+    color: #fff;
+  }
+  div.EditBtn .edit:hover {
+    background-color: #FE7770;
+    color: #fff;
+  }
+  div.BtnWrap {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: translateY(-50%);
+  }
+  div.BtnWrap div {
+    margin: 0 4px;
+    color: #D9D9D9;
+  }
+  div.BtnWrap div:hover {
+    color: #333;
+    cursor: pointer;
   }
 `
 
@@ -502,6 +619,7 @@ const WriteBtn = styled.button`
   color: white;
   background-color: #FE7770;
   font-weight: 500;
+  cursor: pointer;
   &:disabled {
     background-color: transparent;
     color: #D9D9D9;

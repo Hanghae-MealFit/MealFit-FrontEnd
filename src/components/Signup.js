@@ -339,138 +339,149 @@ const Signup = () => {
   }
 
   return (
-    <SignUpWrap>
-      <h1>회원가입</h1>
-      <FormWrap>
-        <PicWrap>
-          <PicSelect files={files} setFiles={setFiles} />
-        </PicWrap>
-        <Contents>
-          <input ref={username_ref} type="text" placeholder='ID를 입력해주세요.' onChange={IdChange} maxLength='12' />
-          <button onClick={CheckId} disabled={idCheckDis} >중복확인</button>
-          <p ref={username_err_ref}>{checkIdMsg}</p>
-        </Contents>
-        <Contents>
-          <input ref={nickname_ref} type="text" placeholder='닉네임를 입력해주세요.' onChange={NickChange} maxLength='12' />
-          <button onClick={CheckNickname} disabled={nickCheckDis} >중복확인</button>
-          <p ref={nickname_err_ref}>{checkNickMsg}</p>
-        </Contents>
-        <Contents>
-          <input ref={email_ref} type="email" placeholder='Email를 입력해주세요.' onChange={EmailChange} />
-          <button onClick={CheckEmail} disabled={emailCheckDis}>중복확인</button>
-          <p ref={email_err_ref}>{checkEmailMsg}</p>
-        </Contents>
-        <Contents>
-          <input ref={password_ref} type="password" placeholder='Password를 입력해주세요.' onChange={PwChange} />
-          <p ref={pw_err_ref}>{PwMsg}</p>
-        </Contents>
-        <Contents>
-          <input ref={passwordCheck_ref} type="password" placeholder='Password를 확인해주세요.' onChange={PwCheckChange} />
-          <p ref={pw_check_err_ref}>{checkPwMsg}</p>
-        </Contents>
-        <WeightWrap>
-          <div>
-            {curInfoMsg ?
-              (
-                <HoverMsg>
-                  정수 혹은 소수점 첫째자리까지 입력해주세요.<br />
-                  <span>ex) 40 / 40.5 / 100.5</span>
-                </HoverMsg>
-              ) :
-              (
-                null
-              )
-            }
-            <input ref={currentWeight_ref} maxLength={5} type="number" onInput={maxLengthCheck} onMouseEnter={() => SetCurInfoMsg(true)} onMouseLeave={() => SetCurInfoMsg(false)} placeholder='현재 체중을 입력해주세요.' onChange={(e) => { CurrentWeightChange(e) }} value={curWeight || ''} />
-            <span className='weight'>(kg)</span>
-            <p className="infomsg" ref={current_weight_err_ref}>{curError}</p>
-          </div>
-          <div>
-            {goInfoMsg ?
-              (
-                <HoverMsg>
-                  정수 혹은 소수점 첫째자리까지 입력해주세요.<br />
-                  <span>ex) 40 / 40.5 / 100.5</span>
-                </HoverMsg>
-              ) :
-              (
-                null
-              )
-            }
-            <input ref={goalWeight_ref} maxLength={5} type="number" onInput={maxLengthCheck} onMouseEnter={() => SetGoInfoMsg(true)} onMouseLeave={() => SetGoInfoMsg(false)} placeholder='목표 체중을 입력해주세요.' onChange={(e) => { GoalWeightChange(e) }} value={goWeight || ''} />
-            <span className='weight'>(kg)</span>
-            <p className="infomsg" ref={goal_weight_err_ref}>{goError}</p>
-          </div>
-        </WeightWrap>
-        <FastTimeWrap>
-          <span ref={hour_check_ref}>{startHourCheck}</span>
-          <FastTime>
-            <p>단식 시작시간</p>
+    <Wrap>
+      <SignUpWrap>
+        <h1>회원가입</h1>
+        <FormWrap>
+          <PicWrap>
+            <PicSelect files={files} setFiles={setFiles} />
+          </PicWrap>
+          <Contents>
+            <input ref={username_ref} type="text" placeholder='ID를 입력해주세요.' onChange={IdChange} maxLength='12' />
+            <button onClick={CheckId} disabled={idCheckDis} >중복확인</button>
+            <p ref={username_err_ref}>{checkIdMsg}</p>
+          </Contents>
+          <Contents>
+            <input ref={nickname_ref} type="text" placeholder='닉네임를 입력해주세요.' onChange={NickChange} maxLength='12' />
+            <button onClick={CheckNickname} disabled={nickCheckDis} >중복확인</button>
+            <p ref={nickname_err_ref}>{checkNickMsg}</p>
+          </Contents>
+          <Contents>
+            <input ref={email_ref} type="email" placeholder='Email를 입력해주세요.' onChange={EmailChange} />
+            <button onClick={CheckEmail} disabled={emailCheckDis}>중복확인</button>
+            <p ref={email_err_ref}>{checkEmailMsg}</p>
+          </Contents>
+          <Contents>
+            <input ref={password_ref} type="password" placeholder='Password를 입력해주세요.' onChange={PwChange} />
+            <p ref={pw_err_ref}>{PwMsg}</p>
+          </Contents>
+          <Contents>
+            <input ref={passwordCheck_ref} type="password" placeholder='Password를 확인해주세요.' onChange={PwCheckChange} />
+            <p ref={pw_check_err_ref}>{checkPwMsg}</p>
+          </Contents>
+          <WeightWrap>
             <div>
-              <Select ref={startFastingHour_ref} onChange={TimeChange} defaultValue="default" id="StartHour" name="StartHour">
-                <option value="default" disabled>시간</option>
-                {
-                  Array.from({ length: 24 }, (item, index) => {
-                    return <option value={(index < 10 ? "0" + index : index)} key={(index < 10 ? "0" + index : index) + "Hour"}> {index < 10 ? "0" + index : index}</option>
-                  })
-                }
-              </Select> 시
-              <Select ref={startFastingMinute_ref} onChange={TimeChange} defaultValue="default" id="StartMinute" name="StartMinute">
-                <option value="default" disabled>분</option>
-                {
-                  Array.from({ length: 60 }, (item, index) => {
-                    return <option value={(index < 10 ? "0" + index : index)} key={(index < 10 ? "0" + index : index) + "Minute"}> {index < 10 ? "0" + index : index}</option>
-                  })
-                }
-              </Select> 분
+              {curInfoMsg ?
+                (
+                  <HoverMsg>
+                    정수 혹은 소수점 첫째자리까지 입력해주세요.<br />
+                    <span>ex) 40 / 40.5 / 100.5</span>
+                  </HoverMsg>
+                ) :
+                (
+                  null
+                )
+              }
+              <input ref={currentWeight_ref} maxLength={5} type="number" onInput={maxLengthCheck} onMouseEnter={() => SetCurInfoMsg(true)} onMouseLeave={() => SetCurInfoMsg(false)} placeholder='현재 체중을 입력해주세요.' onChange={(e) => { CurrentWeightChange(e) }} value={curWeight || ''} />
+              <span className='weight'>(kg)</span>
+              <p className="infomsg" ref={current_weight_err_ref}>{curError}</p>
             </div>
-          </FastTime>
-          <FastTime>
-            <p>단식 종료시간</p>
             <div>
-              <Select ref={endFastingHour_ref} onChange={TimeChange} defaultValue="default" id="EndHour" name="EndHour">
-                <option value="default" disabled>시간</option>
-                {
-                  Array.from({ length: 24 }, (item, index) => {
-                    return <option value={(index < 10 ? "0" + index : index)} key={(index < 10 ? "0" + index : index) + "Hour"}> {index < 10 ? "0" + index : index}</option>
-                  })
-                }
-              </Select> 시
-              <Select ref={endFastingMinute_ref} onChange={TimeChange} defaultValue="default" id="EndMinute" name="EndMinute">
-                <option value="default" disabled>분</option>
-                {
-                  Array.from({ length: 60 }, (item, index) => {
-                    return <option value={(index < 10 ? "0" + index : index)} key={(index < 10 ? "0" + index : index) + "Minute"}> {index < 10 ? "0" + index : index}</option>
-                  })
-                }
-              </Select> 분
+              {goInfoMsg ?
+                (
+                  <HoverMsg>
+                    정수 혹은 소수점 첫째자리까지 입력해주세요.<br />
+                    <span>ex) 40 / 40.5 / 100.5</span>
+                  </HoverMsg>
+                ) :
+                (
+                  null
+                )
+              }
+              <input ref={goalWeight_ref} maxLength={5} type="number" onInput={maxLengthCheck} onMouseEnter={() => SetGoInfoMsg(true)} onMouseLeave={() => SetGoInfoMsg(false)} placeholder='목표 체중을 입력해주세요.' onChange={(e) => { GoalWeightChange(e) }} value={goWeight || ''} />
+              <span className='weight'>(kg)</span>
+              <p className="infomsg" ref={goal_weight_err_ref}>{goError}</p>
             </div>
-          </FastTime>
-        </FastTimeWrap>
-        <Button>
-          <CancleBtn onClick={() => navigate("/")}>취소</CancleBtn>
-          <SignUpBtn
-            onClick={onhandleSignUp}
-            disabled=
-            {
-              checkIdMsg === "* 사용 가능 한 아이디입니다." &&
-                checkNickMsg === "* 사용 가능 한 닉네임입니다." &&
-                checkEmailMsg === "* 사용 가능 한 이메일입니다." &&
-                PwMsg === "* 사용 가능한 비밀번호 입니다." &&
-                checkPwMsg === "* 비밀번호가 일치합니다." &&
-                curError === "* 양식에 맞게 작성되었습니다." &&
-                goError === "* 양식에 맞게 작성되었습니다." &&
-                startHourCheck === ""
-                ? false : true
-            }>회원가입</SignUpBtn>
-        </Button>
-      </FormWrap>
-      {/* <LoginTxt>
-        이미 회원이신가요? <span onClick={() => navigate("/user/login")}>밀핏 계정으로 로그인하기</span>
-      </LoginTxt> */}
-    </SignUpWrap>
+          </WeightWrap>
+          <FastTimeWrap>
+            <span ref={hour_check_ref}>{startHourCheck}</span>
+            <FastTime>
+              <p>단식 시작시간</p>
+              <div>
+                <Select ref={startFastingHour_ref} onChange={TimeChange} defaultValue="default" id="StartHour" name="StartHour">
+                  <option value="default" disabled>시간</option>
+                  {
+                    Array.from({ length: 24 }, (item, index) => {
+                      return <option value={(index < 10 ? "0" + index : index)} key={(index < 10 ? "0" + index : index) + "Hour"}> {index < 10 ? "0" + index : index}</option>
+                    })
+                  }
+                </Select> 시
+                <Select ref={startFastingMinute_ref} onChange={TimeChange} defaultValue="default" id="StartMinute" name="StartMinute">
+                  <option value="default" disabled>분</option>
+                  {
+                    Array.from({ length: 60 }, (item, index) => {
+                      return <option value={(index < 10 ? "0" + index : index)} key={(index < 10 ? "0" + index : index) + "Minute"}> {index < 10 ? "0" + index : index}</option>
+                    })
+                  }
+                </Select> 분
+              </div>
+            </FastTime>
+            <FastTime>
+              <p>단식 종료시간</p>
+              <div>
+                <Select ref={endFastingHour_ref} onChange={TimeChange} defaultValue="default" id="EndHour" name="EndHour">
+                  <option value="default" disabled>시간</option>
+                  {
+                    Array.from({ length: 24 }, (item, index) => {
+                      return <option value={(index < 10 ? "0" + index : index)} key={(index < 10 ? "0" + index : index) + "Hour"}> {index < 10 ? "0" + index : index}</option>
+                    })
+                  }
+                </Select> 시
+                <Select ref={endFastingMinute_ref} onChange={TimeChange} defaultValue="default" id="EndMinute" name="EndMinute">
+                  <option value="default" disabled>분</option>
+                  {
+                    Array.from({ length: 60 }, (item, index) => {
+                      return <option value={(index < 10 ? "0" + index : index)} key={(index < 10 ? "0" + index : index) + "Minute"}> {index < 10 ? "0" + index : index}</option>
+                    })
+                  }
+                </Select> 분
+              </div>
+            </FastTime>
+          </FastTimeWrap>
+          <Button>
+            <CancleBtn onClick={() => navigate("/")}>취소</CancleBtn>
+            <SignUpBtn
+              onClick={onhandleSignUp}
+              disabled=
+              {
+                checkIdMsg === "* 사용 가능 한 아이디입니다." &&
+                  checkNickMsg === "* 사용 가능 한 닉네임입니다." &&
+                  checkEmailMsg === "* 사용 가능 한 이메일입니다." &&
+                  PwMsg === "* 사용 가능한 비밀번호 입니다." &&
+                  checkPwMsg === "* 비밀번호가 일치합니다." &&
+                  curError === "* 양식에 맞게 작성되었습니다." &&
+                  goError === "* 양식에 맞게 작성되었습니다." &&
+                  startHourCheck === ""
+                  ? false : true
+              }>회원가입</SignUpBtn>
+          </Button>
+        </FormWrap>
+        {/* <LoginTxt>
+          이미 회원이신가요? <span onClick={() => navigate("/user/login")}>밀핏 계정으로 로그인하기</span>
+        </LoginTxt> */}
+      </SignUpWrap>
+    </Wrap>
   )
 }
+
+const Wrap = styled.div`
+  width: 100%;
+  height: 100vh;
+  margin-left: 260px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
 
 const SignUpWrap = styled.div`
   position: relative;
@@ -479,7 +490,6 @@ const SignUpWrap = styled.div`
   border-radius: 30px;
   background-color: white;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
-  margin-left: 260px;
   display: flex;
   flex-direction: column;
   justify-content: center;

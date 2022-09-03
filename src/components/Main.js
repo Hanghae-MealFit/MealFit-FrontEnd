@@ -131,106 +131,117 @@ const Main = () => {
 
   return (
     <Wrap>
-      <Container>
-        <div style={{ display: "flex", width: "100%", height: "55%", backgroundColor: "#fff", position: "relative" }}>
-          {
-            !isLogin ? (
-              <DimmedLayer />
-            ) : (
-              null
-            )
-          }
-          <Item1 style={{ filter: !isLogin ? "blur(6px)" : "none" }}>
-            <Circle />
-          </Item1>
-          <GrapWrap style={{ filter: !isLogin ? "blur(6px)" : "none" }}>
-            <Item2>
-              {
-                changeMyWeight ?
-                (
-                  <WeightWrap>
-                    <div className="weightWrap">
-                      { curInfoMsg ? 
-                        (
-                          <HoverMsg>
-                            정수 혹은 소수점 첫째자리까지 입력해주세요.<br />
-                            <span>ex) 40 / 40.5 / 100.5</span>
-                          </HoverMsg>
-                        ) :
-                        (
-                          null
-                        )
-                      }
-                      <h2>현재 몸무게 추가</h2>
-                      <input ref={currentWeight_ref} maxLength={5} type="number" onInput={maxLengthCheck} onMouseEnter={() => SetCurInfoMsg(true)} onMouseLeave={() => SetCurInfoMsg(false)} placeholder='현재 체중을 입력해주세요.' onChange={(e) => {CurrentWeightChange(e)}} value={curWeight || ''} />
-                      <span className='weight'>(kg)</span>
-                      <p className="infomsg" ref={current_weight_err_ref}>{curError}</p>
-                    </div>
-                    <Button>
-                      <CancleBtn onClick={WeightModalClose}>취소하기</CancleBtn>
-                      <SignUpBtn onClick={SendChangeWeight}
-                        disabled=
+      <MainWrap>
+        <Container>
+          <div style={{ display: "flex", width: "100%", height: "55%", backgroundColor: "#fff", position: "relative" }}>
+            {
+              !isLogin ? (
+                <DimmedLayer />
+              ) : (
+                null
+              )
+            }
+            <Item1 style={{ filter: !isLogin ? "blur(6px)" : "none" }}>
+              <Circle />
+            </Item1>
+            <GrapWrap style={{ filter: !isLogin ? "blur(6px)" : "none" }}>
+              <Item2>
+                {
+                  changeMyWeight ?
+                  (
+                    <WeightWrap>
+                      <div className="weightWrap">
+                        { curInfoMsg ? 
+                          (
+                            <HoverMsg>
+                              정수 혹은 소수점 첫째자리까지 입력해주세요.<br />
+                              <span>ex) 40 / 40.5 / 100.5</span>
+                            </HoverMsg>
+                          ) :
+                          (
+                            null
+                          )
+                        }
+                        <h2>현재 몸무게 추가</h2>
+                        <input ref={currentWeight_ref} maxLength={5} type="number" onInput={maxLengthCheck} onMouseEnter={() => SetCurInfoMsg(true)} onMouseLeave={() => SetCurInfoMsg(false)} placeholder='현재 체중을 입력해주세요.' onChange={(e) => {CurrentWeightChange(e)}} value={curWeight || ''} />
+                        <span className='weight'>(kg)</span>
+                        <p className="infomsg" ref={current_weight_err_ref}>{curError}</p>
+                      </div>
+                      <Button>
+                        <CancleBtn onClick={WeightModalClose}>취소하기</CancleBtn>
+                        <SignUpBtn onClick={SendChangeWeight}
+                          disabled=
+                          {
+                            curError === "* 양식에 맞게 작성되었습니다."
+                            ? false : true
+                          }>추가하기</SignUpBtn>
+                      </Button>
+                    </WeightWrap>
+                  ) :
+                  (
+                    <>
+                      <Titlebar>
+                        <p>몸무게 변화량</p>
+                      </Titlebar>
+                      <PlusBtn onMouseEnter={WeightEnterMsg} onMouseLeave={WeightLeaveMsg} onClick={WeightModalOpen}>
+                        +
                         {
-                          curError === "* 양식에 맞게 작성되었습니다."
-                          ? false : true
-                        }>추가하기</SignUpBtn>
-                    </Button>
-                  </WeightWrap>
-                ) :
-                (
-                  <>
-                    <Titlebar>
-                      <p>몸무게 변화량</p>
-                    </Titlebar>
-                    <PlusBtn onMouseEnter={WeightEnterMsg} onMouseLeave={WeightLeaveMsg} onClick={WeightModalOpen}>
-                      +
-                      {
-                        myWeightHover ?
-                        (
-                          <WeightModal>체중 입력하기</WeightModal>
-                        ) :
-                        (
-                          null
-                        )
-                      }
-                    </PlusBtn>
-                    <Rechart weight={weight} />
-                  </>
-                )
-              }
-            </Item2>
-            {/* <Item3>
+                          myWeightHover ?
+                          (
+                            <WeightModal>체중 입력하기</WeightModal>
+                          ) :
+                          (
+                            null
+                          )
+                        }
+                      </PlusBtn>
+                      <Rechart weight={weight} />
+                    </>
+                  )
+                }
+              </Item2>
+              {/* <Item3>
+                <Titlebar>
+                  <p>체지방 변화량</p>
+                </Titlebar>
+              </Item3> */}
+            </GrapWrap>
+          </div>
+          <div style={{ width: "100%", height: "45%" }}>
+            <Item4>
               <Titlebar>
-                <p>체지방 변화량</p>
+                <p>오늘의 식단</p>
               </Titlebar>
-            </Item3> */}
-          </GrapWrap>
-        </div>
-        <div style={{ width: "100%", height: "45%" }}>
-          <Item4>
-            <Titlebar>
-              <p>오늘의 식단</p>
-            </Titlebar>
-            <CardList>
-              {MainData.map((v, idx) => (
-                <CardsBox
-                  onClick={() => {
-                    navigate(`/post/${v.postId}`);
-                  }}
-                  key={idx}
-                >
-                  <Cards post={v} />
-                </CardsBox>
-              ))}
-            </CardList>
-          </Item4>
-        </div>
-      </Container>
+              <CardList>
+                {MainData.map((v, idx) => (
+                  <CardsBox
+                    onClick={() => {
+                      navigate(`/post/${v.postId}`);
+                    }}
+                    key={idx}
+                  >
+                    <Cards post={v} />
+                  </CardsBox>
+                ))}
+              </CardList>
+            </Item4>
+          </div>
+        </Container>
+      </MainWrap>
     </Wrap>
   );
 }
 
 const Wrap = styled.div`
+  width: 100%;
+  height: 100vh;
+  margin-left: 260px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+
+const MainWrap = styled.div`
   width: 100%;
   height: 100%;
 `;
@@ -305,9 +316,8 @@ const WeightModal = styled.div`
 `
 
 const Container = styled.div`
-  width: calc(100% - 260px);
+  width: 100%;
   height: 100%;
-  margin-left: 260px;
   display: flex;
   flex-direction: column;
   justify-content: center;
