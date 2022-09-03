@@ -18,27 +18,27 @@ const DelPostModal = ({setModalOpen, postId}) => {
 
      // 삭제 axios
      const DeletPost = () => {
-            axios.delete(`http://43.200.174.111:8080/post/${postId}`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${auth.authorization}`,
-                        refresh_token: `Bearer ${auth.refresh_token}`,
-                    }
-                })
-                .then(function (response) {
-                    console.log("반응", response)
-                    if(response.status === '200'){
-                    alert('삭제에 성공하였습니다');
-                    setModalOpen(false)
-                    navigate("/post/all")
-                }
-                    // window.alert("삭제되었습니다.")
-                })
-                .catch(function (error) {
-                    console.log("에러", error)
-                    alert("삭제 실패!")
-                });
-            // console.log("삭제됨!", DeletPost) 
+      axios.delete(`http://43.200.174.111:8080/post/${postId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${auth.authorization}`,
+            refresh_token: `Bearer ${auth.refresh_token}`,
+          }
+        })
+        .then(function (response) {
+          console.log("반응", response)
+          if(response.status === 200 && response.data === "삭제완료!"){
+          alert('삭제에 성공하였습니다');
+          setModalOpen(false)
+          navigate("/post/all")
+        }
+          // window.alert("삭제되었습니다.")
+        })
+        .catch(function (error) {
+          console.log("에러", error)
+          alert("삭제 실패!")
+        });
+      // console.log("삭제됨!", DeletPost) 
     }
  
     return (

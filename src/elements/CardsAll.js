@@ -5,8 +5,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart, faEye } from '@fortawesome/free-solid-svg-icons'
 
 const CardsAll = ({post}) => {
-
   const temp_img = "/logo/writebasicimage.png"
+  const temp_pro_img = "/logo/profile.png"
 
   return (
     <Card>
@@ -19,7 +19,7 @@ const CardsAll = ({post}) => {
         </Content>
         <TextBox>
           <UserInfo>
-            <img src={post.profileImage} alt="Writer Profile Img" />
+            <img src={post.profileImage === null ? temp_pro_img : post.profileImage} alt="Writer Profile Img" />
             <p>{post.nickname}</p>
           </UserInfo>
           <TextLabel>
