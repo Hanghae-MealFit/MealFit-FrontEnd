@@ -75,6 +75,12 @@ const Content = styled.div`
   p {
     margin: 0;
     font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
   }
 `
 
@@ -127,9 +133,3 @@ const TextLabel = styled.div`
 `;
 
 export default CardsAll;
-
-// text-overflow: ellipsis;
-// word-wrap: break-word;
-// display: -webkit-box;
-// -webkit-line-clamp: 2;
-// -webkit-box-orient: vertical;
