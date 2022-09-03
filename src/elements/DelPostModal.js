@@ -27,7 +27,7 @@ const DelPostModal = ({setModalOpen, postId}) => {
                 })
                 .then(function (response) {
                     console.log("반응", response)
-                    if(response.status == '200'){
+                    if(response.status === '200'){
                     alert('삭제에 성공하였습니다');
                     setModalOpen(false)
                     navigate("/post/all")
@@ -81,15 +81,15 @@ const Background = styled.div`
     bottom: 0;
     background-color: rgba(0, 0, 0, 0.15);
     backdrop-filter: blur(5px);
-    // animation: modal-bg-show 1s;
-    // @keyframes modal-bg-show {
-    //     from {
-    //         opacity: 0;
-    //     }
-    //     to {
-    //         opacity: 1;
-    //     }
-    // }
+    animation: modal-bg-show 1s;
+    @keyframes modal-bg-show {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
 `;
 
 const ModalBlock = styled.div`
@@ -109,17 +109,17 @@ const ModalBlock = styled.div`
     //     width: 80%;
     // }
     // min-height: 10rem;
-    // animation: modal-show 1s;
-    // @keyframes modal-show {
-    //     from {
-    //         opacity: 0;
-    //         margin-top: -50px;
-    //     }
-    //     to {
-    //         opacity: 1;
-    //         margin-top: 0;
-    //     }
-    // }
+    animation: modal-show 1s;
+    @keyframes modal-show {
+      from {
+      opacity: 0;
+      margin-top: -50px;
+      }
+      to {
+      opacity: 1;
+      margin-top: 0;
+      }
+    }
 `;
 
 const Contents = styled.div`

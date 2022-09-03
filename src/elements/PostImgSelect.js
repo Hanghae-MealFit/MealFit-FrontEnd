@@ -5,7 +5,7 @@ import { faCamera } from '@fortawesome/free-solid-svg-icons'
 
 const PostImgSelect = ({ files, setFiles }) => {
 
-  const temp_img = "https://cdn.icon-icons.com/icons2/2828/PNG/512/images_photos_photo_image_icon_179766.png"
+  const temp_img = "/logo/writebasicimage.png"
   const [prevFiles, setPrevFiles] = React.useState(temp_img);
 
   const previewImage = async (e) => {
@@ -13,7 +13,6 @@ const PostImgSelect = ({ files, setFiles }) => {
     e.preventDefault();
 
     const file = e.target.files[0];
-    console.log(file)
     const reader = new FileReader();
     reader.readAsDataURL(file); // 내가 올릴 img
     reader.onload = (e) => {
@@ -24,7 +23,7 @@ const PostImgSelect = ({ files, setFiles }) => {
 
   return (
     <Wrap>
-      <ImgWrap>
+      <ImgWrap files={files}>
         <Img>
           <img src={prevFiles} alt="" />
         </Img>
@@ -39,34 +38,30 @@ const PostImgSelect = ({ files, setFiles }) => {
 
 const Wrap = styled.div`
   width: 100%;
+  height: 500px;
   margin: 0 auto;
 `
 
 const ImgWrap = styled.div`
-  position: absolute;
-  width: 700px;
-  height: 420px;
-  top: 0px;
+  position: relative;
+  width: 100%;
+  height: 100%;
   margin: 0 auto;
-  background: #b1cfe7;
+  background: ${(props) => props.files.length === 0 ? "#b1cfe7" : "black" };
   border-radius: 30px 30px 0px 0px;
 `
 
 const Img = styled.div`
-position: absolute;
   width: 100%;
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 30px 30px 0px 0px;
   overflow: hidden;
   img {
     width: 100%;
-    // height: 100%;
-    border-radius: 20px
-    object-fit: cover;
-    // background: red;
+    height: 100%;
+    object-fit: contain;
   }
 `
 

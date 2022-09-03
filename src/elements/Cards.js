@@ -13,14 +13,14 @@ const CardsAll = ({post}) => {
     <Card>
       <CardInner>
         <CardImg post={post.images.length}>
-          <img src={post.images.length === 0 ? temp_img : post.images} alt="Content Image" />
+          <img src={post.images.length === 0 ? temp_img : post.images} alt="Content Img" />
         </CardImg>
         <Content>
           <p>{post.content}</p>
         </Content>
         <TextBox>
           <UserInfo>
-            <img src={post.profileImage} alt="Writer Profile Image" />
+            <img src={post.profileImage} alt="Writer Profile Img" />
             <p>{post.nickname}</p>
           </UserInfo>
           <TextLabel>

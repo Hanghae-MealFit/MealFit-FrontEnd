@@ -43,104 +43,113 @@ const MyPage = () => {
 
   return (
     <Wrap>
-      <MemoizedSidebar />
-      <div>마이페이지</div>
-      <MyPageInfoWrap>
-        <h1>My Page</h1>
-        {
-          userInfo.providerType === "LOCAL" ? (
-            <PwModBtn onClick={() => {navigate("/user/info/password")}}>비밀번호 변경</PwModBtn>
-          ) : (
-            null
-          )
-        }
-        <FormWrap>
-          <PicWrap>
-            <PicSelect files={files} setFiles={setFiles} myPageIn={myPageIn} />
-          </PicWrap>
-          <Contents>
-            <p>닉네임</p>
-            <input type="text" value={userInfo.nickname} readOnly />
-          </Contents>
-          <WeightWrap>
-            <div>
-              <p>현재 몸무게</p>
-              <input type="number" readOnly value={NowWeight} />
-              <span className='weight'>(kg)</span>
-            </div>
-            <div>
-              <p>목표 몸무게</p>
-              <input type="number" value={userInfo.goalWeight} readOnly />
-              <span className='weight'>(kg)</span>
-            </div>
-          </WeightWrap>
-          <FastTimeWrap>
-            <FastTime>
-              <p>단식 시작시간</p>
+      <MyPageWrap>
+        <MemoizedSidebar />
+        <MyPageInfoWrap>
+          <h1>My Page</h1>
+          {
+            userInfo.providerType === "LOCAL" ? (
+              <PwModBtn onClick={() => {navigate("/user/info/password")}}>비밀번호 변경</PwModBtn>
+            ) : (
+              null
+            )
+          }
+          <FormWrap>
+            <PicWrap>
+              <PicSelect files={files} setFiles={setFiles} myPageIn={myPageIn} />
+            </PicWrap>
+            <Contents>
+              <p>닉네임</p>
+              <input type="text" value={userInfo.nickname} readOnly />
+            </Contents>
+            <WeightWrap>
               <div>
-                <Select defaultValue="default" readOnly>
-                  <option value="default" disabled readOnly>{startHour}</option>
-                </Select> 시
-                <Select defaultValue="default" readOnly>
-                  <option value="default" disabled readOnly>{startMinute}</option>
-                </Select> 분
+                <p>현재 몸무게</p>
+                <input type="number" readOnly value={NowWeight} />
+                <span className='weight'>(kg)</span>
               </div>
-            </FastTime>
-            <FastTime>
-              <p>단식 종료시간</p>
               <div>
-                <Select defaultValue="default" readOnly>
-                  <option value="default" disabled readOnly>{endHour}</option>
-                </Select> 시
-                <Select defaultValue="default" readOnly>
-                  <option value="default" disabled readOnly>{endMinute}</option>
-                </Select> 분
+                <p>목표 몸무게</p>
+                <input type="number" value={userInfo.goalWeight} readOnly />
+                <span className='weight'>(kg)</span>
               </div>
-            </FastTime>
-          </FastTimeWrap>
-          <IntakeWrap>
-            <h4>일일 목표 섭취량</h4>
-            <GoalInfoWrap>
-              <GoalTitle>칼로리</GoalTitle>
-              <GoalInfo>
-                <input type="number" readOnly value={userGoal.kcal} />
-                <span className='unit'>(Kcal)</span>
-              </GoalInfo>
-            </GoalInfoWrap>
-            <GoalInfoWrap>
-              <GoalTitle>탄수화물</GoalTitle>
-              <GoalInfo>
-                <input type="number" readOnly value={userGoal.carbs} />
-                <span className='unit'>(g)</span>
-              </GoalInfo>
-            </GoalInfoWrap>
-            <GoalInfoWrap>
-              <GoalTitle>단백질</GoalTitle>
-              <GoalInfo>
-                <input type="number" readOnly value={userGoal.protein} />
-                <span className='unit'>(g)</span>
-              </GoalInfo>
-            </GoalInfoWrap>
-            <GoalInfoWrap>
-              <GoalTitle>지방</GoalTitle>
-              <GoalInfo>
-                <input type="number" readOnly value={userGoal.fat} />
-                <span className='unit'>(g)</span>
-              </GoalInfo>
-            </GoalInfoWrap>
-          </IntakeWrap>
-          <Button>
-            <CancleBtn onClick={() => {navigate("/")}}>뒤로가기</CancleBtn>
-            <MyPageInfoBtn onClick={() => {navigate("/user/info/edit")}}>수정하기</MyPageInfoBtn>
-          </Button>
-        </FormWrap>
-      </MyPageInfoWrap>
+            </WeightWrap>
+            <FastTimeWrap>
+              <FastTime>
+                <p>단식 시작시간</p>
+                <div>
+                  <Select defaultValue="default" readOnly>
+                    <option value="default" disabled readOnly>{startHour}</option>
+                  </Select> 시
+                  <Select defaultValue="default" readOnly>
+                    <option value="default" disabled readOnly>{startMinute}</option>
+                  </Select> 분
+                </div>
+              </FastTime>
+              <FastTime>
+                <p>단식 종료시간</p>
+                <div>
+                  <Select defaultValue="default" readOnly>
+                    <option value="default" disabled readOnly>{endHour}</option>
+                  </Select> 시
+                  <Select defaultValue="default" readOnly>
+                    <option value="default" disabled readOnly>{endMinute}</option>
+                  </Select> 분
+                </div>
+              </FastTime>
+            </FastTimeWrap>
+            <IntakeWrap>
+              <h4>일일 목표 섭취량</h4>
+              <GoalInfoWrap>
+                <GoalTitle>칼로리</GoalTitle>
+                <GoalInfo>
+                  <input type="number" readOnly value={userGoal.kcal} />
+                  <span className='unit'>(Kcal)</span>
+                </GoalInfo>
+              </GoalInfoWrap>
+              <GoalInfoWrap>
+                <GoalTitle>탄수화물</GoalTitle>
+                <GoalInfo>
+                  <input type="number" readOnly value={userGoal.carbs} />
+                  <span className='unit'>(g)</span>
+                </GoalInfo>
+              </GoalInfoWrap>
+              <GoalInfoWrap>
+                <GoalTitle>단백질</GoalTitle>
+                <GoalInfo>
+                  <input type="number" readOnly value={userGoal.protein} />
+                  <span className='unit'>(g)</span>
+                </GoalInfo>
+              </GoalInfoWrap>
+              <GoalInfoWrap>
+                <GoalTitle>지방</GoalTitle>
+                <GoalInfo>
+                  <input type="number" readOnly value={userGoal.fat} />
+                  <span className='unit'>(g)</span>
+                </GoalInfo>
+              </GoalInfoWrap>
+            </IntakeWrap>
+            <Button>
+              <CancleBtn onClick={() => {navigate("/")}}>뒤로가기</CancleBtn>
+              <MyPageInfoBtn onClick={() => {navigate("/user/info/edit")}}>수정하기</MyPageInfoBtn>
+            </Button>
+          </FormWrap>
+        </MyPageInfoWrap>
+      </MyPageWrap>
     </Wrap>
   )
 }
 
 const Wrap = styled.div`
-//   background-color: yellow;
+  width: 100%;
+  height: 100vh;
+  margin-left: 260px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+
+const MyPageWrap = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
@@ -150,10 +159,9 @@ const Wrap = styled.div`
 `;
 
 const MyPageInfoWrap = styled.div`
-  position: absolute;
+  position: relative;
   width: 700px;
   height: 920px;
-  margin-left: 260px;
   border-radius: 30px;
   background-color: white;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
@@ -161,7 +169,6 @@ const MyPageInfoWrap = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
   h1 {
     position: absolute;
     top: 0;
@@ -178,7 +185,9 @@ const MyPageInfoWrap = styled.div`
 `
 
 const PwModBtn = styled.div`
-  position: relative;
+  position: absolute;
+  top: 23.5px;
+  right: 40px;
   width: 120px;
   height: 40px;
   margin-left: 400px;

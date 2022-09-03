@@ -2,20 +2,29 @@ import React from 'react'
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 
-const Header = ({isLogin}) => {
+import DelPostModal from './DelPostModal';
 
-  console.log(isLogin)
+const Header = ({isLogin, postId, user, conuser}) => {
+
   const navigate = useNavigate();
+
+  // 삭제 모달창
+  const [modalOpen, setModalOpen] = React.useState(false);
 
   const PostWrite = () => {
     if (isLogin === true) {
       navigate("/post")
     }
   }
+  const EditPost = () => {
+    navigate(`/post/${postId}/edit`)
+  }
+  const DeletePost = () => {
+    setModalOpen(true)
+  }
 
   let code = new URL(window.location.href);
   const PageCheck = code.href
-  const NumReg = /[0-9]/
 
   return (
     <Titlebar>
@@ -40,10 +49,34 @@ const Header = ({isLogin}) => {
               <h2>게시글 작성</h2>
             </Titletag>
           )
-          : (PageCheck === `http://localhost:3000/post/${NumReg}`) ?
+          : (PageCheck === `http://localhost:3000/post/${postId}`) ?
           (
             <Titletag>
               <h2>게시글 상세보기</h2>
+              { user === conuser ?
+                (
+                  <BtnWrap>
+                    <WriteBtn onClick={EditPost}>수정하기</WriteBtn>
+                    <WriteBtn onClick={DeletePost}>삭제하기</WriteBtn>
+                    { modalOpen ? (
+                      <DelPostModal setModalOpen={setModalOpen} postId={postId} />
+                    ) : (
+                      null
+                    )
+
+                    }
+                  </BtnWrap>
+                ) :
+                (
+                  null
+                )
+              }
+            </Titletag>
+          )
+          : (PageCheck === `http://localhost:3000/post/${postId}/edit`) ?
+          (
+            <Titletag>
+              <h2>게시글 수정하기</h2>
             </Titletag>
           )
           :
@@ -91,6 +124,13 @@ const Titletag = styled.div`
   }
 `;
 
+const BtnWrap = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+`
+
 const WriteBtn = styled.div`
   position: relative;
   width: 100px;
@@ -103,7 +143,7 @@ const WriteBtn = styled.div`
   border: 2px solid #FE7770;
   box-sizing: border-box;
   cursor: pointer;
-  transition: 0.2s;
+  transition: background-color 0.2s;
   &:hover {
     border: none;
     background-color: #FE7770;
