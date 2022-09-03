@@ -130,38 +130,99 @@ const Record = () => {
   
   return (
     <Wrap>
-      <MemoizedSidebar />
-      <Container>
-        {
-          isLogin ? (
-            null
-          ) :
-          (
-            <DimmedLayer />
-          )
-        }
-        <CalendarContainer style={{ filter: !isLogin ? "blur(6px)" : "none" }}>
-          <MyCalendar
-            onChange={onChange} value={value}
-            calendarType="US" // 요일을 일요일부터 시작하도록 설정
-            formatDay={(locale, date) => moment(date).format("D")} // '일' 제외하고 숫자만 보이도록 설정
-          />
-        </CalendarContainer>
-        <Line />
-        <RecordingBox style={{ filter: !isLogin ? "blur(6px)" : "none" }}>
-          <h1 className="Title">
-            <div className="text-gray-500 mt-4">
-              {moment(value).format("YYYY년 MM월 DD일 dddd")}
-            </div>
-          </h1>
-          <SelectBoxWrap>
-            <SelectBox>
-              {
-                breakfastOpen  === true ?
-                  (
-                    <>
-                      <Select onClick={() => setBreakfastOpen(false)}>
-                        <div ref={morning_ref}>아침</div>
+      <RecordWrap>
+        <MemoizedSidebar />
+        <Container>
+          {
+            isLogin ? (
+              null
+            ) :
+            (
+              <DimmedLayer />
+            )
+          }
+          <CalendarContainer style={{ filter: !isLogin ? "blur(6px)" : "none" }}>
+            <MyCalendar
+              onChange={onChange} value={value}
+              calendarType="US" // 요일을 일요일부터 시작하도록 설정
+              formatDay={(locale, date) => moment(date).format("D")} // '일' 제외하고 숫자만 보이도록 설정
+            />
+          </CalendarContainer>
+          <Line />
+          <RecordingBox style={{ filter: !isLogin ? "blur(6px)" : "none" }}>
+            <h1 className="Title">
+              <div className="text-gray-500 mt-4">
+                {moment(value).format("YYYY년 MM월 DD일 dddd")}
+              </div>
+            </h1>
+            <SelectBoxWrap>
+              <SelectBox>
+                {
+                  breakfastOpen  === true ?
+                    (
+                      <>
+                        <Select onClick={() => setBreakfastOpen(false)}>
+                          <div ref={morning_ref}>아침</div>
+                          <IconSVG
+                            width="20"
+                            height="20"
+                            viewBox="0 0 20 20"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              clipRule="evenodd"
+                              d="M10 14L16 6H4L10 14Z"
+                              fill="#1A1A1A"
+                            />
+                          </IconSVG>
+                        </Select>
+                        <SelectContent>
+                          {
+                            breakfastEatItem.length === 0 ? (
+                              <div>아침 식단을 입력하세요.</div>
+                            ) :
+                            (
+                              breakfastEatItem.map((v,idx) => (
+                                <div key={"item" + idx}>
+                                  <div style={{
+                                    cursor: "pointer",
+                                    backgroundColor: selectEatItemCheck && v.foodId === selectEatItem.foodId ? "gray" : "transparent"
+                                  }} onClick={() => SelectItem(v)}>
+                                    {v.foodName}
+                                  </div>
+                                  <span onClick={() => EditItem(v)}>수정</span>
+                                  <span onClick={() => DeleteItem(v.dietId)}>삭제</span>
+                                </div>
+                              ))
+                            )
+                          }
+                          <Button onClick={() => {
+                            setRecordModalOpen(true)
+                            setSelectTime(morning_ref.current.innerHTML)
+                          }}
+                          >추가하기</Button>
+                          {
+                            recordModalOpen === true ? (
+                              <RecordModal
+                              setRecordModalOpen={setRecordModalOpen}
+                              selectTime={selectTime}
+                              SelectDay={SelectDay}
+                              selectEatItem={selectEatItem}
+                              editEatItem={editEatItem}
+                              />
+                            ) : (
+                              null
+                            )
+                          }
+                        </SelectContent>
+                      </>
+                    ) :
+                    (
+                      <>
+                      <Select onClick={() => setBreakfastOpen(true)}>
+                        <div>아침</div>
                         <IconSVG
                           width="20"
                           height="20"
@@ -177,78 +238,78 @@ const Record = () => {
                           />
                         </IconSVG>
                       </Select>
-                      <SelectContent>
-                        {
-                          breakfastEatItem.length === 0 ? (
-                            <div>아침 식단을 입력하세요.</div>
-                          ) :
-                          (
-                            breakfastEatItem.map((v,idx) => (
-                              <div key={"item" + idx}>
-                                <div style={{
-                                  cursor: "pointer",
-                                  backgroundColor: selectEatItemCheck && v.foodId === selectEatItem.foodId ? "gray" : "transparent"
-                                }} onClick={() => {SelectItem(v)}}>
-                                  {v.foodName}
-                                </div>
-                                <span onClick={() => EditItem(v)}>수정</span>
-                                <span onClick={() => {DeleteItem(v.dietId)}}>삭제</span>
-                              </div>
-                            ))
-                          )
-                        }
-                        <Button onClick={() => {
-                          setRecordModalOpen(true)
-                          setSelectTime(morning_ref.current.innerHTML)
-                        }}
-                        >추가하기</Button>
-                        {
-                          recordModalOpen === true ? (
-                            <RecordModal
-                            setRecordModalOpen={setRecordModalOpen}
-                            selectTime={selectTime}
-                            SelectDay={SelectDay}
-                            selectEatItem={selectEatItem}
-                            editEatItem={editEatItem}
-                            />
-                          ) : (
-                            null
-                          )
-                        }
-                      </SelectContent>
                     </>
-                  ) :
-                  (
-                    <>
-                    <Select onClick={() => setBreakfastOpen(true)}>
-                      <div>아침</div>
-                      <IconSVG
-                        width="20"
-                        height="20"
-                        viewBox="0 0 20 20"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          clipRule="evenodd"
-                          d="M10 14L16 6H4L10 14Z"
-                          fill="#1A1A1A"
-                        />
-                      </IconSVG>
-                    </Select>
-                  </>
-                  )
-              }
-            </SelectBox>
+                    )
+                }
+              </SelectBox>
 
-            <SelectBox>
-              {
-                lunchOpen  === true ?
-                  (
-                    <>
-                      <Select onClick={() => setLunchOpen(false)}>
-                        <div ref={lunch_ref}>점심</div>
+              <SelectBox>
+                {
+                  lunchOpen  === true ?
+                    (
+                      <>
+                        <Select onClick={() => setLunchOpen(false)}>
+                          <div ref={lunch_ref}>점심</div>
+                          <IconSVG
+                            width="20"
+                            height="20"
+                            viewBox="0 0 20 20"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              clipRule="evenodd"
+                              d="M10 14L16 6H4L10 14Z"
+                              fill="#1A1A1A"
+                            />
+                          </IconSVG>
+                        </Select>
+                        <SelectContent>
+                          {
+                            lunchEatItem.length === 0 ? (
+                              <div>점심 식단을 입력하세요.</div>
+                            ) :
+                            (
+                              lunchEatItem.map((v,idx) => (
+                                <div key={"item" + idx}>
+                                  <div style={{
+                                    cursor: "pointer",
+                                    backgroundColor: selectEatItemCheck && v.foodId === selectEatItem.foodId ? "gray" : "transparent"
+                                  }} onClick={() => {SelectItem(v)}}>
+                                    {v.foodName}
+                                  </div>
+                                  <span onClick={() => EditItem(v)}>수정</span>
+                                  <span onClick={() => {DeleteItem(v.dietId)}}>삭제</span>
+                                </div>
+                              ))
+                            )
+                          }
+                          <Button onClick={() => {
+                            setRecordModalOpen(true)
+                            setSelectTime(lunch_ref.current.innerHTML)
+                          }}
+                          >추가하기</Button>
+                          {
+                            recordModalOpen === true ? (
+                              <RecordModal
+                              setRecordModalOpen={setRecordModalOpen}
+                              selectTime={selectTime}
+                              SelectDay={SelectDay}
+                              selectEatItem={selectEatItem}
+                              editEatItem={editEatItem}
+                              />
+                            ) : (
+                              null
+                            )
+                          }
+                        </SelectContent>
+                      </>
+                    ) :
+                    (
+                      <>
+                      <Select onClick={() => setLunchOpen(true)}>
+                        <div>점심</div>
                         <IconSVG
                           width="20"
                           height="20"
@@ -264,78 +325,78 @@ const Record = () => {
                           />
                         </IconSVG>
                       </Select>
-                      <SelectContent>
-                        {
-                          lunchEatItem.length === 0 ? (
-                            <div>점심 식단을 입력하세요.</div>
-                          ) :
-                          (
-                            lunchEatItem.map((v,idx) => (
-                              <div key={"item" + idx}>
-                                <div style={{
-                                  cursor: "pointer",
-                                  backgroundColor: selectEatItemCheck && v.foodId === selectEatItem.foodId ? "gray" : "transparent"
-                                }} onClick={() => {SelectItem(v)}}>
-                                  {v.foodName}
-                                </div>
-                                <span onClick={() => EditItem(v)}>수정</span>
-                                <span onClick={() => {DeleteItem(v.dietId)}}>삭제</span>
-                              </div>
-                            ))
-                          )
-                        }
-                        <Button onClick={() => {
-                          setRecordModalOpen(true)
-                          setSelectTime(lunch_ref.current.innerHTML)
-                        }}
-                        >추가하기</Button>
-                        {
-                          recordModalOpen === true ? (
-                            <RecordModal
-                            setRecordModalOpen={setRecordModalOpen}
-                            selectTime={selectTime}
-                            SelectDay={SelectDay}
-                            selectEatItem={selectEatItem}
-                            editEatItem={editEatItem}
-                            />
-                          ) : (
-                            null
-                          )
-                        }
-                      </SelectContent>
                     </>
-                  ) :
-                  (
-                    <>
-                    <Select onClick={() => setLunchOpen(true)}>
-                      <div>점심</div>
-                      <IconSVG
-                        width="20"
-                        height="20"
-                        viewBox="0 0 20 20"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          clipRule="evenodd"
-                          d="M10 14L16 6H4L10 14Z"
-                          fill="#1A1A1A"
-                        />
-                      </IconSVG>
-                    </Select>
-                  </>
-                  )
-              }
-            </SelectBox>
+                    )
+                }
+              </SelectBox>
 
-            <SelectBox>
-              {
-                dinnerOpen  === true ?
-                  (
-                    <>
-                      <Select onClick={() => setDinnerOpen(false)}>
-                        <div ref={dinner_ref}>저녁</div>
+              <SelectBox>
+                {
+                  dinnerOpen  === true ?
+                    (
+                      <>
+                        <Select onClick={() => setDinnerOpen(false)}>
+                          <div ref={dinner_ref}>저녁</div>
+                          <IconSVG
+                            width="20"
+                            height="20"
+                            viewBox="0 0 20 20"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              clipRule="evenodd"
+                              d="M10 14L16 6H4L10 14Z"
+                              fill="#1A1A1A"
+                            />
+                          </IconSVG>
+                        </Select>
+                        <SelectContent>
+                          {
+                            dinnerEatItem.length === 0 ? (
+                              <div>저녁 식단을 입력하세요.</div>
+                            ) :
+                            (
+                              dinnerEatItem.map((v,idx) => (
+                                <div key={"item" + idx}>
+                                  <div style={{
+                                    cursor: "pointer",
+                                    backgroundColor: selectEatItemCheck && v.foodId === selectEatItem.foodId ? "gray" : "transparent"
+                                  }} onClick={() => {SelectItem(v)}}>
+                                    {v.foodName}
+                                  </div>
+                                  <span onClick={() => EditItem(v)}>수정</span>
+                                  <span onClick={() => {DeleteItem(v.dietId)}}>삭제</span>
+                                </div>
+                              ))
+                            )
+                          }
+                          <Button onClick={() => {
+                            setRecordModalOpen(true)
+                            setSelectTime(dinner_ref.current.innerHTML)
+                          }}
+                          >추가하기</Button>
+                          {
+                            recordModalOpen === true ? (
+                              <RecordModal
+                              setRecordModalOpen={setRecordModalOpen}
+                              selectTime={selectTime}
+                              SelectDay={SelectDay}
+                              selectEatItem={selectEatItem}
+                              editEatItem={editEatItem}
+                              />
+                            ) : (
+                              null
+                            )
+                          }
+                        </SelectContent>
+                      </>
+                    ) :
+                    (
+                      <>
+                      <Select onClick={() => setDinnerOpen(true)}>
+                        <div>저녁</div>
                         <IconSVG
                           width="20"
                           height="20"
@@ -351,79 +412,28 @@ const Record = () => {
                           />
                         </IconSVG>
                       </Select>
-                      <SelectContent>
-                        {
-                          dinnerEatItem.length === 0 ? (
-                            <div>저녁 식단을 입력하세요.</div>
-                          ) :
-                          (
-                            dinnerEatItem.map((v,idx) => (
-                              <div key={"item" + idx}>
-                                <div style={{
-                                  cursor: "pointer",
-                                  backgroundColor: selectEatItemCheck && v.foodId === selectEatItem.foodId ? "gray" : "transparent"
-                                }} onClick={() => {SelectItem(v)}}>
-                                  {v.foodName}
-                                </div>
-                                <span onClick={() => EditItem(v)}>수정</span>
-                                <span onClick={() => {DeleteItem(v.dietId)}}>삭제</span>
-                              </div>
-                            ))
-                          )
-                        }
-                        <Button onClick={() => {
-                          setRecordModalOpen(true)
-                          setSelectTime(dinner_ref.current.innerHTML)
-                        }}
-                        >추가하기</Button>
-                        {
-                          recordModalOpen === true ? (
-                            <RecordModal
-                            setRecordModalOpen={setRecordModalOpen}
-                            selectTime={selectTime}
-                            SelectDay={SelectDay}
-                            selectEatItem={selectEatItem}
-                            editEatItem={editEatItem}
-                            />
-                          ) : (
-                            null
-                          )
-                        }
-                      </SelectContent>
                     </>
-                  ) :
-                  (
-                    <>
-                    <Select onClick={() => setDinnerOpen(true)}>
-                      <div>저녁</div>
-                      <IconSVG
-                        width="20"
-                        height="20"
-                        viewBox="0 0 20 20"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          clipRule="evenodd"
-                          d="M10 14L16 6H4L10 14Z"
-                          fill="#1A1A1A"
-                        />
-                      </IconSVG>
-                    </Select>
-                  </>
-                  )
-              }
-            </SelectBox>
-          </SelectBoxWrap>
-        </RecordingBox>
-      </Container>
+                    )
+                }
+              </SelectBox>
+            </SelectBoxWrap>
+          </RecordingBox>
+        </Container>
+      </RecordWrap>
     </Wrap>
   )
 }
 
 const Wrap = styled.div`
-  // background-color: yellow;
+  width: 100%;
+  height: 100vh;
+  margin-left: 260px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+
+const RecordWrap = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
@@ -437,7 +447,6 @@ const Container = styled.div`
   position: absolute;
   width: 1200px;
   height: 600px;
-  margin-left: 260px;
   border-radius: 30px;
   background-color: white;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);

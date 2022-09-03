@@ -303,202 +303,212 @@ const MyPageChange = () => {
   }
 
   return (
-    <SignUpWrap>
-      <MemoizedSidebar />
-      <h1>내 정보 변경</h1>
-      <FormWrap>
-        <PicWrap>
-          <PicSelect files={files} setFiles={setFiles} myPageChangeIn={myPageChangeIn} />
-        </PicWrap>
-        <Contents>
-          <input ref={nickname_ref} type="text" placeholder='닉네임를 입력해주세요.' onChange={NickChange} maxLength='12' />
-          <button onClick={CheckNickname} disabled={nickCheckDis} >중복확인</button>
-          <p ref={nickname_err_ref}>{checkNickMsg}</p>
-        </Contents>
-        <WeightWrap>
-          <div>
-            { curInfoMsg ? 
-              (
-                <HoverMsg>
-                  정수 혹은 소수점 첫째자리까지 입력해주세요.<br />
-                  <span>ex) 40 / 40.5 / 100.5</span>
-                </HoverMsg>
-              ) :
-              (
-                null
-              )
-            }
-            <input ref={currentWeight_ref} maxLength={5} type="number" onInput={maxLengthCheck} onMouseEnter={() => SetCurInfoMsg(true)} onMouseLeave={() => SetCurInfoMsg(false)} placeholder='현재 체중을 입력해주세요.' onChange={(e) => {CurrentWeightChange(e)}} value={curWeight || ''} />
-            <span className='weight'>(kg)</span>
-            <p className="infomsg" ref={current_weight_err_ref}>{curError}</p>
-          </div>
-          <div>
-            { goInfoMsg ?
-              (
-                <HoverMsg>
-                  정수 혹은 소수점 첫째자리까지 입력해주세요.<br />
-                  <span>ex) 40 / 40.5 / 100.5</span>
-                </HoverMsg>
-              ) :
-              (
-                null
-              )
-            }
-            <input ref={goalWeight_ref} maxLength={5} type="number" onInput={maxLengthCheck} onMouseEnter={() => SetGoInfoMsg(true)} onMouseLeave={() => SetGoInfoMsg(false)} placeholder='목표 체중을 입력해주세요.' onChange={(e) => {GoalWeightChange(e)}} value={goWeight || ''} />
-            <span className='weight'>(kg)</span>
-            <p className="infomsg" ref={goal_weight_err_ref}>{goError}</p>
-          </div>
-        </WeightWrap>
-        <FastTimeWrap>
-          <span ref={hour_check_ref}>{startHourCheck}</span>
-          <FastTime>
-            <p>단식 시작시간</p>
+    <Wrap>
+      <SignUpWrap>
+        <MemoizedSidebar />
+        <h1>내 정보 변경</h1>
+        <FormWrap>
+          <PicWrap>
+            <PicSelect files={files} setFiles={setFiles} myPageChangeIn={myPageChangeIn} />
+          </PicWrap>
+          <Contents>
+            <input ref={nickname_ref} type="text" placeholder='닉네임를 입력해주세요.' onChange={NickChange} maxLength='12' />
+            <button onClick={CheckNickname} disabled={nickCheckDis} >중복확인</button>
+            <p ref={nickname_err_ref}>{checkNickMsg}</p>
+          </Contents>
+          <WeightWrap>
             <div>
-              <Select ref={startFastingHour_ref} onChange={TimeChange} defaultValue="default" id="StartHour" name="StartHour">
-                <option value="default" disabled>시간</option>
-                { 
-                  Array.from({ length: 24 }, (item, index) => {
-                  return <option value = {(index < 10 ? "0" + index : index)} key = {(index < 10 ? "0" + index : index) + "Hour"}> {index < 10 ? "0" + index : index}</option>
-                  })
-                }
-              </Select> 시
-              <Select ref={startFastingMinute_ref} onChange={TimeChange} defaultValue="default" id="StartMinute" name="StartMinute">
-                <option value="default" disabled>분</option>
-                { 
-                  Array.from({ length: 60 }, (item, index) => {
-                  return <option value = {(index < 10 ? "0" + index : index)} key = {(index < 10 ? "0" + index : index) + "Minute"}> {index < 10 ? "0" + index : index}</option>
-                  })
-                }
-              </Select> 분
+              { curInfoMsg ? 
+                (
+                  <HoverMsg>
+                    정수 혹은 소수점 첫째자리까지 입력해주세요.<br />
+                    <span>ex) 40 / 40.5 / 100.5</span>
+                  </HoverMsg>
+                ) :
+                (
+                  null
+                )
+              }
+              <input ref={currentWeight_ref} maxLength={5} type="number" onInput={maxLengthCheck} onMouseEnter={() => SetCurInfoMsg(true)} onMouseLeave={() => SetCurInfoMsg(false)} placeholder='현재 체중을 입력해주세요.' onChange={(e) => {CurrentWeightChange(e)}} value={curWeight || ''} />
+              <span className='weight'>(kg)</span>
+              <p className="infomsg" ref={current_weight_err_ref}>{curError}</p>
             </div>
-          </FastTime>
-          <FastTime>
-            <p>단식 종료시간</p>
             <div>
-              <Select ref={endFastingHour_ref} onChange={TimeChange} defaultValue="default" id="EndHour" name="EndHour">
-                <option value="default" disabled>시간</option>
-                { 
-                  Array.from({ length: 24 }, (item, index) => {
-                  return <option value = {(index < 10 ? "0" + index : index)} key = {(index < 10 ? "0" + index : index) + "Hour"}> {index < 10 ? "0" + index : index}</option>
-                  })
-                }
-              </Select> 시
-              <Select ref={endFastingMinute_ref} onChange={TimeChange} defaultValue="default" id="EndMinute" name="EndMinute">
-                <option value="default" disabled>분</option>
-                { 
-                  Array.from({ length: 60 }, (item, index) => {
-                  return <option value = {(index < 10 ? "0" + index : index)} key = {(index < 10 ? "0" + index : index) + "Minute"}> {index < 10 ? "0" + index : index}</option>
-                  })
-                }
-              </Select> 분
+              { goInfoMsg ?
+                (
+                  <HoverMsg>
+                    정수 혹은 소수점 첫째자리까지 입력해주세요.<br />
+                    <span>ex) 40 / 40.5 / 100.5</span>
+                  </HoverMsg>
+                ) :
+                (
+                  null
+                )
+              }
+              <input ref={goalWeight_ref} maxLength={5} type="number" onInput={maxLengthCheck} onMouseEnter={() => SetGoInfoMsg(true)} onMouseLeave={() => SetGoInfoMsg(false)} placeholder='목표 체중을 입력해주세요.' onChange={(e) => {GoalWeightChange(e)}} value={goWeight || ''} />
+              <span className='weight'>(kg)</span>
+              <p className="infomsg" ref={goal_weight_err_ref}>{goError}</p>
             </div>
-          </FastTime>
-        </FastTimeWrap>
-        <IntakeWrap>
-          <h4>일일 목표 섭취량</h4>
-          <GoalInfoWrap>
-            { calInfo ? 
-              (
-                <GoalHoverMsg>
-                  목표 섭취 칼로리를 입력해주세요.<br />
-                  <span>ex) 2400 / 2000 / 1400</span>
-                </GoalHoverMsg>
-              ) :
-              (
-                null
-              )
-            }
-            <GoalTitle>칼로리</GoalTitle>
-            <GoalInfo>
-              <input ref={goal_kcal_ref} maxLength={4} type="number" onInput={maxLengthCheck} onMouseEnter={() => SetCalInfo(true)} onMouseLeave={() => SetCalInfo(false)} placeholder='칼로리' onChange={(e) => {GoalKcalChange(e)}} value={goalKcal || ''} />
-              <span className='unit'>(Kcal)</span>
-              <p ref={goal_kcal_err_ref}>{goalKcalError}</p>
-            </GoalInfo>
-          </GoalInfoWrap>
-          <GoalInfoWrap>
-            { carbsInfo ? 
-              (
-                <GoalHoverMsg>
-                  목표 섭취 탄수화물을 입력해주세요.<br />
-                  <span>ex) 100 / 110 / 120 </span>
-                </GoalHoverMsg>
-              ) :
-              (
-                null
-              )
-            }
-            <GoalTitle>탄수화물</GoalTitle>
-            <GoalInfo>
-              <input ref={goal_carbs_ref} maxLength={3} type="number" onInput={maxLengthCheck} onMouseEnter={() => SetCarbsInfo(true)} onMouseLeave={() => SetCarbsInfo(false)} placeholder='탄수화물' onChange={(e) => {GoalCarbsChange(e)}} value={goalCarbs || ''} />
-              <span className='unit'>(g)</span>
-              <p ref={goal_carbs_err_ref}>{goalCarbsError}</p>
-            </GoalInfo>
-          </GoalInfoWrap>
-          <GoalInfoWrap>
-            { proInfo ? 
-              (
-                <GoalHoverMsg>
-                  목표 섭취 단백질을 입력해주세요.<br />
-                  <span>ex) 100 / 110 / 120 </span>
-                </GoalHoverMsg>
-              ) :
-              (
-                null
-              )
-            }
-            <GoalTitle>단백질</GoalTitle>
-            <GoalInfo>
-              <input ref={goal_pro_ref} maxLength={3} type="number" onInput={maxLengthCheck} onMouseEnter={() => SetProInfo(true)} onMouseLeave={() => SetProInfo(false)} placeholder='단백질' onChange={(e) => {GoalProChange(e)}} value={goalPro || ''} />
-              <span className='unit'>(g)</span>
-              <p ref={goal_pro_err_ref}>{goalProError}</p>
-            </GoalInfo>
-          </GoalInfoWrap>
-          <GoalInfoWrap>
-            { fatInfo ? 
-              (
-                <GoalHoverMsg>
-                  목표 섭취 지방을 입력해주세요.<br />
-                  <span>ex) 100 / 110 / 120 </span>
-                </GoalHoverMsg>
-              ) :
-              (
-                null
-              )
-            }
-            <GoalTitle>지방</GoalTitle>
-            <GoalInfo>
-              <input ref={goal_fat_ref} maxLength={3} type="number" onInput={maxLengthCheck} onMouseEnter={() => SetFatInfo(true)} onMouseLeave={() => SetFatInfo(false)} placeholder='지방' onChange={(e) => {GoalFatChange(e)}} value={goalFat || ''} />
-              <span className='unit'>(g)</span>
-              <p ref={goal_fat_err_ref}>{goalFatError}</p>
-            </GoalInfo>
-          </GoalInfoWrap>
-        </IntakeWrap>
-        <Button>
-          <CancleBtn onClick={() => {navigate("/")}}>뒤로가기</CancleBtn>
-          <SignUpBtn onClick={onhandleSignUpSNS}
-            disabled=
-            {
-              checkNickMsg === "* 사용 가능 한 닉네임입니다." &&
-              curError === "* 양식에 맞게 작성되었습니다." &&
-              goError === "* 양식에 맞게 작성되었습니다." &&
-              startHourCheck === "" &&
-              goalKcalError === "" &&
-              goalCarbsError === "" &&
-              goalProError === "" &&
-              goalFatError === ""
-              ? false : true
-            }>수정하기</SignUpBtn>
-        </Button>
-      </FormWrap>
-    </SignUpWrap>
+          </WeightWrap>
+          <FastTimeWrap>
+            <span ref={hour_check_ref}>{startHourCheck}</span>
+            <FastTime>
+              <p>단식 시작시간</p>
+              <div>
+                <Select ref={startFastingHour_ref} onChange={TimeChange} defaultValue="default" id="StartHour" name="StartHour">
+                  <option value="default" disabled>시간</option>
+                  { 
+                    Array.from({ length: 24 }, (item, index) => {
+                    return <option value = {(index < 10 ? "0" + index : index)} key = {(index < 10 ? "0" + index : index) + "Hour"}> {index < 10 ? "0" + index : index}</option>
+                    })
+                  }
+                </Select> 시
+                <Select ref={startFastingMinute_ref} onChange={TimeChange} defaultValue="default" id="StartMinute" name="StartMinute">
+                  <option value="default" disabled>분</option>
+                  { 
+                    Array.from({ length: 60 }, (item, index) => {
+                    return <option value = {(index < 10 ? "0" + index : index)} key = {(index < 10 ? "0" + index : index) + "Minute"}> {index < 10 ? "0" + index : index}</option>
+                    })
+                  }
+                </Select> 분
+              </div>
+            </FastTime>
+            <FastTime>
+              <p>단식 종료시간</p>
+              <div>
+                <Select ref={endFastingHour_ref} onChange={TimeChange} defaultValue="default" id="EndHour" name="EndHour">
+                  <option value="default" disabled>시간</option>
+                  { 
+                    Array.from({ length: 24 }, (item, index) => {
+                    return <option value = {(index < 10 ? "0" + index : index)} key = {(index < 10 ? "0" + index : index) + "Hour"}> {index < 10 ? "0" + index : index}</option>
+                    })
+                  }
+                </Select> 시
+                <Select ref={endFastingMinute_ref} onChange={TimeChange} defaultValue="default" id="EndMinute" name="EndMinute">
+                  <option value="default" disabled>분</option>
+                  { 
+                    Array.from({ length: 60 }, (item, index) => {
+                    return <option value = {(index < 10 ? "0" + index : index)} key = {(index < 10 ? "0" + index : index) + "Minute"}> {index < 10 ? "0" + index : index}</option>
+                    })
+                  }
+                </Select> 분
+              </div>
+            </FastTime>
+          </FastTimeWrap>
+          <IntakeWrap>
+            <h4>일일 목표 섭취량</h4>
+            <GoalInfoWrap>
+              { calInfo ? 
+                (
+                  <GoalHoverMsg>
+                    목표 섭취 칼로리를 입력해주세요.<br />
+                    <span>ex) 2400 / 2000 / 1400</span>
+                  </GoalHoverMsg>
+                ) :
+                (
+                  null
+                )
+              }
+              <GoalTitle>칼로리</GoalTitle>
+              <GoalInfo>
+                <input ref={goal_kcal_ref} maxLength={4} type="number" onInput={maxLengthCheck} onMouseEnter={() => SetCalInfo(true)} onMouseLeave={() => SetCalInfo(false)} placeholder='칼로리' onChange={(e) => {GoalKcalChange(e)}} value={goalKcal || ''} />
+                <span className='unit'>(Kcal)</span>
+                <p ref={goal_kcal_err_ref}>{goalKcalError}</p>
+              </GoalInfo>
+            </GoalInfoWrap>
+            <GoalInfoWrap>
+              { carbsInfo ? 
+                (
+                  <GoalHoverMsg>
+                    목표 섭취 탄수화물을 입력해주세요.<br />
+                    <span>ex) 100 / 110 / 120 </span>
+                  </GoalHoverMsg>
+                ) :
+                (
+                  null
+                )
+              }
+              <GoalTitle>탄수화물</GoalTitle>
+              <GoalInfo>
+                <input ref={goal_carbs_ref} maxLength={3} type="number" onInput={maxLengthCheck} onMouseEnter={() => SetCarbsInfo(true)} onMouseLeave={() => SetCarbsInfo(false)} placeholder='탄수화물' onChange={(e) => {GoalCarbsChange(e)}} value={goalCarbs || ''} />
+                <span className='unit'>(g)</span>
+                <p ref={goal_carbs_err_ref}>{goalCarbsError}</p>
+              </GoalInfo>
+            </GoalInfoWrap>
+            <GoalInfoWrap>
+              { proInfo ? 
+                (
+                  <GoalHoverMsg>
+                    목표 섭취 단백질을 입력해주세요.<br />
+                    <span>ex) 100 / 110 / 120 </span>
+                  </GoalHoverMsg>
+                ) :
+                (
+                  null
+                )
+              }
+              <GoalTitle>단백질</GoalTitle>
+              <GoalInfo>
+                <input ref={goal_pro_ref} maxLength={3} type="number" onInput={maxLengthCheck} onMouseEnter={() => SetProInfo(true)} onMouseLeave={() => SetProInfo(false)} placeholder='단백질' onChange={(e) => {GoalProChange(e)}} value={goalPro || ''} />
+                <span className='unit'>(g)</span>
+                <p ref={goal_pro_err_ref}>{goalProError}</p>
+              </GoalInfo>
+            </GoalInfoWrap>
+            <GoalInfoWrap>
+              { fatInfo ? 
+                (
+                  <GoalHoverMsg>
+                    목표 섭취 지방을 입력해주세요.<br />
+                    <span>ex) 100 / 110 / 120 </span>
+                  </GoalHoverMsg>
+                ) :
+                (
+                  null
+                )
+              }
+              <GoalTitle>지방</GoalTitle>
+              <GoalInfo>
+                <input ref={goal_fat_ref} maxLength={3} type="number" onInput={maxLengthCheck} onMouseEnter={() => SetFatInfo(true)} onMouseLeave={() => SetFatInfo(false)} placeholder='지방' onChange={(e) => {GoalFatChange(e)}} value={goalFat || ''} />
+                <span className='unit'>(g)</span>
+                <p ref={goal_fat_err_ref}>{goalFatError}</p>
+              </GoalInfo>
+            </GoalInfoWrap>
+          </IntakeWrap>
+          <Button>
+            <CancleBtn onClick={() => {navigate("/user/info")}}>뒤로가기</CancleBtn>
+            <SignUpBtn onClick={onhandleSignUpSNS}
+              disabled=
+              {
+                checkNickMsg === "* 사용 가능 한 닉네임입니다." &&
+                curError === "* 양식에 맞게 작성되었습니다." &&
+                goError === "* 양식에 맞게 작성되었습니다." &&
+                startHourCheck === "" &&
+                goalKcalError === "" &&
+                goalCarbsError === "" &&
+                goalProError === "" &&
+                goalFatError === ""
+                ? false : true
+              }>수정하기</SignUpBtn>
+          </Button>
+        </FormWrap>
+      </SignUpWrap>
+    </Wrap>
   )
 }
+
+const Wrap = styled.div`
+  width: 100%;
+  height: 100vh;
+  margin-left: 260px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
 
 const SignUpWrap = styled.div`
   position: relative;
   width: 700px;
   height: 920px;
-  margin-left: 260px;
   border-radius: 30px;
   background-color: white;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);

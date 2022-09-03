@@ -5,7 +5,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart, faEye } from '@fortawesome/free-solid-svg-icons'
 
 const CardsAll = ({post}) => {
-  console.log(post)
 
   const temp_img = "/logo/writebasicimage.png"
 

@@ -95,43 +95,53 @@ const FindMyInfo = () => {
   }
 
   return (
-    <FindWrap>
-      <h1>아이디/비밀번호 찾기</h1>
-      <InputWrap>
-        <FindIdInputWrap>
-          <p>아이디를 찾기 위해 이메일을 입력해주세요.</p>
-          <Find>
-            <InputTxt>
-              <input type="email" placeholder='이메일을 입력해주세요.' ref={id_email_ref} onChange={IdEmailChange} />
-              <p ref={id_email_msg_ref}>{idEmailMsg}</p>
-            </InputTxt>
-            <button onClick={FindId} disabled={idEmailMsg === "* 올바른 양식으로 작성하였습니다." ? false : true}>아이디 찾기</button>
-          </Find>
-        </FindIdInputWrap>
-        <FindPwInputWrap>
-          <p>비밀번호를 찾기 위해 아이디와 이메일을 입력해주세요.</p>
-          <Find>
-            <InputTxt>
-              <input type="text" placeholder='아이디를 입력해주세요.' ref={pw_id_ref} onChange={PwIdChange} />
-              <p ref={pw_id_msg_ref}>{pwIdMsg}</p>
-            </InputTxt>
-            <InputTxt>
-              <input type="email" placeholder='이메일을 입력해주세요.' ref={pw_email_ref} onChange={PwEmailChange} />
-              <p ref={pw_email_msg_ref}>{pwEmailMsg}</p>
-            </InputTxt>
-            <button onClick={FindPw} disabled={pwIdMsg === "* 올바른 양식으로 작성하였습니다." && pwEmailMsg === "* 올바른 양식으로 작성하였습니다." ? false : true}>비밀번호 찾기</button>
-          </Find>
-        </FindPwInputWrap>
-      </InputWrap>
-    </FindWrap>
+    <Wrap>
+      <FindWrap>
+        <h1>아이디/비밀번호 찾기</h1>
+        <InputWrap>
+          <FindIdInputWrap>
+            <p>아이디를 찾기 위해 이메일을 입력해주세요.</p>
+            <Find>
+              <InputTxt>
+                <input type="email" placeholder='이메일을 입력해주세요.' ref={id_email_ref} onChange={IdEmailChange} />
+                <p ref={id_email_msg_ref}>{idEmailMsg}</p>
+              </InputTxt>
+              <button onClick={FindId} disabled={idEmailMsg === "* 올바른 양식으로 작성하였습니다." ? false : true}>아이디 찾기</button>
+            </Find>
+          </FindIdInputWrap>
+          <FindPwInputWrap>
+            <p>비밀번호를 찾기 위해 아이디와 이메일을 입력해주세요.</p>
+            <Find>
+              <InputTxt>
+                <input type="text" placeholder='아이디를 입력해주세요.' ref={pw_id_ref} onChange={PwIdChange} />
+                <p ref={pw_id_msg_ref}>{pwIdMsg}</p>
+              </InputTxt>
+              <InputTxt>
+                <input type="email" placeholder='이메일을 입력해주세요.' ref={pw_email_ref} onChange={PwEmailChange} />
+                <p ref={pw_email_msg_ref}>{pwEmailMsg}</p>
+              </InputTxt>
+              <button onClick={FindPw} disabled={pwIdMsg === "* 올바른 양식으로 작성하였습니다." && pwEmailMsg === "* 올바른 양식으로 작성하였습니다." ? false : true}>비밀번호 찾기</button>
+            </Find>
+          </FindPwInputWrap>
+        </InputWrap>
+      </FindWrap>
+    </Wrap>
   )
 }
+
+const Wrap = styled.div`
+  width: 100%;
+  height: 100vh;
+  margin-left: 260px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
 
 const FindWrap = styled.div`
   position: relative;
   width: 600px;
   height: 740px;
-  margin-left: 260px;
   border-radius: 30px;
   background-color: white;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);

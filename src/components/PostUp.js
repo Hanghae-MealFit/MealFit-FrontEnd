@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { MemoizedSidebar } from "./Sidebar";
 import PostImgSelect from '../elements/PostImgSelect';
@@ -9,30 +9,51 @@ import Header from "../elements/Header";
 
 const PostUp = () => {
   const navigate = useNavigate();
+  const { postId } = useParams();
+
+  let code = new URL(window.location.href);
+  const PageCheck = code.href
+  const EditPage = PageCheck.includes("edit")
 
   const [ImageFile, setImageFile] = React.useState([]);
+  const [contentText, setContentText] = React.useState(false);
   // const [ShowImg, setShowImg] = React.useState(null);
   const UpdateformData = new FormData();
   const formData = new FormData();
-  const postId_ref = React.useRef(null);
   const content_ref = React.useRef(null);
+
+  const TextCheck = (e) => {
+    if(e.target.value.length === 0) {
+      setContentText(false)
+    } else {
+      setContentText(true)
+    }
+  }
+
+  const auth = {
+    authorization: sessionStorage.getItem("accessToken"),
+    refresh_token: sessionStorage.getItem("refreshToken")
+  };
+
+  const [contentData, setContentData] = React.useState({
+    content: "",
+    createdAt: null,
+    image: [],
+    like: 0,
+    liked: null,
+    postId: 18,
+    updatedAt: null,
+    userDto: {
+      nickname: "",
+      profile: null
+    },
+    view: 1
+  })
 
   // 작성
   const PostUpAX = async () => {
-    const data = {
-      postImage: ImageFile,
-      content: content_ref.current.value
-    };
-  
     formData.append("postImageList", ImageFile);
     formData.append("content", content_ref.current.value);
-    // console.log(formData);
-    // console.log(ImageFile);
-
-    const auth = {
-      authorization: sessionStorage.getItem("accessToken"),
-      refresh_token: sessionStorage.getItem("refreshToken")
-    };  
 
     await axios({
       baseURL: "http://43.200.174.111:8080/",
@@ -54,60 +75,73 @@ const PostUp = () => {
     });
   };
 
+  // 수정 페이지 시, 식단 게시글 상세조회
+  const PostViewAX = async () => {
+    try {
+      const response = await axios.get(`http://43.200.174.111:8080/post/${postId}`, {
+        headers: {
+          Authorization: `Bearer ${auth.authorization}`,
+          refresh_token: `Bearer ${auth.refresh_token}`
+        }
+      })
+      setContentData(response.data)
+    } catch (error) {
+      console.log(error)
+    }
+  };
+
   // 수정
   const PostUpdateAX = async () => {
-    const data = {
-      postId: postId_ref.current.value,
-      postImage: ImageFile,
-      content: content_ref.current.value
-    };
-
-    UpdateformData.append("postId", postId_ref.current.value);
-    UpdateformData.append("postImage", ImageFile);  
+    UpdateformData.append("postId", postId);
+    UpdateformData.append("postImageList", ImageFile);
     UpdateformData.append("content", content_ref.current.value);
-    console.log("수정 데이터", UpdateformData);
-    console.log("수정 이미지", ImageFile);
 
-    const auth = {
-      authorization: sessionStorage.getItem("accessToken"),
-      refresh_token: sessionStorage.getItem("refreshToken")
-    };  
-
-    const apiImg = axios.create({
-      baseURL: "http://43.200.174.111:8080/",
-      headers: {
-        Authorization: `Bearer ${auth.authorization}`,
-        refresh_token: `Bearer ${auth.refresh_token}`,
-      }
-    });
-
-    const UpdatePostAX = await apiImg
-      .put("/post", UpdateformData)
-      .then((response) => {
-        if(response.status == '200'){
-          alert("식단 수정 성공!")}
-        navigate("/")
-        console.log("반응", response)
-      }).catch((error) => {
-        console.log("에러", error)
-        alert("식단 수정 실패!");
-      });
+    try {
+      const res = await axios.put("http://43.200.174.111:8080/post", {
+        UpdateformData
+      }, {
+        headers: {
+          Authorization: `Bearer ${auth.authorization}`,
+          refresh_token: `Bearer ${auth.refresh_token}`
+        }
+      })
+      console.log(res)
+    } catch(err) {
+      console.log(err)
     }
+  }
 
     const onhandleBack = () => {
       navigate("/");
     };
 
+    useEffect(() => {
+      if(EditPage) {
+        PostViewAX()
+      }
+    }, [])
+
     return (
       <Wrap>
         <MemoizedSidebar />
-        <Header />
+        <Header postId={postId} />
         <Container>
           <PostImgSelect files={ImageFile} setFiles={setImageFile} />
-          <Textarea ref={content_ref} placeholder='오늘 식단을 입력해주세요.' />
+          <Textarea
+            ref={content_ref}
+            onChange={TextCheck}
+            placeholder='오늘 식단을 입력해주세요.'
+          >
+          </Textarea>
           <Button>
             <CancleBtn onClick={onhandleBack}>뒤로가기</CancleBtn>
-            <PostUpBtn onClick={PostUpAX}>올리기</PostUpBtn>
+            {
+              EditPage ? (
+                <PostUpBtn onClick={PostUpdateAX} disabled={ImageFile.length !== 0 && contentText ? false : true}>수정하기</PostUpBtn>
+              ) : (
+                <PostUpBtn onClick={PostUpAX} disabled={ImageFile.length !== 0 && contentText ? false : true}>작성하기</PostUpBtn>
+              )
+            }
           </Button>
         </Container>
       </Wrap>
@@ -115,22 +149,18 @@ const PostUp = () => {
   };
 
 const Wrap = styled.div`
-  // background-color: yellow;
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 180px;
-  `;
+  margin: 180px 0 40px 260px;
+`;
 
 const Container = styled.div`
-  // border: 5px solid blue;
-  position: absolute;
   width: 700px;
-  height: 860px;
-  margin-left: 260px;
+  min-height: 800px;
   border-radius: 30px;
   background-color: white;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
@@ -141,40 +171,29 @@ const Container = styled.div`
   font-size: 20px;
   text-align: center;
   font-weight: bold;
-  p {
-    position: relative;
-    bottom: -20px;
-    font-size: 16px;
-    color: #D9D9D9;
-  }
   `;
 
 const Textarea = styled.textarea`
-  // border: 1px solid #9A9A9A;
-    position: absolute;
-    margin: 20px auto;
-    bottom: 70px;
-    width: 600px;
-    height: 300px;
-    border: none;
-    border-radius: 10px;
-    padding-left: 15px;
-    padding-right: 10px;
-    padding-top: 15px;
+  margin: 20px auto;
+  bottom: 70px;
+  width: 600px;
+  height: 300px;
+  border: none;
+  outline: none;
+  border-radius: 10px;
+  padding: 15px;
+  box-sizing: border-box;
+  resize: none;
 `;
 
 const Button = styled.div`
-  // background-color: red;
-  position: absolute;
-  width: 250px;
-  height: 35px;
-  bottom: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-bottom: 40px;
   button {
-    width: 100%;
-    height: 100%;
+    width: 160px;
+    height: 40px;
     margin: 0 10px;
     border: none;
     border-radius: 30px;

@@ -38,6 +38,7 @@ function App() {
         <Route path="post/all" element = { <Post /> } />
         {/* 아직 정해지지 앉음 "post?sort=""&size=""&lastid="" */}
         <Route path="post" element = { <PostUp /> } />
+        <Route path="post/:postId/edit" element = { <PostUp /> } />
         <Route path="post/:postId" element = { <PostView /> } />
       </Routes>
     </Wrap>

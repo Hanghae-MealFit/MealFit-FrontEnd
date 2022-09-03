@@ -84,7 +84,7 @@ const Login = () => {
     }
 
   return (
-    <div>
+    <Wrap>
       <LoginWrap>
         <h1>로그인</h1>
         <ConWrap>
@@ -111,16 +111,24 @@ const Login = () => {
           </SocialBtnWrap>
         </ConWrap>
       </LoginWrap>
-    </div>
+    </Wrap>
   )
 }
+
+const Wrap = styled.div`
+  width: 100%;
+  height: 100vh;
+  margin-left: 260px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
 
 const LoginWrap = styled.div`
   position: relative;
   width: 700px;
   height: 640px;
   margin: 0 auto;
-  margin-left: 260px;
   border-radius: 30px;
   background-color: white;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
