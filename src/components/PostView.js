@@ -5,7 +5,7 @@ import axios from "axios";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart, faEye, faPen, faXmark } from '@fortawesome/free-solid-svg-icons'
 
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import { MemoizedSidebar } from "./Sidebar";
@@ -46,7 +46,7 @@ const PostView = (props) => {
   const [isLogin, setIsLogin] = React.useState(false);
   const [commentUserCheck, setCommentUserCheck] = React.useState('')
   const [commentEditCheck, setCommentEditCheck] = React.useState('')
-  const [commetEditOpen, setCommentEditOpen] = React.useState(false)
+  const [commentEditOpen, setCommentEditOpen] = React.useState(false)
 
   // 좋아요 버튼
   const [liked, setLiked] = React.useState(false);
@@ -148,25 +148,9 @@ const PostView = (props) => {
           refresh_token: `Bearer ${Token.refresh_token}`
         }
       })
-      console.log("댓글 작성하기", response)
+      // console.log("댓글 작성하기", response)
       setCommentCheck(!commentCheck)
       setCheckItemContent('')
-    } catch (error) {
-      console.log("댓글 작성 실패", error)
-    }
-  }
-
-  // 댓글 삭제하기
-  const CommentDelete = async (commentId) => {
-    try {
-      const response = await axios.delete(`http://43.200.174.111:8080//post/comment/${commentId}`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${Token.authorization}`,
-          refresh_token: `Bearer ${Token.refresh_token}`
-        }
-      })
-      console.log("댓글 삭제하기", response)
     } catch (error) {
       console.log("댓글 작성 실패", error)
     }
@@ -181,20 +165,44 @@ const PostView = (props) => {
   const edit_ref = React.useRef(null)
 
   const CommentEdit = async () => {
+    const commentId = commentEditCheck.commentId
     try {
-      const res = await axios.put("http://43.200.174.111:8080/post/comment", {
-        commentId: commentEditCheck.commentId,
-        comment: edit_ref.current.value
-      }, {
+      const res = await axios.put(`http://43.200.174.111:8080/post/comment/${commentId}`, {
+        content: edit_ref.current.value
+      }
+      , {
         headers: {
           Authorization: `Bearer ${Token.authorization}`,
           refresh_token: `Bearer ${Token.refresh_token}`
         }
       })
-      console.log(res)
+      // console.log(res)
+      if(res.status === 200 && res.data === "수정 완료!") {
+        setCommentEditOpen(false)
+        setCommentCheck(!commentCheck)
+      }
     } catch(err) {
       console.log(err)
-      console.log(commentEditCheck.commentId, edit_ref.current.value)
+    }
+  }
+
+  // 댓글 삭제하기
+  const CommentDelete = async (commentId) => {
+    try {
+      const response = await axios.delete(`http://43.200.174.111:8080/post/comment/${commentId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${Token.authorization}`,
+          refresh_token: `Bearer ${Token.refresh_token}`
+        }
+      })
+      // console.log("댓글 삭제하기", response)
+      if(response.status === 200 && response.data === "삭제완료") {
+        alert('댓글을 삭제하였습니다.');
+        setCommentCheck(!commentCheck)
+      }
+    } catch (error) {
+      console.log("댓글 삭제실패", error)
     }
   }
 
@@ -208,7 +216,14 @@ const PostView = (props) => {
     CommentLoad()
   }, [commentCheck])
 
+  useEffect(() => {
+    if(commentEditOpen) {
+      edit_ref.current.focus()
+    }
+  }, [commentEditOpen])
+
   const temp_img = "/logo/writebasicimage.png"
+  const temp_pro_img = "/logo/profile.png"
 
   return (
     <Wrap>
@@ -220,7 +235,7 @@ const PostView = (props) => {
         </CardImg>
         <BoardInfo>
           <UserInfo>
-            <img src={contentData.profileImage} alt="Writer User Img" />
+            <img src={contentData.profileImage === null ? temp_pro_img : contentData.profileImage} alt="Writer User Img" />
             <BoardText>
               <p>{contentData.nickname}</p>
               <WriteTime>
@@ -253,7 +268,7 @@ const PostView = (props) => {
               <div className="CommentWrap">
                 <p>{v.userDto.nickname}</p>
                 {
-                  commentEditCheck.commentId === v.commentId && commetEditOpen ? (
+                  commentEditCheck.commentId === v.commentId && commentEditOpen ? (
                     <input type="text" defaultValue={v.comment} ref={edit_ref} />
                   ) :
                   (
@@ -262,7 +277,7 @@ const PostView = (props) => {
                 }
               </div>
               {
-                commentEditCheck.commentId === v.commentId && commetEditOpen ? (
+                commentEditCheck.commentId === v.commentId && commentEditOpen ? (
                   <div className="EditBtn">
                     <div className="cancle" onClick={() => setCommentEditOpen(false)}>취소</div>
                     <div className="edit" onClick={CommentEdit}>수정</div>
@@ -366,18 +381,17 @@ const BoardInfo = styled.div`
     border-bottom: 1px solid #D9D9D9;
     padding: 0px 20px;
     box-sizing: border-box;
-    img {
-        width: 50px;
-        height: 50px;
-        border-radius: 50px;
-        background-color: gray;
-    }
 `;
 
 const UserInfo = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50px;
+    }
 `
 
 const BoardText = styled.div`

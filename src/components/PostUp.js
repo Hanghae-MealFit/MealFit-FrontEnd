@@ -92,23 +92,29 @@ const PostUp = () => {
 
   // 수정
   const PostUpdateAX = async () => {
-    UpdateformData.append("postId", postId);
     UpdateformData.append("postImageList", ImageFile);
     UpdateformData.append("content", content_ref.current.value);
 
-    try {
-      const res = await axios.put("http://43.200.174.111:8080/post", {
-        UpdateformData
-      }, {
-        headers: {
-          Authorization: `Bearer ${auth.authorization}`,
-          refresh_token: `Bearer ${auth.refresh_token}`
-        }
-      })
-      console.log(res)
-    } catch(err) {
-      console.log(err)
-    }
+    await axios({
+      baseURL: "http://43.200.174.111:8080/",
+      method: "PUT",
+      url: `/post/${postId}`,
+      data: UpdateformData,
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${auth.authorization}`,
+        refresh_token: `Bearer ${auth.refresh_token}`
+      },
+    }).then((response) => {
+      console.log("반응", response)
+      if(response.status === 200 && response.data === "수정 완료!") {
+        window.alert("게시글이 성공적으로 수정되었습니다.")
+        navigate(`/post/${postId}`)
+      }
+    }).catch((error) => {
+      console.log("에러", error)
+      window.alert("게시글 수정에 실패하였습니다.")
+    });
   }
 
     const onhandleBack = () => {
