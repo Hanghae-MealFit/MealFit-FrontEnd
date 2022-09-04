@@ -28,6 +28,7 @@ const Main = () => {
   const [ curInfoMsg, SetCurInfoMsg ] = React.useState(false);
   const [ curError, setCurError ] = React.useState("* 현재 체중을 입력해주세요.");
   const [ weightCheck, setWeightCheck ] = React.useState(false);
+  const [ timeCheck, setTimeCheck ] = React.useState(false);
 
   const currentWeight_ref = React.useRef(null);
   const current_weight_err_ref = React.useRef(null);
@@ -120,14 +121,18 @@ const Main = () => {
   }
 
   useEffect(() => {
+    dispatch(loadMainUserDB())
+    dispatch(loadPostDB())
+    LoginCheck()
+  }, [])
+
+  useEffect(() => {
     dispatch(loadUserWeightDB())
   }, [weightCheck])
 
   useEffect(() => {
     dispatch(loadMainUserDB())
-    dispatch(loadPostDB())
-    LoginCheck()
-  }, [])
+  }, [timeCheck])
 
   return (
     <Wrap>
@@ -142,7 +147,7 @@ const Main = () => {
               )
             }
             <Item1 style={{ filter: !isLogin ? "blur(6px)" : "none" }}>
-              <Circle />
+              <Circle Token={Token} timeCheck={timeCheck} setTimeCheck={setTimeCheck} />
             </Item1>
             <GrapWrap style={{ filter: !isLogin ? "blur(6px)" : "none" }}>
               <Item2>
@@ -340,7 +345,6 @@ const Item1 = styled.div`
 const GrapWrap = styled.div`
     width: 50%;
     height: 100%;
-    // background-color: yellow;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;

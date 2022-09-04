@@ -7,7 +7,7 @@ import { faHeart, faEye } from '@fortawesome/free-solid-svg-icons'
 const CardsAll = ({post}) => {
   const temp_img = "/logo/writebasicimage.png"
   const temp_pro_img = "/logo/profile.png"
-
+  console.log(post)
   return (
     <Card>
       <CardInner>

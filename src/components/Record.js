@@ -5,6 +5,8 @@ import axios from 'axios';
 import { MemoizedSidebar } from "./Sidebar";
 import RecordModal from "../elements/RecordModal";
 import DimmedLayer from "../elements/DimmedLayer";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCirclePlus, faCircleMinus } from '@fortawesome/free-solid-svg-icons'
 
 import Calendar from 'react-calendar';
 import moment from "moment";
@@ -62,6 +64,14 @@ const Record = () => {
     setSelectEatItem(value)
     setEditEatItem(true)
     setRecordModalOpen(true)
+  }
+
+  const morningToggle = () => {
+    if(breakfastOpen === false) {
+      setBreakfastOpen(true)
+    } else {
+      setBreakfastOpen(false)
+    }
   }
 
   // status
@@ -148,7 +158,6 @@ const Record = () => {
               formatDay={(locale, date) => moment(date).format("D")} // '일' 제외하고 숫자만 보이도록 설정
             />
           </CalendarContainer>
-          <Line />
           <RecordingBox style={{ filter: !isLogin ? "blur(6px)" : "none" }}>
             <h1 className="Title">
               <div className="text-gray-500 mt-4">
@@ -157,93 +166,63 @@ const Record = () => {
             </h1>
             <SelectBoxWrap>
               <SelectBox>
-                {
-                  breakfastOpen  === true ?
+                <Select>
+                  <SelectTitle  onClick={morningToggle}>
+                    <div ref={morning_ref}>아침</div>
+                    <FontAwesomeIcon icon={ breakfastOpen ? faCircleMinus : faCirclePlus} />
+                    {/* <IconSVG width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" >
+                      <path fillRule="evenodd" clipRule="evenodd" d="M10 14L16 6H4L10 14Z" fill="#1A1A1A" />
+                    </IconSVG> */}
+                  </SelectTitle>
+                  { breakfastOpen  === true ? 
                     (
-                      <>
-                        <Select onClick={() => setBreakfastOpen(false)}>
-                          <div ref={morning_ref}>아침</div>
-                          <IconSVG
-                            width="20"
-                            height="20"
-                            viewBox="0 0 20 20"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              clipRule="evenodd"
-                              d="M10 14L16 6H4L10 14Z"
-                              fill="#1A1A1A"
-                            />
-                          </IconSVG>
-                        </Select>
-                        <SelectContent>
-                          {
-                            breakfastEatItem.length === 0 ? (
-                              <div>아침 식단을 입력하세요.</div>
-                            ) :
-                            (
-                              breakfastEatItem.map((v,idx) => (
-                                <div key={"item" + idx}>
-                                  <div style={{
-                                    cursor: "pointer",
-                                    backgroundColor: selectEatItemCheck && v.foodId === selectEatItem.foodId ? "gray" : "transparent"
-                                  }} onClick={() => SelectItem(v)}>
-                                    {v.foodName}
-                                  </div>
-                                  <span onClick={() => EditItem(v)}>수정</span>
-                                  <span onClick={() => DeleteItem(v.dietId)}>삭제</span>
+                      <SelectContent>
+                        {
+                          breakfastEatItem.length === 0 ? (
+                            <div>아침 식단을 입력하세요.</div>
+                          ) :
+                          (
+                            breakfastEatItem.map((v,idx) => (
+                              <div key={"item" + idx}>
+                                <div style={{
+                                  cursor: "pointer",
+                                  backgroundColor: selectEatItemCheck && v.foodId === selectEatItem.foodId ? "gray" : "transparent"
+                                }} onClick={() => SelectItem(v)}>
+                                  {v.foodName}
                                 </div>
-                              ))
-                            )
-                          }
-                          <Button onClick={() => {
-                            setRecordModalOpen(true)
-                            setSelectTime(morning_ref.current.innerHTML)
-                          }}
-                          >추가하기</Button>
-                          {
-                            recordModalOpen === true ? (
-                              <RecordModal
+                                <span onClick={() => EditItem(v)}>수정</span>
+                                <span onClick={() => DeleteItem(v.dietId)}>삭제</span>
+                              </div>
+                            ))
+                          )
+                        }
+                        <Button onClick={() => {
+                          setRecordModalOpen(true)
+                          setSelectTime(morning_ref.current.innerHTML)
+                        }}
+                        >추가하기</Button>
+                        {
+                          recordModalOpen === true ? (
+                            <RecordModal
                               setRecordModalOpen={setRecordModalOpen}
                               selectTime={selectTime}
                               SelectDay={SelectDay}
                               selectEatItem={selectEatItem}
                               editEatItem={editEatItem}
-                              />
-                            ) : (
-                              null
-                            )
-                          }
-                        </SelectContent>
-                      </>
+                            />
+                          ) : (
+                            null
+                          )
+                        }
+                      </SelectContent>
                     ) :
                     (
-                      <>
-                      <Select onClick={() => setBreakfastOpen(true)}>
-                        <div>아침</div>
-                        <IconSVG
-                          width="20"
-                          height="20"
-                          viewBox="0 0 20 20"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            clipRule="evenodd"
-                            d="M10 14L16 6H4L10 14Z"
-                            fill="#1A1A1A"
-                          />
-                        </IconSVG>
-                      </Select>
-                    </>
+                      null
                     )
-                }
+                  }
+                </Select>
               </SelectBox>
-
-              <SelectBox>
+              {/* <SelectBox>
                 {
                   lunchOpen  === true ?
                     (
@@ -415,7 +394,7 @@ const Record = () => {
                     </>
                     )
                 }
-              </SelectBox>
+              </SelectBox> */}
             </SelectBoxWrap>
           </RecordingBox>
         </Container>
@@ -492,21 +471,19 @@ const CalendarContainer = styled.div`
 `;
 
 const RecordingBox = styled.div`
-  // background-color: green;
-  // border: 5px solid green;
+  position: relative;
   width: 50%;
   height: 100%;
   display: flex;
-  flex-direction: row;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
 
   h1.Title {
     position: absolute;
-    top: 10px;
-    right: 30px;
+    top: 0;
+    right: calc(50% - 270px);
     margin: 0 auto;
-    padding: 30px 0;
+    padding: 20px 0;
     font-size: 20px;
     text-align: center;
     color: #555;
@@ -515,70 +492,65 @@ const RecordingBox = styled.div`
   }
 `;
 
-const Line = styled.hr`
-    height : 90%;
-    border-left: 1px solid #eee;
-`;
-
 const SelectBoxWrap = styled.div`
-  // background-color: pink;
-  width: 75%;
-  height: 50%;
+  width: 100%;
+  height: 80%;
+  margin-top: 67px;
   font-size: 18px;
   display: flex;
   flex-direction: column;
-  // justify-content: space-around;
-  // align-items: center;
+  justify-content: space-around;
+  align-items: flex-start;
   overflow: auto;
 `;
 
 const SelectBox = styled.div`
-  // background-color: hotpink;
   width: 100%;
   height: 100%;
-  margin-bottom: 10px;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   flex-direction: column;
 `;
 
 const Select = styled.div`
-  // background-color: gray;
   position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-direction: row;
+  flex-direction: column;
   min-width: 0;
-  width: 400px;
-  padding: 8px 8px;
-  font-size: inherit;
-  line-height: inherit;
-  border: 1px solid;
-  border-radius: 5px;
+  width: 450px;
   color: #555;
-  // background-color: transparent;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  &:focus {
-    border-color: #333;
-  }
-    cursor: pointer;
 `;
 
+const SelectTitle = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #FFB0AC;
+  padding: 8px;
+  box-sizing: border-box;
+  cursor: pointer;
+`
+
 const SelectContent = styled.div`
-display: flex;
-justify-content: center;
-align-items: center;
-flex-direction: column;
-div {
+  width: 100%;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 20px;
-}
+  flex-direction: column;
+  background-color: #D9D9D9;
+  box-sizing: border-box;
+  div {
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 `;
 
 const IconSVG = styled.svg`
@@ -595,7 +567,6 @@ const Button = styled.div`
   flex-direction: column;
   width: 400px;
   height: 40px;
-  margin-top: 20px;
   border: none;
   border-radius: 30px;
   color: #fff;
