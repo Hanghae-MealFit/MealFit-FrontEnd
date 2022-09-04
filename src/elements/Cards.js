@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart, faEye } from '@fortawesome/free-solid-svg-icons'
 
-const CardsAll = ({post}) => {
+const Cards = ({post}) => {
   console.log(post)
 
   const temp_img = "/logo/writebasicimage.png"
@@ -132,4 +132,4 @@ const TextLabel = styled.div`
   }
 `;
 
-export default CardsAll;
+export default Cards;

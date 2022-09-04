@@ -4,8 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 import { MemoizedTime } from './Time'
+import axios from 'axios';
 
-const Circle = () => {
+const Circle = ({Token, timeCheck, setTimeCheck}) => {
 
   const navigate = useNavigate();
   const [time, setTime] = React.useState(new Date());
@@ -65,6 +66,27 @@ const Circle = () => {
 
   const ChangeTimeClose = () => {
     setChangeEatTime(false)
+  }
+
+  const ChangeTiemAX = async () => {
+    try {
+      const res = await axios.put("http://43.200.174.111:8080/user/fastingTime", {
+        startFasting: startFastingHour_ref.current.value + ":" + startFastingMinute_ref.current.value,
+        endFasting: endFastingHour_ref.current.value + ":" + endFastingMinute_ref.current.value,
+      }, {
+        headers: {
+          Authorization: `Bearer ${Token.authorization}`,
+          refresh_token: `Bearer ${Token.refresh_token}`
+        }
+      })
+      console.log(res)
+      if(res.status === 200) {
+        setChangeEatTime(false)
+        setTimeCheck(!timeCheck)
+      }
+    } catch(err) {
+      console.log(err)
+    }
   }
 
   useEffect(() => {
@@ -147,12 +169,8 @@ const Circle = () => {
               </FastTimeWrap>
               <Button>
                 <CancleBtn onClick={ChangeTimeClose}>취소하기</CancleBtn>
-                <SignUpBtn onClick={ChangeTimeClose}
-                  disabled=
-                  {
-                    startHourCheck === ""
-                    ? false : true
-                  }>수정하기</SignUpBtn>
+                <SignUpBtn onClick={ChangeTiemAX}
+                  disabled={startHourCheck === "" ? false : true}>수정하기</SignUpBtn>
               </Button>
             </Modal>
           ) : (

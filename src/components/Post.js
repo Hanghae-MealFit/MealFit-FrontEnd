@@ -88,8 +88,7 @@ const Wrap = styled.div`
 const Container = styled.div`
   width: calc(100% - 260px);
   height: 100%;
-  margin-left: 260px;
-  margin-top: 180px;
+  margin: 180px 0 60px 260px;
   display: flex;
   flex-direction: column;
   justify-content: center;

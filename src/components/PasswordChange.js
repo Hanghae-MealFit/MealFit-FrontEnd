@@ -35,9 +35,9 @@ const PasswordChange = () => {
 
     try {
       const res = await axios.put("http://43.200.174.111:8080/user/password", {
-        password: cur_password_ref,
-        changePassword: password_ref,
-        passwordCheck: passwordCheck_ref
+        password: cur_password_ref.current.value,
+        changePassword: password_ref.current.value,
+        passwordCheck: passwordCheck_ref.current.value
       }, {
         headers: {
           "Content-Type": "application/json",
