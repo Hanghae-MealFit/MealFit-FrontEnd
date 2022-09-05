@@ -6,7 +6,7 @@ import { MemoizedSidebar } from "./Sidebar";
 import RecordModal from "../elements/RecordModal";
 import DimmedLayer from "../elements/DimmedLayer";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCirclePlus, faCircleMinus } from '@fortawesome/free-solid-svg-icons'
+import { faCirclePlus, faCircleMinus, faCaretRight, faCaretDown } from '@fortawesome/free-solid-svg-icons'
 
 import Calendar from 'react-calendar';
 import moment from "moment";
@@ -158,18 +158,32 @@ const Record = () => {
               formatDay={(locale, date) => moment(date).format("D")} // '일' 제외하고 숫자만 보이도록 설정
             />
           </CalendarContainer>
-          <RecordingBox style={{ filter: !isLogin ? "blur(6px)" : "none" }}>
+          <RecordingBox 
+            style={{ filter: !isLogin ? "blur(6px)" : "none" }}>
             <h1 className="Title">
               <div className="text-gray-500 mt-4">
                 {moment(value).format("YYYY년 MM월 DD일 dddd")}
               </div>
             </h1>
             <SelectBoxWrap>
+              {
+                recordModalOpen === true ? (
+                  <RecordModal
+                    setRecordModalOpen={setRecordModalOpen}
+                    selectTime={selectTime}
+                    SelectDay={SelectDay}
+                    selectEatItem={selectEatItem}
+                    editEatItem={editEatItem}
+                  />
+                ) : (
+                  null
+                )
+              }
               <SelectBox>
                 <Select>
                   <SelectTitle  onClick={morningToggle}>
+                    <FontAwesomeIcon icon={ breakfastOpen ? faCaretDown : faCaretRight} />
                     <div ref={morning_ref}>아침</div>
-                    <FontAwesomeIcon icon={ breakfastOpen ? faCircleMinus : faCirclePlus} />
                     {/* <IconSVG width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" >
                       <path fillRule="evenodd" clipRule="evenodd" d="M10 14L16 6H4L10 14Z" fill="#1A1A1A" />
                     </IconSVG> */}
@@ -177,6 +191,13 @@ const Record = () => {
                   { breakfastOpen  === true ? 
                     (
                       <SelectContent>
+                        <div className="addBtn">
+                          <Button onClick={() => {
+                              setRecordModalOpen(true)
+                              setSelectTime(morning_ref.current.innerHTML)
+                            }}
+                          >추가하기</Button>
+                        </div>
                         {
                           breakfastEatItem.length === 0 ? (
                             <div>아침 식단을 입력하세요.</div>
@@ -194,24 +215,6 @@ const Record = () => {
                                 <span onClick={() => DeleteItem(v.dietId)}>삭제</span>
                               </div>
                             ))
-                          )
-                        }
-                        <Button onClick={() => {
-                          setRecordModalOpen(true)
-                          setSelectTime(morning_ref.current.innerHTML)
-                        }}
-                        >추가하기</Button>
-                        {
-                          recordModalOpen === true ? (
-                            <RecordModal
-                              setRecordModalOpen={setRecordModalOpen}
-                              selectTime={selectTime}
-                              SelectDay={SelectDay}
-                              selectEatItem={selectEatItem}
-                              editEatItem={editEatItem}
-                            />
-                          ) : (
-                            null
                           )
                         }
                       </SelectContent>
@@ -477,7 +480,6 @@ const RecordingBox = styled.div`
   display: flex;
   justify-content: center;
   align-items: flex-start;
-
   h1.Title {
     position: absolute;
     top: 0;
@@ -519,7 +521,6 @@ const Select = styled.div`
   justify-content: space-between;
   align-items: center;
   flex-direction: column;
-  min-width: 0;
   width: 450px;
   color: #555;
 `;
@@ -528,11 +529,12 @@ const SelectTitle = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   background-color: #FFB0AC;
   padding: 8px;
   box-sizing: border-box;
+  gap: 8px;
   cursor: pointer;
 `
 
@@ -551,28 +553,29 @@ const SelectContent = styled.div`
     justify-content: center;
     align-items: center;
   }
+  div.addBtn {
+    margin: 0;
+    width: 100%;
+    height: 40px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
 `;
 
-const IconSVG = styled.svg`
-	margin-left: -30px;
-	align-self: center;
-	width: 24px;
-	height: 24px;
-`;
-
-const Button = styled.div`
+const Button = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
-  width: 400px;
-  height: 40px;
+  width: 70px;
+  height: 30px;
   border: none;
-  border-radius: 30px;
+  border-radius: 8px;
   color: #fff;
   background-color: #FE7770;
-  font-size: 16px;
-  // font-weight: 900;
+  font-size: 14px;
+  font-weight: 900;
+  margin-right: 10px;
   cursor: pointer;
 `;
 

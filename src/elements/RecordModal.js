@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 // import FoodModal from "../elements/FoodModal";
 
 const RecordModal = (
@@ -153,16 +155,18 @@ const RecordModal = (
       <ModalBlock>
         {
           editEatItem ? (
-            <h1>수정하기</h1>
+            <Title>수정하기</Title>
           ) :
           (
-            <h1>추가하기</h1>
+            <Title>추가하기</Title>
           )
         }
         <Contents>
           <InputTxt>
-              <input ref={search_food_ref} type="text" placeholder='검색어를 입력하세요.' />
-              <button onClick={FoodSearch}>검색하기</button>
+            <input ref={search_food_ref} type="text" placeholder='검색어를 입력하세요.' />
+            <button onClick={FoodSearch}>
+              <FontAwesomeIcon icon={faMagnifyingGlass} />
+            </button>
           </InputTxt>
           {
             notFoundSearch ? (
@@ -192,25 +196,46 @@ const RecordModal = (
               </Direct>
             ) : 
             (
+              // style={{
+              //   cursor: "pointer",
+              //   backgroundColor: selectMenuCheck && v.foodId === selectMenu.foodId ? "black" : "transparent"
+              // }}
               !notFoundSearch ? (
-                <>
                   <FoodData>
                     {searchList?.map((v, idx) => (
-                      <div style={{
-                        cursor: "pointer",
-                        backgroundColor: selectMenuCheck && v.foodId === selectMenu.foodId ? "black" : "transparent"
-                      }} onClick={(e) => {SelectFood(e, v)}} key={idx}>
-                        <p>{v.foodName}</p>
-                        <p>{v.oneServing}</p>
-                        <p>{v.kcal}</p>
-                        <p>{v.carbs}</p>
-                        <p>{v.protein}</p>
-                        <p>{v.fat}</p>
-                      </div>
+                      <FoodInfo key={idx}>
+                        <RadioInput type="radio" id={v.foodId} name="SelectFood" value={v} />
+                        <label htmlFor={v.foodId} onClick={(e) => {SelectFood(e, v)}}>
+                          <RadioBtn className="RadioBtn" />
+                          <FoodInofWrap>
+                            <FoodTitle>
+                              <p className="FoodTitle">{v.foodName}</p>
+                            </FoodTitle>
+                            <FoodCom className="FoodCom">
+                              <p>제조사 : {v.madeBy}</p>
+                            </FoodCom>
+                            <FoodDesc className="FoodDesc">
+                              <p>1회 제공량: {v.oneServing}(g)</p>
+                              <p>kcal: {v.kcal}</p>
+                              <p>탄: {v.carbs}</p>
+                              <p>단: {v.protein}</p>
+                              <p>지: {v.fat}</p>
+                            </FoodDesc>
+                            { selectMenuCheck && v.foodId === selectMenu.foodId ?
+                              (
+                                <EatInput>
+                                  <input ref={eating_weight_ref} type="text" placeholder='섭취량을 입력해주세요.' />
+                                </EatInput>
+                              ) :
+                              (
+                                null
+                              )
+                            }
+                          </FoodInofWrap>
+                        </label>
+                      </FoodInfo>
                     ))}
                   </FoodData>
-                  <input ref={eating_weight_ref} type="text" placeholder='섭취량 입력' />
-                </>
               ) : (
                 null
               )
@@ -243,131 +268,116 @@ const RecordModal = (
 };
 
 const Container = styled.div`
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    z-index: 5000;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
 `;
 
 const Background = styled.div`
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.15);
-    backdrop-filter: blur(5px);
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(5px);
 `;
 
 const ModalBlock = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    border-radius: 30px;
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
-    background-color: #fff;
-    width: 35rem;
-    height: 100%;
-    h1 {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      margin: 0 auto;
-      padding: 30px 0;
-      font-size: 26px;
-      color: #FE7770;
-      width: 540px;
-      border-bottom: 1px solid #E0E2E6;
-      text-align: center;
-    }
-    @media (max-width: 1120px) {
-        width: 50rem;
-    }
-    @media (max-width: 50rem) {
-        width: 80%;
-    }
-    min-height: 10rem;
-    animation: modal-show 1s;
-    @keyframes modal-show {
-        from {
-            opacity: 0;
-            margin-top: -50px;
-        }
-        to {
-            opacity: 1;
-            margin-top: 0;
-        }
-    }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 30px;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+  background-color: #fff;
+  width: 80%;
+  height: 80%;
+  z-index: 120;
+  @media (max-width: 1120px) {
+      width: 50rem;
+  }
+  @media (max-width: 50rem) {
+      width: 80%;
+  }
+  min-height: 10rem;
+  animation: modal-show 1s;
+  @keyframes modal-show {
+      from {
+          opacity: 0;
+          margin-top: -50px;
+      }
+      to {
+          opacity: 1;
+          margin-top: 0;
+      }
+  }
+`;
+
+const Title = styled.h1`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  margin: 0 auto;
+  padding: 20px 0;
+  font-size: 22px;
+  color: #FE7770;
 `;
 
 const Contents = styled.div`
-  position: relative;
   width: 100%;
-  height: 80%;
-  position: absolute;
-  bottom: 20px;
+  height: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: flex-start;
   flex-direction: column;
-  p {
-      font-size: 17px;
-      font-weight: 100;
-      color: #bbb;
-    }
-  div {
-      display: flex;
-      align-items: center;
-      justify-content: space-evenly;
-      width: 60%;
-  }
-  button {
-      position: relative;
-      // margin: 0px;
-      width: 100px;
-      height: 30px;
-      font-size: 12px;
-      font-weight: 900;
-      border-radius: 30px;
-      cursor: pointer;
-      border: 1px solid #555;
-      background-color: white;
-      }
+  box-sizing: border-box;
 `;
 
 const InputTxt = styled.div`
-    // background-color: red;
-    input {
-        width: 250px;
-        background-color: transparent;
-        border: none;
-        border-bottom: 1px solid #808080;
-        padding: 12px 0 12px 6px;
-        box-sizing: border-box;
-        outline: none;
-    }
-    button {
-        // position: relative;
-        width: 100px;
-        height: 30px;
-        font-size: 12px;
-        font-weight: 900;
-        border-radius: 30px;
-        cursor: pointer;
-        border: 1px solid #555;
-        background-color: white;
-        }
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 85%;
+  height: 40px;
+  margin-bottom: 16px;
+  input {
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    border: 1px solid #808080;
+    border-radius: 12px;
+    padding: 12px;
+    padding-right: 52px;
+    box-sizing: border-box;
+    outline: none;
+  }
+  button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 40px;
+    height: 100%;
+    font-size: 16px;
+    font-weight: 900;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    box-sizing: border-box;
+  }
 `;
 
 const Search = styled.div`
@@ -380,7 +390,9 @@ const Search = styled.div`
     justify-content: center;
     align-items: center;
     p {
-      margin-bottom: 40px;
+      font-size: 17px;
+      font-weight: 100;
+      color: #bbb;
     }
 `;
 
@@ -405,21 +417,159 @@ const Direct = styled.div`
 `;
 
 const FoodData = styled.div`
-    // background-color: hotpink;
+  width: 90%;
+  height: 280px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  /* border: 1px solid #555; */
+  border-radius: 8px;
+  padding: 12px;
+  box-sizing: border-box;
+  overflow: auto;
+`;
+
+const FoodInfo = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 6px;
+  box-sizing: border-box;
+`
+
+const RadioInput = styled.input`
+  display: none;
+  & + label {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    cursor: pointer;
+  }
+  &:checked + label > .RadioBtn {
+    background-color: #FE7770;
+  }
+  &:checked + label .FoodTitle {
+    color: #FE7770;
+  }
+`
+
+const RadioBtn = styled.div`
+  position: relative;
+  width: 24px;
+  height: 24px;
+  background-color: #fff;
+  border-radius: 50%;
+  border: 1px solid #eee;
+  box-sizing: border-box;
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 12px;
+    height: 12px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background-color: #fff;
+  }
+`
+
+const FoodInofWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  width: 90%;
+  margin-left: 12px;
+`
+
+const FoodTitle = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  p {
+    font-size: 14px;
+    color: #bbb;
+    margin: 0;
+  }
+`
+const FoodCom = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  p {
+    font-size: 8px;
+    color: #bbb;
+    margin: 0;
+    font-weight: 300;
+  }
+`
+
+const FoodDesc = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  p {
+    position: relative;
+    font-size: 8px;
+    color: #bbb;
+    margin: 0;
+    padding: 0 4px;
+    text-align: center;
+    box-sizing: border-box;
+    font-weight: 300;
+  }
+  p::before {
+    position: absolute;
+    content: '';
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
     width: 100%;
     height: 50%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    border: 1px solid #555;
-    border-radius: 8px;
-    p {
-      font-size: 17px;
-      font-weight: 100;
-      color: #bbb;
-      margin-bottom: 50px;
-    }
-`;
+    border-right: 1px solid #CCC;
+  }
+  p:first-child {
+    padding-left: 0;
+  }
+  p:last-child:before {
+    border: none;
+  }
+`
+
+const EatInput = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin: 3px 0;
+  color: #bbb;
+  animation: modal-show 1s;
+  @keyframes modal-show {
+      from {
+          opacity: 0;
+          margin-left: -40px;
+      }
+      to {
+          opacity: 1;
+          margin-left: 0;
+      }
+  }
+  input {
+    border: none;
+    outline: none;
+    border-bottom: 1px solid #BBB;
+    padding: 2px;
+    font-size: 12px;
+  }
+`
 
 export default RecordModal;
