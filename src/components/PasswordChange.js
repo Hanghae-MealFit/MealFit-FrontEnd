@@ -34,7 +34,7 @@ const PasswordChange = () => {
     };
 
     try {
-      const res = await axios.put("http://43.200.174.111:8080/user/password", {
+      const res = await axios.put("http://43.200.174.111:8080/api/user/password", {
         password: cur_password_ref.current.value,
         changePassword: password_ref.current.value,
         passwordCheck: passwordCheck_ref.current.value
@@ -102,15 +102,15 @@ const PasswordChange = () => {
           <ModInputWrap>
             <p>새로운 비밀번호를 입력해주세요.</p>
             <InputTxt>
-              <input ref={cur_password_ref} onChange={CurPw} type="password" placeholder='현재 비밀번호를 입력하세요.' />
+              <input ref={cur_password_ref} onChange={CurPw} type="password" placeholder='현재 비밀번호를 입력하세요.' autoComplete="off" />
               <p ref={cur_pw_err_ref}>{curPwMsg}</p>
             </InputTxt>
             <InputTxt>
-              <input ref={password_ref} onChange={PwChange} type="password" placeholder='새로운 비밀번호를 입력하세요.' />
+              <input ref={password_ref} onChange={PwChange} type="password" placeholder='새로운 비밀번호를 입력하세요.' autoComplete="off" />
               <p ref={pw_err_ref}>{PwMsg}</p>
             </InputTxt>
             <InputTxt>
-              <input ref={passwordCheck_ref} onChange={PwCheck} type="password" placeholder='새로운 비밀번호 다시 한번 입력해주세요.' />
+              <input ref={passwordCheck_ref} onChange={PwCheck} type="password" placeholder='새로운 비밀번호 다시 한번 입력해주세요.' autoComplete="off" />
               <p ref={pw_check_err_ref}>{checkPwMsg}</p>
             </InputTxt>
           </ModInputWrap>

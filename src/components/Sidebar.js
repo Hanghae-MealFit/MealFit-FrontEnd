@@ -82,7 +82,7 @@ const Sidebar = () => {
     e.preventDefault()
 
     try {
-      const response = await axios.post("http://43.200.174.111:8080/user/logout",
+      const response = await axios.post("http://43.200.174.111:8080/api/user/logout",
         {
           headers: {
             Authorization: `Bearer ${Token.authorization}`,

@@ -103,7 +103,7 @@ const Signup = () => {
     await axios({
       baseURL: "http://43.200.174.111:8080/",
       method: "POST",
-      url: "/user/signup",
+      url: "/api/user/signup",
       data: formData,
       headers: {
         "Content-Type": "multipart/form-data",
@@ -123,7 +123,7 @@ const Signup = () => {
 
     try {
       const username = username_ref.current.value
-      const res = await axios.get(`http://43.200.174.111:8080/user/username/${username}`,
+      const res = await axios.get(`http://43.200.174.111:8080/api/user/username/${username}`,
         {
           headers: {
             "Content-Type": "application/json"
@@ -147,7 +147,7 @@ const Signup = () => {
 
     try {
       const nickname = nickname_ref.current.value
-      const res = await axios.get(`http://43.200.174.111:8080/user/nickname/${nickname}`,
+      const res = await axios.get(`http://43.200.174.111:8080/api/user/nickname/${nickname}`,
         {
           headers: {
             "Content-Type": "application/json"
@@ -171,7 +171,7 @@ const Signup = () => {
 
     try {
       const email = email_ref.current.value
-      const res = await axios.get(`http://43.200.174.111:8080/user/email/${email}`,
+      const res = await axios.get(`http://43.200.174.111:8080/api/user/email/${email}`,
         {
           headers: {
             "Content-Type": "application/json"
@@ -362,11 +362,11 @@ const Signup = () => {
             <p ref={email_err_ref}>{checkEmailMsg}</p>
           </Contents>
           <Contents>
-            <input ref={password_ref} type="password" placeholder='Password를 입력해주세요.' onChange={PwChange} />
+            <input ref={password_ref} type="password" placeholder='Password를 입력해주세요.' onChange={PwChange} autoComplete="off" />
             <p ref={pw_err_ref}>{PwMsg}</p>
           </Contents>
           <Contents>
-            <input ref={passwordCheck_ref} type="password" placeholder='Password를 확인해주세요.' onChange={PwCheckChange} />
+            <input ref={passwordCheck_ref} type="password" placeholder='Password를 확인해주세요.' onChange={PwCheckChange} autoComplete="off" />
             <p ref={pw_check_err_ref}>{checkPwMsg}</p>
           </Contents>
           <WeightWrap>

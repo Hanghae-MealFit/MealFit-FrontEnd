@@ -13,15 +13,22 @@ const RecordModal = (
     selectTime,
     SelectDay,
     editEatItem,
-    selectEatItem
+    setEditEatItem,
+    selectEatItem,
+    checkInputFood,
+    setCheckInputFood
   }) => {
 
   const handleClose = () => {
-      setRecordModalOpen(false);
+    setNotFoundSarch(false)
   };
+  
+  const handleEditClose = () => {
+    setRecordModalOpen(false)
+    setEditEatItem(false)
+  }
 
   const [notFoundSearch, setNotFoundSarch] = React.useState(false)
-  const [foodInputModal, setFoodInputModal] = React.useState(false)
   const [searchList, setSearchList] = React.useState()
   const [selectMenu, setSelectMenu] = React.useState()
   const [selectMenuCheck, setSelectMenuCheck] = React.useState(false)
@@ -40,9 +47,10 @@ const RecordModal = (
     refresh_token: sessionStorage.getItem("refreshToken")
   }
 
+  // 음식 추가하기
   const FoodInsert = async () => {
     try {
-      const res = await axios.post("http://43.200.174.111:8080/food",
+      const res = await axios.post("http://43.200.174.111:8080/api/food",
         {
           foodName: foodName_ref.current.value,
           oneServing: serving_ref.current.value,
@@ -57,28 +65,36 @@ const RecordModal = (
           },
         })
       console.log(res)
+      if(res.status === 201 && res.data === "음식 입력 완료") {
+        window.alert("음식 입력에 완료되었습니다.\n검색 후 섭취량을 기록해주세요.")
+        setNotFoundSarch(false)
+        search_food_ref.current.focus()
+        setText(foodName_ref.current.value)
+        FoodSearch(foodName_ref.current.value)
+      }
     } catch (error) {
       console.log(error)
+      window.alert("음식 입력에 실패하였습니다.")
     }
   }
 
   // 검색
-  const FoodSearch = async () => {
-    const SearchName = search_food_ref.current.value
+  const FoodSearch = async (data) => {
+    const SearchName = data ? data : search_food_ref.current.value
     try {
-      const res = await axios.get(`http://43.200.174.111:8080/food?name=${SearchName}`,
+      const res = await axios.get(`http://43.200.174.111:8080/api/food?name=${SearchName}`,
         {
           headers: {
             Authorization: `Bearer ${auth.authorization}`,
             refresh_token: `Bearer ${auth.refresh_token}`
           },
         })
-        console.log(res.data)
+        console.log(res)
         if(res.data.length === 0) {
           setNotFoundSarch(true)
         } else {
-          setSearchList(res.data)
           setNotFoundSarch(false)
+          setSearchList(res.data)
         }
     } catch (error) {
         console.log(error)
@@ -88,23 +104,27 @@ const RecordModal = (
   // 식단 추가하기
   const DietInsert = async () => {
     try {
-      const res = await axios.post(`http://43.200.174.111:8080/diet`,{
-          foodId: selectMenu.foodId,
-          foodWeight: eating_weight_ref.current.value,
-          status: selectTime === "아침" ? "BREAKFAST" : selectTime === "점심" ? "LUNCH" : "DINNER",
-          date: SelectDay
+      const res = await axios.post(`http://43.200.174.111:8080/api/diet`,{
+        foodId: selectMenu.foodId,
+        foodWeight: eating_weight_ref.current.value,
+        status: selectTime === "아침" ? "BREAKFAST" : selectTime === "점심" ? "LUNCH" : "DINNER",
+        date: SelectDay
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${auth.authorization}`,
+          refresh_token: `Bearer ${auth.refresh_token}`
         },
-        {
-          headers: {
-            Authorization: `Bearer ${auth.authorization}`,
-            refresh_token: `Bearer ${auth.refresh_token}`
-          },
-        })
-        console.log(res)
-        // console.log(selectMenu.foodId, eating_ref.current.value, selectTime, SelectDay)
+      })
+      console.log(res)
+      if(res.status === 201) {
+        window.alert("식단 입력이 완료되었습니다.")
+        setRecordModalOpen(false)
+        setCheckInputFood(!checkInputFood)
+      }
     } catch (error) {
         console.log(error)
-        // console.log(selectMenu.foodId, eating_ref.current.value, selectTime, SelectDay)
+        window.alert("식단 입력에 실패하였습니다.")
     }
   }
 
@@ -117,37 +137,44 @@ const RecordModal = (
   // 식단 수정하기
   const DietEdit = async () => {
     try {
-      const res = await axios.put(`http://43.200.174.111:8080/diet`,{
-          dietId: selectEatItem.dietId,
-          foodId: selectMenu.foodId,
-          foodWeight: eating_weight_ref.current.value
+      const res = await axios.put(`http://43.200.174.111:8080/api/diet`,{
+        dietId: selectEatItem.dietId,
+        foodId: selectMenu.foodId,
+        foodWeight: eating_weight_ref.current.value
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${auth.authorization}`,
+          refresh_token: `Bearer ${auth.refresh_token}`
         },
-        {
-          headers: {
-            Authorization: `Bearer ${auth.authorization}`,
-            refresh_token: `Bearer ${auth.refresh_token}`
-          },
-        })
-        console.log(res)
-        console.log(
-          "dd", selectEatItem,
-          "dietId", selectEatItem.dietId,
-          "foodId", selectMenu.foodId,
-          "foodWeight", eating_weight_ref.current.value)
-        console.log(selectMenu.foodId, eating_weight_ref.current.value, selectEatItem.dietId, selectMenu.foodId)
+      })
+      console.log(res)
+      if(res.status === 200 && res.data === "식단 수정 완료!") {
+        window.alert("음식 수정이 완료되었습니다.")
+        setRecordModalOpen(false)
+        setEditEatItem(false)
+        setCheckInputFood(!checkInputFood)
+      }
     } catch (error) {
       console.log(error)
-      console.log(
-        "dd", selectEatItem,
-        "dietId", selectEatItem.dietId,
-        "foodId", selectEatItem.foodId,
-        "changeTo", selectMenu.foodId,
-        "foodWeight", eating_weight_ref.current.value)
+      window.alert("음식 수정에 실패하였습니다.")
     }
   }
-  console.log(selectEatItem, selectMenu)
+  console.log("EatItem",selectEatItem, "selectMenu",selectMenu)
 
   console.log("edit", editEatItem)
+
+  const onCheckEnter = (e) => {
+    if(e.key === 'Enter') {
+      FoodSearch()
+    }
+  }
+
+  const [text, setText] = React.useState("");
+
+  const displayText = (e) => {
+    setText(e.target.value);
+  };
 
   return (
     <Container>
@@ -163,7 +190,7 @@ const RecordModal = (
         }
         <Contents>
           <InputTxt>
-            <input ref={search_food_ref} type="text" placeholder='검색어를 입력하세요.' />
+            <input ref={search_food_ref} type="text" placeholder='검색어를 입력하세요.' onKeyPress={onCheckEnter} value={text} onChange={displayText} />
             <button onClick={FoodSearch}>
               <FontAwesomeIcon icon={faMagnifyingGlass} />
             </button>
@@ -172,95 +199,100 @@ const RecordModal = (
             notFoundSearch ? (
               <Search>
                 <p>검색 결과가 없습니다. 직접 입력해주세요.</p>
-                <button onClick={() => setFoodInputModal(true)}>직접 입력</button>
+                <Direct>
+                  <div className="InputWrap">
+                    <p>음식명</p>
+                    <input ref={foodName_ref} type="text" placeholder='음식이름' />
+                  </div>
+
+                  <div className="InputWrap">
+                    <p>1회 제공량</p>
+                    <input ref={serving_ref} type="text" placeholder='1회 제공량' />
+                  </div>
+
+                  <div className="InputWrap">
+                    <p>칼로리</p>
+                    <input ref={kcal_ref} type="text" placeholder='칼로리' />
+                  </div>
+
+                  <div className="InputWrap">
+                    <p>탄수화물</p>
+                    <input ref={carbs_ref} type="text" placeholder='탄수화물' />
+                  </div>
+
+                  <div className="InputWrap">
+                    <p>단백질</p>
+                    <input ref={pro_ref} type="text" placeholder='단백질' />
+                  </div>
+
+                  <div className="InputWrap">
+                    <p>지방: </p>
+                    <input ref={fat_ref} type="text" placeholder='지방' />
+                  </div>
+                </Direct>
               </Search>
             ) :
             (
-              null
+              <FoodData>
+                {searchList?.map((v, idx) => (
+                  <FoodInfo key={idx}>
+                    <RadioInput type="radio" id={v.foodId} name="SelectFood" value={v}  />
+                    <label htmlFor={v.foodId} onClick={(e) => {SelectFood(e, v)}}>
+                      <RadioBtn className="RadioBtn" />
+                      <FoodInofWrap>
+                        <FoodTitle>
+                          <p className="FoodTitle">{v.foodName === null ? "미정" : v.foodName}</p>
+                        </FoodTitle>
+                        <FoodCom className="FoodCom">
+                          <p>제조사 : {v.madeBy === null ? "미정" : v.madeBy}</p>
+                        </FoodCom>
+                        <FoodDesc className="FoodDesc">
+                          <p>1회 제공량: {v.oneServing === null ? "미정" : v.oneServing}(g)</p>
+                          <p>kcal: {v.kcal === null ? "미정" : v.kcal}</p>
+                          <p>탄: {v.carbs === null ? "미정" : v.carbs}</p>
+                          <p>단: {v.protein === null ? "미정" : v.protein}</p>
+                          <p>지: {v.fat === null ? "미정" : v.fat}</p>
+                        </FoodDesc>
+                        { selectMenuCheck && v.foodId === selectMenu.foodId ?
+                          (
+                            <EatInput>
+                              <input ref={eating_weight_ref} type="text" placeholder='섭취량을 입력해주세요.' />
+                            </EatInput>
+                          ) :
+                          (
+                            null
+                          )
+                        }
+                      </FoodInofWrap>
+                    </label>
+                  </FoodInfo>
+                ))}
+              </FoodData>
             )
           }
-          {
-            foodInputModal ?
+          { notFoundSearch ?
             (
-              <Direct>
-                <input ref={foodName_ref} type="text" placeholder='음식이름' />
-                <input ref={serving_ref} type="text" placeholder='1회 제공량' />
-                <input ref={kcal_ref} type="text" placeholder='칼로리' />
-                <input ref={carbs_ref} type="text" placeholder='탄수화물' />
-                <input ref={pro_ref} type="text" placeholder='단백질' />
-                <input ref={fat_ref} type="text" placeholder='지방' />
-                <div style={{ width: "80%" }}>
-                <button onClick={() => {setFoodInputModal(false)}}>취소하기</button>
+              <BtnWrap>
+                <button onClick={handleClose}>뒤로가기</button>
                 <button onClick={FoodInsert}>입력하기</button>
-                </div>
-              </Direct>
-            ) : 
+              </BtnWrap>
+            ) :
             (
-              // style={{
-              //   cursor: "pointer",
-              //   backgroundColor: selectMenuCheck && v.foodId === selectMenu.foodId ? "black" : "transparent"
-              // }}
-              !notFoundSearch ? (
-                  <FoodData>
-                    {searchList?.map((v, idx) => (
-                      <FoodInfo key={idx}>
-                        <RadioInput type="radio" id={v.foodId} name="SelectFood" value={v} />
-                        <label htmlFor={v.foodId} onClick={(e) => {SelectFood(e, v)}}>
-                          <RadioBtn className="RadioBtn" />
-                          <FoodInofWrap>
-                            <FoodTitle>
-                              <p className="FoodTitle">{v.foodName}</p>
-                            </FoodTitle>
-                            <FoodCom className="FoodCom">
-                              <p>제조사 : {v.madeBy}</p>
-                            </FoodCom>
-                            <FoodDesc className="FoodDesc">
-                              <p>1회 제공량: {v.oneServing}(g)</p>
-                              <p>kcal: {v.kcal}</p>
-                              <p>탄: {v.carbs}</p>
-                              <p>단: {v.protein}</p>
-                              <p>지: {v.fat}</p>
-                            </FoodDesc>
-                            { selectMenuCheck && v.foodId === selectMenu.foodId ?
-                              (
-                                <EatInput>
-                                  <input ref={eating_weight_ref} type="text" placeholder='섭취량을 입력해주세요.' />
-                                </EatInput>
-                              ) :
-                              (
-                                null
-                              )
-                            }
-                          </FoodInofWrap>
-                        </label>
-                      </FoodInfo>
-                    ))}
-                  </FoodData>
-              ) : (
-                null
-              )
-            )
-          }
-          <div style={{ width: "50%" }}>
-              <button onClick={handleClose}>뒤로가기</button>
-              {
-                editEatItem ? (
-                  <button onClick={DietEdit}>수정하기</button>
+              editEatItem ?
+                (
+                  <BtnWrap>
+                    <button onClick={handleEditClose}>뒤로가기</button>
+                    <button onClick={DietEdit}>수정하기</button>
+                  </BtnWrap>
                 ) :
                 (
-                  <button onClick={DietInsert}>기록하기</button>
+                  <BtnWrap>
+                    <button onClick={handleClose}>뒤로가기</button>
+                    <button onClick={DietInsert}>기록하기</button>
+                  </BtnWrap>
                 )
-              }
-              {/* <button onClick={() => { setFoodModalOpen(true) }}
-              >검색하기</button> */}
-              {/* {
-        foodModalOpen === true ? (
-            <FoodModal setFoodModalOpen={setFoodModalOpen} />
-        ) : (
-            null
-        )
-    } */}
-          </div>
+            )
+          }
         </Contents>
       </ModalBlock>
     </Container>
@@ -381,37 +413,61 @@ const InputTxt = styled.div`
 `;
 
 const Search = styled.div`
-    // background-color: pink;
     position: relative;
-    width: 100%;
-    height: 25%;
+    width: 85%;
+    height: 280px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     p {
       font-size: 17px;
-      font-weight: 100;
-      color: #bbb;
+      font-weight: 700;
+      color: #333;
+      margin: 0;
     }
 `;
 
 const Direct = styled.div`
-    // background-color: hotpink;
     width: 100%;
-    height: 70%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    border: 1px solid #555;
-    border-radius: 8px;
+    div.InputWrap {
+      width: 100%;
+      height: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-sizing: border-box;
+      margin-bottom: 8px;
+    }
+    div.InputWrap:last-child {
+      margin: 0;
+    }
+    p {
+      width: 90px;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #FE7770;
+      border-radius: 8px 0 0 8px;
+      font-size: 14px;
+      color: #fff;
+      margin: 0;
+    }
     input {
+        width: 200px;
+        height: 100%;
         background-color: transparent;
-        border: none;
-        border-bottom: 1px solid #808080;
-        padding: 6px 0 6px 3px;
+        border: 1px solid #808080;
+        border-left: none;
+        padding: 6px 10px;
         box-sizing: border-box;
+        border-radius: 0 8px 8px 0;
         outline: none;
     }
 `;
@@ -432,7 +488,6 @@ const FoodData = styled.div`
 
 const FoodInfo = styled.div`
   width: 100%;
-  height: 100%;
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -552,8 +607,8 @@ const EatInput = styled.div`
   align-items: center;
   margin: 3px 0;
   color: #bbb;
-  animation: modal-show 1s;
-  @keyframes modal-show {
+  animation: eatInput-show 1s;
+  @keyframes eatInput-show {
       from {
           opacity: 0;
           margin-left: -40px;
@@ -569,6 +624,31 @@ const EatInput = styled.div`
     border-bottom: 1px solid #BBB;
     padding: 2px;
     font-size: 12px;
+  }
+`
+
+const BtnWrap = styled.div`
+  width: 100%;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  margin-top: 18px;
+  button {
+    width: 140px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    border-radius: 30px;
+    font-weight: 900;
+    cursor: pointer;
+  }
+  button:last-child {
+    background-color: #FE7770;
+    color: #fff;
   }
 `
 

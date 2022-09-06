@@ -58,7 +58,7 @@ const PostUp = () => {
     await axios({
       baseURL: "http://43.200.174.111:8080/",
       method: "POST",
-      url: "/post",
+      url: "/api/post",
       data: formData,
       headers: {
         "Content-Type": "multipart/form-data",
@@ -78,7 +78,7 @@ const PostUp = () => {
   // 수정 페이지 시, 식단 게시글 상세조회
   const PostViewAX = async () => {
     try {
-      const response = await axios.get(`http://43.200.174.111:8080/post/${postId}`, {
+      const response = await axios.get(`http://43.200.174.111:8080/api/post/${postId}`, {
         headers: {
           Authorization: `Bearer ${auth.authorization}`,
           refresh_token: `Bearer ${auth.refresh_token}`
@@ -98,7 +98,7 @@ const PostUp = () => {
     await axios({
       baseURL: "http://43.200.174.111:8080/",
       method: "PUT",
-      url: `/post/${postId}`,
+      url: `/api/post/${postId}`,
       data: UpdateformData,
       headers: {
         "Content-Type": "multipart/form-data",

@@ -103,7 +103,7 @@ const PostView = (props) => {
   // 식단 게시글 상세조회
   const PostViewAX = async () => {
     try {
-      const response = await axios.get(`http://43.200.174.111:8080/post/${postId}`, {
+      const response = await axios.get(`http://43.200.174.111:8080/api/post/${postId}`, {
         headers: {
           Authorization: `Bearer ${Token.authorization}`,
           refresh_token: `Bearer ${Token.refresh_token}`
@@ -122,7 +122,7 @@ const PostView = (props) => {
   // 댓글 불러오기
   const CommentLoad = async () => {
     try {
-      const response = await axios.get(`http://43.200.174.111:8080/post/${postId}/comment`, {
+      const response = await axios.get(`http://43.200.174.111:8080/api/post/${postId}/comment`, {
         headers: {
           Authorization: `Bearer ${Token.authorization}`,
           refresh_token: `Bearer ${Token.refresh_token}`
@@ -138,7 +138,7 @@ const PostView = (props) => {
   // 댓글 작성하기
   const CommentWrite = async () => {
     try {
-      const response = await axios.post(`http://43.200.174.111:8080/post/${postId}/comment`, {
+      const response = await axios.post(`http://43.200.174.111:8080/api/post/${postId}/comment`, {
         content: comment_ref.current.value
       },
       {
@@ -167,7 +167,7 @@ const PostView = (props) => {
   const CommentEdit = async () => {
     const commentId = commentEditCheck.commentId
     try {
-      const res = await axios.put(`http://43.200.174.111:8080/post/comment/${commentId}`, {
+      const res = await axios.put(`http://43.200.174.111:8080/api/post/comment/${commentId}`, {
         content: edit_ref.current.value
       }
       , {
@@ -189,7 +189,7 @@ const PostView = (props) => {
   // 댓글 삭제하기
   const CommentDelete = async (commentId) => {
     try {
-      const response = await axios.delete(`http://43.200.174.111:8080/post/comment/${commentId}`, {
+      const response = await axios.delete(`http://43.200.174.111:8080/api/post/comment/${commentId}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${Token.authorization}`,

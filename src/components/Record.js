@@ -24,6 +24,7 @@ const Record = () => {
   const [ breakfastEatItem, setBreakfastEatItem] = React.useState([])
   const [ lunchEatItem, setLunchEatItem] = React.useState([])
   const [ dinnerEatItem, setDinnerEatItem] = React.useState([])
+  const [ checkInputFood, setCheckInputFood ] = React.useState(false)
 
   const [selectTime, setSelectTime] = React.useState("");
   const [todayEatItem, setTodayEatItem] = React.useState("");
@@ -32,8 +33,6 @@ const Record = () => {
   const [selectEatItemCheck, setSelectEatItemCheck] = React.useState(false);
 
   const [editEatItem, setEditEatItem] = React.useState(false);
-
-  // console.log("타임", selectTime)
 
   const Token = {
     authorization: sessionStorage.getItem("accessToken"),
@@ -90,7 +89,7 @@ const Record = () => {
   const getFood = async () => {
     if (Token.authorization !== null && Token.refresh_token !== null) {
       try {
-        const res = await axios.get(`http://43.200.174.111:8080/diet?date=${SelectDay}`,
+        const res = await axios.get(`http://43.200.174.111:8080/api/diet?date=${SelectDay}`,
           {
             headers: {
               Authorization: `Bearer ${auth.authorization}`,
@@ -108,9 +107,9 @@ const Record = () => {
       }
     }
   }
-  console.log(breakfastEatItem)
-  console.log(lunchEatItem)
-  console.log(dinnerEatItem)
+  console.log("아침",breakfastEatItem)
+  console.log("점심",lunchEatItem)
+  console.log("저녁",dinnerEatItem)
 
   React.useEffect(() => {
     LoginCheck()
@@ -118,23 +117,26 @@ const Record = () => {
 
   React.useEffect(() => {
     getFood()
-  }, [SelectDay])
+  }, [SelectDay, checkInputFood])
 
   console.log("why",selectEatItem)
 
   const DeleteItem = async (value) => {
     try {
-      const res = await axios.delete(`http://43.200.174.111:8080/diet/${value}`,{
+      const res = await axios.delete(`http://43.200.174.111:8080/api/diet/${value}`,{
         headers: {
           Authorization: `Bearer ${auth.authorization}`,
           refresh_token: `Bearer ${auth.refresh_token}`
         },
       })
       console.log(res)
-      console.log(selectEatItem.dietId)
+      if(res.status === 200 && res.data === "식단 삭제 완료!") {
+        window.alert("선택하신 음식이 삭제되었습니다.")
+        setCheckInputFood(!checkInputFood)
+      }
     } catch(error) {
       console.log(error)
-      console.log(selectEatItem.dietId)
+      window.alert("음식 삭제에 실패하였습니다.")
     }
   }
   
@@ -174,6 +176,9 @@ const Record = () => {
                     SelectDay={SelectDay}
                     selectEatItem={selectEatItem}
                     editEatItem={editEatItem}
+                    setEditEatItem={setEditEatItem}
+                    checkInputFood={checkInputFood}
+                    setCheckInputFood={setCheckInputFood}
                   />
                 ) : (
                   null
