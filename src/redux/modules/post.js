@@ -9,22 +9,20 @@ const DELETEPOST = "post/DELETEPOST";
 
 //reducer이 사용할 initialState
 const initialState = {
-  post: {
-    content: [
-      {
-        content: "",
-        createdAt: "",
-        images: [],
-        like: "",
-        liked: "",
-        nickname: "",
-        postId: "",
-        profileImage: "",
-        updatedAt: "",
-        view: ""
-      },
-    ]
-  }
+  post: [
+    {
+      content: "",
+      createdAt: "",
+      images: [],
+      like: "",
+      liked: "",
+      nickname: "",
+      postId: "",
+      profileImage: "",
+      updatedAt: "",
+      view: ""
+    },
+  ]
 }
 
 // Action Creators
@@ -49,8 +47,8 @@ export function delPost(post) {
 export const loadPostDB = () => {
   return async function (dispatch) {
     try {
-      const res = await axios.get('http://43.200.174.111:8080/post?size=6')
-      // console.log(res.data)
+      const res = await axios.get('http://43.200.174.111:8080/api/post?size=6')
+      console.log(res.data)
       dispatch(loadPost(res.data))
     } catch(error) {
       console.log(error);

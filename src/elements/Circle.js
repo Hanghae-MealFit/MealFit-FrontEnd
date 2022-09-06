@@ -70,7 +70,7 @@ const Circle = ({Token, timeCheck, setTimeCheck}) => {
 
   const ChangeTiemAX = async () => {
     try {
-      const res = await axios.put("http://43.200.174.111:8080/user/fastingTime", {
+      const res = await axios.put("http://43.200.174.111:8080/api/user/fastingTime", {
         startFasting: startFastingHour_ref.current.value + ":" + startFastingMinute_ref.current.value,
         endFasting: endFastingHour_ref.current.value + ":" + endFastingMinute_ref.current.value,
       }, {

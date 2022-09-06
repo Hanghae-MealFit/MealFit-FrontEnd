@@ -107,7 +107,7 @@ const MyPageChange = () => {
     await axios({
       baseURL: "http://43.200.174.111:8080/",
       method: "POST",
-      url: "/user/info",
+      url: "/api/user/info",
       data: formData,
       headers: {
         "Content-Type": "multipart/form-data",
@@ -131,7 +131,7 @@ const MyPageChange = () => {
 
     try {
       const nickname = nickname_ref.current.value
-      const res = await axios.get(`http://43.200.174.111:8080/user/nickname/${nickname}`,
+      const res = await axios.get(`http://43.200.174.111:8080/api/user/nickname/${nickname}`,
       {
         headers: {
           "Content-Type": "application/json"

@@ -20,7 +20,7 @@ const Post = () => {
   // let { postId } = useParams();
   // console.log(postId);
 
-  const data = useSelector((state) => state.post.post.content);
+  const data = useSelector((state) => state.post.post);
   // console.log(data);
   const [ isLogin, setIsLogin ] = React.useState(false);
 
@@ -38,7 +38,7 @@ const Post = () => {
   // 서버에서 아이템을 가지고 오는 함수
   const getItems = useCallback(async () => {
     setLoading(true)
-    await axios.get('http://43.200.174.111:8080/post?size=6').then((res) => {
+    await axios.get('http://43.200.174.111:8080/api/post?size=6').then((res) => {
       setItems(prevState => [...prevState, res])
     })
     setLoading(false)
@@ -69,7 +69,7 @@ const Post = () => {
       <Header isLogin={isLogin} />
       <Container>
         <CardList>
-          {data.map((v, idx) => (
+          {data?.map((v, idx) => (
             <CardsBox onClick={() => {navigate(`/post/${v.postId}`)}} key={idx}>
               <CardsAll post={v} />
             </CardsBox>

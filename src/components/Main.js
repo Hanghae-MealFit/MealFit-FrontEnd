@@ -15,8 +15,9 @@ import { loadUserWeightDB } from '../redux/modules/userweight';
 import { loadPostDB } from "../redux/modules/post";
 
 const Main = () => {
-  const data = useSelector((state) => state.post.post.content);
-  const MainData = data.sort((a,b) => (b.view - a.view)).slice(0, 4)
+  const data = useSelector((state) => state.post.post);
+  console.log(data)
+  const MainData = data?.sort((a,b) => (b.view - a.view)).slice(0, 4)
   const weight = useSelector((state) => state.userweight.data.data);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -218,7 +219,7 @@ const Main = () => {
                 <p>오늘의 식단</p>
               </Titlebar>
               <CardList>
-                {MainData.map((v, idx) => (
+                {MainData?.map((v, idx) => (
                   <CardsBox
                     onClick={() => {
                       navigate(`/post/${v.postId}`);

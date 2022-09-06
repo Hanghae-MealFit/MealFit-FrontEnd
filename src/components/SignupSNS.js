@@ -106,7 +106,7 @@ const SignupSNS = () => {
     await axios({
       baseURL: "http://43.200.174.111:8080/",
       method: "POST",
-      url: "/user/social/signup",
+      url: "/api/user/social/signup",
       data: formData,
       headers: {
         "Content-Type": "multipart/form-data",
@@ -135,7 +135,7 @@ const SignupSNS = () => {
 
     try {
       const nickname = nickname_ref.current.value
-      const res = await axios.get(`http://43.200.174.111:8080/user/nickname/${nickname}`,
+      const res = await axios.get(`http://43.200.174.111:8080/api/user/nickname/${nickname}`,
       {
         headers: {
           "Content-Type": "application/json"
