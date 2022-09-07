@@ -236,10 +236,10 @@ const RecordModal = (
               <FoodData>
                 {searchList?.map((v, idx) => (
                   <FoodInfo key={idx}>
-                    <RadioInput type="radio" id={v.foodId} name="SelectFood" value={v}  />
+                    <RadioInput type="radio" id={v.foodId} name="SelectFood" value={v} />
                     <label htmlFor={v.foodId} onClick={(e) => {SelectFood(e, v)}}>
                       <RadioBtn className="RadioBtn" />
-                      <FoodInofWrap>
+                      <FoodInfoWrap>
                         <FoodTitle>
                           <p className="FoodTitle">{v.foodName === null ? "미정" : v.foodName}</p>
                         </FoodTitle>
@@ -247,11 +247,11 @@ const RecordModal = (
                           <p>제조사 : {v.madeBy === null ? "미정" : v.madeBy}</p>
                         </FoodCom>
                         <FoodDesc className="FoodDesc">
-                          <p>1회 제공량: {v.oneServing === null ? "미정" : v.oneServing}(g)</p>
-                          <p>kcal: {v.kcal === null ? "미정" : v.kcal}</p>
-                          <p>탄: {v.carbs === null ? "미정" : v.carbs}</p>
-                          <p>단: {v.protein === null ? "미정" : v.protein}</p>
-                          <p>지: {v.fat === null ? "미정" : v.fat}</p>
+                          <p>1회 제공량: {v.oneServing === null ? "미정" : v.oneServing.toFixed(2)}(g)</p>
+                          <p>kcal: {v.kcal === null ? "미정" : v.kcal.toFixed(2)}</p>
+                          <p>탄: {v.carbs === null ? "미정" : v.carbs.toFixed(2)}</p>
+                          <p>단: {v.protein === null ? "미정" : v.protein.toFixed(2)}</p>
+                          <p>지: {v.fat === null ? "미정" : v.fat.toFixed(2)}</p>
                         </FoodDesc>
                         { selectMenuCheck && v.foodId === selectMenu.foodId ?
                           (
@@ -263,7 +263,7 @@ const RecordModal = (
                             null
                           )
                         }
-                      </FoodInofWrap>
+                      </FoodInfoWrap>
                     </label>
                   </FoodInfo>
                 ))}
@@ -287,7 +287,7 @@ const RecordModal = (
                 ) :
                 (
                   <BtnWrap>
-                    <button onClick={handleClose}>뒤로가기</button>
+                    <button onClick={handleEditClose}>뒤로가기</button>
                     <button onClick={DietInsert}>기록하기</button>
                   </BtnWrap>
                 )
@@ -533,7 +533,7 @@ const RadioBtn = styled.div`
   }
 `
 
-const FoodInofWrap = styled.div`
+const FoodInfoWrap = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
