@@ -97,7 +97,7 @@ const PostUp = () => {
 
     await axios({
       baseURL: "http://43.200.174.111:8080/",
-      method: "PUT",
+      method: "POST",
       url: `/api/post/${postId}`,
       data: UpdateformData,
       headers: {

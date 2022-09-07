@@ -5,8 +5,9 @@ import axios from 'axios';
 import { MemoizedSidebar } from "./Sidebar";
 import RecordModal from "../elements/RecordModal";
 import DimmedLayer from "../elements/DimmedLayer";
+import CircleGraph from "../elements/CircleGraph"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCirclePlus, faCircleMinus, faCaretRight, faCaretDown } from '@fortawesome/free-solid-svg-icons'
+import { faPen, faXmark, faCaretRight, faCaretDown } from '@fortawesome/free-solid-svg-icons'
 
 import Calendar from 'react-calendar';
 import moment from "moment";
@@ -16,21 +17,23 @@ const Record = () => {
   const [isLogin, setIsLogin] = React.useState(false)
   const [value, onChange] = React.useState(new Date());
   const [recordModalOpen, setRecordModalOpen] = React.useState(false);
-  // const [open, setOpen] = React.useState(false);
+
   const [breakfastOpen, setBreakfastOpen] = React.useState(false);
   const [lunchOpen, setLunchOpen] = React.useState(false);
   const [dinnerOpen, setDinnerOpen] = React.useState(false);
 
+  const [ totalEatItem, setTotalEatItem] = React.useState([])
   const [ breakfastEatItem, setBreakfastEatItem] = React.useState([])
   const [ lunchEatItem, setLunchEatItem] = React.useState([])
   const [ dinnerEatItem, setDinnerEatItem] = React.useState([])
   const [ checkInputFood, setCheckInputFood ] = React.useState(false)
 
   const [selectTime, setSelectTime] = React.useState("");
-  const [todayEatItem, setTodayEatItem] = React.useState("");
 
   const [selectEatItem, setSelectEatItem] = React.useState("");
-  const [selectEatItemCheck, setSelectEatItemCheck] = React.useState(false);
+  const [selectBreakfast, setSelectBreakfast] = React.useState(false);
+  const [selectLunch, setSelectLunch] = React.useState(false);
+  const [selectDinner, setSelectDinner] = React.useState(false);
 
   const [editEatItem, setEditEatItem] = React.useState(false);
 
@@ -51,13 +54,20 @@ const Record = () => {
   const lunch_ref = React.useRef(null);
   const dinner_ref = React.useRef(null);
 
-  const SelectItem = (value) => {
-    console.log("select")
+  const BreakfastSelectItem = (value) => {
     setSelectEatItem(value)
-    setSelectEatItemCheck(true)
+    setSelectBreakfast(true)
   }
 
-  console.log(selectEatItem, selectEatItemCheck)
+  const LunchSelectItem = (value) => {
+    setSelectEatItem(value)
+    setSelectLunch(true)
+  }
+
+  const DinnerSelectItem = (value) => {
+    setSelectEatItem(value)
+    setSelectDinner(true)
+  }
 
   const EditItem = (value) => {
     setSelectEatItem(value)
@@ -70,13 +80,27 @@ const Record = () => {
       setBreakfastOpen(true)
     } else {
       setBreakfastOpen(false)
+      setSelectBreakfast(false)
     }
   }
 
-  // status
-  // 아침: BREAKFAST
-  // 점심: LUNCH
-  // 저녁: DINNER
+  const LunchToggle = () => {
+    if(lunchOpen === false) {
+      setLunchOpen(true)
+    } else {
+      setLunchOpen(false)
+      setSelectLunch(false)
+    }
+  }
+
+  const DinnerToggle = () => {
+    if(dinnerOpen === false) {
+      setDinnerOpen(true)
+    } else {
+      setDinnerOpen(false)
+      setSelectDinner(false)
+    }
+  }
 
   const auth = {
     authorization: sessionStorage.getItem("accessToken"),
@@ -84,7 +108,6 @@ const Record = () => {
   };
 
   const SelectDay = moment(value).format("YYYY-MM-DD")
-  console.log(SelectDay)
 
   const getFood = async () => {
     if (Token.authorization !== null && Token.refresh_token !== null) {
@@ -96,20 +119,67 @@ const Record = () => {
               refresh_token: `Bearer ${auth.refresh_token}`
             },
           })
-        console.log(res.data.dietResponseDto)
+        console.log(res)
         const data = res.data.dietResponseDto;
         console.log(data)
-        setBreakfastEatItem(data.filter((value) => value.dietStatus === "BREAKFAST"))
-        setLunchEatItem(data.filter((value) => value.dietStatus === "LUNCH"))
-        setDinnerEatItem(data.filter((value) => value.dietStatus === "DINNER"))
+        if(res.status === 200) {
+          setTotalEatItem(data)
+          setBreakfastEatItem(data.filter((value) => value.dietStatus === "BREAKFAST"))
+          setLunchEatItem(data.filter((value) => value.dietStatus === "LUNCH"))
+          setDinnerEatItem(data.filter((value) => value.dietStatus === "DINNER"))
+        }
       } catch (error) {
         console.log(error)
       }
     }
   }
-  console.log("아침",breakfastEatItem)
-  console.log("점심",lunchEatItem)
-  console.log("저녁",dinnerEatItem)
+
+  const [morningKcal, setMorningKcal] = React.useState(0)
+  const [lunchKcal, setLunchKcal] = React.useState(0)
+  const [dinnerKcal, setDinnerKcal] = React.useState(0)
+
+  let MorningArr = [];
+  let LunchArr = [];
+  let DinnerArr = [];
+
+  const MorningKcal = () => {
+    if(breakfastEatItem.length === 1) {
+      setMorningKcal(breakfastEatItem[0].kcal.toFixed(2))
+    } else if(breakfastEatItem.length === 0) {
+      setMorningKcal(0)
+    } else {
+      for(let i = 0; i < breakfastEatItem.length; i++) {
+        MorningArr.push((breakfastEatItem[i].kcal))
+      }
+      setMorningKcal((MorningArr.reduce((pre, cur) => pre + cur)).toFixed(2))
+    }
+  }
+
+  const LunchKcal = () => {
+    if(lunchEatItem.length === 1) {
+      setLunchKcal((lunchEatItem[0].kcal).toFixed(2))
+    } else if(lunchEatItem.length === 0) {
+      setLunchKcal(0)
+    } else {
+      for(let i = 0; i < lunchEatItem.length; i++) {
+        LunchArr.push(lunchEatItem[i].kcal)
+      }
+      setLunchKcal((LunchArr.reduce((pre, cur) => pre + cur)).toFixed(2))
+    }
+  }
+
+  const DinnerKcal = () => {
+    if(dinnerEatItem.length === 1) {
+      setDinnerKcal(dinnerEatItem[0].kcal.toFixed(2))
+    } else if(dinnerEatItem.length === 0) {
+      setDinnerKcal(0)
+    } else {
+      for(let i = 0; i < dinnerEatItem.length; i++) {
+        DinnerArr.push((dinnerEatItem[i].kcal))
+      }
+      setDinnerKcal((DinnerArr.reduce((pre, cur) => pre + cur)).toFixed(2))
+    }
+  }
 
   React.useEffect(() => {
     LoginCheck()
@@ -119,7 +189,17 @@ const Record = () => {
     getFood()
   }, [SelectDay, checkInputFood])
 
-  console.log("why",selectEatItem)
+  React.useEffect(() => {
+    MorningKcal()
+  }, [breakfastEatItem])
+
+  React.useEffect(() => {
+    LunchKcal()
+  }, [lunchEatItem])
+
+  React.useEffect(() => {
+    DinnerKcal()
+  }, [dinnerEatItem])
 
   const DeleteItem = async (value) => {
     try {
@@ -167,58 +247,87 @@ const Record = () => {
                 {moment(value).format("YYYY년 MM월 DD일 dddd")}
               </div>
             </h1>
+            {
+              recordModalOpen === true ? (
+                <RecordModal
+                  setRecordModalOpen={setRecordModalOpen}
+                  selectTime={selectTime}
+                  SelectDay={SelectDay}
+                  selectEatItem={selectEatItem}
+                  editEatItem={editEatItem}
+                  setEditEatItem={setEditEatItem}
+                  checkInputFood={checkInputFood}
+                  setCheckInputFood={setCheckInputFood}
+                />
+              ) : (
+                null
+              )
+            }
             <SelectBoxWrap>
-              {
-                recordModalOpen === true ? (
-                  <RecordModal
-                    setRecordModalOpen={setRecordModalOpen}
-                    selectTime={selectTime}
-                    SelectDay={SelectDay}
-                    selectEatItem={selectEatItem}
-                    editEatItem={editEatItem}
-                    setEditEatItem={setEditEatItem}
-                    checkInputFood={checkInputFood}
-                    setCheckInputFood={setCheckInputFood}
-                  />
-                ) : (
-                  null
-                )
-              }
-              <SelectBox>
+              <SelectBox className="MorningSelect">
                 <Select>
-                  <SelectTitle  onClick={morningToggle}>
+                  <SelectTitle onClick={morningToggle} style={{borderRadius: breakfastOpen ? "6px 6px 0 0" : "6px"}}>
                     <FontAwesomeIcon icon={ breakfastOpen ? faCaretDown : faCaretRight} />
                     <div ref={morning_ref}>아침</div>
-                    {/* <IconSVG width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" >
-                      <path fillRule="evenodd" clipRule="evenodd" d="M10 14L16 6H4L10 14Z" fill="#1A1A1A" />
-                    </IconSVG> */}
-                  </SelectTitle>
-                  { breakfastOpen  === true ? 
-                    (
-                      <SelectContent>
+                    <p className="TotalKcal">총 섭취 칼로리 : {morningKcal}</p>
+                    { breakfastOpen  === true ?
+                      (
                         <div className="addBtn">
                           <Button onClick={() => {
                               setRecordModalOpen(true)
                               setSelectTime(morning_ref.current.innerHTML)
                             }}
-                          >추가하기</Button>
+                          >+ 추가하기</Button>
                         </div>
+                      ) : (
+                        null
+                      )
+                    }
+                  </SelectTitle>
+                  { breakfastOpen  === true ? 
+                    (
+                      <SelectContent>
                         {
                           breakfastEatItem.length === 0 ? (
-                            <div>아침 식단을 입력하세요.</div>
+                            <div className="TimeTitle">아침 식단을 입력하세요.</div>
                           ) :
                           (
                             breakfastEatItem.map((v,idx) => (
-                              <div key={"item" + idx}>
-                                <div style={{
-                                  cursor: "pointer",
-                                  backgroundColor: selectEatItemCheck && v.foodId === selectEatItem.foodId ? "gray" : "transparent"
-                                }} onClick={() => SelectItem(v)}>
-                                  {v.foodName}
-                                </div>
-                                <span onClick={() => EditItem(v)}>수정</span>
-                                <span onClick={() => DeleteItem(v.dietId)}>삭제</span>
-                              </div>
+                              <FoodInfo key={idx}>
+                                <RadioInput type="radio" id={v.foodId} name="SelectFood" value={v} />
+                                <label htmlFor={v.foodId} onClick={() => BreakfastSelectItem(v)}>
+                                  <RadioBtn className="RadioBtn" />
+                                  <FoodInfoWrap className="FoodInfo">
+                                    <FoodTitle>
+                                      <p className="FoodTitle">{v.foodName === null ? "미정" : v.foodName}</p>
+                                    </FoodTitle>
+                                    <FoodCom className="FoodCom">
+                                      <p>제조사 : {v.madeBy === null ? "미정" : v.madeBy}</p>
+                                    </FoodCom>
+                                    <FoodDesc className="FoodDesc">
+                                      <p>총 섭취량: {v.foodWeight === null ? "미정" : v.foodWeight.toFixed(2)}(g)</p>
+                                      <p>kcal: {v.kcal === null ? "미정" : v.kcal.toFixed(2)}</p>
+                                      <p>탄: {v.carbs === null ? "미정" : v.carbs.toFixed(2)}</p>
+                                      <p>단: {v.protein === null ? "미정" : v.protein.toFixed(2)}</p>
+                                      <p>지: {v.fat === null ? "미정" : v.fat.toFixed(2)}</p>
+                                    </FoodDesc>
+                                    {
+                                      selectBreakfast && v.foodId === selectEatItem.foodId ? (
+                                        <EtcBtnWrap>
+                                          <div onClick={() => EditItem(v)}>
+                                            <FontAwesomeIcon icon={faPen} />
+                                          </div>
+                                          <div onClick={() => DeleteItem(v.dietId)}>
+                                            <FontAwesomeIcon icon={faXmark} />
+                                          </div>
+                                        </EtcBtnWrap>
+                                      ) : (
+                                        null
+                                      )
+                                    }
+                                  </FoodInfoWrap>
+                                </label>
+                              </FoodInfo>
                             ))
                           )
                         }
@@ -230,180 +339,158 @@ const Record = () => {
                   }
                 </Select>
               </SelectBox>
-              {/* <SelectBox>
-                {
-                  lunchOpen  === true ?
-                    (
-                      <>
-                        <Select onClick={() => setLunchOpen(false)}>
-                          <div ref={lunch_ref}>점심</div>
-                          <IconSVG
-                            width="20"
-                            height="20"
-                            viewBox="0 0 20 20"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              clipRule="evenodd"
-                              d="M10 14L16 6H4L10 14Z"
-                              fill="#1A1A1A"
-                            />
-                          </IconSVG>
-                        </Select>
-                        <SelectContent>
-                          {
-                            lunchEatItem.length === 0 ? (
-                              <div>점심 식단을 입력하세요.</div>
-                            ) :
-                            (
-                              lunchEatItem.map((v,idx) => (
-                                <div key={"item" + idx}>
-                                  <div style={{
-                                    cursor: "pointer",
-                                    backgroundColor: selectEatItemCheck && v.foodId === selectEatItem.foodId ? "gray" : "transparent"
-                                  }} onClick={() => {SelectItem(v)}}>
-                                    {v.foodName}
-                                  </div>
-                                  <span onClick={() => EditItem(v)}>수정</span>
-                                  <span onClick={() => {DeleteItem(v.dietId)}}>삭제</span>
-                                </div>
-                              ))
-                            )
-                          }
+              <SelectBox className="LunchSelect">
+                <Select>
+                  <SelectTitle onClick={LunchToggle} style={{borderRadius: lunchOpen ? "6px 6px 0 0" : "6px"}}>
+                    <FontAwesomeIcon icon={ lunchOpen ? faCaretDown : faCaretRight} />
+                    <div ref={lunch_ref}>점심</div>
+                    <p className="TotalKcal">총 섭취 칼로리 : {lunchKcal}</p>
+                    { lunchOpen === true ?
+                      (
+                        <div className="addBtn">
                           <Button onClick={() => {
-                            setRecordModalOpen(true)
-                            setSelectTime(lunch_ref.current.innerHTML)
-                          }}
-                          >추가하기</Button>
-                          {
-                            recordModalOpen === true ? (
-                              <RecordModal
-                              setRecordModalOpen={setRecordModalOpen}
-                              selectTime={selectTime}
-                              SelectDay={SelectDay}
-                              selectEatItem={selectEatItem}
-                              editEatItem={editEatItem}
-                              />
-                            ) : (
-                              null
-                            )
-                          }
-                        </SelectContent>
-                      </>
+                              setRecordModalOpen(true)
+                              setSelectTime(lunch_ref.current.innerHTML)
+                            }}
+                          >+ 추가하기</Button>
+                        </div>
+                      ) : (
+                        null
+                      )
+                    }
+                  </SelectTitle>
+                  { lunchOpen === true ? 
+                    (
+                      <SelectContent>
+                        {
+                          lunchEatItem.length === 0 ? (
+                            <div className="TimeTitle">점심 식단을 입력하세요.</div>
+                          ) :
+                          (
+                            lunchEatItem.map((v,idx) => (
+                              <FoodInfo key={idx}>
+                                <RadioInput type="radio" id={v.foodId} name="SelectFood" value={v} />
+                                <label htmlFor={v.foodId} onClick={() => LunchSelectItem(v)}>
+                                  <RadioBtn className="RadioBtn" />
+                                  <FoodInfoWrap className="FoodInfo">
+                                    <FoodTitle>
+                                      <p className="FoodTitle">{v.foodName === null ? "미정" : v.foodName}</p>
+                                    </FoodTitle>
+                                    <FoodCom className="FoodCom">
+                                      <p>제조사 : {v.madeBy === null ? "미정" : v.madeBy}</p>
+                                    </FoodCom>
+                                    <FoodDesc className="FoodDesc">
+                                      <p>총 섭취량: {v.foodWeight === null ? "미정" : v.foodWeight.toFixed(2)}(g)</p>
+                                      <p>kcal: {v.kcal === null ? "미정" : v.kcal.toFixed(2)}</p>
+                                      <p>탄: {v.carbs === null ? "미정" : v.carbs.toFixed(2)}</p>
+                                      <p>단: {v.protein === null ? "미정" : v.protein.toFixed(2)}</p>
+                                      <p>지: {v.fat === null ? "미정" : v.fat.toFixed(2)}</p>
+                                    </FoodDesc>
+                                    {
+                                      selectLunch && v.foodId === selectEatItem.foodId ? (
+                                        <EtcBtnWrap>
+                                          <div onClick={() => EditItem(v)}>
+                                            <FontAwesomeIcon icon={faPen} />
+                                          </div>
+                                          <div onClick={() => DeleteItem(v.dietId)}>
+                                            <FontAwesomeIcon icon={faXmark} />
+                                          </div>
+                                        </EtcBtnWrap>
+                                      ) : (
+                                        null
+                                      )
+                                    }
+                                  </FoodInfoWrap>
+                                </label>
+                              </FoodInfo>
+                            ))
+                          )
+                        }
+                      </SelectContent>
                     ) :
                     (
-                      <>
-                      <Select onClick={() => setLunchOpen(true)}>
-                        <div>점심</div>
-                        <IconSVG
-                          width="20"
-                          height="20"
-                          viewBox="0 0 20 20"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            clipRule="evenodd"
-                            d="M10 14L16 6H4L10 14Z"
-                            fill="#1A1A1A"
-                          />
-                        </IconSVG>
-                      </Select>
-                    </>
+                      null
                     )
-                }
+                  }
+                </Select>
               </SelectBox>
-
-              <SelectBox>
-                {
-                  dinnerOpen  === true ?
-                    (
-                      <>
-                        <Select onClick={() => setDinnerOpen(false)}>
-                          <div ref={dinner_ref}>저녁</div>
-                          <IconSVG
-                            width="20"
-                            height="20"
-                            viewBox="0 0 20 20"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              clipRule="evenodd"
-                              d="M10 14L16 6H4L10 14Z"
-                              fill="#1A1A1A"
-                            />
-                          </IconSVG>
-                        </Select>
-                        <SelectContent>
-                          {
-                            dinnerEatItem.length === 0 ? (
-                              <div>저녁 식단을 입력하세요.</div>
-                            ) :
-                            (
-                              dinnerEatItem.map((v,idx) => (
-                                <div key={"item" + idx}>
-                                  <div style={{
-                                    cursor: "pointer",
-                                    backgroundColor: selectEatItemCheck && v.foodId === selectEatItem.foodId ? "gray" : "transparent"
-                                  }} onClick={() => {SelectItem(v)}}>
-                                    {v.foodName}
-                                  </div>
-                                  <span onClick={() => EditItem(v)}>수정</span>
-                                  <span onClick={() => {DeleteItem(v.dietId)}}>삭제</span>
-                                </div>
-                              ))
-                            )
-                          }
+              <SelectBox className="DinnerSelect">
+                <Select>
+                  <SelectTitle onClick={DinnerToggle} style={{borderRadius: dinnerOpen ? "6px 6px 0 0" : "6px"}}>
+                    <FontAwesomeIcon icon={ dinnerOpen ? faCaretDown : faCaretRight} />
+                    <div ref={dinner_ref}>저녁</div>
+                    <p className="TotalKcal">총 섭취 칼로리 : {dinnerKcal}</p>
+                    { dinnerOpen === true ?
+                      (
+                        <div className="addBtn">
                           <Button onClick={() => {
-                            setRecordModalOpen(true)
-                            setSelectTime(dinner_ref.current.innerHTML)
-                          }}
-                          >추가하기</Button>
-                          {
-                            recordModalOpen === true ? (
-                              <RecordModal
-                              setRecordModalOpen={setRecordModalOpen}
-                              selectTime={selectTime}
-                              SelectDay={SelectDay}
-                              selectEatItem={selectEatItem}
-                              editEatItem={editEatItem}
-                              />
-                            ) : (
-                              null
-                            )
-                          }
-                        </SelectContent>
-                      </>
+                              setRecordModalOpen(true)
+                              setSelectTime(dinner_ref.current.innerHTML)
+                            }}
+                          >+ 추가하기</Button>
+                        </div>
+                      ) : (
+                        null
+                      )
+                    }
+                  </SelectTitle>
+                  { dinnerOpen === true ? 
+                    (
+                      <SelectContent>
+                        {
+                          dinnerEatItem.length === 0 ? (
+                            <div className="TimeTitle">저녁 식단을 입력하세요.</div>
+                          ) :
+                          (
+                            dinnerEatItem.map((v,idx) => (
+                              <FoodInfo key={idx}>
+                                <RadioInput type="radio" id={v.foodId} name="SelectFood" value={v} />
+                                <label htmlFor={v.foodId} onClick={() => DinnerSelectItem(v)}>
+                                  <RadioBtn className="RadioBtn" />
+                                  <FoodInfoWrap className="FoodInfo">
+                                    <FoodTitle>
+                                      <p className="FoodTitle">{v.foodName === null ? "미정" : v.foodName}</p>
+                                    </FoodTitle>
+                                    <FoodCom className="FoodCom">
+                                      <p>제조사 : {v.madeBy === null ? "미정" : v.madeBy}</p>
+                                    </FoodCom>
+                                    <FoodDesc className="FoodDesc">
+                                      <p>총 섭취량: {v.foodWeight === null ? "미정" : v.foodWeight.toFixed(2)}(g)</p>
+                                      <p>kcal: {v.kcal === null ? "미정" : v.kcal.toFixed(2)}</p>
+                                      <p>탄: {v.carbs === null ? "미정" : v.carbs.toFixed(2)}</p>
+                                      <p>단: {v.protein === null ? "미정" : v.protein.toFixed(2)}</p>
+                                      <p>지: {v.fat === null ? "미정" : v.fat.toFixed(2)}</p>
+                                    </FoodDesc>
+                                    {
+                                      selectDinner && v.foodId === selectEatItem.foodId ? (
+                                        <EtcBtnWrap>
+                                          <div onClick={() => EditItem(v)}>
+                                            <FontAwesomeIcon icon={faPen} />
+                                          </div>
+                                          <div onClick={() => DeleteItem(v.dietId)}>
+                                            <FontAwesomeIcon icon={faXmark} />
+                                          </div>
+                                        </EtcBtnWrap>
+                                      ) : (
+                                        null
+                                      )
+                                    }
+                                  </FoodInfoWrap>
+                                </label>
+                              </FoodInfo>
+                            ))
+                          )
+                        }
+                      </SelectContent>
                     ) :
                     (
-                      <>
-                      <Select onClick={() => setDinnerOpen(true)}>
-                        <div>저녁</div>
-                        <IconSVG
-                          width="20"
-                          height="20"
-                          viewBox="0 0 20 20"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            clipRule="evenodd"
-                            d="M10 14L16 6H4L10 14Z"
-                            fill="#1A1A1A"
-                          />
-                        </IconSVG>
-                      </Select>
-                    </>
+                      null
                     )
-                }
-              </SelectBox> */}
+                  }
+                </Select>
+              </SelectBox>
             </SelectBoxWrap>
+            <CircleGraph totalEatItem={totalEatItem} />
           </RecordingBox>
         </Container>
       </RecordWrap>
@@ -427,13 +514,11 @@ const RecordWrap = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  `;
+`;
 
 const Container = styled.div`
-  // border: 5px solid blue;
-  position: absolute;
-  width: 1200px;
-  height: 600px;
+  width: 80%;
+  height: 70%;
   border-radius: 30px;
   background-color: white;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
@@ -441,41 +526,21 @@ const Container = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  font-size: 20px;
+  /* font-size: 20px;
   text-align: center;
-  font-weight: bold;
+  font-weight: bold; */
   overflow: hidden;
-  /* p {
-    position: relative;
-    bottom: -20px;
-    font-size: 16px;
-    color: #D9D9D9;
-  } */
 `;
 
-const NotLogin = styled.div`
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 500;
-`
-
 const CalendarContainer = styled.div`
-  // background-color: yellow;
-  // border: 5px solid yellow;
-
   /* ~~~ container styles ~~~ */
   width: 50%;
-  height: 80%;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 3px;
+  border-right: 1px solid #BBB;
 `;
 
 const RecordingBox = styled.div`
@@ -483,12 +548,10 @@ const RecordingBox = styled.div`
   width: 50%;
   height: 100%;
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   h1.Title {
-    position: absolute;
-    top: 0;
-    right: calc(50% - 270px);
     margin: 0 auto;
     padding: 20px 0;
     font-size: 20px;
@@ -501,23 +564,22 @@ const RecordingBox = styled.div`
 
 const SelectBoxWrap = styled.div`
   width: 100%;
-  height: 80%;
-  margin-top: 67px;
   font-size: 18px;
+  margin: 12px auto;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
-  align-items: flex-start;
+  justify-content: space-between;
+  align-items: center;
   overflow: auto;
 `;
 
 const SelectBox = styled.div`
   width: 100%;
-  height: 100%;
   display: flex;
   justify-content: flex-start;
   align-items: center;
   flex-direction: column;
+  margin: 8px 0;
 `;
 
 const Select = styled.div`
@@ -531,48 +593,46 @@ const Select = styled.div`
 `;
 
 const SelectTitle = styled.div`
+  position: relative;
   width: 100%;
   height: 100%;
   display: flex;
   justify-content: flex-start;
   align-items: center;
   background-color: #FFB0AC;
-  padding: 8px;
+  padding: 10px;
   box-sizing: border-box;
   gap: 8px;
   cursor: pointer;
-`
-
-const SelectContent = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  background-color: #D9D9D9;
-  box-sizing: border-box;
-  div {
-    height: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
   div.addBtn {
+    position: absolute;
+    top: 0;
+    right: 0;
     margin: 0;
     width: 100%;
-    height: 40px;
+    height: 100%;
     display: flex;
     justify-content: flex-end;
     align-items: center;
   }
-`;
+  p.TotalKcal {
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    font-size: 12px;
+    font-weight: 300;
+    color: #555;
+    box-sizing: border-box;
+  }
+`
 
 const Button = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 70px;
+  width: 80px;
   height: 30px;
   border: none;
   border-radius: 8px;
@@ -584,31 +644,190 @@ const Button = styled.button`
   cursor: pointer;
 `;
 
+const SelectContent = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+  background-color: #fff;
+  border-radius: 0 0 6px 6px;
+  box-shadow: 2px 2px 4px #ccc;
+  box-sizing: border-box;
+  div.TimeTitle {
+    min-height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+`;
+
+const FoodInfo = styled.div`
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 6px;
+  box-sizing: border-box;
+`
+
+const RadioInput = styled.input`
+  display: none;
+  & + label {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    cursor: pointer;
+  }
+  &:checked + label > .RadioBtn {
+    background-color: #FE7770;
+  }
+  &:checked + label .FoodTitle {
+    color: #FE7770;
+  }
+`
+
+const RadioBtn = styled.div`
+  position: relative;
+  width: 24px;
+  height: 24px;
+  background-color: #fff;
+  border-radius: 50%;
+  border: 1px solid #eee;
+  box-sizing: border-box;
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 12px;
+    height: 12px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background-color: #fff;
+  }
+`
+
+const FoodInfoWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  width: 90%;
+  margin-left: 12px;
+`
+
+const FoodTitle = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  p {
+    font-size: 14px;
+    color: #bbb;
+    margin: 0;
+  }
+`
+const FoodCom = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  p {
+    font-size: 8px;
+    color: #bbb;
+    margin: 0;
+    font-weight: 300;
+  }
+`
+
+const FoodDesc = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  p {
+    position: relative;
+    font-size: 8px;
+    color: #bbb;
+    margin: 0;
+    padding: 0 4px;
+    text-align: center;
+    box-sizing: border-box;
+    font-weight: 300;
+  }
+  p::before {
+    position: absolute;
+    content: '';
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    width: 100%;
+    height: 50%;
+    border-right: 1px solid #CCC;
+  }
+  p:first-child {
+    padding-left: 0;
+  }
+  p:last-child:before {
+    border: none;
+  }
+`
+
+const EtcBtnWrap = styled.div`
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #bbb;
+  font-size: 14px;
+  gap: 6px;
+  div:hover {
+    color: #333;
+  }
+`
+
 const MyCalendar = styled(Calendar)`
-.react-calendar {
-}
+  width: 90%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 
    /* 상단 네비게이션 바 */
   .react-calendar__navigation {
     display: flex;
-    width: 500px;
+    width: 100%;
     height: 50px;
     margin-bottom: 40px;
-
-    .react-calendar__navigation__label {
-      width: 1000px;
-      height: 100%;
-      font-weight: bold;
-      font-size: 22px;
-    }
-
-    .react-calendar__navigation__arrow {
-      flex-grow: 0.333;
-    }
   }
 
+  .react-calendar__navigation__label {
+    width: 50%;
+    height: 100%;
+    font-weight: bold;
+    font-size: 22px;
+  }
+
+  .react-calendar__navigation__arrow {
+    /* flex-grow: 0.333; */
+    width: 12%;
+  }
+
+  .react-calendar__viewContainer {
+    width: 100%;
+  }
    /* 요일 라벨 */
   .react-calendar__month-view__weekdays {
+    width: 100%;
     text-align: center;
     font-weight: 300;
     font-size: 20px;
@@ -661,7 +880,6 @@ const MyCalendar = styled(Calendar)`
   .react-calendar__tile--range {
     color: #333;
     background-color: #FE7770;
-    // box-shadow: 0 0 6px 2px #eee;
   }
 
   /* 월 & 년도 버튼 스타일 */
