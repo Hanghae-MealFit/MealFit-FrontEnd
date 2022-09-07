@@ -22,7 +22,7 @@ const MyPage = () => {
   const userInfo = useSelector((state) => state.userinfo.user.userProfile);
   const userGoal = useSelector((state) => state.userinfo.user.nutritionGoal);
   const weight = useSelector((state) => state.userweight.data.data);
-  const NowWeight = (weight.sort((a,b) => (b.id - a.id))).slice(0, 1)[0].weight
+  const NowWeight = (weight?.sort((a,b) => (b.id - a.id))).slice(0, 1)[0].weight
   const startHour = user.startFasting.split(":")[0]
   const startMinute = user.startFasting.split(":")[1]
   const endHour = user.endFasting.split(":")[0]
@@ -283,46 +283,6 @@ const WeightWrap = styled.div`
   }
 `
 
-const HoverMsg = styled.p`
-  position: absolute;
-  top: 35px;
-  left: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  width: 100%;
-  height: 40px;
-  font-size: 9px;
-  background-color: white;
-  border: 1px solid #FE7770;
-  border-radius: 6px;
-  padding: 4px;
-  color: #333;
-  /* box-sizing: border-box; */
-  z-index: 5000;
-  span {
-    color: #81C147;
-    font-size: 11px;
-    margin-top: 6px;
-  }
-  &::before {
-    content: '';
-    position: absolute;
-    top: -4px;
-    left: 20px;
-    width: 8px;
-    height: 8px;
-    border-bottom: 1px solid transparent;
-    border-right: 1px solid transparent;
-    border-top: 1px solid #FE7770;
-    border-left: 1px solid #FE7770;
-    box-sizing: border-box;
-    background-color: white;
-    transform: rotate(45deg);
-  }
-`
-
 const FastTimeWrap = styled.div`
   position: relative;
   display: flex;
@@ -435,46 +395,6 @@ const GoalInfoWrap = styled.div`
   justify-content: center;
   align-items: center;
   margin: 10px auto 4px;
-`
-
-const GoalHoverMsg = styled.p`
-  position: absolute;
-  top: 35px;
-  left: 90px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  width: 75%;
-  height: 40px;
-  font-size: 10px;
-  background-color: white;
-  border: 1px solid #FE7770;
-  border-radius: 6px;
-  padding: 5px;
-  color: #333;
-  /* box-sizing: border-box; */
-  z-index: 5000;
-  span {
-    color: #81C147;
-    font-size: 11px;
-    margin-top: 6px;
-  }
-  &::before {
-    content: '';
-    position: absolute;
-    top: -4px;
-    left: 20px;
-    width: 8px;
-    height: 8px;
-    border-bottom: 1px solid transparent;
-    border-right: 1px solid transparent;
-    border-top: 1px solid #FE7770;
-    border-left: 1px solid #FE7770;
-    box-sizing: border-box;
-    background-color: white;
-    transform: rotate(45deg);
-  }
 `
 
 const GoalTitle = styled.div`

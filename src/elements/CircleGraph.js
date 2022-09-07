@@ -110,7 +110,7 @@ const CircleGraph = ({ totalEatItem }) => {
               </svg>
               <Info>
                 <InfoTitle>{v.title}</InfoTitle>
-                <InfoPer>{v.per} %</InfoPer>
+                <InfoPer>{v.per}%</InfoPer>
                 <Goal>{Math.ceil(parseInt(v.info).toFixed(0))} / {v.goal}</Goal>
                 <Unit>{v.unit}</Unit>
               </Info>

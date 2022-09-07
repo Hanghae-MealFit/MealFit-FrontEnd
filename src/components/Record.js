@@ -848,11 +848,10 @@ const MyCalendar = styled(Calendar)`
     font-size: 22px;
     font-weight: 700;
     padding: 5px 0;
-
+    cursor: pointer;
     &:hover {
       background-color: #eee;
     }
-
     &:active {
       background-color: #808080;
     }
@@ -862,10 +861,8 @@ const MyCalendar = styled(Calendar)`
   .react-calendar__month-view__days {
     display: grid !important;
     grid-template-columns: 14.2% 14.2% 14.2% 14.2% 14.2% 14.2% 14.2%;
-
     .react-calendar__tile {
       max-width: initial !important;
-      
     }
   }
 
@@ -877,9 +874,14 @@ const MyCalendar = styled(Calendar)`
     color: #FE7770;
   }
 
+  .react-calendar__tile--now {
+    background-color: #FE7770;
+    color: #fff;
+  }
+
   .react-calendar__tile--range {
     color: #333;
-    background-color: #FE7770;
+    background-color: #FFB0AC;
   }
 
   /* 월 & 년도 버튼 스타일 */
@@ -894,7 +896,6 @@ const MyCalendar = styled(Calendar)`
     }
 
     .react-calendar__tile {
-      // background-color: green;
       height: 100px;
       max-width: initial !important;
     }
