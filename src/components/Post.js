@@ -2,26 +2,15 @@ import React, { useCallback, useEffect } from "react";
 import styled from "styled-components";
 import axios from "axios";
 
-import { useNavigate, useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-
-import { useInView } from "react-intersection-observer"
+import { useNavigate } from "react-router-dom";
 
 import { MemoizedSidebar } from "./Sidebar";
 import CardsAll from "../elements/CardsAll";
 import Header from "../elements/Header";
 
-import { loadPostDB } from "../redux/modules/post";
-
 const Post = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // let { postId } = useParams();
-  // console.log(postId);
-
-  const data = useSelector((state) => state.post.post);
-  // console.log(data);
   const [ isLogin, setIsLogin ] = React.useState(false);
 
   const Token = {
@@ -29,35 +18,51 @@ const Post = () => {
     refresh_token: sessionStorage.getItem("refreshToken")
   }
 
-  const [items, setItems] = React.useState([])
-  const [page, setPage] = React.useState(1)
-  const [loading, setLoading] = React.useState(false)
+  const obsRef = React.useRef(null) // observer Element
+  const [list, setList] = React.useState([]); // Post List
+  const [page, setPage] = React.useState(0); // 현재 페이지
+  const preventRef = React.useRef(true); // 옵저버 중복 실행 방지
+  const endRef = React.useRef(false); // 모든 글 로드 확인
 
-  const [ref, inView] = useInView()
+  useEffect(() => {
+    const observer = new IntersectionObserver(obsHandler, { threshold: 0.5 });
+    if (obsRef.current) observer.observe(obsRef.current);
+    return () => {
+      observer.disconnect();
+    }
+  }, []);
 
-  // 서버에서 아이템을 가지고 오는 함수
-  const getItems = useCallback(async () => {
-    setLoading(true)
-    await axios.get('http://43.200.174.111:8080/api/post?size=6').then((res) => {
-      setItems(prevState => [...prevState, res])
-    })
-    setLoading(false)
+  useEffect(() => {
+    getPostList();
   }, [page])
 
-  // `getItems` 가 바뀔 때 마다 함수 실행
-  useEffect(() => {
-    getItems()
-  }, [getItems])
-
-  useEffect(() => {
-    // 사용자가 마지막 요소를 보고 있고, 로딩 중이 아니라면
-    if (inView && !loading) {
-      setPage(prevState => prevState + 1)
+  const obsHandler = (entries) => {
+    const target = entries[0];
+    if (target.isIntersecting && preventRef.current) {
+      preventRef.current = false;
+      setPage((prev) => prev + 1);
     }
-  }, [inView, loading])
+  }
+  console.log("page", page)
+
+  const getPostList = useCallback(async() => {
+    try {
+      const res = await axios.get(`http://43.200.174.111:8080/api/post?size=3&page=${page}`)
+      console.log(res.data)
+      if(res.data) {
+        setList(prev => {
+          console.log("prev", prev)
+          return [...prev, ...res.data]
+        })
+        preventRef.current = true;
+      }
+    } catch(error) {
+      console.log(error)
+    }
+  }, [page])
+  console.log("list", list)
 
   useEffect(() => {
-    dispatch(loadPostDB())
     if(Token.authorization !== null && Token.refresh_token !== null) {
       setIsLogin(true)
     }
@@ -69,13 +74,14 @@ const Post = () => {
       <Header isLogin={isLogin} />
       <Container>
         <CardList>
-          {data?.map((v, idx) => (
+          {list?.map((v, idx) => (
             <CardsBox onClick={() => {navigate(`/post/${v.postId}`)}} key={idx}>
               <CardsAll post={v} />
             </CardsBox>
           ))}
         </CardList>
       </Container>
+      <div ref={obsRef} style={{ height: "0"}}></div>
     </Wrap>
   )
 }

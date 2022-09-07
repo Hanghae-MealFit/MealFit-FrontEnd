@@ -225,7 +225,7 @@ const Percent = styled.div`
     transform: translate(5px, 5px);
     stroke-dasharray: 1080;
     stroke-dashoffset: 1080;
-    stroke-linecap: round;
+    /* stroke-linecap: round; */
     transition: 0.2s;
   }
   svg circle:first-child {
