@@ -518,11 +518,23 @@ const CardList = styled.div`
 `;
 
 const CardsBox = styled.div`
-  width: 300px;
+  width: 22%;
   height: 75%;
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  /* @media (max-width: 320px) {
+    height: 200px;
+  }
+  @media (min-width: 321px) and (max-width: 768px) {
+    height: 260px;
+  }
+  @media (min-width: 769px) and (max-width: 1023px) {
+
+  } */
+  @media (min-width: 1024px) and (max-width: 1400px) {
+    height: 60%;
+  }
 `;
 
 export default Main;

@@ -20,7 +20,7 @@ const RecordModal = (
   }) => {
 
   const handleClose = () => {
-    setNotFoundSarch(false)
+    setRecordModalOpen(false)
   };
   
   const handleEditClose = () => {
@@ -549,7 +549,7 @@ const FoodTitle = styled.div`
   align-items: center;
   p {
     font-size: 14px;
-    color: #bbb;
+    color: #555;
     margin: 0;
   }
 `
@@ -561,7 +561,7 @@ const FoodCom = styled.div`
   align-items: flex-start;
   p {
     font-size: 8px;
-    color: #bbb;
+    color: #555;
     margin: 0;
     font-weight: 300;
   }
@@ -575,7 +575,7 @@ const FoodDesc = styled.div`
   p {
     position: relative;
     font-size: 8px;
-    color: #bbb;
+    color: #555;
     margin: 0;
     padding: 0 4px;
     text-align: center;
