@@ -75,7 +75,7 @@ const Post = () => {
       <Container>
         <CardList>
           {list?.map((v, idx) => (
-            <CardsBox onClick={() => {navigate(`/post/${v.postId}`)}} key={idx}>
+            <CardsBox className="CardsBox" onClick={() => {navigate(`/post/${v.postId}`)}} key={idx}>
               <CardsAll post={v} />
             </CardsBox>
           ))}
@@ -105,17 +105,18 @@ const Container = styled.div`
 `;
 
 const CardList = styled.div`
-  width: 1080px;
+  max-width: 1080px;
   height: 100%;
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
-  gap: 60px;
-  flex-wrap : wrap;
+  gap: 54px;
+  flex-wrap: wrap;
+  margin: 0 auto;
 `;
 
 const CardsBox = styled.div`
-  width: 320px;
+  width: 30%;
   height: 400px;
   display: flex;
   justify-content: center;

@@ -58,6 +58,7 @@ const Record = () => {
     setSelectEatItem(value)
     setSelectBreakfast(true)
   }
+  console.log(selectEatItem)
 
   const LunchSelectItem = (value) => {
     setSelectEatItem(value)
@@ -133,6 +134,9 @@ const Record = () => {
       }
     }
   }
+  console.log("아침",breakfastEatItem)
+  console.log("점심",lunchEatItem)
+  console.log("저녁",dinnerEatItem)
 
   const [morningKcal, setMorningKcal] = React.useState(0)
   const [lunchKcal, setLunchKcal] = React.useState(0)
@@ -294,8 +298,8 @@ const Record = () => {
                           (
                             breakfastEatItem.map((v,idx) => (
                               <FoodInfo key={idx}>
-                                <RadioInput type="radio" id={v.foodId} name="SelectFood" value={v} />
-                                <label htmlFor={v.foodId} onClick={() => BreakfastSelectItem(v)}>
+                                <RadioInput type="radio" id={v.dietId} name="SelectFood" value={v} />
+                                <label htmlFor={v.dietId} onClick={() => BreakfastSelectItem(v)}>
                                   <RadioBtn className="RadioBtn" />
                                   <FoodInfoWrap className="FoodInfo">
                                     <FoodTitle>
@@ -312,7 +316,7 @@ const Record = () => {
                                       <p>지: {v.fat === null ? "미정" : v.fat.toFixed(2)}</p>
                                     </FoodDesc>
                                     {
-                                      selectBreakfast && v.foodId === selectEatItem.foodId ? (
+                                      selectBreakfast && v.dietId === selectEatItem.dietId ? (
                                         <EtcBtnWrap>
                                           <div onClick={() => EditItem(v)}>
                                             <FontAwesomeIcon icon={faPen} />
@@ -369,8 +373,8 @@ const Record = () => {
                           (
                             lunchEatItem.map((v,idx) => (
                               <FoodInfo key={idx}>
-                                <RadioInput type="radio" id={v.foodId} name="SelectFood" value={v} />
-                                <label htmlFor={v.foodId} onClick={() => LunchSelectItem(v)}>
+                                <RadioInput type="radio" id={v.dietId} name="SelectFood" value={v} />
+                                <label htmlFor={v.dietId} onClick={() => LunchSelectItem(v)}>
                                   <RadioBtn className="RadioBtn" />
                                   <FoodInfoWrap className="FoodInfo">
                                     <FoodTitle>
@@ -387,7 +391,7 @@ const Record = () => {
                                       <p>지: {v.fat === null ? "미정" : v.fat.toFixed(2)}</p>
                                     </FoodDesc>
                                     {
-                                      selectLunch && v.foodId === selectEatItem.foodId ? (
+                                      selectLunch && v.dietId === selectEatItem.dietId ? (
                                         <EtcBtnWrap>
                                           <div onClick={() => EditItem(v)}>
                                             <FontAwesomeIcon icon={faPen} />
@@ -444,8 +448,8 @@ const Record = () => {
                           (
                             dinnerEatItem.map((v,idx) => (
                               <FoodInfo key={idx}>
-                                <RadioInput type="radio" id={v.foodId} name="SelectFood" value={v} />
-                                <label htmlFor={v.foodId} onClick={() => DinnerSelectItem(v)}>
+                                <RadioInput type="radio" id={v.dietId} name="SelectFood" value={v} />
+                                <label htmlFor={v.dietId} onClick={() => DinnerSelectItem(v)}>
                                   <RadioBtn className="RadioBtn" />
                                   <FoodInfoWrap className="FoodInfo">
                                     <FoodTitle>
@@ -462,7 +466,7 @@ const Record = () => {
                                       <p>지: {v.fat === null ? "미정" : v.fat.toFixed(2)}</p>
                                     </FoodDesc>
                                     {
-                                      selectDinner && v.foodId === selectEatItem.foodId ? (
+                                      selectDinner && v.dietId === selectEatItem.dietId ? (
                                         <EtcBtnWrap>
                                           <div onClick={() => EditItem(v)}>
                                             <FontAwesomeIcon icon={faPen} />
@@ -727,7 +731,7 @@ const FoodTitle = styled.div`
   align-items: center;
   p {
     font-size: 14px;
-    color: #bbb;
+    color: #555;
     margin: 0;
   }
 `
@@ -739,7 +743,7 @@ const FoodCom = styled.div`
   align-items: flex-start;
   p {
     font-size: 8px;
-    color: #bbb;
+    color: #555;
     margin: 0;
     font-weight: 300;
   }
@@ -753,7 +757,7 @@ const FoodDesc = styled.div`
   p {
     position: relative;
     font-size: 8px;
-    color: #bbb;
+    color: #555;
     margin: 0;
     padding: 0 4px;
     text-align: center;

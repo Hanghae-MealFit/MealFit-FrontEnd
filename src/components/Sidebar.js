@@ -3,7 +3,7 @@ import styled, {css} from "styled-components";
 import axios from "axios";
 // FontAwesom Icon 사용
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faClipboardList, faBullhorn, faPenToSquare } from '@fortawesome/free-solid-svg-icons'
+import { faClipboardList, faPenToSquare } from '@fortawesome/free-solid-svg-icons'
 
 import { loadMainUserDB } from "../redux/modules/userinfo";
 
@@ -13,6 +13,8 @@ import { useSelector, useDispatch } from "react-redux";
 const Sidebar = () => {
 
   const user = useSelector((state) => state.userinfo.user.userProfile)
+  const user2 = useSelector((state) => state)
+  console.log(user2)
 
   const [isLogin, setIsLogin] = React.useState(false);
   const sessionStorage = window.sessionStorage;
@@ -21,7 +23,6 @@ const Sidebar = () => {
 
   const board_ref = React.useRef(null);
   const record_ref = React.useRef(null);
-  const guide_ref = React.useRef(null);
 
   const Token = {
     authorization: sessionStorage.getItem("accessToken"),
@@ -68,8 +69,6 @@ const Sidebar = () => {
       navigate("/")
     }
   }
-
-  // console.log(USER_CHECK.includes("post"))
 
   const onClickLogin = () => {
     sessionStorage.clear()
@@ -139,10 +138,6 @@ const Sidebar = () => {
             <span><FontAwesomeIcon icon={faPenToSquare} /></span>
             <p>기록하기</p>
           </MenuWrap>
-          {/* <MenuWrap className="sidebar-item" onClick={MenuClick} ref={guide_ref} checkMenu={USER_CHECK.includes("guide") ? true : false}>
-            <span><FontAwesomeIcon icon={faBullhorn} /></span>
-            <p>식단가이드</p>
-          </MenuWrap> */}
         </Menu>
         {
           !isLogin ?
@@ -171,19 +166,33 @@ const SideBar = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* justify-content: center; */
+    justify-content: flex-start;
     width: 260px;
-    height: 100vh;
+    height: 100%;
     background-color: #FE7770;
     z-index: 20000;
+    @media (max-width: 320px) {
+      width: 100%;
+      height: 500px;
+      flex-direction: row;
+    }
+    @media (min-width: 321px) and (max-width: 768px) {
+      width: 100%;
+      height: 120px;
+      flex-direction: row;
+      justify-content: space-between;
+    }
+    @media (min-width: 769px) and (max-width: 1023px) {
+      width: 160px;
+    }
+    @media (min-width: 1024px) and (max-width: 1400px) {
+      width: 220px;
+    }
 `;
 
 const Logo = styled.div`
     width: 100%;
     height: 40px;
-    font-family: 'Montserrat';
-    font-weight: 900;
-    font-size: 36px;
     /* identical to box height */
     display: flex;
     align-items: center;
@@ -194,6 +203,19 @@ const Logo = styled.div`
     img {
       height: 100%;
     }
+    @media (max-width: 320px) {
+      /* display: none; */
+    }
+    @media (min-width: 321px) and (max-width: 768px) {
+      width: 30%;
+      margin: 0;
+    }
+    @media (min-width: 769px) and (max-width: 1023px) {
+      margin: 20px auto;
+    }
+    @media (min-width: 1024px) and (max-width: 1400px) {
+      margin: 30px auto;
+    }
 `;
 
 const SideBox = styled.div`
@@ -202,12 +224,17 @@ const SideBox = styled.div`
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
+    @media (max-width: 320px) {
+    /* display: none; */
+  }
+  @media (min-width: 321px) and (max-width: 768px) {
+    width: 60%;
+  }
 `;
 
 const Info = styled.div`
   width: 100%;
-  height: 100%;
-  padding: 20px 0;
+  padding: 30px 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -228,31 +255,90 @@ const Info = styled.div`
   span.Welcome {
     font-size: 12px;
   }
+  @media (max-width: 320px) {
+    /* display: none; */
+  }
+  @media (min-width: 321px) and (max-width: 768px) {
+    border-top: 0;
+    padding: 10px 0;
+    justify-content: flex-start;
+  }
+  @media (min-width: 769px) and (max-width: 1023px) {
+    padding: 10px 0;
+    flex-direction: column;
+    span {
+      align-items: center;
+    }
+    span.UserNick {
+      font-size: 14px;
+      font-weight: 700;
+    }
+    span.Welcome {
+      font-size: 9px;
+    }
+  }
+  @media (min-width: 1024px) and (max-width: 1400px) {
+    padding: 20px 0;
+    span.UserNick {
+      font-size: 13px;
+      font-weight: 700;
+    }
+    span.Welcome {
+      font-size: 10px;
+    }
+  }
 `;
 
 const Profile = styled.img`
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    margin-right: 14px;
-    background-color: #ddd;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 14px;
+  background-color: #ddd;
+  transition: 0.4s;
+  cursor: pointer;
+  &:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
     transition: 0.4s;
-    cursor: pointer;
-    &:hover {
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
-      transition: 0.4s;
-    }
+  }
+  @media (max-width: 320px) {
+    /* display: none; */
+  }
+  @media (min-width: 321px) and (max-width: 768px) {
+    /* display: none; */
+  }
+  @media (min-width: 769px) and (max-width: 1023px) {
+    margin-right: 0;
+  }
 `;
 
 const Menu = styled.div`
+  width: 100%;
+  height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  font-size: 16px;
+  margin-top: 40px;
+  @media (max-width: 320px) {
     width: 100%;
-    height: 180px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    font-size: 16px;
-    margin-top: 40px;
+    height: 30px;
+    margin-top: 4px;
+    flex-direction: row;
+  }
+  @media (min-width: 321px) and (max-width: 768px) {
+    width: 100%;
+    height: 30px;
+    margin-top: 4px;
+    flex-direction: row;
+  }
+  @media (min-width: 769px) and (max-width: 1023px) {
+    width: 160px;
+  }
+  @media (min-width: 1024px) and (max-width: 1400px) {
+    width: 220px;
+  }
 `;
 
 const MenuWrap = styled.div`
@@ -278,6 +364,14 @@ const MenuWrap = styled.div`
   p {
     margin: 0;
   }
+  @media (max-width: 320px) {
+    justify-content: center;
+    padding-left: 0;
+  }
+  @media (min-width: 321px) and (max-width: 768px) {
+    justify-content: center;
+    padding-left: 0;
+  }
 `
 
 const Button = styled.div`
@@ -299,6 +393,35 @@ const Button = styled.div`
     font-family: 'GmarketM', 'sans-serif';
     cursor: pointer;
     background-color: white;
+  }
+  @media (max-width: 320px) {
+    /* display: none; */
+  }
+  @media (min-width: 321px) and (max-width: 768px) {
+    width: 70px;
+    top: 20px;
+    right: 10px;
+    bottom: 65px;
+    align-items: flex-start;
+    justify-content: flex-end;
+    button {
+      width: 70px;
+      height: 30px;
+      margin-bottom: 0;
+      font-size: 12px;
+    }
+  }
+  @media (min-width: 769px) and (max-width: 1023px) {
+    button {
+      width: 120px;
+      height: 40px;
+    }
+  }
+  @media (min-width: 1024px) and (max-width: 1400px) {
+    button {
+      width: 160px;
+      height: 40px;
+    }
   }
 `
 

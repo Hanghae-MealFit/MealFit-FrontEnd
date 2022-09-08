@@ -49,7 +49,7 @@ const PostView = (props) => {
   const [commentEditOpen, setCommentEditOpen] = React.useState(false)
 
   // 좋아요 버튼
-  const [liked, setLiked] = React.useState(false);
+  const [postLiked, setPostLiked] = React.useState(false);
 
   // 댓글 좋아요
   const [commentLiked, setCommentLiked] = React.useState(false);
@@ -109,7 +109,7 @@ const PostView = (props) => {
           refresh_token: `Bearer ${Token.refresh_token}`
         }
       })
-      // console.log("게시글 불러오기", response)
+      console.log("게시글 불러오기", response)
       setContentData(response.data)
     } catch (error) {
       console.log(error)
@@ -128,7 +128,7 @@ const PostView = (props) => {
           refresh_token: `Bearer ${Token.refresh_token}`
         }
       })
-      // console.log("댓글 불러오기", response.data)
+      console.log("댓글 불러오기", response.data)
       setCommentData(response.data.comments)
     } catch (error) {
       console.log("댓글 불러오기 실패", error)
@@ -206,6 +206,57 @@ const PostView = (props) => {
     }
   }
 
+  // 좋아요 버튼
+  const PostLike = async () => {
+
+    if(postLiked === false) {
+      setPostLiked(true)
+    } else {
+      setPostLiked(false)
+    }
+
+    try {
+      const res = await axios.post(`http://43.200.174.111:8080/api/post/comment/${postId}/likeIt`,{
+        likeToggle : postLiked
+      }, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${Token.authorization}`,
+          refresh_token: `Bearer ${Token.refresh_token}`
+        }
+      })
+      console.log(res)
+    } catch(error) {
+      console.log(error)
+    }
+  }
+
+  // 댓글 좋아요 버튼
+  const CommentLike = async (commentId) => {
+
+    if(commentLiked === false) {
+      setCommentLiked(true)
+    } else {
+      setCommentLiked(false)
+    }
+
+    try {
+      const res = await axios.post(`http://43.200.174.111:8080/api/post/comment/${commentId}/likeIt`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${Token.authorization}`,
+          refresh_token: `Bearer ${Token.refresh_token}`
+        }
+      })
+      console.log(res)
+    } catch(error) {
+      console.log(error)
+    }
+  }
+
+  console.log("liked",postLiked)
+  console.log("commentliked", commentLiked)
+
   useEffect(() => {
     isLoginCheck()
     PostViewAX()
@@ -244,8 +295,8 @@ const PostView = (props) => {
               </WriteTime>
             </BoardText>
           </UserInfo>
-          <IconWrap>
-            <div>
+          <IconWrap liked={postLiked}>
+            <div onClick={PostLike}>
               <span><FontAwesomeIcon icon={faHeart} /></span>{contentData.like}
             </div>
             <div>
@@ -259,7 +310,7 @@ const PostView = (props) => {
         <CommentTitle>댓글</CommentTitle>
         <CommentWrap>
           {commentData.map((v, idx) => (
-            <CommentInfo key={idx}
+            <CommentInfo key={idx} liked={commentLiked} commentId={commentUserCheck.commentId} commentIdCheck={v.commentId}
               onMouseEnter={() => setCommentUserCheck(v)}
               onMouseLeave={() => setCommentUserCheck('')}>
               <div className="CommentProfile">
@@ -283,25 +334,25 @@ const PostView = (props) => {
                     <div className="edit" onClick={CommentEdit}>수정</div>
                   </div>
                 ) : (
-                  commentUserCheck.userDto?.nickname === user?.nickname &&
-                  commentUserCheck?.commentId === v?.commentId ? (
-                    <div className="BtnWrap">
-                      <div>
-                        <FontAwesomeIcon icon={faHeart} />
-                      </div>
-                      <div onClick={() => CommentEditModal(v)}>
-                        <FontAwesomeIcon icon={faPen} />
-                      </div>
-                      <div onClick={() => CommentDelete(v.commentId)}>
-                        <FontAwesomeIcon icon={faXmark} />
-                      </div>
+                  <div className="BtnWrap">
+                    <div onClick={() => CommentLike(v.commentId)} className="likeBtn">
+                      <FontAwesomeIcon icon={faHeart} />
                     </div>
-                  ) :
-                  (
-                    <div className="BtnWrap">
-                      <div><FontAwesomeIcon icon={faHeart} /></div>
-                    </div>
-                  )
+                    { commentUserCheck.userDto?.nickname === user?.nickname &&
+                      commentUserCheck?.commentId === v?.commentId ? (
+                        <>
+                          <div onClick={() => CommentEditModal(v)}>
+                            <FontAwesomeIcon icon={faPen} />
+                          </div>
+                          <div onClick={() => CommentDelete(v.commentId)}>
+                            <FontAwesomeIcon icon={faXmark} />
+                          </div>
+                        </>
+                      ) : (
+                        null
+                      )
+                  }
+                  </div>
                 )
               }
             </CommentInfo>
@@ -367,7 +418,7 @@ const CardImg = styled.div`
   img {
     width: 100%;
     height: 100%;
-    object-fit: contain;
+    object-fit: cover;
   }
 `;
 
@@ -428,8 +479,12 @@ const IconWrap = styled.div`
     align-items: center;
     margin: 0 6px;
   }
+  div:first-child > span {
+    color: ${props => props.liked ? "#FF7770" : "#808080"}
+  }
   div:hover {
     cursor: pointer;
+    color: #333;
   }
   div > span {
     display: flex;
@@ -558,6 +613,9 @@ const CommentInfo = styled.div`
   div.BtnWrap div {
     margin: 0 4px;
     color: #D9D9D9;
+  }
+  div.BtnWrap div.likeBtn {
+    color: ${props => props.liked && props.commentId === props.commentIdCheck ? "#FF7770" : "#D9D9D9"};
   }
   div.BtnWrap div:hover {
     color: #333;

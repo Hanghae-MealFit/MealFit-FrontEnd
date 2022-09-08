@@ -1,0 +1,132 @@
+@font-face {
+  font-family: 'GmarketSans';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+* {
+  margin: 0;
+  font-family: 'GmarketSans';
+  box-sizing: border-box;
+  text-decoration: none;
+  color: inherit;
+}
+
+.another {
+  color: #FF7770;
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.Wrap {
+  background-color: #fff;
+  width: 600px;
+  height: 600px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.line {
+  width: 100%;
+  border: 4px solid #FF7770;
+  margin-bottom: 50px;
+}
+
+.second-line {
+  width: 100%;
+  border: 1px solid #ddd;
+  margin-bottom: 14px;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding-left: 50px;
+  margin-bottom: 50px;
+}
+.header .Title {
+  margin-top: 12px;
+  font-size: 26px;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 40px;
+  padding-left: 50px;
+}
+
+.content .content-text {
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.content .VerifyBtn {
+  width: 300px;
+  height: 60px;
+  background-color: #FF7770;
+  border: none;
+  color: #fff;
+  font-size: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 50px;
+}
+
+.content .VerifyBtn a {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.footer {
+  padding-left: 50px;
+  color: #aaa;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.userfind {
+  width: 400px;
+  height: 50px;
+  border: 1px solid #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.userfind p {
+  width: 30%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #FF7770;
+  color: #fff;
+}
+
+.userfind div {
+  width: 70%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
