@@ -48,10 +48,10 @@ export const loadPostDB = () => {
   return async function (dispatch) {
     try {
       const res = await axios.get('http://43.200.174.111:8080/api/post?size=12')
-      console.log(res)
+      // console.log(res)
       dispatch(loadPost(res.data))
     } catch(error) {
-      console.log(error);
+      // console.log(error);
     }
   }
 }

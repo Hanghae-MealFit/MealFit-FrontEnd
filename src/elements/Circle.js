@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import styled, { keyframes } from 'styled-components'
-import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 import { MemoizedTime } from './Time'
@@ -8,7 +7,6 @@ import axios from 'axios';
 
 const Circle = ({Token, timeCheck, setTimeCheck}) => {
 
-  const navigate = useNavigate();
   const [time, setTime] = React.useState(new Date());
 
   const Hour = time.getHours();
@@ -31,8 +29,8 @@ const Circle = ({Token, timeCheck, setTimeCheck}) => {
   const EndTime = user.endFasting.split(":")
   const EndTimeTotal = ((parseInt(EndTime[0] * 60) + parseInt(EndTime[1])) * 60) + parseInt(EndTime[2])
   const EndPer = ((EndTimeTotal / TodaySecond) * 100).toFixed(1)
-  // console.log(StartPer, NowPer, EndPer)
-  // console.log(StartTimeTotal, EndTimeTotal)
+  // console.log("단식시작퍼센트",StartPer,"현재퍼센트",NowPer, "단식종료퍼센트",EndPer)
+  // console.log("단식시작 총 초",StartTimeTotal,"현재 총 초", NowSecond, "단식종료 총 초",EndTimeTotal)
 
   const [ startHourCheck, SetStartHourCheck ] = React.useState("* 필수 선택값을 모두 선택하세요.");
   const hour_check_ref = React.useRef(null);
@@ -91,14 +89,14 @@ const Circle = ({Token, timeCheck, setTimeCheck}) => {
 
   useEffect(() => {
     if(StartPer < NowPer && NowPer < EndPer) {
-      setEatTime(true)
-    } else {
       setEatTime(false)
+    } else {
+      setEatTime(true)
     }
     if(StartTimeTotal < NowSecond && NowSecond < EndTimeTotal) {
-      setEatTimeCheck(true)
-    } else {
       setEatTimeCheck(false)
+    } else {
+      setEatTimeCheck(true)
     }
     setTodayPer((3.6 * NowPer).toFixed(1))
   }, [time]);

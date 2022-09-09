@@ -17,7 +17,6 @@ const PostUp = () => {
 
   const [ImageFile, setImageFile] = React.useState([]);
   const [contentText, setContentText] = React.useState(false);
-  // const [ShowImg, setShowImg] = React.useState(null);
   const UpdateformData = new FormData();
   const formData = new FormData();
   const content_ref = React.useRef(null);
@@ -66,11 +65,11 @@ const PostUp = () => {
         refresh_token: `Bearer ${auth.refresh_token}`
       },
     }).then((response) => {
-      // console.log("반응", response)
+      console.log("반응", response)
       window.alert("식단 작성 성공!");
       navigate("/post/all")
     }).catch((error) => {
-      // console.log("에러", error)
+      console.log("에러", error)
       window.alert("식단 작성 실패!");
     });
   };

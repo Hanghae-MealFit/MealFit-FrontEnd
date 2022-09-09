@@ -80,6 +80,7 @@ const RecordModal = (
 
   // 검색
   const FoodSearch = async (data) => {
+    console.log(data)
     const SearchName = data ? data : search_food_ref.current.value
     try {
       const res = await axios.get(`http://43.200.174.111:8080/api/food?name=${SearchName}`,
@@ -191,7 +192,7 @@ const RecordModal = (
         <Contents>
           <InputTxt>
             <input ref={search_food_ref} type="text" placeholder='검색어를 입력하세요.' onKeyPress={onCheckEnter} value={text} onChange={displayText} />
-            <button onClick={FoodSearch}>
+            <button onClick={() => FoodSearch()}>
               <FontAwesomeIcon icon={faMagnifyingGlass} />
             </button>
           </InputTxt>

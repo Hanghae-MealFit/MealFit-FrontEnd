@@ -16,14 +16,14 @@ const FindMyInfo = () => {
 
   const FindId = async () => {
     try {
-      const res = await axios.post("http://43.200.174.111:8080/api/user/find/username", {
-        "email": id_email_ref.current.value
-      }, {
-        headers: {
-          "Content-Type": "application/json"
-        }
-      })
-      console.log(res)
+      const res = await axios.post("http://43.200.174.111:8080/api/user/find/username",
+        id_email_ref.current.value,
+        {
+          headers: {
+            "Content-Type": "application/json"
+          }
+        })
+        console.log(res)
     } catch(error) {
       console.log(error)
     }

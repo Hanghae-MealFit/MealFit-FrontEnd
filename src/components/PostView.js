@@ -47,6 +47,8 @@ const PostView = (props) => {
   const [commentUserCheck, setCommentUserCheck] = React.useState('')
   const [commentEditCheck, setCommentEditCheck] = React.useState('')
   const [commentEditOpen, setCommentEditOpen] = React.useState(false)
+  console.log(commentUserCheck)
+  console.log(commentData)
 
   // 좋아요 버튼
   const [postLiked, setPostLiked] = React.useState(false);
@@ -216,21 +218,22 @@ const PostView = (props) => {
     }
 
     try {
-      const res = await axios.post(`http://43.200.174.111:8080/api/post/comment/${postId}/likeIt`,{
-        likeToggle : postLiked
-      }, {
+      const res = await axios.post(`http://43.200.174.111:8080/api/post/comment/${postId}/likeIt`,
+      null,
+      {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${Token.authorization}`,
           refresh_token: `Bearer ${Token.refresh_token}`
         }
       })
-      console.log(res)
+      console.log("게시글 좋아요",res)
     } catch(error) {
       console.log(error)
     }
   }
 
+  const comment_like_ref = React.useRef(null)
   // 댓글 좋아요 버튼
   const CommentLike = async (commentId) => {
 
@@ -241,14 +244,24 @@ const PostView = (props) => {
     }
 
     try {
-      const res = await axios.post(`http://43.200.174.111:8080/api/post/comment/${commentId}/likeIt`, {
+      const res = await axios.post(`http://43.200.174.111:8080/api/post/comment/${commentId}/likeIt`, null,
+      {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${Token.authorization}`,
           refresh_token: `Bearer ${Token.refresh_token}`
         }
       })
-      console.log(res)
+      console.log("댓글 좋아요",res, "commentId", commentId)
+      if(res.status === 201 && res.data === true) {
+        if(commentUserCheck.commentId === commentId) {
+          comment_like_ref.current.style.color = "#FF7770"
+        }
+      } else if(res.status === 201 && res.data === false) {
+        if(commentUserCheck.commentId === commentId) {
+          comment_like_ref.current.style.color = "#D9D9D9"
+        }
+      }
     } catch(error) {
       console.log(error)
     }
@@ -320,10 +333,10 @@ const PostView = (props) => {
                 <p>{v.userDto.nickname}</p>
                 {
                   commentEditCheck.commentId === v.commentId && commentEditOpen ? (
-                    <input type="text" defaultValue={v.comment} ref={edit_ref} />
+                    <input type="text" defaultValue={v.content} ref={edit_ref} />
                   ) :
                   (
-                    <p>{v.comment}</p>
+                    <p>{v.content}</p>
                   )
                 }
               </div>
@@ -335,7 +348,7 @@ const PostView = (props) => {
                   </div>
                 ) : (
                   <div className="BtnWrap">
-                    <div onClick={() => CommentLike(v.commentId)} className="likeBtn">
+                    <div onClick={() => CommentLike(v.commentId)} className="likeBtn" ref={comment_like_ref}>
                       <FontAwesomeIcon icon={faHeart} />
                     </div>
                     { commentUserCheck.userDto?.nickname === user?.nickname &&
@@ -614,9 +627,9 @@ const CommentInfo = styled.div`
     margin: 0 4px;
     color: #D9D9D9;
   }
-  div.BtnWrap div.likeBtn {
+  /* div.BtnWrap div.likeBtn {
     color: ${props => props.liked && props.commentId === props.commentIdCheck ? "#FF7770" : "#D9D9D9"};
-  }
+  } */
   div.BtnWrap div:hover {
     color: #333;
     cursor: pointer;

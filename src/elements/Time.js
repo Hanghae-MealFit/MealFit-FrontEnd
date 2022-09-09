@@ -7,12 +7,11 @@ const Time = ({time, setTime, EatTime, EatTimeCheck, StartTimeTotal, EndTimeTota
   const user = useSelector((state) => state.userinfo.user.fastingInfo);
   const StartTime = user.startFasting.split(":").slice(0, -1).join(":")
   const EndTime = user.endFasting.split(":").slice(0, -1).join(":")
-  // console.log(startTime, endTime)
 
   useEffect(() => {
     const timer = setInterval(() => {
       setTime(new Date());
-    }, 1000);
+    }, 60000);
 
     return () => {
       clearInterval(timer)
@@ -26,10 +25,21 @@ const Time = ({time, setTime, EatTime, EatTimeCheck, StartTimeTotal, EndTimeTota
   const Minute = time.getMinutes();
   const Second = time.getSeconds();
   const NowSecond = (((Hour * 60) + Minute) * 60) + Second
+  console.log("현재 시간 초",NowSecond)
+  console.log("시작시간", StartTime, "종료시간", EndTime)
+  console.log("총 시작시간", StartTimeTotal)
+  console.log("총 종료시간", EndTimeTotal)
+
+  const EatStartTime = (StartTimeTotal - NowSecond)
+  const EatStartTimeHour = Math.abs(Math.floor(EatStartTime / (1000 * 60 * 60)));
+  const EatStartTimeMinute = Math.abs(Math.floor((EatStartTime % (1000 * 60 * 60)) / (1000 * 60)));
+  console.log("EatStartTime", EatStartTime, "NowSecond", NowSecond, "StartTimeTotal", StartTimeTotal)
+  console.log("EatStartTimeHour", EatStartTimeHour, "EatStartTimeMinute", EatStartTimeMinute)
 
   const TimeCheck = (NowSecond - StartTimeTotal) * 1000
   const TimeHour = Math.abs(Math.floor(TimeCheck / (1000 * 60 * 60)));
   const TimeMinute = Math.abs(Math.floor((TimeCheck % (1000 * 60 * 60)) / (1000 * 60)));
+  // console.log("시간체크", TimeCheck, "시작시간", TimeHour, "시작분", TimeMinute)
   
   const EndTimeCheck = (EndTimeTotal - NowSecond) * 1000
   const EndTimeHour = Math.floor(EndTimeCheck / (1000 * 60 * 60));
