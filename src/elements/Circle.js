@@ -17,20 +17,16 @@ const Circle = ({Token, timeCheck, setTimeCheck}) => {
   const NowPer = ((NowSecond / TodaySecond) * 100).toFixed(1)
   const [ todayPer, setTodayPer ] = React.useState();
   const [ eatTime, setEatTime ] = React.useState(true);
-  const [ eatTimeCheck, setEatTimeCheck ] = React.useState(true);
   const [ hoverClickPlus, setHoverClickPlus ] = React.useState(false)
   const [ changeEatTime, setChangeEatTime ] = React.useState(false)
 
   const user = useSelector((state) => state.userinfo.user.fastingInfo);
   const StartTime = user.startFasting.split(":")
   const StartTimeTotal = ((parseInt(StartTime[0] * 60) + parseInt(StartTime[1])) * 60) + parseInt(StartTime[2])
-  const StartPer = ((StartTimeTotal / TodaySecond) * 100).toFixed(1)
 
   const EndTime = user.endFasting.split(":")
   const EndTimeTotal = ((parseInt(EndTime[0] * 60) + parseInt(EndTime[1])) * 60) + parseInt(EndTime[2])
-  const EndPer = ((EndTimeTotal / TodaySecond) * 100).toFixed(1)
-  // console.log("단식시작퍼센트",StartPer,"현재퍼센트",NowPer, "단식종료퍼센트",EndPer)
-  // console.log("단식시작 총 초",StartTimeTotal,"현재 총 초", NowSecond, "단식종료 총 초",EndTimeTotal)
+  console.log("단식시작 총 초",StartTimeTotal,"현재 총 초", NowSecond, "단식종료 총 초",EndTimeTotal)
 
   const [ startHourCheck, SetStartHourCheck ] = React.useState("* 필수 선택값을 모두 선택하세요.");
   const hour_check_ref = React.useRef(null);
@@ -87,17 +83,37 @@ const Circle = ({Token, timeCheck, setTimeCheck}) => {
     }
   }
 
+  // 시작시간 20시, 종료시간 18시
+  // 20 21 22 23 24 01 02
+
+  // StartTimeTotal < NowSecond
+  // 20 < 22 < 18 => StartTime < NowTime && NowTime < EndTime + TodaySecond
+
+  // StartTimeTotal > NowSecond
+  // 20 < 01 < 18 => StartTime < TodaySecond + NowTime && NowTime < EndTime
+
   useEffect(() => {
-    if(StartPer < NowPer && NowPer < EndPer) {
-      setEatTime(false)
+    if(StartTimeTotal < EndTimeTotal) {
+      if(StartTimeTotal < NowSecond && NowSecond < EndTimeTotal) {
+        setEatTime(false)
+      } else {
+        setEatTime(true)
+      }
     } else {
-      setEatTime(true)
+      if(StartTimeTotal < NowSecond) {
+        setEatTime(false)
+      } else if(StartTimeTotal > NowSecond) {
+        if(NowSecond < EndTimeTotal) {
+          setEatTime(false)
+        } else {
+          setEatTime(true)
+        }
+      } else {
+        setEatTime(true)
+      }
     }
-    if(StartTimeTotal < NowSecond && NowSecond < EndTimeTotal) {
-      setEatTimeCheck(false)
-    } else {
-      setEatTimeCheck(true)
-    }
+    console.log(NowSecond, TodaySecond + EndTimeTotal)
+
     setTodayPer((3.6 * NowPer).toFixed(1))
   }, [time]);
 
@@ -115,7 +131,7 @@ const Circle = ({Token, timeCheck, setTimeCheck}) => {
             stroke: eatTime === true ? "yellowgreen" : "#FE7770"
           }} cx="195" cy="195" r="170"></circle>
         </svg>
-        <MemoizedTime time={time} setTime={setTime} EatTime={eatTime} EatTimeCheck={eatTimeCheck} StartTimeTotal={StartTimeTotal} EndTimeTotal={EndTimeTotal} />
+        <MemoizedTime time={time} setTime={setTime} EatTime={eatTime} StartTimeTotal={StartTimeTotal} EndTimeTotal={EndTimeTotal} TodaySecond={TodaySecond} />
         {
           changeEatTime ? (
             <Modal>

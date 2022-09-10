@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 
-const Time = ({time, setTime, EatTime, EatTimeCheck, StartTimeTotal, EndTimeTotal}) => {
+const Time = ({time, setTime, EatTime, StartTimeTotal, EndTimeTotal, TodaySecond}) => {
 
   const user = useSelector((state) => state.userinfo.user.fastingInfo);
   const StartTime = user.startFasting.split(":").slice(0, -1).join(":")
@@ -11,7 +11,7 @@ const Time = ({time, setTime, EatTime, EatTimeCheck, StartTimeTotal, EndTimeTota
   useEffect(() => {
     const timer = setInterval(() => {
       setTime(new Date());
-    }, 60000);
+    }, 1000);
 
     return () => {
       clearInterval(timer)
@@ -30,21 +30,22 @@ const Time = ({time, setTime, EatTime, EatTimeCheck, StartTimeTotal, EndTimeTota
   console.log("총 시작시간", StartTimeTotal)
   console.log("총 종료시간", EndTimeTotal)
 
-  const EatStartTime = (StartTimeTotal - NowSecond)
-  const EatStartTimeHour = Math.abs(Math.floor(EatStartTime / (1000 * 60 * 60)));
-  const EatStartTimeMinute = Math.abs(Math.floor((EatStartTime % (1000 * 60 * 60)) / (1000 * 60)));
-  console.log("EatStartTime", EatStartTime, "NowSecond", NowSecond, "StartTimeTotal", StartTimeTotal)
-  console.log("EatStartTimeHour", EatStartTimeHour, "EatStartTimeMinute", EatStartTimeMinute)
-
-  const TimeCheck = (NowSecond - StartTimeTotal) * 1000
+  // 단식 시작 : 10시 / 단식 종료 : 12시
+  // 식사 시작 : 12시 / 식사 종료 : 10시
+  // 식사 종료 : 10시 - 현재시간 => 단식 시작시간 - 현재시간
+  // 단식 종료 : 12시 - 현재시간 => 단식 종료시간 - 현재시간
+  const TimeCheck = StartTimeTotal - NowSecond > 0 ?
+  (StartTimeTotal - NowSecond) * 1000 :
+  ((StartTimeTotal + TodaySecond) - NowSecond) * 1000 // 단식 시작시간(식사종료) - 현재시간 = 종료시간 타이머
   const TimeHour = Math.abs(Math.floor(TimeCheck / (1000 * 60 * 60)));
   const TimeMinute = Math.abs(Math.floor((TimeCheck % (1000 * 60 * 60)) / (1000 * 60)));
-  // console.log("시간체크", TimeCheck, "시작시간", TimeHour, "시작분", TimeMinute)
   
-  const EndTimeCheck = (EndTimeTotal - NowSecond) * 1000
+  const EndTimeCheck = EndTimeTotal - NowSecond > 0 ?
+  (EndTimeTotal - NowSecond) * 1000 :
+  ((EndTimeTotal + TodaySecond) - NowSecond) * 1000 // 
   const EndTimeHour = Math.floor(EndTimeCheck / (1000 * 60 * 60));
   const EndTimeMinute = Math.floor((EndTimeCheck % (1000 * 60 * 60)) / (1000 * 60));
-  // console.log(NowSecond, StartTimeTotal)
+  console.log(NowSecond, "엔드타임아워",EndTimeHour, "엔드타임미닛",EndTimeMinute)
 
   return (
     <TimeWrap>
@@ -65,23 +66,23 @@ const Time = ({time, setTime, EatTime, EatTimeCheck, StartTimeTotal, EndTimeTota
         <p>단식 시간 : {StartTime} ~ {EndTime}</p>
         <p>음식 섭취 가능 시간 : {EndTime} ~ {StartTime}</p>
         {
-          EatTimeCheck === true ?
+          EatTime === true ?
           (
             EndTimeMinute === 60 ?
             (
-              <p>식사 종료까지 {EndTimeHour < 10 ? "0" + (EndTimeHour - 1) : EndTimeHour}시간 00분 남았습니다.</p>
+              <p>식사 종료까지 {TimeHour < 10 ? "0" + (TimeHour - 1) : TimeHour}시간 00분 남았습니다.</p>
             ) :
             (
-              <p>식사 종료까지 {EndTimeHour < 10 ? "0" + (EndTimeHour) : EndTimeHour - 1}시간 {EndTimeMinute < 10 ? "0" + EndTimeMinute : EndTimeMinute}분 남았습니다.</p>
+              <p>식사 종료까지 {TimeHour < 10 ? "0" + TimeHour : TimeHour}시간 {TimeMinute < 10 ? "0" + TimeMinute : TimeMinute}분 남았습니다.</p>
             )
           ) :
           (
             TimeMinute === 60 ?
             (
-              <p>단식 종료까지 {TimeHour < 10 ? "0" + (TimeHour) : TimeHour}시간 00분 남았습니다.</p>
+              <p>단식 종료까지 {EndTimeHour < 10 ? "0" + (EndTimeHour - 1) : EndTimeHour}시간 00분 남았습니다.</p>
             ) :
             (
-              <p>단식 종료까지 {TimeHour < 10 ? "0" + (TimeHour - 1) : TimeHour - 1}시간 {TimeMinute < 10 ? "0" + TimeMinute : TimeMinute}분 남았습니다.</p>
+              <p>단식 종료까지 {EndTimeHour < 10 ? "0" + EndTimeHour : EndTimeHour}시간 {TimeMinute < 10 ? "0" + TimeMinute : TimeMinute}분 남았습니다.</p>
             )
           )
         }
