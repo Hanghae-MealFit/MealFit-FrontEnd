@@ -16,7 +16,7 @@ import { loadPostDB } from "../redux/modules/post";
 
 const Main = () => {
   const data = useSelector((state) => state.post.post);
-  console.log(data)
+  // console.log(data)
   const MainData = data?.sort((a,b) => (b.view - a.view)).slice(0, 4)
   const weight = useSelector((state) => state.userweight.data.data);
   const dispatch = useDispatch();

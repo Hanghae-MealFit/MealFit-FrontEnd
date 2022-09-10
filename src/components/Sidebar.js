@@ -13,8 +13,8 @@ import { useSelector, useDispatch } from "react-redux";
 const Sidebar = () => {
 
   const user = useSelector((state) => state.userinfo.user.userProfile)
-  const user2 = useSelector((state) => state)
-  console.log(user2)
+  // const user2 = useSelector((state) => state)
+  // console.log(user2)
 
   const [isLogin, setIsLogin] = React.useState(false);
   const sessionStorage = window.sessionStorage;
@@ -54,7 +54,7 @@ const Sidebar = () => {
     if(isLogin) {
       dispatch(loadMainUserDB())
     }
-  }, [isLogin])
+  }, [])
 
   const MenuClick = (e) => {
     if(!isLogin) {
@@ -81,15 +81,14 @@ const Sidebar = () => {
     e.preventDefault()
 
     try {
-      const response = await axios.post("http://43.200.174.111:8080/api/user/logout",
-        {
+      const response = await axios.post("http://43.200.174.111:8080/logout", null ,{
           headers: {
             Authorization: `Bearer ${Token.authorization}`,
             refresh_token: `Bearer ${Token.refresh_token}`
           }
         })
-      if (response) {
-        // console.log("반응", response)
+        console.log("반응", response)
+      if (response.status === 200) {
         sessionStorage.clear();
         setIsLogin(false);
         window.alert("로그아웃 하셨습니다. 밀핏을 찾아주셔서 감사합니다.");
@@ -98,8 +97,8 @@ const Sidebar = () => {
       }
     } catch (error) {
       console.log("에러", error)
-      console.log(Token)
-      window.alert("로그아웃에 실패하였습니다. 다시 한번 시도해주십시오.");
+      // console.log(Token)
+      // window.alert("로그아웃에 실패하였습니다. 다시 한번 시도해주십시오.");
     }
   };
 

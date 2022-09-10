@@ -97,8 +97,8 @@ const CircleGraph = ({ totalEatItem }) => {
     <Wrap>
       {
         TotalInfo.map((v, idx) => (
-          <CircleWrap>
-            <Percent key={idx}>
+          <CircleWrap key={idx}>
+            <Percent>
               <svg>
                 <circle style={{
                   stroke: v.per > 100 ? "red" : "#BBB"
