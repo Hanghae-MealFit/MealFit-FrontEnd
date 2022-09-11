@@ -18,6 +18,13 @@ const Login = () => {
   const sessionStorage = window.sessionStorage;
   const navigate = useNavigate();
 
+  React.useEffect(() => {
+    if(sessionStorage.getItem("accessToken") !== null || sessionStorage.getItem("refreshToken") !== null) {
+      window.alert("이미 로그인 되어 있는 상태입니다.\n메인으로 돌아갑니다.")
+      navigate("/")
+    }
+  }, [])
+
   const IdChange = (e) => {
     let regTxt = /[0-9a-zA-Z]/;
     let regKor = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
