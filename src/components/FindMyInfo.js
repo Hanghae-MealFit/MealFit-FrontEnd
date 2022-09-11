@@ -1,8 +1,20 @@
 import React from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 const FindMyInfo = () => {
+
+  const sessionStorage = window.sessionStorage;
+  const navigate = useNavigate();
+
+  React.useEffect(() => {
+    if(sessionStorage.getItem("accessToken") !== null || sessionStorage.getItem("refreshToken") !== null) {
+      window.alert("이미 로그인 되어 있는 상태입니다.\n메인으로 돌아갑니다.")
+      navigate("/")
+    }
+  }, [])
+
   const id_email_ref = React.useRef(null)
   const pw_id_ref = React.useRef(null)
   const pw_email_ref = React.useRef(null)
