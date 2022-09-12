@@ -227,7 +227,7 @@ const RecordModal = (
                   </div>
 
                   <div className="InputWrap">
-                    <p>지방: </p>
+                    <p>지방</p>
                     <input ref={fat_ref} type="text" placeholder='지방' />
                   </div>
                 </Direct>

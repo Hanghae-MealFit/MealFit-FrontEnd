@@ -103,132 +103,159 @@ const Sidebar = () => {
   };
 
   return (
-    <SideBar>
-      <Logo onClick={LogoClick} style={{ cursor: "pointer" }}>
-        <img className="logo" src="/logo/mealft_1.png" alt="logo" />
-      </Logo>
-      <SideBox>
-        {
-          !isLogin ?
-            (
-              <Info>
-                <Profile src={temp_img}></Profile>
-                <span style={{ color: "white" }}>로그인 해주세요</span>
-              </Info>
-            ) :
-            (
-              <Info>
-                <Profile onClick={() => { navigate("/user/info") }}
-                src={user.profileImage === null ? temp_img : user.profileImage }
-                alt="User Profile Image" />
-                <span style={{ color: "white" }}>
-                  <span className="UserNick">{user.nickname} 님</span>
-                  <span className="Welcome">밀핏에 오신 걸 환영합니다!</span>
-                </span>
-              </Info>
-            )
-        }
-        <Menu>
-          <MenuWrap className="sidebar-item" onClick={MenuClick} ref={board_ref} checkMenu={USER_CHECK.includes("post") ? true : false}>
-            <span><FontAwesomeIcon icon={faClipboardList} /></span>
-            <p>식단게시판</p>
-          </MenuWrap>
-          <MenuWrap className="sidebar-item" onClick={MenuClick} ref={record_ref} checkMenu={USER_CHECK.includes("record") ? true : false}>
-            <span><FontAwesomeIcon icon={faPenToSquare} /></span>
-            <p>기록하기</p>
-          </MenuWrap>
-        </Menu>
-        {
-          !isLogin ?
-            (
-              <Button>
-                <LogInBtn onClick={onClickLogin}>로그인</LogInBtn>
-              </Button>
-            ) :
-            (
-              <Button>
-                <LogOutBtn onClick={onhandleLogOut}>로그아웃</LogOutBtn>
-              </Button>
-            )
-        }
-      </SideBox>
-    </SideBar>
+    <>
+      <MobileHeader>
+        <Logo onClick={LogoClick} style={{ cursor: "pointer" }}>
+          <img className="logo" src="/logo/mealft_1.png" alt="logo" />
+        </Logo>
+        <HamBtn>
+          <div></div>
+          <div></div>
+          <div></div>
+        </HamBtn>
+      </MobileHeader>
+      <SideBar>
+        <Logo onClick={LogoClick} style={{ cursor: "pointer" }}>
+          <img className="logo" src="/logo/mealft_1.png" alt="logo" />
+        </Logo>
+        <SideBox>
+          {
+            !isLogin ?
+              (
+                <Info>
+                  <Profile src={temp_img}></Profile>
+                  <span style={{ color: "white" }}>로그인 해주세요</span>
+                </Info>
+              ) :
+              (
+                <Info>
+                  <Profile onClick={() => { navigate("/user/info") }}
+                  src={user.profileImage === null ? temp_img : user.profileImage }
+                  alt="User Profile Image" />
+                  <span style={{ color: "white" }}>
+                    <span className="UserNick">{user.nickname} 님</span>
+                    <span className="Welcome">밀핏에 오신 걸 환영합니다!</span>
+                  </span>
+                </Info>
+              )
+          }
+          <Menu>
+            <MenuWrap className="sidebar-item" onClick={MenuClick} ref={board_ref} checkMenu={USER_CHECK.includes("post") ? true : false}>
+              <span><FontAwesomeIcon icon={faClipboardList} /></span>
+              <p>식단게시판</p>
+            </MenuWrap>
+            <MenuWrap className="sidebar-item" onClick={MenuClick} ref={record_ref} checkMenu={USER_CHECK.includes("record") ? true : false}>
+              <span><FontAwesomeIcon icon={faPenToSquare} /></span>
+              <p>기록하기</p>
+            </MenuWrap>
+          </Menu>
+          {
+            !isLogin ?
+              (
+                <Button>
+                  <LogInBtn onClick={onClickLogin}>로그인</LogInBtn>
+                </Button>
+              ) :
+              (
+                <Button>
+                  <LogOutBtn onClick={onhandleLogOut}>로그아웃</LogOutBtn>
+                </Button>
+              )
+          }
+        </SideBox>
+      </SideBar>
+    </>
   );
 }
 
+const MobileHeader = styled.div`
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 60px;
+  background-color: #FE7770;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  box-sizing: border-box;
+  z-index: 20000;
+`
+
+const HamBtn = styled.div`
+  div {
+    width: 24px;
+    height: 4px;
+    margin: 3px;
+    border-radius: 4px;
+    background-color: #fff;
+  }
+`
+
 const SideBar = styled.div`
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    width: 260px;
-    height: 100%;
-    background-color: #FE7770;
-    z-index: 20000;
-    @media (max-width: 320px) {
-      width: 100%;
-      height: 500px;
-      flex-direction: row;
-    }
-    @media (min-width: 321px) and (max-width: 768px) {
-      width: 100%;
-      height: 120px;
-      flex-direction: row;
-      justify-content: space-between;
-    }
-    @media (min-width: 769px) and (max-width: 1023px) {
-      width: 160px;
-    }
-    @media (min-width: 1024px) and (max-width: 1400px) {
-      width: 220px;
-    }
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 260px;
+  height: 100%;
+  background-color: #FE7770;
+  z-index: 20000;
+  @media (max-width: 768px) {
+    display: none;
+  }
+  @media (min-width: 769px) and (max-width: 1023px) {
+    width: 160px;
+  }
+  @media (min-width: 1024px) and (max-width: 1400px) {
+    width: 220px;
+  }
 `;
 
 const Logo = styled.div`
-    width: 100%;
-    height: 40px;
-    /* identical to box height */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 40px auto;
-    color: #FFF;
-    cursor: pointer;
-    img {
-      height: 100%;
-    }
-    @media (max-width: 320px) {
-      /* display: none; */
-    }
-    @media (min-width: 321px) and (max-width: 768px) {
-      width: 30%;
-      margin: 0;
-    }
-    @media (min-width: 769px) and (max-width: 1023px) {
-      margin: 20px auto;
-    }
-    @media (min-width: 1024px) and (max-width: 1400px) {
-      margin: 30px auto;
-    }
+  /* width: 100%; */
+  height: 40px;
+  /* identical to box height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* margin: 40px auto; */
+  color: #FFF;
+  cursor: pointer;
+  img {
+    height: 60%;
+  }
+  @media (max-width: 768px) {
+    width: 30%;
+  }
+  @media (min-width: 769px) and (max-width: 1023px) {
+    margin: 20px auto;
+  }
+  @media (min-width: 1024px) and (max-width: 1400px) {
+    margin: 30px auto;
+  }
 `;
 
 const SideBox = styled.div`
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    @media (max-width: 320px) {
-    /* display: none; */
-  }
-  @media (min-width: 321px) and (max-width: 768px) {
-    width: 60%;
-  }
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  @media (max-width: 320px) {
+  /* display: none; */
+}
+@media (min-width: 321px) and (max-width: 768px) {
+  width: 60%;
+}
 `;
 
 const Info = styled.div`

@@ -25,10 +25,6 @@ const Time = ({time, setTime, EatTime, StartTimeTotal, EndTimeTotal, TodaySecond
   const Minute = time.getMinutes();
   const Second = time.getSeconds();
   const NowSecond = (((Hour * 60) + Minute) * 60) + Second
-  console.log("현재 시간 초",NowSecond)
-  console.log("시작시간", StartTime, "종료시간", EndTime)
-  console.log("총 시작시간", StartTimeTotal)
-  console.log("총 종료시간", EndTimeTotal)
 
   // 단식 시작 : 10시 / 단식 종료 : 12시
   // 식사 시작 : 12시 / 식사 종료 : 10시
@@ -42,10 +38,9 @@ const Time = ({time, setTime, EatTime, StartTimeTotal, EndTimeTotal, TodaySecond
   
   const EndTimeCheck = EndTimeTotal - NowSecond > 0 ?
   (EndTimeTotal - NowSecond) * 1000 :
-  ((EndTimeTotal + TodaySecond) - NowSecond) * 1000 // 
+  ((EndTimeTotal + TodaySecond) - NowSecond) * 1000 
   const EndTimeHour = Math.floor(EndTimeCheck / (1000 * 60 * 60));
   const EndTimeMinute = Math.floor((EndTimeCheck % (1000 * 60 * 60)) / (1000 * 60));
-  console.log(NowSecond, "엔드타임아워",EndTimeHour, "엔드타임미닛",EndTimeMinute)
 
   return (
     <TimeWrap>

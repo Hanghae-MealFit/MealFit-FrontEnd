@@ -77,23 +77,15 @@ const MyPage = () => {
               <FastTime>
                 <p>단식 시작시간</p>
                 <div>
-                  <Select defaultValue="default" readOnly>
-                    <option value="default" disabled readOnly>{startHour}</option>
-                  </Select> 시
-                  <Select defaultValue="default" readOnly>
-                    <option value="default" disabled readOnly>{startMinute}</option>
-                  </Select> 분
+                  <Select type="text" value={startHour} readOnly></Select> 시
+                  <Select type="text" value={startMinute} readOnly></Select> 분
                 </div>
               </FastTime>
               <FastTime>
                 <p>단식 종료시간</p>
                 <div>
-                  <Select defaultValue="default" readOnly>
-                    <option value="default" disabled readOnly>{endHour}</option>
-                  </Select> 시
-                  <Select defaultValue="default" readOnly>
-                    <option value="default" disabled readOnly>{endMinute}</option>
-                  </Select> 분
+                  <Select type="text" value={endHour} readOnly></Select> 시
+                  <Select type="text" value={endMinute} readOnly></Select> 분
                 </div>
               </FastTime>
             </FastTimeWrap>
@@ -141,8 +133,8 @@ const MyPage = () => {
 
 const Wrap = styled.div`
   width: 100%;
-  height: 100vh;
-  margin-left: 260px;
+  height: 100%;
+  /* margin-left: 260px; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -159,9 +151,12 @@ const MyPageWrap = styled.div`
 
 const MyPageInfoWrap = styled.div`
   position: relative;
-  width: 700px;
-  height: 920px;
-  border-radius: 30px;
+  /* width: 700px;
+  height: 920px; */
+  width: 100%;
+  height: 100%;
+  margin-top: 60px;
+  /* border-radius: 30px; */
   background-color: white;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
   display: flex;
@@ -169,26 +164,26 @@ const MyPageInfoWrap = styled.div`
   justify-content: center;
   align-items: center;
   h1 {
-    position: absolute;
+    /* position: absolute;
     top: 0;
     left: 0;
-    right: 0;
+    right: 0; */
     margin: 0 auto;
     padding: 30px 0;
-    font-size: 26px;
+    font-size: 20px;
     color: #FE7770;
-    width: 540px;
-    border-bottom: 1px solid #E0E2E6;
+    width: 100%;
+    /* border-bottom: 1px solid #E0E2E6; */
     text-align: center;
   }
 `
 
 const PwModBtn = styled.div`
   position: absolute;
-  top: 23.5px;
-  right: 40px;
-  width: 120px;
-  height: 40px;
+  top: 10px;
+  right: 10px;
+  width: 70px;
+  height: 24px;
   margin-left: 400px;
   display: flex;
   justify-content: center;
@@ -197,10 +192,13 @@ const PwModBtn = styled.div`
   color: #555;
   border: 1px solid #555;
   cursor: pointer;
+  font-size: 10px;
 `;
 
 const FormWrap = styled.form`
-  margin-top: 94px;
+  /* margin-top: 94px; */
+  width: 100%;
+  height: 100%;
 `
 
 const PicWrap = styled.div`
@@ -210,8 +208,9 @@ const PicWrap = styled.div`
 
 const Contents = styled.div`
   position: relative;
-  width: 460px;
-  margin: 26px auto;
+  /* width: 460px; */
+  width: 80%;
+  margin: 20px auto;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -225,43 +224,50 @@ const Contents = styled.div`
     align-items: center;
     margin: 0;
     box-sizing: border-box;
-    margin-right: 20px;
+    /* margin-right: 20px; */
+    margin-right: 10px;
     color: #fff;
-    font-size: 15px;
+    font-size: 12px;
   }
   input {
     width: 100%;
     border: none;
     border-bottom: 1px solid #9A9A9A;
-    padding: 12px 0 12px 6px;
+    /* padding: 12px 0 12px 6px; */
+    padding: 6px 0 6px 3px;
     box-sizing: border-box;
     outline: none;
   }
 `
 
 const WeightWrap = styled.div`
-  width: 460px;
+  width: 80%;
   margin: 0 auto;
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
   div {
     position: relative;
-    width: 200px;
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
   }
+  div:last-child {
+    margin-top: 20px;
+  }
   div input {
-    width: 50%;
-    padding: 12px;
+    width: 100%;
+    /* padding: 12px; */
+    padding: 6px 0 6px 3px;
     border: none;
     border-bottom: 1px solid #9A9A9A;
     box-sizing: border-box;
     outline: none;
   }
   div p {
-    width: 80px;
+    min-width: 80px;
     height: 30px;
     background-color: #FE7770;
     border-radius: 6px;
@@ -270,13 +276,13 @@ const WeightWrap = styled.div`
     align-items: center;
     margin: 0;
     box-sizing: border-box;
-    margin-right: 20px;
+    margin-right: 10px;
     color: #fff;
-    font-size: 15px;
+    font-size: 12px;
   }
   div span.weight {
     position: absolute;
-    bottom: 12px;
+    bottom: 6px;
     right: 10px;
     font-size: 12px;
     color: #9A9A9A;
@@ -288,8 +294,9 @@ const FastTimeWrap = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 460px;
-  height: 120px;
+  /* width: 460px; */
+  width: 80%;
+  height: 80px;
   padding: 10px;
   box-sizing: border-box;
   border: 1px solid #9A9A9A;
@@ -309,15 +316,16 @@ const FastTime = styled.div`
   justify-content: space-around;
   align-items: center;
   margin: 10px 0;
+  font-size: 11px;
   p {
     margin: 0;
   }
 `
 
 const Button = styled.div`
-  width: 460px;
-  height: 40px;
-  margin: 0 auto;
+  width: 80%;
+  height: 36px;
+  margin: 0 auto 30px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -347,22 +355,22 @@ const MyPageInfoBtn = styled.button`
   }
 `
 
-const Select = styled.select`
-  width: 60px;
-  height: 30px;
+const Select = styled.input`
+  width: 50px;
+  height: 20px;
   border: none;
   border-bottom: 1px solid #9A9A9A;
   outline: none;
   padding: 0 4px;
   box-sizing: border-box;
   font-family: 'GmarketM', 'sans-serif';
-  font-size: 12px;
+  font-size: 10px;
   text-align: center;
 `
 
 const IntakeWrap = styled.div`
   position: relative;
-  width: 460px;
+  width: 80%;
   margin: 40px auto;
   display: flex;
   justify-content: space-between;
@@ -398,12 +406,13 @@ const GoalInfoWrap = styled.div`
 `
 
 const GoalTitle = styled.div`
-  width: 80px;
+  /* width: 80px; */
+  width: 60px;
   height: 30px;
   background-color: #FE7770;
   border-radius: 6px;
   color: #fff;
-  font-size: 15px;
+  font-size: 12px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -418,7 +427,8 @@ const GoalInfo = styled.div`
   align-items: center;
   input {
     width: 100%;
-    padding: 12px;
+    /* padding: 12px; */
+    padding: 6px 0px 6px 3px;
     border: none;
     border-bottom: 1px solid #9A9A9A;
     box-sizing: border-box;
@@ -431,9 +441,9 @@ const GoalInfo = styled.div`
   }
   span.unit {
     position: absolute;
-    bottom: 12px;
-    right: 10px;
-    font-size: 12px;
+    bottom: 6px;
+    right: 6px;
+    font-size: 10px;
     color: #9A9A9A;
   }
   p {

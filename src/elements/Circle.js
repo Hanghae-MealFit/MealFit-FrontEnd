@@ -26,7 +26,6 @@ const Circle = ({Token, timeCheck, setTimeCheck}) => {
 
   const EndTime = user.endFasting.split(":")
   const EndTimeTotal = ((parseInt(EndTime[0] * 60) + parseInt(EndTime[1])) * 60) + parseInt(EndTime[2])
-  console.log("단식시작 총 초",StartTimeTotal,"현재 총 초", NowSecond, "단식종료 총 초",EndTimeTotal)
 
   const [ startHourCheck, SetStartHourCheck ] = React.useState("* 필수 선택값을 모두 선택하세요.");
   const hour_check_ref = React.useRef(null);
@@ -112,7 +111,6 @@ const Circle = ({Token, timeCheck, setTimeCheck}) => {
         setEatTime(true)
       }
     }
-    console.log(NowSecond, TodaySecond + EndTimeTotal)
 
     setTodayPer((3.6 * NowPer).toFixed(1))
   }, [time]);

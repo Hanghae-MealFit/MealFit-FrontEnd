@@ -57,8 +57,8 @@ const Wrap = styled.div`
 
 const ImgWrap = styled.div`
   position: relative;
-  width: 160px;
-  height: 160px;
+  width: 120px;
+  height: 120px;
   margin: 0 auto;
 `
 
