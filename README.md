@@ -49,6 +49,11 @@
 
 
 ---
+## 서비스 아키텍쳐
+![아키텍쳐](https://user-images.githubusercontent.com/97043760/190020857-6d54642a-7146-4b22-8644-e31984afccd6.png)
+![cicd](https://user-images.githubusercontent.com/97043760/190021299-5470c21f-3ef8-43b8-ab3d-d16a782daf41.png)
+
+---
 ### **🔨 사용한 기술스택**
 
 
