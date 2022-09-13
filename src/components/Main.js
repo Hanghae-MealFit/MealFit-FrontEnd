@@ -16,7 +16,7 @@ import { loadPostDB } from "../redux/modules/post";
 
 const Main = () => {
   const data = useSelector((state) => state.post.post);
-  // console.log(data)
+  console.log(useSelector((state) => state))
   const MainData = data?.sort((a,b) => (b.view - a.view)).slice(0, 4)
   const weight = useSelector((state) => state.userweight.data.data);
   const dispatch = useDispatch();
@@ -40,8 +40,7 @@ const Main = () => {
     refresh_token: sessionStorage.getItem("refreshToken")
   }
 
-  const LoginCheck = () => {  
-    // console.log(Token)
+  const LoginCheck = () => {
     if (Token.authorization !== null && Token.refresh_token !== null) {
       setIsLogin(true)
     }
@@ -139,7 +138,7 @@ const Main = () => {
     <Wrap>
       <MainWrap>
         <Container>
-          <div style={{ display: "flex", width: "100%", height: "55%", backgroundColor: "#fff", position: "relative" }}>
+          <TopMenu>
             {
               !isLogin ? (
                 <DimmedLayer />
@@ -206,13 +205,8 @@ const Main = () => {
                   )
                 }
               </Item2>
-              {/* <Item3>
-                <Titlebar>
-                  <p>체지방 변화량</p>
-                </Titlebar>
-              </Item3> */}
             </GrapWrap>
-          </div>
+          </TopMenu>
           <div style={{ width: "100%", height: "45%" }}>
             <Item4>
               <Titlebar>
@@ -240,11 +234,17 @@ const Main = () => {
 
 const Wrap = styled.div`
   width: 100%;
-  height: 100vh;
-  margin-left: 260px;
+  height: 150vh;
+  margin-top: 60px;
   display: flex;
   justify-content: center;
   align-items: center;
+  @media (min-width: 400px) and (max-width: 768px) {
+    height: 120vh;
+  }
+  @media (min-width: 769px) {
+    height: 100vh;
+  }
 `
 
 const MainWrap = styled.div`
@@ -256,8 +256,8 @@ const Titlebar = styled.div`
   position: absolute;
   top: 0;
   left: 0;
-  width: 140px;
-  height: 40px;
+  width: 100px;
+  height: 30px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -265,7 +265,7 @@ const Titlebar = styled.div`
   background-color: #ffc81e;
   color: #333;
   p {
-    font-size: 16px;
+    font-size: 12px;
     font-weight: bold;
     display: flex;
     align-items: center;
@@ -326,42 +326,72 @@ const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   font-size: 20px;
   text-align: center;
   font-weight: bold;
 `;
 
+const TopMenu = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  position: relative;
+  overflow: hidden;
+  @media (min-width: 769px) {
+    flex-direction: row;
+    height: 50%;
+  }
+`
+
 const Item1 = styled.div`
   width: 50%;
+  height: 50%;
   display: flex;
   padding: 20px;
   box-sizing: border-box;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin: 20px 0;
 `;
 
 const GrapWrap = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  margin-bottom: 20px;
+  @media (min-width: 769px) {
     width: 50%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    align-items: center;
+  }
 `;
 
 const Item2 = styled.div`
-    position: relative;
+  position: relative;
+  width: 100%;
+  min-height: 220px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  background-color: #F6EAE0;
+  @media (min-width: 400px) and (max-width: 768px) {
     width: 70%;
-    height: 70%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 8px;
-    background-color: #F6EAE0;
- `;
+    min-height: 240px;
+  }
+  @media (min-width: 769px) {
+    width: 90%;
+    height: 55%;
+  }
+`;
 
 const WeightWrap = styled.div`
   position: absolute;
@@ -379,8 +409,8 @@ const WeightWrap = styled.div`
   border: 2px solid #333;
   box-sizing: border-box;
   h2 {
-    margin: 0 0 20px;
-    font-size: 24px;
+    margin: 0 0 10px;
+    font-size: 16px;
   }
   div.weightWrap {
     position: relative;
@@ -389,11 +419,11 @@ const WeightWrap = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin: 30px 0;
+    margin: 10px 0;
   }
   div input {
     width: 100%;
-    padding: 12px;
+    padding: 6px 0px 6px 3px;
     border: none;
     border-bottom: 1px solid #9A9A9A;
     box-sizing: border-box;
@@ -419,11 +449,16 @@ const WeightWrap = styled.div`
     font-size: 10px;
     color: #D9D9D9;
   }
+  @media (min-width: 769px) {
+    div input {
+      padding: 12px;
+    }
+  }
 `
 
 const HoverMsg = styled.p`
   position: absolute;
-  top: 90px;
+  top: 55px;
   left: 0;
   display: flex;
   flex-direction: column;
@@ -437,7 +472,6 @@ const HoverMsg = styled.p`
   border-radius: 6px;
   padding: 4px;
   color: #333;
-  /* box-sizing: border-box; */
   z-index: 5000;
   span {
     color: #81C147;
@@ -459,12 +493,16 @@ const HoverMsg = styled.p`
     background-color: white;
     transform: rotate(45deg);
   }
+  @media (min-width: 769px) {
+    top: 65px;
+    box-sizing: border-box;
+  }
 `
 
 const Button = styled.div`
   width: 80%;
-  height: 40px;
-  margin: 0 auto;
+  height: 30px;
+  margin: 26px auto 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -475,7 +513,7 @@ const Button = styled.div`
     border: none;
     border-radius: 30px;
     color: #fff;
-    font-size: 16px;
+    font-size: 12px;
     font-weight: 900;
     font-family: 'GmarketM', 'sans-serif';
     cursor: pointer;
@@ -494,11 +532,6 @@ const SignUpBtn = styled.button`
   }
 `
 
-const Item3 = styled.div`
-    width: 80%;
-    height: 40%;
- `;
-
 const Item4 = styled.div`
     position: relative;
     box-sizing: border-box;
@@ -507,7 +540,7 @@ const Item4 = styled.div`
     flex-direction: column;
     justify-content: space-evenly;
     align-items: space-evenly;
- `;
+`;
 
 const CardList = styled.div`
   width: 100%;
@@ -515,14 +548,31 @@ const CardList = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-evenly;
+  flex-wrap: wrap;
 `;
 
 const CardsBox = styled.div`
-  width: 22%;
+  width: 80%;
   height: 75%;
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  margin-top: 30px;
+  &:first-child {
+    margin-top: 50px;
+  }
+  @media (min-width: 400px) and (max-width: 768px) {
+    width: 46%;
+    &:nth-child(2) {
+      margin-top: 50px;
+    }
+  }
+  @media (min-width: 769px) and (max-width: 1023px) {
+    width: 23%;
+    &:first-child {
+      margin-top: 30px;
+    }
+  }
   /* @media (max-width: 320px) {
     height: 200px;
   }
@@ -532,9 +582,9 @@ const CardsBox = styled.div`
   @media (min-width: 769px) and (max-width: 1023px) {
 
   } */
-  @media (min-width: 1024px) and (max-width: 1400px) {
+  /* @media (min-width: 1024px) and (max-width: 1400px) {
     height: 60%;
-  }
+  } */
 `;
 
 export default Main;

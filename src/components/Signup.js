@@ -484,20 +484,21 @@ const Signup = () => {
 
 const Wrap = styled.div`
   width: 100%;
-  height: 100%;
+  height: 100vh;
   /* margin-left: 260px; */
   display: flex;
   justify-content: center;
   align-items: center;
+  @media (min-width: 769px) {
+    height: 100%;
+    margin-top: 100px;
+  }
 `
 
 const SignUpWrap = styled.div`
   position: relative;
-  /* width: 700px;
-  height: 940px; */
   width: 100%;
   height: 100%;
-  /* border-radius: 30px; */
   background-color: white;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
   display: flex;
@@ -505,25 +506,38 @@ const SignUpWrap = styled.div`
   justify-content: center;
   align-items: center;
   h1 {
-    /* position: absolute;
-    top: 0;
-    left: 0;
-    right: 0; */
     margin: 0 auto;
     padding: 30px 0;
     font-size: 20px;
     color: #FE7770;
     width: 100%;
-    /* border-bottom: 1px solid #E0E2E6; */
     text-align: center;
+  }
+  @media (min-width: 520px) and (max-width: 768px) {
+    padding: 0 60px;
+    box-sizing: border-box;
+  }
+  @media (min-width: 769px) {
+    width: 700px;
+    height: 840px;
+    border-radius: 30px;
+    h1 {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      border-bottom: 1px solid #E0E2E6;
+    }
   }
 `
 
 const FormWrap = styled.form`
-  /* margin-top: 94px; */
   margin-top: 60px;
   width: 100%;
   height: 100%;
+  @media (min-width: 769px) {
+    margin-top: 94px;
+  }
 `
 
 const PicWrap = styled.div`
@@ -533,14 +547,12 @@ const PicWrap = styled.div`
 
 const Contents = styled.div`
   position: relative;
-  /* width: 460px; */
   width: 80%;
-  margin: 20px auto;
+  margin: 20px auto;  
   input {
     width: 100%;
     border: none;
     border-bottom: 1px solid #9A9A9A;
-    /* padding: 12px 0 12px 6px; */
     padding: 6px 0 6px 3px;
     box-sizing: border-box;
     outline: none;
@@ -550,7 +562,6 @@ const Contents = styled.div`
     position: absolute;
     bottom: 6px;
     right: 0;
-    /* width: 80px; */
     width: 54px;
     height: 20px;
     border: 1px solid #000;
@@ -566,8 +577,6 @@ const Contents = styled.div`
   }
   p {
     position: absolute;
-    /* bottom: -20px;
-    left: 6px; */
     bottom: -16px;
     left: -26px;
     margin: 0;
@@ -577,15 +586,34 @@ const Contents = styled.div`
     color: #D9D9D9;
     text-align: left;
   }
+  @media (min-width: 769px) {
+    width: 460px;
+    margin: 26px auto;
+    input {
+      padding: 12px 0 12px 6px;
+    }
+    button {
+      bottom: 10px;
+      right: 0;
+      width: 80px;
+      height: 30px;
+      font-size: 12px;
+    }
+    p {
+      bottom: -20px;
+      left: 6px;
+      -webkit-transform: scale(1.0);
+    }
+  }
 `
 
 const WeightWrap = styled.div`
-  /* width: 460px; */
   width: 80%;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
+
   div {
     position: relative;
     width: 100px;
@@ -595,7 +623,6 @@ const WeightWrap = styled.div`
   }
   div input {
     width: 100%;
-    /* padding: 12px; */
     padding: 6px 0 6px 3px;
     font-size: 11px;
     border: none;
@@ -617,8 +644,6 @@ const WeightWrap = styled.div`
   }
   div p.infomsg {
     position: absolute;
-    /* bottom: -20px;
-    left: 6px; */
     bottom: -16px;
     left: -12px;
     width: 140px;
@@ -628,17 +653,34 @@ const WeightWrap = styled.div`
     color: #D9D9D9;
     text-align: left;
   }
+  @media (min-width: 769px) {
+    width: 460px;
+    div {
+      width: 200px;
+    }
+    div input {
+      padding: 12px;
+    }
+    div span.weight {
+      bottom: 12px;
+      right: 10px;
+      font-size: 12px;
+    }
+    div p.infomsg {
+      bottom: -20px;
+      left: 6px;
+      -webkit-transform: scale(1.0);
+    }
+  }
 `
 
 const HoverMsg = styled.p`
   position: absolute;
   top: 16px;
-  /* left: 0; */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  /* width: 100%; */
   width: 120px;
   height: 40px;
   font-size: 10px;
@@ -648,7 +690,6 @@ const HoverMsg = styled.p`
   border-radius: 6px;
   padding: 4px;
   color: #333;
-  /* box-sizing: border-box; */
   z-index: 5000;
   span {
     color: #81C147;
@@ -670,6 +711,16 @@ const HoverMsg = styled.p`
     background-color: white;
     transform: rotate(45deg);
   }
+  @media (min-width: 769px) {
+    top: 35px;
+    left: 0;
+    width: 100%;
+    font-size: 10px;
+    -webkit-transform: scale(0.9);
+    span {
+      font-size: 11px;
+    }
+  }
 `
 
 const FastTimeWrap = styled.div`
@@ -677,7 +728,6 @@ const FastTimeWrap = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  /* width: 460px; */
   width: 80%;
   height: 80px;
   padding: 10px;
@@ -691,6 +741,10 @@ const FastTimeWrap = styled.div`
     left: 6px;
     font-size: 10px;
     color: #D9D9D9;
+  }
+  @media (min-width: 769px) {
+    width: 460px;
+    height: 120px;
   }
 `
 
@@ -724,6 +778,11 @@ const Button = styled.div`
     font-family: 'GmarketM', 'sans-serif';
     cursor: pointer;
   }
+  @media (min-width: 769px) {
+    width: 460px;
+    height: 40px;
+    margin: 0 auto;
+  }
 `
 
 const CancleBtn = styled.button`
@@ -749,6 +808,11 @@ const Select = styled.select`
   font-family: 'GmarketM', 'sans-serif';
   font-size: 10px;
   text-align: center;
+  @media (min-width: 769px) {
+    width: 60px;
+    height: 30px;
+    font-size: 12px;
+  }
 `
 
 export default Signup

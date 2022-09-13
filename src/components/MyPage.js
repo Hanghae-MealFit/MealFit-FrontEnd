@@ -27,6 +27,7 @@ const MyPage = () => {
   const startMinute = user.startFasting.split(":")[1]
   const endHour = user.endFasting.split(":")[0]
   const endMinute = user.endFasting.split(":")[1]
+  console.log(useSelector((state) => state.userinfo.user))
 
   useEffect(() => {
     if(MYPAGE_CHECK === "http://localhost:3000/user/info") {
@@ -133,7 +134,7 @@ const MyPage = () => {
 
 const Wrap = styled.div`
   width: 100%;
-  height: 100%;
+  height: 100vh;
   /* margin-left: 260px; */
   display: flex;
   justify-content: center;
@@ -151,12 +152,9 @@ const MyPageWrap = styled.div`
 
 const MyPageInfoWrap = styled.div`
   position: relative;
-  /* width: 700px;
-  height: 920px; */
   width: 100%;
   height: 100%;
   margin-top: 60px;
-  /* border-radius: 30px; */
   background-color: white;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
   display: flex;
@@ -164,17 +162,32 @@ const MyPageInfoWrap = styled.div`
   justify-content: center;
   align-items: center;
   h1 {
-    /* position: absolute;
-    top: 0;
-    left: 0;
-    right: 0; */
     margin: 0 auto;
     padding: 30px 0;
     font-size: 20px;
     color: #FE7770;
     width: 100%;
-    /* border-bottom: 1px solid #E0E2E6; */
     text-align: center;
+  }
+  @media (min-width: 520px) and (max-width: 768px) {
+    padding: 0 60px;
+    box-sizing: border-box;
+  }
+  @media (min-width: 769px) and (max-width: 1023px) {
+    padding: 0 60px;
+    width: 700px;
+    height: 820px;
+    border-radius: 30px;
+    box-sizing: border-box;
+    h1 {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      width: 90%;
+      border-bottom: 1px solid #E0E2E6;
+      font-size: 26px;
+    }
   }
 `
 
@@ -193,12 +206,21 @@ const PwModBtn = styled.div`
   border: 1px solid #555;
   cursor: pointer;
   font-size: 10px;
+  @media (min-width: 769px) and (max-width: 1023px) {
+    top: 30px;
+    right: 30px;
+    width: 100px;
+    height: 34px;
+    font-size: 14px;
+  }
 `;
 
 const FormWrap = styled.form`
-  /* margin-top: 94px; */
   width: 100%;
   height: 100%;
+  @media (min-width: 769px) and (max-width: 1023px) {
+    margin-top: 124px;
+  }
 `
 
 const PicWrap = styled.div`
@@ -237,6 +259,15 @@ const Contents = styled.div`
     padding: 6px 0 6px 3px;
     box-sizing: border-box;
     outline: none;
+  }
+  @media (min-width: 769px) and (max-width: 1023px) {
+    width: 460px;
+    p {
+      margin-right: 20px;
+    }
+    input {
+      padding: 12px 0 12px 6px;
+    }
   }
 `
 
@@ -287,6 +318,32 @@ const WeightWrap = styled.div`
     font-size: 12px;
     color: #9A9A9A;
   }
+  @media (min-width: 520px) and (max-width: 1023px) {
+    flex-direction: row;
+    div input {
+      padding: 12px;
+    }
+    div:last-child {
+      margin-top: 0px;
+      margin-left: 50px;
+    }
+    div span.weight {
+      bottom: 12px;
+    }
+  }
+  /* @media (min-width: 769px) and (max-width: 1023px) {
+    flex-direction: row;
+    div input {
+      padding: 12px;
+    }
+    div:last-child {
+      margin-top: 0px;
+      margin-left: 50px;
+    }
+    div span.weight {
+      bottom: 12px;
+    }
+  } */
 `
 
 const FastTimeWrap = styled.div`
@@ -309,6 +366,9 @@ const FastTimeWrap = styled.div`
     font-size: 10px;
     color: #D9D9D9;
   }
+  @media (min-width: 769px) and (max-width: 1023px) {
+    width: 460px;
+  }
 `
 
 const FastTime = styled.div`
@@ -319,6 +379,9 @@ const FastTime = styled.div`
   font-size: 11px;
   p {
     margin: 0;
+  }
+  @media (min-width: 769px) and (max-width: 1023px) {
+    font-size: 14px;
   }
 `
 
@@ -340,6 +403,9 @@ const Button = styled.div`
     font-weight: 900;
     font-family: 'GmarketM', 'sans-serif';
     cursor: pointer;
+  }
+  @media (min-width: 769px) and (max-width: 1023px) {
+    height: 44px;
   }
 `
 
@@ -417,6 +483,9 @@ const GoalTitle = styled.div`
   justify-content: center;
   align-items: center;
   margin-right: 10px;
+  @media (min-width: 769px) and (max-width: 1023px) {
+    width: 80px;
+  }
 `
 
 const GoalInfo = styled.div`
@@ -453,6 +522,11 @@ const GoalInfo = styled.div`
     margin: 0;
     font-size: 6px;
     color: #D9D9D9;
+  }
+  @media (min-width: 769px) and (max-width: 1023px) {
+    input {
+      padding: 12px;
+    }
   }
 `
 

@@ -90,12 +90,13 @@ const Header = ({isLogin, postId, user, conuser}) => {
 
 const Titlebar = styled.div`
   position: fixed;
-  top: 0;
+  top: 60px;
   left: 0;
   right: 0;
-  width: calc(100% - 260px);
-  height: 120px;
-  margin-left: 260px;
+  /* width: calc(100% - 260px); */
+  width: 100%;
+  height: 60px;
+  /* margin-left: 260px; */
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -106,14 +107,18 @@ const Titlebar = styled.div`
 
 
 const Titletag = styled.div`
-  width: 1000px;
+  /* width: 1000px; */
+  width: 100%;
   height: 50px;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  box-sizing: border-box;
+  padding: 0 10px;
   h2 {
-    font-size: 26px;
+    /* font-size: 26px; */
+    font-size: 14px;
     font-weight: bold;
     display: flex;
     align-items: center;
@@ -133,8 +138,8 @@ const BtnWrap = styled.div`
 
 const WriteBtn = styled.div`
   position: relative;
-  width: 100px;
-  height: 40px;
+  width: 60px;
+  height: 30px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -144,6 +149,7 @@ const WriteBtn = styled.div`
   box-sizing: border-box;
   cursor: pointer;
   transition: background-color 0.2s;
+  font-size: 10px;
   &:hover {
     border: none;
     background-color: #FE7770;

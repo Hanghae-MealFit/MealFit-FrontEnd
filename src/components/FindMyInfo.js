@@ -152,9 +152,6 @@ const Wrap = styled.div`
 
 const FindWrap = styled.div`
   position: relative;
-  /* width: 600px;
-  height: 740px; */
-  /* border-radius: 30px; */
   width: 100%;
   height: 100%;
   margin: 0 auto;
@@ -166,19 +163,26 @@ const FindWrap = styled.div`
   align-items: center;
   overflow: hidden;
   h1 {
-    /* position: absolute;
-    top: 0;
-    left: 0;
-    right: 0; */
     margin: 0 auto;
-    /* padding: 30px 0; */
     padding-top: 20px;
     font-size: 20px;
     color: #FE7770;
-    /* width: 540px; */
     width: 100%;
-    /* border-bottom: 1px solid #E0E2E6; */
     text-align: center;
+  }
+  @media (min-width: 769px) {
+    width: 600px;
+    height: 740px;
+    border-radius: 30px;
+    h1 {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 30px 0;
+      width: 540px;
+      border-bottom: 1px solid #E0E2E6;
+    }
   }
 `
 
@@ -207,6 +211,15 @@ const FindIdInputWrap = styled.div`
     width: 80%;
     font-size: 12px;
   }
+  @media (min-width: 520px) and (max-width: 768px) {
+    padding: 0 60px;
+    box-sizing: border-box;
+  }
+  @media (min-width: 769px) {
+    p {
+      width: 60%;
+    }
+  }
 `
 
 const FindPwInputWrap = styled.div`
@@ -220,6 +233,15 @@ const FindPwInputWrap = styled.div`
   p {
     width: 80%;
     font-size: 12px;
+  }
+  @media (min-width: 520px) and (max-width: 768px) {
+    padding: 0 60px;
+    box-sizing: border-box;
+  }
+  @media (min-width: 769px) {
+    p {
+      width: 60%;
+    }
   }
 `
 
@@ -236,7 +258,6 @@ const Find = styled.div`
     background-color: transparent;
     border: none;
     border-bottom: 1px solid #808080;
-    /* padding: 12px 0 12px 6px; */
     padding: 6px 0 6px 3px;
     margin: 12px auto;
     box-sizing: border-box;
@@ -259,6 +280,12 @@ const Find = styled.div`
     background-color: #808080;
     cursor: default; 
   }
+  @media (min-width: 769px) {
+    width: 60%;
+    input {
+      padding: 12px 0 12px 6px;
+    }
+  }
 `
 
 const InputTxt = styled.div`
@@ -267,7 +294,6 @@ const InputTxt = styled.div`
   p {
     margin: 0;
     position: absolute;
-    /* left: 6px; */
     left: -26px;
     bottom: -6px;
     width: 280px;
@@ -275,6 +301,12 @@ const InputTxt = styled.div`
     -webkit-transform: scale(0.8);
     color: #808080;
     text-align: left;
+  }
+  @media (min-width: 769px) {
+    p {
+      left: 6px;
+      -webkit-transform: scale(1.0);
+    }
   }
 `
 

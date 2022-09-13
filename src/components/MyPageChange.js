@@ -498,7 +498,7 @@ const MyPageChange = () => {
 
 const Wrap = styled.div`
   width: 100%;
-  height: 100%;
+  height: 100vh;
   /* margin-left: 260px; */
   display: flex;
   justify-content: center;
@@ -530,6 +530,9 @@ const SignUpWrap = styled.div`
     width: 100%;
     /* border-bottom: 1px solid #E0E2E6; */
     text-align: center;
+  }
+  @media (min-width: 520px) and (max-width: 768px) {
+    padding: 0 60px;
   }
 `
 
@@ -641,6 +644,24 @@ const WeightWrap = styled.div`
     -webkit-transform: scale(0.8);
     color: #D9D9D9;
     text-align: left;
+  }
+  @media (min-width: 400px) and (max-width: 768px) {
+    flex-direction: row;
+    div {
+      width: 200px;
+      max-width: 200px;
+    }
+    div input {
+      padding: 12px;
+    }
+    div:last-child {
+      margin-top: 0px;
+      margin-left: 50px;
+    }
+    div span.weight {
+      position: absolute;
+      bottom: 12px;
+    }
   }
 `
 

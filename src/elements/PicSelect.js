@@ -60,6 +60,10 @@ const ImgWrap = styled.div`
   width: 120px;
   height: 120px;
   margin: 0 auto;
+  @media (min-width: 1024px) {
+    width: 160px;
+    height: 160px;
+  }
 `
 
 const Img = styled.div`

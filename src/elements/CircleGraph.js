@@ -126,8 +126,19 @@ const Wrap = styled.div`
   width: 100%;
   height: 30%;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  @media (min-width: 520px) and (max-width: 768px) {
+    width: 70%;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  @media (min-width: 769px) {
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
 `
 
 const CircleWrap = styled.div`

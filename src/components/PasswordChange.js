@@ -176,6 +176,10 @@ const Container = styled.div`
     /* border-bottom: 1px solid #E0E2E6; */
     text-align: center;
   }
+  @media (min-width: 520px) and (max-width: 768px) {
+    padding: 0 60px;
+    box-sizing: border-box;
+  }
 `;
 
 const ModInputWrap = styled.div`

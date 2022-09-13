@@ -89,23 +89,32 @@ const Post = () => {
 const Wrap = styled.div`
   width: 100%;
   height: 100%;
-`;
-
-const Container = styled.div`
-  width: calc(100% - 260px);
-  height: 100%;
-  margin: 180px 0 60px 260px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+`;
+
+const Container = styled.div`
+  /* width: calc(100% - 260px); */
+  width: 90%;
+  height: 100%;
+  /* margin: 180px 0 60px 260px; */
+  margin-top: 180px;
+  margin-bottom: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
   font-size: 20px;
   text-align: center;
   font-weight: bold;
 `;
 
 const CardList = styled.div`
-  max-width: 1080px;
+  /* max-width: 1080px; */
+  width: 100%;
   height: 100%;
   display: flex;
   align-items: flex-start;
@@ -113,10 +122,14 @@ const CardList = styled.div`
   gap: 54px;
   flex-wrap: wrap;
   margin: 0 auto;
+  @media (min-width: 400px) and (max-width: 599px) {
+    width: 70%;
+  }
 `;
 
 const CardsBox = styled.div`
-  width: 30%;
+  /* width: 30%; */
+  width: 100%;
   height: 400px;
   display: flex;
   justify-content: center;
@@ -126,6 +139,12 @@ const CardsBox = styled.div`
   overflow: hidden;
   box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
   box-sizing: border-box;
+  @media (min-width: 600px) and (max-width: 768px) {
+    width: 45%;
+  }
+  @media (min-width: 769px) {
+    width: 45%;
+  }
 `;
 
 export default Post;
