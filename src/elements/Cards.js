@@ -74,7 +74,7 @@ const Content = styled.div`
   box-sizing: border-box;
   p {
     margin: 0;
-    font-size: 14px;
+    font-size: 12px;
     overflow: hidden;
     text-overflow: ellipsis;
     word-wrap: break-word;
@@ -100,20 +100,20 @@ const UserInfo = styled.div`
   justify-content: center;
   align-items: center;
   img {
-    width: 40px;
-    height: 40px;
+    width: 26px;
+    height: 26px;
     border-radius: 50%;
   }
   p {
     margin: 0;
     margin-left: 6px;
-    font-size: 13px;
+    font-size: 11px;
   }
 `;
 
 const TextLabel = styled.div`
   color: #808080;
-  font-size: 12px;
+  font-size: 10px;
   display: flex;
   justify-content: center;
   align-items: center;

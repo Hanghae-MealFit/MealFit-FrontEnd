@@ -181,15 +181,15 @@ const RecordModal = (
     <Container>
       <Background />
       <ModalBlock>
-        {
-          editEatItem ? (
-            <Title>수정하기</Title>
-          ) :
-          (
-            <Title>추가하기</Title>
-          )
-        }
         <Contents>
+          {
+            editEatItem ? (
+              <Title>수정하기</Title>
+            ) :
+            (
+              <Title>추가하기</Title>
+            )
+          }
           <InputTxt>
             <input ref={search_food_ref} type="text" placeholder='검색어를 입력하세요.' onKeyPress={onCheckEnter} value={text} onChange={displayText} />
             <button onClick={() => FoodSearch()}>
@@ -227,7 +227,7 @@ const RecordModal = (
                   </div>
 
                   <div className="InputWrap">
-                    <p>지방: </p>
+                    <p>지방</p>
                     <input ref={fat_ref} type="text" placeholder='지방' />
                   </div>
                 </Direct>
@@ -302,7 +302,7 @@ const RecordModal = (
 
 const Container = styled.div`
   width: 100%;
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
@@ -311,7 +311,7 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  z-index: 100;
+  z-index: 21000;
 `;
 
 const Background = styled.div`
@@ -331,19 +331,21 @@ const ModalBlock = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border-radius: 30px;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
   background-color: #fff;
-  width: 80%;
-  height: 80%;
-  z-index: 120;
-  @media (max-width: 1120px) {
-      width: 50rem;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  @media (min-width: 520px) {
+    width: 80%;
+    height: 80%;
+    border-radius: 30px;
   }
-  @media (max-width: 50rem) {
-      width: 80%;
+  @media (min-width: 769px) {
+    width: 60%;
+    height: 60%;
+    border-radius: 30px;
   }
-  min-height: 10rem;
   animation: modal-show 1s;
   @keyframes modal-show {
       from {
@@ -373,7 +375,7 @@ const Contents = styled.div`
   height: 100%;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   flex-direction: column;
   box-sizing: border-box;
 `;
@@ -422,7 +424,7 @@ const Search = styled.div`
     justify-content: center;
     align-items: center;
     p {
-      font-size: 17px;
+      font-size: 13px;
       font-weight: 700;
       color: #333;
       margin: 0;
@@ -474,8 +476,8 @@ const Direct = styled.div`
 `;
 
 const FoodData = styled.div`
-  width: 90%;
-  height: 280px;
+  width: 100%;
+  height: 360px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -485,6 +487,9 @@ const FoodData = styled.div`
   padding: 12px;
   box-sizing: border-box;
   overflow: auto;
+  @media (min-width: 520px) {
+    width: 80%;
+  }
 `;
 
 const FoodInfo = styled.div`
@@ -515,8 +520,8 @@ const RadioInput = styled.input`
 
 const RadioBtn = styled.div`
   position: relative;
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   background-color: #fff;
   border-radius: 50%;
   border: 1px solid #eee;
@@ -526,8 +531,8 @@ const RadioBtn = styled.div`
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 12px;
-    height: 12px;
+    width: 10px;
+    height: 10px;
     transform: translate(-50%, -50%);
     border-radius: 50%;
     background-color: #fff;
@@ -549,7 +554,7 @@ const FoodTitle = styled.div`
   justify-content: flex-start;
   align-items: center;
   p {
-    font-size: 14px;
+    font-size: 13px;
     color: #555;
     margin: 0;
   }
@@ -561,7 +566,7 @@ const FoodCom = styled.div`
   justify-content: center;
   align-items: flex-start;
   p {
-    font-size: 8px;
+    font-size: 10px;
     color: #555;
     margin: 0;
     font-weight: 300;
@@ -575,7 +580,7 @@ const FoodDesc = styled.div`
   align-items: center;
   p {
     position: relative;
-    font-size: 8px;
+    font-size: 10px;
     color: #555;
     margin: 0;
     padding: 0 4px;
@@ -629,7 +634,7 @@ const EatInput = styled.div`
 `
 
 const BtnWrap = styled.div`
-  width: 100%;
+  width: 90%;
   height: 40px;
   display: flex;
   justify-content: center;

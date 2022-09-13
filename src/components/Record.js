@@ -504,11 +504,16 @@ const Record = () => {
 
 const Wrap = styled.div`
   width: 100%;
-  height: 100vh;
-  margin-left: 260px;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+  @media (min-width: 769px) {
+    height: 100vh;
+  }
+  @media (min-width: 1024px) {
+    margin-left: 260px;
+  }
 `
 
 const RecordWrap = styled.div`
@@ -521,35 +526,57 @@ const RecordWrap = styled.div`
 `;
 
 const Container = styled.div`
-  width: 80%;
-  height: 70%;
-  border-radius: 30px;
+  width: 100%;
+  height: 100%;
   background-color: white;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  /* font-size: 20px;
-  text-align: center;
-  font-weight: bold; */
+  margin-top: 60px;
+  padding-top: 20px;
   overflow: hidden;
+  @media (min-width: 1024px) {
+    margin-top: 0;
+    padding-top: 0;
+  }
+  @media (min-width: 1440px) {
+    width: 95%;
+    height: 70%;
+    border-radius: 30px;
+    flex-direction: row;
+    font-size: 20px;
+    text-align: center;
+    font-weight: bold;
+  }
 `;
 
 const CalendarContainer = styled.div`
   /* ~~~ container styles ~~~ */
-  width: 50%;
+  width: 80%;
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 3px;
-  border-right: 1px solid #BBB;
+  @media (min-width: 520px) {
+    height: 50%;
+  }
+  @media (min-width: 769px) {
+    width: 600px;
+    height: 50%;
+  }
+  @media (min-width: 1440px) {
+    width: 50%;
+    height: 100%;
+    border-right: 1px solid #BBB;
+  }
 `;
 
 const RecordingBox = styled.div`
   position: relative;
-  width: 50%;
+  width: 80%;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -557,12 +584,33 @@ const RecordingBox = styled.div`
   align-items: center;
   h1.Title {
     margin: 0 auto;
-    padding: 20px 0;
-    font-size: 20px;
+    padding: 10px 0;
+    font-size: 15px;
     text-align: center;
     color: #555;
-    width: 540px;
+    width: 100%;
+    border-top: 1px solid #E0E2E6;
     border-bottom: 1px solid #E0E2E6;
+    margin-top: 10px;
+  }
+  @media (min-width: 520px) {
+    margin-top: 35px;
+    margin-bottom: 35px;
+    height: 50%;
+  }
+  @media (min-width: 769px) {
+    width: 600px;
+  }
+  @media (min-width: 1440px) {
+    width: 50%;
+    height: 100%;
+    h1.Title {
+      padding: 20px 0;
+      font-size: 20px;
+      width: 540px;
+      border-top: none;
+      margin-top: 0;
+    }
   }
 `;
 
@@ -592,8 +640,12 @@ const Select = styled.div`
   justify-content: space-between;
   align-items: center;
   flex-direction: column;
-  width: 450px;
+  width: 100%;
   color: #555;
+  font-size: 12px;
+  @media (min-width: 1440px) {
+    width: 450px;
+  }
 `;
 
 const SelectTitle = styled.div`
@@ -625,10 +677,15 @@ const SelectTitle = styled.div`
     justify-content: center;
     align-items: center;
     margin: 0;
-    font-size: 12px;
+    font-size: 10px;
     font-weight: 300;
     color: #555;
     box-sizing: border-box;
+  }
+  @media (min-width: 1440px) {
+    p.TotalKcal {
+      font-size: 12px;
+    }
   }
 `
 
@@ -636,16 +693,20 @@ const Button = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 80px;
+  width: 60px;
   height: 30px;
   border: none;
   border-radius: 8px;
   color: #fff;
   background-color: #FE7770;
-  font-size: 14px;
+  font-size: 11px;
   font-weight: 900;
   margin-right: 10px;
   cursor: pointer;
+  @media (min-width: 1440px) {
+    width: 80px;
+    font-size: 14px;
+  }
 `;
 
 const SelectContent = styled.div`
@@ -809,16 +870,20 @@ const MyCalendar = styled(Calendar)`
    /* 상단 네비게이션 바 */
   .react-calendar__navigation {
     display: flex;
+    justify-content: center;
+    align-items: center;
     width: 100%;
     height: 50px;
-    margin-bottom: 40px;
+    @media (min-width: 1440px) {
+      margin-bottom: 40px;
+    }
   }
 
   .react-calendar__navigation__label {
     width: 50%;
     height: 100%;
     font-weight: bold;
-    font-size: 22px;
+    font-size: 16px;
   }
 
   .react-calendar__navigation__arrow {
@@ -834,22 +899,25 @@ const MyCalendar = styled(Calendar)`
     width: 100%;
     text-align: center;
     font-weight: 300;
-    font-size: 20px;
+    font-size: 15px;
     color: #808080;
     margin-top: 10px;
     margin-bottom: 10px;
+    @media (min-width: 1440px) {      
+      font-size: 20px;
+    }
   }
 
   /* 버튼 */
   button {
     width: 100%;
-    height: 50px;
+    height: 30px;
     margin: 3px;
     border: none;
     background-color: #fff;
     border-radius: 10px;
     color: #555;
-    font-size: 22px;
+    font-size: 16px;
     font-weight: 700;
     padding: 5px 0;
     cursor: pointer;
@@ -858,6 +926,10 @@ const MyCalendar = styled(Calendar)`
     }
     &:active {
       background-color: #808080;
+    }
+    @media (min-width: 1440px) {
+      height: 50px;
+      font-size: 22px;
     }
   }
 

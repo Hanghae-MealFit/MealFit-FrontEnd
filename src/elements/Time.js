@@ -25,10 +25,6 @@ const Time = ({time, setTime, EatTime, StartTimeTotal, EndTimeTotal, TodaySecond
   const Minute = time.getMinutes();
   const Second = time.getSeconds();
   const NowSecond = (((Hour * 60) + Minute) * 60) + Second
-  console.log("현재 시간 초",NowSecond)
-  console.log("시작시간", StartTime, "종료시간", EndTime)
-  console.log("총 시작시간", StartTimeTotal)
-  console.log("총 종료시간", EndTimeTotal)
 
   // 단식 시작 : 10시 / 단식 종료 : 12시
   // 식사 시작 : 12시 / 식사 종료 : 10시
@@ -42,17 +38,16 @@ const Time = ({time, setTime, EatTime, StartTimeTotal, EndTimeTotal, TodaySecond
   
   const EndTimeCheck = EndTimeTotal - NowSecond > 0 ?
   (EndTimeTotal - NowSecond) * 1000 :
-  ((EndTimeTotal + TodaySecond) - NowSecond) * 1000 // 
+  ((EndTimeTotal + TodaySecond) - NowSecond) * 1000 
   const EndTimeHour = Math.floor(EndTimeCheck / (1000 * 60 * 60));
   const EndTimeMinute = Math.floor((EndTimeCheck % (1000 * 60 * 60)) / (1000 * 60));
-  console.log(NowSecond, "엔드타임아워",EndTimeHour, "엔드타임미닛",EndTimeMinute)
 
   return (
     <TimeWrap>
       <TopText>
         <p>{Year}년 {Month < 10 ? '0' + Month : Month}월 {Day < 10 ? '0' + Day : Day}일</p>
         <p>{Hour < 10 ? '0' + Hour : Hour}시 {Minute < 10 ? '0' + Minute : Minute}분</p>
-        {
+        {/* {
           EatTime === true ?
           (
             <p>지금은 식사시간 입니다.</p>
@@ -60,29 +55,36 @@ const Time = ({time, setTime, EatTime, StartTimeTotal, EndTimeTotal, TodaySecond
           (
             <p>지금은 단식시간 입니다.</p>
           )
-        }
+        } */}
       </TopText>
       <BottomText>
-        <p>단식 시간 : {StartTime} ~ {EndTime}</p>
-        <p>음식 섭취 가능 시간 : {EndTime} ~ {StartTime}</p>
+        {
+          EatTime === true ?
+          (
+            <p className="TimeCheck">음식 섭취 가능 시간 : {EndTime} ~ {StartTime}</p>
+          ) :
+          (
+            <p className="TimeCheck">단식 시간 : {StartTime} ~ {EndTime}</p>
+          )
+        }
         {
           EatTime === true ?
           (
             EndTimeMinute === 60 ?
             (
-              <p>식사 종료까지 {TimeHour < 10 ? "0" + (TimeHour - 1) : TimeHour}시간 00분 남았습니다.</p>
+              <p className="ramain">식사 종료까지<br />{TimeHour < 10 ? "0" + (TimeHour - 1) : TimeHour}시간 00분</p>
             ) :
             (
-              <p>식사 종료까지 {TimeHour < 10 ? "0" + TimeHour : TimeHour}시간 {TimeMinute < 10 ? "0" + TimeMinute : TimeMinute}분 남았습니다.</p>
+              <p className="ramain">식사 종료까지<br /> {TimeHour < 10 ? "0" + TimeHour : TimeHour}시간 {TimeMinute < 10 ? "0" + TimeMinute : TimeMinute}분</p>
             )
           ) :
           (
             TimeMinute === 60 ?
             (
-              <p>단식 종료까지 {EndTimeHour < 10 ? "0" + (EndTimeHour - 1) : EndTimeHour}시간 00분 남았습니다.</p>
+              <p className="ramain">단식 종료까지<br />{EndTimeHour < 10 ? "0" + (EndTimeHour - 1) : EndTimeHour}시간 00분</p>
             ) :
             (
-              <p>단식 종료까지 {EndTimeHour < 10 ? "0" + EndTimeHour : EndTimeHour}시간 {TimeMinute < 10 ? "0" + TimeMinute : TimeMinute}분 남았습니다.</p>
+              <p className="ramain">단식 종료까지<br />{EndTimeHour < 10 ? "0" + EndTimeHour : EndTimeHour}시간 {TimeMinute < 10 ? "0" + TimeMinute : TimeMinute}분</p>
             )
           )
         }
@@ -106,9 +108,9 @@ const TimeWrap = styled.div`
 
 const TopText = styled.div`
   color: #ffffff;
-  font-size: 18px;
+  font-size: 14px;
   text-shadow: -1px 0 #FE7770, 0 1px #FE7770, 1px 0 #FE7770, 0 -1px #FE7770;
-  margin-bottom: 10px;
+  /* margin-bottom: 10px; */
   p {
     margin: 0;
   }
@@ -118,6 +120,13 @@ const BottomText = styled.div`
   font-size: 14px;
   p {
     margin: 0;
+  }
+  p.TimeCheck {
+    font-size: 11px;
+    margin: 10px 0;
+  }
+  p.remain {
+    font-size: 13px;
   }
 `;
 

@@ -349,8 +349,8 @@ const Signup = () => {
   return (
     <Wrap>
       <SignUpWrap>
-        <h1>회원가입</h1>
         <FormWrap>
+          <h1>회원가입</h1>
           <PicWrap>
             <PicSelect files={files} setFiles={setFiles} />
           </PicWrap>
@@ -390,7 +390,7 @@ const Signup = () => {
                   null
                 )
               }
-              <input ref={currentWeight_ref} maxLength={5} type="number" onInput={maxLengthCheck} onMouseEnter={() => SetCurInfoMsg(true)} onMouseLeave={() => SetCurInfoMsg(false)} placeholder='현재 체중을 입력해주세요.' onChange={(e) => { CurrentWeightChange(e) }} value={curWeight || ''} />
+              <input ref={currentWeight_ref} maxLength={5} type="number" onInput={maxLengthCheck} onMouseEnter={() => SetCurInfoMsg(true)} onMouseLeave={() => SetCurInfoMsg(false)} placeholder='현재 체중' onChange={(e) => { CurrentWeightChange(e) }} value={curWeight || ''} />
               <span className='weight'>(kg)</span>
               <p className="infomsg" ref={current_weight_err_ref}>{curError}</p>
             </div>
@@ -406,7 +406,7 @@ const Signup = () => {
                   null
                 )
               }
-              <input ref={goalWeight_ref} maxLength={5} type="number" onInput={maxLengthCheck} onMouseEnter={() => SetGoInfoMsg(true)} onMouseLeave={() => SetGoInfoMsg(false)} placeholder='목표 체중을 입력해주세요.' onChange={(e) => { GoalWeightChange(e) }} value={goWeight || ''} />
+              <input ref={goalWeight_ref} maxLength={5} type="number" onInput={maxLengthCheck} onMouseEnter={() => SetGoInfoMsg(true)} onMouseLeave={() => SetGoInfoMsg(false)} placeholder='목표 체중' onChange={(e) => { GoalWeightChange(e) }} value={goWeight || ''} />
               <span className='weight'>(kg)</span>
               <p className="infomsg" ref={goal_weight_err_ref}>{goError}</p>
             </div>
@@ -485,17 +485,24 @@ const Signup = () => {
 const Wrap = styled.div`
   width: 100%;
   height: 100vh;
-  margin-left: 260px;
   display: flex;
   justify-content: center;
   align-items: center;
+  @media (min-width: 769px) {
+    height: 100%;
+    margin-top: 100px;
+  }
+  @media (min-width: 1024px) {
+    margin-left: 260px;
+    margin-top: 0;
+    height: 100vh;
+  }
 `
 
 const SignUpWrap = styled.div`
   position: relative;
-  width: 700px;
-  height: 940px;
-  border-radius: 30px;
+  width: 100%;
+  height: 100%;
   background-color: white;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
   display: flex;
@@ -503,22 +510,42 @@ const SignUpWrap = styled.div`
   justify-content: center;
   align-items: center;
   h1 {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
     margin: 0 auto;
     padding: 30px 0;
-    font-size: 26px;
+    font-size: 20px;
     color: #FE7770;
-    width: 540px;
-    border-bottom: 1px solid #E0E2E6;
+    width: 100%;
     text-align: center;
+  }
+  @media (min-width: 520px) and (max-width: 768px) {
+    padding: 0 60px;
+    box-sizing: border-box;
+  }
+  @media (min-width: 769px) {
+    width: 700px;
+    height: 840px;
+    border-radius: 30px;
+    h1 {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      border-bottom: 1px solid #E0E2E6;
+      font-size: 26px;
+    }
+  }
+  @media (min-width: 1024px) {
+    height: 940px;
   }
 `
 
 const FormWrap = styled.form`
-  margin-top: 94px;
+  margin-top: 60px;
+  width: 100%;
+  height: 100%;
+  @media (min-width: 769px) {
+    margin-top: 124px;
+  }
 `
 
 const PicWrap = styled.div`
@@ -528,26 +555,27 @@ const PicWrap = styled.div`
 
 const Contents = styled.div`
   position: relative;
-  width: 460px;
-  margin: 26px auto;
+  width: 80%;
+  margin: 20px auto;  
   input {
     width: 100%;
     border: none;
     border-bottom: 1px solid #9A9A9A;
-    padding: 12px 0 12px 6px;
+    padding: 6px 0 6px 3px;
     box-sizing: border-box;
     outline: none;
+    font-size: 11px;
   }
   button {
     position: absolute;
-    bottom: 10px;
+    bottom: 6px;
     right: 0;
-    width: 80px;
-    height: 30px;
+    width: 54px;
+    height: 20px;
     border: 1px solid #000;
     border-radius: 6px;
     font-family: 'GmarketM', 'sans-serif';
-    font-size: 12px;
+    font-size: 10px;
     background-color: transparent;
     cursor: pointer;
   }
@@ -557,30 +585,54 @@ const Contents = styled.div`
   }
   p {
     position: absolute;
-    bottom: -20px;
-    left: 6px;
+    bottom: -16px;
+    left: -26px;
     margin: 0;
+    width: 280px;
     font-size: 10px;
+    -webkit-transform: scale(0.8);
     color: #D9D9D9;
+    text-align: left;
+  }
+  @media (min-width: 769px) {
+    width: 460px;
+    margin: 26px auto;
+    input {
+      padding: 12px 0 12px 6px;
+    }
+    button {
+      bottom: 10px;
+      right: 0;
+      width: 80px;
+      height: 30px;
+      font-size: 12px;
+    }
+    p {
+      bottom: -20px;
+      left: 6px;
+      -webkit-transform: scale(1.0);
+    }
   }
 `
 
 const WeightWrap = styled.div`
-  width: 460px;
+  width: 80%;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
+
   div {
     position: relative;
-    width: 200px;
+    width: 100px;
     display: flex;
     justify-content: center;
     align-items: center;
   }
   div input {
     width: 100%;
-    padding: 12px;
+    padding: 6px 0 6px 3px;
+    font-size: 11px;
     border: none;
     border-bottom: 1px solid #9A9A9A;
     box-sizing: border-box;
@@ -593,42 +645,63 @@ const WeightWrap = styled.div`
   }
   div span.weight {
     position: absolute;
-    bottom: 12px;
-    right: 10px;
-    font-size: 12px;
+    bottom: 6px;
+    right: 6px;
+    font-size: 10px;
     color: #9A9A9A;
   }
   div p.infomsg {
     position: absolute;
-    bottom: -20px;
-    left: 6px;
+    bottom: -16px;
+    left: -12px;
+    width: 140px;
     margin: 0;
     font-size: 10px;
+    -webkit-transform: scale(0.8);
     color: #D9D9D9;
+    text-align: left;
+  }
+  @media (min-width: 769px) {
+    width: 460px;
+    div {
+      width: 200px;
+    }
+    div input {
+      padding: 12px;
+    }
+    div span.weight {
+      bottom: 12px;
+      right: 10px;
+      font-size: 12px;
+    }
+    div p.infomsg {
+      bottom: -20px;
+      left: 6px;
+      -webkit-transform: scale(1.0);
+    }
   }
 `
 
 const HoverMsg = styled.p`
   position: absolute;
-  top: 35px;
-  left: 0;
+  top: 16px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  width: 100%;
+  width: 120px;
   height: 40px;
-  font-size: 9px;
+  font-size: 10px;
+  -webkit-transform: scale(0.8);
   background-color: white;
   border: 1px solid #FE7770;
   border-radius: 6px;
   padding: 4px;
   color: #333;
-  /* box-sizing: border-box; */
   z-index: 5000;
   span {
     color: #81C147;
-    font-size: 11px;
+    font-size: 10px;
     margin-top: 6px;
   }
   &::before {
@@ -646,6 +719,16 @@ const HoverMsg = styled.p`
     background-color: white;
     transform: rotate(45deg);
   }
+  @media (min-width: 769px) {
+    top: 35px;
+    left: 0;
+    width: 100%;
+    font-size: 10px;
+    -webkit-transform: scale(0.9);
+    span {
+      font-size: 11px;
+    }
+  }
 `
 
 const FastTimeWrap = styled.div`
@@ -653,8 +736,8 @@ const FastTimeWrap = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 460px;
-  height: 120px;
+  width: 80%;
+  height: 80px;
   padding: 10px;
   box-sizing: border-box;
   border: 1px solid #9A9A9A;
@@ -667,6 +750,10 @@ const FastTimeWrap = styled.div`
     font-size: 10px;
     color: #D9D9D9;
   }
+  @media (min-width: 769px) {
+    width: 460px;
+    height: 120px;
+  }
 `
 
 const FastTime = styled.div`
@@ -674,15 +761,16 @@ const FastTime = styled.div`
   justify-content: space-around;
   align-items: center;
   margin: 10px 0;
+  font-size: 11px;
   p {
     margin: 0;
   }
 `
 
 const Button = styled.div`
-  width: 460px;
-  height: 40px;
-  margin: 0 auto;
+  width: 80%;
+  height: 36px;
+  margin: 0 auto 30px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -698,6 +786,11 @@ const Button = styled.div`
     font-family: 'GmarketM', 'sans-serif';
     cursor: pointer;
   }
+  @media (min-width: 769px) {
+    width: 460px;
+    height: 40px;
+    margin: 0 auto;
+  }
 `
 
 const CancleBtn = styled.button`
@@ -712,27 +805,22 @@ const SignUpBtn = styled.button`
   }
 `
 
-const LoginTxt = styled.div`
-  font-size: 12px;
-  margin: 16px auto;
-  text-align: center;
-  span {
-    color: #FE7770;
-    cursor: pointer;
-  }
-`
-
 const Select = styled.select`
-  width: 60px;
-  height: 30px;
+  width: 50px;
+  height: 20px;
   border: none;
   border-bottom: 1px solid #9A9A9A;
   outline: none;
   padding: 0 4px;
   box-sizing: border-box;
   font-family: 'GmarketM', 'sans-serif';
-  font-size: 12px;
+  font-size: 10px;
   text-align: center;
+  @media (min-width: 769px) {
+    width: 60px;
+    height: 30px;
+    font-size: 12px;
+  }
 `
 
 export default Signup

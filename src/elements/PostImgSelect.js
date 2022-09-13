@@ -38,8 +38,14 @@ const PostImgSelect = ({ files, setFiles }) => {
 
 const Wrap = styled.div`
   width: 100%;
-  height: 500px;
+  height: 200px;
   margin: 0 auto;
+  @media (min-width: 400px) and (max-width: 768px) {
+    height: 360px;
+  }
+  @media (min-width: 769px) {
+    height: 500px;
+  }
 `
 
 const ImgWrap = styled.div`
@@ -67,8 +73,8 @@ const Img = styled.div`
 
 const IconWrap = styled.label`
   position: absolute;
-  bottom: 20px;
-  right: 20px;
+  bottom: 10px;
+  right: 10px;
   width: 35px;
   height: 35px;
   border-radius: 50%;

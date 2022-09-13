@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 import "../css/rechart.css"
@@ -26,10 +26,10 @@ const Rechart = ({weight}) => {
         }}
       >
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="날짜" style={{ fontSize: "12px" }} />
-        <YAxis style={{ fontSize: "12px" }} />
+        <XAxis dataKey="날짜" style={{ fontSize: "10px" }} />
+        <YAxis style={{ fontSize: "10px" }} />
         <Tooltip />
-        <Area type="monotone" dataKey="몸무게" stroke="#FE7770" fill="#FFB0AC" style={{ fontSize: "12px" }} />
+        <Area type="monotone" dataKey="몸무게" stroke="#FE7770" fill="#FFB0AC" style={{ fontSize: "10px" }} />
       </AreaChart>
     </ResponsiveContainer>
   );

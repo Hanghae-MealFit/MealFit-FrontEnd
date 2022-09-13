@@ -95,8 +95,8 @@ const Login = () => {
   return (
     <Wrap>
       <LoginWrap>
-        <h1>로그인</h1>
         <ConWrap>
+          <h1>로그인</h1>
           <Contents>
             <input ref={username_ref} type="text" placeholder='아이디를 입력해주세요.' onChange={IdChange} maxLength={12} />
             <p ref={username_err_ref}>{checkIdMsg}</p>
@@ -127,18 +127,19 @@ const Login = () => {
 const Wrap = styled.div`
   width: 100%;
   height: 100vh;
-  margin-left: 260px;
   display: flex;
   justify-content: center;
   align-items: center;
+  @media (min-width: 1024px) {
+    margin-left: 260px;
+  }
 `
 
 const LoginWrap = styled.div`
   position: relative;
-  width: 700px;
-  height: 640px;
+  width: 100%;
+  height: 100%;
   margin: 0 auto;
-  border-radius: 30px;
   background-color: white;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
   display: flex;
@@ -146,40 +147,56 @@ const LoginWrap = styled.div`
   justify-content: center;
   align-items: center;
   h1 {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
     margin: 0 auto;
     padding: 30px 0;
-    font-size: 26px;
+    font-size: 20px;
     color: #FE7770;
-    width: 540px;
-    border-bottom: 1px solid #E0E2E6;
+    width: 100%;
     text-align: center;
+  }
+  @media (min-width: 520px) {
+    padding: 0 60px;
+    box-sizing: border-box;
+  }
+  @media (min-width: 769px) {
+    width: 700px;
+    height: 640px;
+    border-radius: 30px;
+    h1 {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      width: 540px;
+      font-size: 26px;
+      border-bottom: 1px solid #E0E2E6;
+    }
   }
 `
 
 const ConWrap = styled.form`
   width: 100%;
   height: 100%;
-  margin: 94px auto 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  @media (min-width: 769px) {
+    margin: 94px auto 0;
+  }
 `
 
 const Contents = styled.div`
   position: relative;
-  width: 400px;
-  margin: 12px auto;
+  width: 80%;
+  margin: 10px auto;
   input {
     width: 100%;
     border: none;
     border-bottom: 1px solid #9A9A9A;
     background-color: transparent;
-    padding: 12px 0 12px 6px;
+    padding: 6px 0 6px 3px;
+    font-size: 12px;
     box-sizing: border-box;
     outline: none;
   }
@@ -198,23 +215,36 @@ const Contents = styled.div`
   }
   p {
     position: absolute;
-    bottom: -20px;
-    left: 6px;
+    left: -26px;
+    right: 0;
+    width: 280px;
     margin: 0;
     font-size: 10px;
+    -webkit-transform: scale(0.8);
     color: #D9D9D9;
+  }
+  @media (min-width: 769px) {
+    width: 400px;
+    input {
+      padding: 12px 0 12px 6px;
+    }
+    p {
+      bottom: -20px;
+      left: 6px;
+      -webkit-transform: scale(1.0);
+    }
   }
 `
 
 const Button = styled.div`
-  width: 400px;
-  height: 52px;
+  width: 100%;
+  height: 40px;
   margin: 20px auto 0;
   display: flex;
   justify-content: center;
   align-items: center;
   button {
-    width: 500px;
+    width: 80%;
     height: 100%;
     margin: 0;
     border: none;
@@ -223,6 +253,12 @@ const Button = styled.div`
     font-size: 18px;
     font-weight: 900;
     cursor: pointer;
+  }
+  @media (min-width: 769px) {
+    width: 400px;
+    button {
+      width: 500px;
+    }
   }
 `
 const LoginBtn = styled.button`
@@ -234,7 +270,7 @@ const LoginBtn = styled.button`
 `
 
 const LoginTxt = styled.div`
-  font-size: 12px;
+  font-size: 10px;
   margin: 16px auto;
   text-align: center;
   span {
@@ -256,12 +292,15 @@ const LoginTxt = styled.div`
     height: 10px;
     border-right: 1px solid #CCC;
   }
+  @media (min-width: 769px) {
+    font-size: 12px;
+  }
 `
 
 const SocialTxt = styled.h4`
   position: relative;
-  width: 400px;
-  font-size: 12px;
+  width: 80%;
+  font-size: 11px;
   text-align: center;
   margin: 12px auto 6px;
   color: #808080;
@@ -281,14 +320,20 @@ const SocialTxt = styled.h4`
     width: 34%;
     border-top: 1px solid #CCC;
   }
+  @media (min-width: 769px) {
+    font-size: 12px;
+  }
 `
 
 const SocialBtnWrap = styled.div`
-  width: 50%;
+  width: 100%;
   margin: 26px auto 0;
   display: flex;
   justify-content: space-around;
   align-items: center;
+  @media (min-width: 769px) {
+    width: 50%;
+  }
 `
 
 export default Login

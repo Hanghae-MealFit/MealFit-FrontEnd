@@ -117,7 +117,11 @@ const PostUp = () => {
   }
 
     const onhandleBack = () => {
-      navigate("/");
+      navigate("/post/all");
+    };
+
+    const onhandleEditBack = () => {
+      navigate(`/post/${postId}`);
     };
 
     useEffect(() => {
@@ -138,16 +142,19 @@ const PostUp = () => {
             placeholder='오늘 식단을 입력해주세요.'
           >
           </Textarea>
-          <Button>
-            <CancleBtn onClick={onhandleBack}>뒤로가기</CancleBtn>
             {
               EditPage ? (
-                <PostUpBtn onClick={PostUpdateAX} disabled={ImageFile.length !== 0 && contentText ? false : true}>수정하기</PostUpBtn>
+                <Button>
+                  <CancleBtn onClick={onhandleEditBack}>뒤로가기</CancleBtn>
+                  <PostUpBtn onClick={PostUpdateAX} disabled={ImageFile.length !== 0 && contentText ? false : true}>수정하기</PostUpBtn>
+                </Button>
               ) : (
-                <PostUpBtn onClick={PostUpAX} disabled={ImageFile.length !== 0 && contentText ? false : true}>작성하기</PostUpBtn>
+                <Button>
+                  <CancleBtn onClick={onhandleBack}>뒤로가기</CancleBtn>
+                  <PostUpBtn onClick={PostUpAX} disabled={ImageFile.length !== 0 && contentText ? false : true}>작성하기</PostUpBtn>
+                </Button>
               )
             }
-          </Button>
         </Container>
       </Wrap>
     );
@@ -160,12 +167,16 @@ const Wrap = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 180px 0 40px 260px;
+  margin-top: 180px;
+  margin-bottom: 60px;
+  @media (min-width: 1024px) {
+    margin: 180px 0 40px 260px;
+  }
 `;
 
 const Container = styled.div`
-  width: 700px;
-  min-height: 800px;
+  width: 90%;
+  height: 100%;
   border-radius: 30px;
   background-color: white;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
@@ -176,28 +187,41 @@ const Container = styled.div`
   font-size: 20px;
   text-align: center;
   font-weight: bold;
-  `;
+  overflow: hidden;
+  @media (min-width: 769px) {
+    width: 700px;
+    min-height: 800px;
+  }
+`;
 
 const Textarea = styled.textarea`
   margin: 20px auto;
   bottom: 70px;
-  width: 600px;
-  height: 300px;
+  height: 100px;
+  width: 80%;
   border: none;
   outline: none;
   border-radius: 10px;
   padding: 15px;
   box-sizing: border-box;
   resize: none;
+  @media (min-width: 400px) and (max-width: 768px) {
+    height: 240px;
+  }
+  @media (min-width: 769px) {
+    width: 600px;
+    height: 300px;
+  }
 `;
 
 const Button = styled.div`
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   margin-bottom: 40px;
   button {
-    width: 160px;
+    width: 40%;
     height: 40px;
     margin: 0 10px;
     border: none;
@@ -207,7 +231,6 @@ const Button = styled.div`
     font-weight: 900;
     cursor: pointer;
   }
-
 `
 
 const CancleBtn = styled.button`

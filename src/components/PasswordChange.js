@@ -98,8 +98,8 @@ const PasswordChange = () => {
       <PwChangeWrap>
         <MemoizedSidebar />
         <Container>
-          <h1>비밀번호 변경</h1>
           <ModInputWrap>
+            <h1>비밀번호 변경</h1>
             <p>새로운 비밀번호를 입력해주세요.</p>
             <InputTxt>
               <input ref={cur_password_ref} onChange={CurPw} type="password" placeholder='현재 비밀번호를 입력하세요.' autoComplete="off" />
@@ -135,10 +135,12 @@ const PasswordChange = () => {
 const Wrap = styled.div`
   width: 100%;
   height: 100vh;
-  margin-left: 260px;
   display: flex;
   justify-content: center;
   align-items: center;
+  @media (min-width: 1024px) {
+    margin-left: 260px;
+  }
 `
 
 const PwChangeWrap = styled.div`
@@ -152,35 +154,44 @@ const PwChangeWrap = styled.div`
 
 const Container = styled.div`
   position: relative;
-  width: 700px;
-  height: 640px;
-  border-radius: 30px;
+  width: 100%;
+  height: 100%;
   background-color: white;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-size: 20px;
-  text-align: center;
-  font-weight: bold;
   h1 {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
     margin: 0 auto;
     padding: 30px 0;
-    font-size: 26px;
+    font-size: 20px;
     color: #FE7770;
-    width: 540px;
-    border-bottom: 1px solid #E0E2E6;
+    width: 100%;
     text-align: center;
   }
-  `;
+  @media (min-width: 520px) and (max-width: 768px) {
+    padding: 0 60px;
+    box-sizing: border-box;
+  }
+  @media (min-width: 769px) {
+    width: 700px;
+    height: 640px;
+    border-radius: 30px;
+    font-size: 20px;
+    h1 {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      font-size: 26px;
+      width: 540px;
+      border-bottom: 1px solid #E0E2E6;
+    }
+  }
+`;
 
 const ModInputWrap = styled.div`
-  // background-color: green;
   width: 100%;
   height: 60%;
   margin-bottom: 65px;
@@ -189,66 +200,85 @@ const ModInputWrap = styled.div`
   justify-content: center;
   align-items: center;
   p {
+    font-size: 13px;
+  }
+  @media (min-width: 769px) {
     font-size: 17px;
   }
 `
 
 const InputTxt = styled.div`
-position: relative;
-text-align: center;
-display: flex;
-flex-direction: column;
-justify-content: center;
-align-items: center;
-input {
-  width: 400px;
-  background-color: transparent;
-  border: none;
-  border-bottom: 1px solid #808080;
-  padding: 12px 0 12px 6px;
-  margin: 12px auto;
-  box-sizing: border-box;
-  outline: none;
-}
-p {
-  margin: 0;
-  position: absolute;
-  left: 6px;
-  bottom: -6px;
-  font-size: 10px;
-  color: #D9D9D9;
-}
-button {
-  width: 400px;
-  height: 40px;
-  border: none;
-  border-radius: 12px;
-  font-family: 'GmarketM', 'sans-serif';
-  font-size: 14px;
-  background-color: #FE7770;
-  color: #fff;
-  margin-top: 20px;
-  cursor: pointer;
-}
-button:disabled {
-  background-color: #808080;
-  cursor: default; 
-}
+  width: 80%;
+  position: relative;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  input {
+    width: 100%;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid #808080;
+    padding: 6px 0 6px 3px;
+    margin: 12px auto;
+    box-sizing: border-box;
+    outline: none;
+    font-size: 11px;
+  }
+  p {
+    position: absolute;
+    bottom: -6px;
+    left: -26px;
+    margin: 0;
+    width: 280px;
+    font-size: 10px;
+    -webkit-transform: scale(0.8);
+    color: #D9D9D9;
+    text-align: left;
+  }
+  button {
+    width: 400px;
+    height: 40px;
+    border: none;
+    border-radius: 12px;
+    font-family: 'GmarketM', 'sans-serif';
+    font-size: 14px;
+    background-color: #FE7770;
+    color: #fff;
+    margin-top: 20px;
+    cursor: pointer;
+  }
+  button:disabled {
+    background-color: #808080;
+    cursor: default; 
+  }
+  @media (min-width: 769px) {
+    width: 58%;
+    input {
+      width: 400px;
+      padding: 12px 0 12px 6px;
+    }
+    p {
+      bottom: -6px;
+      left: 6px;
+      -webkit-transform: scale(1.0);
+    }
+  }
 `
 
 const Button = styled.div`
-  // background-color: red;
   position: absolute;
-  width: 400px;
+  width: 80%;
   height: 40px;
   bottom: 120px;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   button {
-    width: 100%;
+    width: 46%;
     height: 100%;
-    margin: 0 10px;
+    margin: 0;
     border: none;
     border-radius: 30px;
     color: #fff;

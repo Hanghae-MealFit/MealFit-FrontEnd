@@ -402,17 +402,19 @@ const PostView = (props) => {
 const Wrap = styled.div`
   width: 100%;
   height: 100%;
-  margin-left: 260px;
   margin-top: 180px;
   margin-bottom: 40px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  `;
+  @media (min-width: 1024px) {
+    margin-left: 260px;
+  }
+`;
 
 const Container = styled.div`
-  width: 700px;
+  width: 90%;
   border-radius: 30px;
   background-color: white;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
@@ -420,11 +422,14 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  `;
+  @media (min-width: 769px) {
+    width: 700px;
+  }
+`;
 
 const CardImg = styled.div`
   width: 100%;
-  height: 600px;
+  height: 200px;
   border-radius: 30px 30px 0px 0px;
   overflow: hidden;
   background-color: ${(props) => props.conImg?.length === 0 ? "#b1cfe7" : "black" };
@@ -433,10 +438,16 @@ const CardImg = styled.div`
     height: 100%;
     object-fit: cover;
   }
+  @media (min-width: 600px) and (max-width: 768px) {
+    height: 340px;
+  }
+  @media (min-width: 769px) {
+    height: 600px;
+  }
 `;
 
 const BoardInfo = styled.div`
-    width: 90%;
+    width: 100%;
     height: 80px;
     display: flex;
     justify-content: space-between;
@@ -445,6 +456,9 @@ const BoardInfo = styled.div`
     border-bottom: 1px solid #D9D9D9;
     padding: 0px 20px;
     box-sizing: border-box;
+    @media (min-width: 600px) {
+      width: 90%;
+    }
 `;
 
 const UserInfo = styled.div`
@@ -452,10 +466,16 @@ const UserInfo = styled.div`
   justify-content: center;
   align-items: center;
   img {
-        width: 50px;
-        height: 50px;
-        border-radius: 50px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50px;
+  }
+  @media (min-width: 769px) {
+    img {
+      width: 50px;
+      height: 50px;
     }
+  }
 `
 
 const BoardText = styled.div`
@@ -466,14 +486,20 @@ const BoardText = styled.div`
   margin-left: 10px;
   p {
     margin: 0;
+    font-size: 14px;
+  }
+  @media (min-width: 769px) {
+    p {
     font-size: 20px;
+    }
   }
 `
 
 const WriteTime = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   p {
     margin: 0 2px;
     font-size: 10px;
@@ -509,11 +535,16 @@ const IconWrap = styled.div`
 `;
 
 const Content = styled.div`
-  width: 90%;
-  min-height: 240px;
+  width: 100%;
+  min-height: 140px;
   padding: 0 20px;
   box-sizing: border-box;
   border-bottom: 1px solid #D9D9D9;
+  font-size: 14px;
+  @media (min-width: 600px) {
+    width: 90%;
+    min-height: 240px;
+  }
 `
 
 const CommentTitle = styled.div`
@@ -524,8 +555,11 @@ const CommentTitle = styled.div`
   align-items: center;
   box-sizing: border-box;
   padding-left: 10px;
-  font-size: 18px;
+  font-size: 14px;
   color: #333;
+  @media (min-width: 600px) {
+    font-size: 18px;
+  }
 `
 
 const CommentWrap = styled.div`
@@ -549,8 +583,8 @@ const CommentInfo = styled.div`
     margin-bottom: 14px;
   }
   div.CommentProfile {
-    width: 40px;
-    height: 40px;
+    width: 34px;
+    height: 34px;
   }
   div.CommentProfile img {
     width: 100%;
@@ -560,16 +594,16 @@ const CommentInfo = styled.div`
     flex-basis: 100%;
   }
   div.CommentWrap {
-    width: 90%;
+    width: 76%;
     margin-left: 12px;
   }
   div.CommentWrap p {
     margin: 0;
-    font-size: 12px;
+    font-size: 10px;
     font-weight: 500;
   }
   div.CommentWrap p:first-child {
-    font-size: 15px;
+    font-size: 12px;
     font-weight: 600;
   }
   div.CommentWrap p:last-child {
@@ -634,6 +668,21 @@ const CommentInfo = styled.div`
     color: #333;
     cursor: pointer;
   }
+  @media (min-width: 769px) {
+    div.CommentProfile {
+      width: 40px;
+      height: 40px;
+    }
+    div.CommentWrap {
+      width: 90%;
+    }
+    div.CommentWrap p {
+      font-size: 12px;
+    }
+    div.CommentWrap p:first-child {
+      font-size: 15px;
+    }
+  }
 `
 
 const Comment = styled.div`
@@ -650,26 +699,37 @@ const CommentWriter = styled.div`
   min-height: 120px;
   border: 2px solid #D9D9D9;
   border-radius: 6px;
-  padding: 20px;
+  padding: 8px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
+  @media (min-width: 769px) {
+    padding: 20px;
+  }
 `
+
 const WriterInfo = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
   margin-bottom: 12px;
   img {
-    width: 40px;
-    height: 40px;
+    width: 34px;
+    height: 34px;
     border-radius: 50%;
   }
   p {
     margin: 0;
     margin-left: 6px;
+    font-size: 14px;
+  }
+  @media (min-width: 769px) {
+    img {
+      width: 40px;
+      height: 40px;
+    }
   }
 `
 
