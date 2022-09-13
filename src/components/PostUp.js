@@ -117,7 +117,7 @@ const PostUp = () => {
   }
 
     const onhandleBack = () => {
-      navigate("/");
+      navigate("/post/all");
     };
 
     const onhandleEditBack = () => {
@@ -167,9 +167,11 @@ const Wrap = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  /* margin: 180px 0 40px 260px; */
   margin-top: 180px;
   margin-bottom: 60px;
+  @media (min-width: 1024px) {
+    margin: 180px 0 40px 260px;
+  }
 `;
 
 const Container = styled.div`

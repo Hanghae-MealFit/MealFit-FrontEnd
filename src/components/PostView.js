@@ -402,14 +402,16 @@ const PostView = (props) => {
 const Wrap = styled.div`
   width: 100%;
   height: 100%;
-  /* margin-left: 260px; */
   margin-top: 180px;
   margin-bottom: 40px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  `;
+  @media (min-width: 1024px) {
+    margin-left: 260px;
+  }
+`;
 
 const Container = styled.div`
   width: 90%;

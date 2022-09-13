@@ -127,10 +127,12 @@ const Login = () => {
 const Wrap = styled.div`
   width: 100%;
   height: 100vh;
-  /* margin-left: 260px; */
   display: flex;
   justify-content: center;
   align-items: center;
+  @media (min-width: 1024px) {
+    margin-left: 260px;
+  }
 `
 
 const LoginWrap = styled.div`
@@ -166,6 +168,7 @@ const LoginWrap = styled.div`
       left: 0;
       right: 0;
       width: 540px;
+      font-size: 26px;
       border-bottom: 1px solid #E0E2E6;
     }
   }

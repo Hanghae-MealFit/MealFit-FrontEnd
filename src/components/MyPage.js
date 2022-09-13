@@ -135,10 +135,12 @@ const MyPage = () => {
 const Wrap = styled.div`
   width: 100%;
   height: 100vh;
-  /* margin-left: 260px; */
   display: flex;
   justify-content: center;
   align-items: center;
+  @media (min-width: 1024px) {
+    margin-left: 260px;
+  }
 `
 
 const MyPageWrap = styled.div`
@@ -173,7 +175,7 @@ const MyPageInfoWrap = styled.div`
     padding: 0 60px;
     box-sizing: border-box;
   }
-  @media (min-width: 769px) and (max-width: 1023px) {
+  @media (min-width: 769px) {
     padding: 0 60px;
     width: 700px;
     height: 820px;
@@ -184,10 +186,14 @@ const MyPageInfoWrap = styled.div`
       top: 0;
       left: 0;
       right: 0;
-      width: 90%;
+      width: 540px;
       border-bottom: 1px solid #E0E2E6;
       font-size: 26px;
     }
+  }
+  @media (min-width: 1024px) {
+    height: 920px;
+    margin-top: 0;
   }
 `
 
@@ -206,19 +212,19 @@ const PwModBtn = styled.div`
   border: 1px solid #555;
   cursor: pointer;
   font-size: 10px;
-  @media (min-width: 769px) and (max-width: 1023px) {
-    top: 30px;
-    right: 30px;
-    width: 100px;
-    height: 34px;
-    font-size: 14px;
+  @media (min-width: 769px) {
+    top: 23.5px;
+    right: 40px;
+    width: 120px;
+    height: 40px;
+    font-size: 13px;
   }
 `;
 
 const FormWrap = styled.form`
   width: 100%;
   height: 100%;
-  @media (min-width: 769px) and (max-width: 1023px) {
+  @media (min-width: 769px) {
     margin-top: 124px;
   }
 `
@@ -230,7 +236,6 @@ const PicWrap = styled.div`
 
 const Contents = styled.div`
   position: relative;
-  /* width: 460px; */
   width: 80%;
   margin: 20px auto;
   display: flex;
@@ -246,7 +251,6 @@ const Contents = styled.div`
     align-items: center;
     margin: 0;
     box-sizing: border-box;
-    /* margin-right: 20px; */
     margin-right: 10px;
     color: #fff;
     font-size: 12px;
@@ -255,15 +259,16 @@ const Contents = styled.div`
     width: 100%;
     border: none;
     border-bottom: 1px solid #9A9A9A;
-    /* padding: 12px 0 12px 6px; */
     padding: 6px 0 6px 3px;
     box-sizing: border-box;
     outline: none;
   }
-  @media (min-width: 769px) and (max-width: 1023px) {
+  @media (min-width: 769px) {
     width: 460px;
+    margin: 26px auto;
     p {
       margin-right: 20px;
+      font-size: 15px;
     }
     input {
       padding: 12px 0 12px 6px;
@@ -290,7 +295,6 @@ const WeightWrap = styled.div`
   }
   div input {
     width: 100%;
-    /* padding: 12px; */
     padding: 6px 0 6px 3px;
     border: none;
     border-bottom: 1px solid #9A9A9A;
@@ -318,7 +322,7 @@ const WeightWrap = styled.div`
     font-size: 12px;
     color: #9A9A9A;
   }
-  @media (min-width: 520px) and (max-width: 1023px) {
+  @media (min-width: 520px) {
     flex-direction: row;
     div input {
       padding: 12px;
@@ -331,19 +335,29 @@ const WeightWrap = styled.div`
       bottom: 12px;
     }
   }
-  /* @media (min-width: 769px) and (max-width: 1023px) {
+  @media (min-width: 769px) {
+    width: 460px;
     flex-direction: row;
+    div {
+      width: 200px;
+    }
     div input {
+      width: 50%;
       padding: 12px;
     }
     div:last-child {
       margin-top: 0px;
       margin-left: 50px;
     }
+    div p {
+      margin-right: 20px;
+      font-size: 15px;
+    }
     div span.weight {
       bottom: 12px;
+      right: 10px;
     }
-  } */
+  }
 `
 
 const FastTimeWrap = styled.div`
@@ -351,7 +365,6 @@ const FastTimeWrap = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  /* width: 460px; */
   width: 80%;
   height: 80px;
   padding: 10px;
@@ -366,8 +379,9 @@ const FastTimeWrap = styled.div`
     font-size: 10px;
     color: #D9D9D9;
   }
-  @media (min-width: 769px) and (max-width: 1023px) {
+  @media (min-width: 769px) {
     width: 460px;
+    height: 120px;
   }
 `
 
@@ -380,7 +394,7 @@ const FastTime = styled.div`
   p {
     margin: 0;
   }
-  @media (min-width: 769px) and (max-width: 1023px) {
+  @media (min-width: 769px) {
     font-size: 14px;
   }
 `
@@ -404,8 +418,10 @@ const Button = styled.div`
     font-family: 'GmarketM', 'sans-serif';
     cursor: pointer;
   }
-  @media (min-width: 769px) and (max-width: 1023px) {
-    height: 44px;
+  @media (min-width: 769px) {
+    width: 460px;
+    height: 40px;
+    margin: 0 auto;
   }
 `
 
@@ -432,6 +448,11 @@ const Select = styled.input`
   font-family: 'GmarketM', 'sans-serif';
   font-size: 10px;
   text-align: center;
+  @media (min-width: 769px) {
+    width: 60px;
+    height: 30px;
+    font-size: 12px;
+  }
 `
 
 const IntakeWrap = styled.div`
@@ -461,6 +482,10 @@ const IntakeWrap = styled.div`
     color: #fff;
     border-radius: 6px;
   }
+  @media (min-width: 769px) {
+    width: 460px;
+    margin: 40px auto;
+  }
 `
 
 const GoalInfoWrap = styled.div`
@@ -472,7 +497,6 @@ const GoalInfoWrap = styled.div`
 `
 
 const GoalTitle = styled.div`
-  /* width: 80px; */
   width: 60px;
   height: 30px;
   background-color: #FE7770;
@@ -483,8 +507,9 @@ const GoalTitle = styled.div`
   justify-content: center;
   align-items: center;
   margin-right: 10px;
-  @media (min-width: 769px) and (max-width: 1023px) {
+  @media (min-width: 769px) {
     width: 80px;
+    font-size: 15px;
   }
 `
 
@@ -496,7 +521,6 @@ const GoalInfo = styled.div`
   align-items: center;
   input {
     width: 100%;
-    /* padding: 12px; */
     padding: 6px 0px 6px 3px;
     border: none;
     border-bottom: 1px solid #9A9A9A;
@@ -523,9 +547,14 @@ const GoalInfo = styled.div`
     font-size: 6px;
     color: #D9D9D9;
   }
-  @media (min-width: 769px) and (max-width: 1023px) {
+  @media (min-width: 769px) {
     input {
       padding: 12px;
+    }
+    span.unit {
+      bottom: 12px;
+      right: 10px;
+      font-size: 12px;
     }
   }
 `

@@ -26,20 +26,20 @@ function App() {
     <Wrap>
       <MemoizedSidebar />
       <Routes>
-        <Route path="/" element = { <Main /> } /> {/* 태블릿 */}
-        <Route path="user/info" element = { <MyPage /> } /> {/* 태블릿 */}
+        <Route path="/" element = { <Main /> } />
+        <Route path="user/info" element = { <MyPage /> } />
         <Route path="user/info/edit" element = { <MyPageChange /> } />
         <Route path="user/info/password" element = { <PasswordChange /> } />
-        <Route path="user/signup" element = { <Signup /> } /> {/* 태블릿 */}
-        <Route path="user/signupsns" element = { <SignupSNS /> } /> {/* 태블릿 */}
-        <Route path="user/login" element = { <Login /> } /> {/* 태블릿 */}
-        <Route path="user/find" element = { <FindMyInfo /> } /> {/* 태블릿 */}
-        <Route path="oauth2/redirect" element = { <SocialUserCheck /> } /> {/* 모바일 필요없음*/}
-        <Route path="user/verify" element = { <EmailVerify /> } /> {/* 모바일 필요없음 */}
+        <Route path="user/signup" element = { <Signup /> } />
+        <Route path="user/signupsns" element = { <SignupSNS /> } />
+        <Route path="user/login" element = { <Login /> } />
+        <Route path="user/find" element = { <FindMyInfo /> } />
+        <Route path="oauth2/redirect" element = { <SocialUserCheck /> } />
+        <Route path="user/verify" element = { <EmailVerify /> } />
         <Route path="record" element = { <Record /> } />
-        <Route path="post/all" element = { <Post /> } /> {/* 태블릿 */}
-        <Route path="post" element = { <PostUp /> } /> {/* 태블릿 */}
-        <Route path="post/:postId/edit" element = { <PostUp /> } /> {/* 태블릿 */}
+        <Route path="post/all" element = { <Post /> } />
+        <Route path="post" element = { <PostUp /> } />
+        <Route path="post/:postId/edit" element = { <PostUp /> } />
         <Route path="post/:postId" element = { <PostView /> } />
       </Routes>
     </Wrap>

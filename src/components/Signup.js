@@ -485,13 +485,17 @@ const Signup = () => {
 const Wrap = styled.div`
   width: 100%;
   height: 100vh;
-  /* margin-left: 260px; */
   display: flex;
   justify-content: center;
   align-items: center;
   @media (min-width: 769px) {
     height: 100%;
     margin-top: 100px;
+  }
+  @media (min-width: 1024px) {
+    margin-left: 260px;
+    margin-top: 0;
+    height: 100vh;
   }
 `
 
@@ -527,7 +531,11 @@ const SignUpWrap = styled.div`
       left: 0;
       right: 0;
       border-bottom: 1px solid #E0E2E6;
+      font-size: 26px;
     }
+  }
+  @media (min-width: 1024px) {
+    height: 940px;
   }
 `
 
@@ -536,7 +544,7 @@ const FormWrap = styled.form`
   width: 100%;
   height: 100%;
   @media (min-width: 769px) {
-    margin-top: 94px;
+    margin-top: 124px;
   }
 `
 

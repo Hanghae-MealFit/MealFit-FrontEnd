@@ -93,21 +93,26 @@ const Titlebar = styled.div`
   top: 60px;
   left: 0;
   right: 0;
-  /* width: calc(100% - 260px); */
   width: 100%;
   height: 60px;
-  /* margin-left: 260px; */
   display: flex;
   justify-content: space-between;
   align-items: center;
   background-color: #FFF;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  padding: 0 30px;
+  box-sizing: border-box;
   z-index: 5000;
+  @media (min-width: 1024px) {
+    top: 0;
+    height: 100px;
+    width: calc(100% - 260px);
+    margin-left: 260px;
+  }
 `;
 
 
 const Titletag = styled.div`
-  /* width: 1000px; */
   width: 100%;
   height: 50px;
   margin: 0 auto;
@@ -117,7 +122,6 @@ const Titletag = styled.div`
   box-sizing: border-box;
   padding: 0 10px;
   h2 {
-    /* font-size: 26px; */
     font-size: 14px;
     font-weight: bold;
     display: flex;
@@ -126,6 +130,11 @@ const Titletag = styled.div`
     color: #333;
     border-bottom: 2px double #333;
     padding-bottom: 6px;
+  }
+  @media (min-width: 1024px) {
+    h2 {
+      font-size: 26px;
+    }
   }
 `;
 
@@ -154,6 +163,11 @@ const WriteBtn = styled.div`
     border: none;
     background-color: #FE7770;
     color: #fff;
+  }
+  @media (min-width: 1024px) {
+    width: 100px;
+    height: 40px;
+    font-size: 14px;
   }
 `;
 

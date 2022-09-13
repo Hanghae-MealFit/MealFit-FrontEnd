@@ -336,17 +336,16 @@ const ModalBlock = styled.div`
   width: 100%;
   height: 100%;
   z-index: 1000;
-  @media (min-width: 520px) and (max-width: 768px) {
+  @media (min-width: 520px) {
     width: 80%;
     height: 80%;
     border-radius: 30px;
   }
-  /* @media (max-width: 1120px) {
-      width: 50rem;
+  @media (min-width: 769px) {
+    width: 60%;
+    height: 60%;
+    border-radius: 30px;
   }
-  @media (max-width: 50rem) {
-      width: 80%;
-  } */
   animation: modal-show 1s;
   @keyframes modal-show {
       from {
@@ -488,7 +487,7 @@ const FoodData = styled.div`
   padding: 12px;
   box-sizing: border-box;
   overflow: auto;
-  @media (min-width: 520px) and (max-width: 768px) {
+  @media (min-width: 520px) {
     width: 80%;
   }
 `;

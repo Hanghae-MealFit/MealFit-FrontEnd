@@ -265,6 +265,9 @@ const MobileHeader = styled.div`
     color: #333;
     cursor: pointer;
   }
+  @media (min-width: 1023px) {
+    display: none;
+  }
 `
 
 const HamBtn = styled.div`
@@ -295,33 +298,26 @@ const SideBar = styled.div`
   @media (max-width: 1023px) {
     display: none;
   }
-  @media (min-width: 1024px) and (max-width: 1400px) {
-    width: 220px;
-  }
 `;
 
 const Logo = styled.div`
-  /* width: 100%; */
   height: 40px;
   /* identical to box height */
   display: flex;
   align-items: center;
   justify-content: center;
-  /* margin: 40px auto; */
   color: #FFF;
   cursor: pointer;
   img {
     height: 60%;
   }
-  /* @media (max-width: 768px) {
-    width: 30%;
+  @media (min-width: 1023px) {
+    width: 100%;
+    margin: 40px auto;
+    img {
+      height: 100%;
+    }
   }
-  @media (min-width: 769px) and (max-width: 1023px) {
-    margin: 20px auto;
-  }
-  @media (min-width: 1024px) and (max-width: 1400px) {
-    margin: 30px auto;
-  } */
 `;
 
 const SideBox = styled.div`
@@ -361,16 +357,6 @@ const Info = styled.div`
   span.Welcome {
     font-size: 12px;
   }
-  @media (min-width: 1024px) and (max-width: 1400px) {
-    padding: 20px 0;
-    span.UserNick {
-      font-size: 13px;
-      font-weight: 700;
-    }
-    span.Welcome {
-      font-size: 10px;
-    }
-  }
 `;
 
 const Profile = styled.img`
@@ -396,24 +382,6 @@ const Menu = styled.div`
   flex-direction: column;
   font-size: 16px;
   margin-top: 40px;
-  @media (max-width: 320px) {
-    width: 100%;
-    height: 30px;
-    margin-top: 4px;
-    flex-direction: row;
-  }
-  @media (min-width: 321px) and (max-width: 768px) {
-    width: 100%;
-    height: 30px;
-    margin-top: 4px;
-    flex-direction: row;
-  }
-  @media (min-width: 769px) and (max-width: 1023px) {
-    width: 160px;
-  }
-  @media (min-width: 1024px) and (max-width: 1400px) {
-    width: 220px;
-  }
 `;
 
 const MenuWrap = styled.div`
@@ -439,14 +407,6 @@ const MenuWrap = styled.div`
   p {
     margin: 0;
   }
-  @media (max-width: 320px) {
-    justify-content: center;
-    padding-left: 0;
-  }
-  @media (min-width: 321px) and (max-width: 768px) {
-    justify-content: center;
-    padding-left: 0;
-  }
 `
 
 const Button = styled.div`
@@ -468,35 +428,6 @@ const Button = styled.div`
     font-family: 'GmarketM', 'sans-serif';
     cursor: pointer;
     background-color: white;
-  }
-  @media (max-width: 320px) {
-    /* display: none; */
-  }
-  @media (min-width: 321px) and (max-width: 768px) {
-    width: 70px;
-    top: 20px;
-    right: 10px;
-    bottom: 65px;
-    align-items: flex-start;
-    justify-content: flex-end;
-    button {
-      width: 70px;
-      height: 30px;
-      margin-bottom: 0;
-      font-size: 12px;
-    }
-  }
-  @media (min-width: 769px) and (max-width: 1023px) {
-    button {
-      width: 120px;
-      height: 40px;
-    }
-  }
-  @media (min-width: 1024px) and (max-width: 1400px) {
-    button {
-      width: 160px;
-      height: 40px;
-    }
   }
 `
 

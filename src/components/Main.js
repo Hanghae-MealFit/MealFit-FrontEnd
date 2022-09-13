@@ -245,6 +245,10 @@ const Wrap = styled.div`
   @media (min-width: 769px) {
     height: 100vh;
   }
+  @media (min-width: 1024px) {
+    margin-left: 260px;
+    margin-top: 0;
+  }
 `
 
 const MainWrap = styled.div`
@@ -270,6 +274,13 @@ const Titlebar = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+  @media (min-width: 1024px) {
+    width: 140px;
+    height: 40px;
+  }
+  p {
+    font-size: 16px;
   }
 `;
 
@@ -345,7 +356,7 @@ const TopMenu = styled.div`
   overflow: hidden;
   @media (min-width: 769px) {
     flex-direction: row;
-    height: 50%;
+    height: 55%;
   }
 `
 
@@ -359,6 +370,9 @@ const Item1 = styled.div`
   justify-content: center;
   align-items: center;
   margin: 20px 0;
+  @media (min-width: 769px) {
+    margin: 0;
+  }
 `;
 
 const GrapWrap = styled.div`
@@ -390,6 +404,10 @@ const Item2 = styled.div`
   @media (min-width: 769px) {
     width: 90%;
     height: 55%;
+  }
+  @media (min-width: 1024px) {
+    width: 70%;
+    height: 60%;
   }
 `;
 
@@ -454,6 +472,18 @@ const WeightWrap = styled.div`
       padding: 12px;
     }
   }
+  @media (min-width: 1024px) {
+    h2 {
+      margin: 0 0 20px;
+      font-size: 24px;
+    }
+    div.weightWrap {
+      margin: 30px 0;
+    }
+    div input {
+      padding: 12px;
+    }
+  }
 `
 
 const HoverMsg = styled.p`
@@ -497,6 +527,9 @@ const HoverMsg = styled.p`
     top: 65px;
     box-sizing: border-box;
   }
+  @media (min-width: 1024px) {
+    top: 90px;
+  }
 `
 
 const Button = styled.div`
@@ -517,6 +550,13 @@ const Button = styled.div`
     font-weight: 900;
     font-family: 'GmarketM', 'sans-serif';
     cursor: pointer;
+  }
+  @media (min-width: 1024px) {
+    height: 40px;
+    margin: 0 auto;
+    button {
+      font-size: 16px;
+    }
   }
 `
 
@@ -573,18 +613,12 @@ const CardsBox = styled.div`
       margin-top: 30px;
     }
   }
-  /* @media (max-width: 320px) {
-    height: 200px;
+  @media (min-width: 1024px) {
+    width: 22%;
+    &:first-child {
+      margin-top: 30px;
+    }
   }
-  @media (min-width: 321px) and (max-width: 768px) {
-    height: 260px;
-  }
-  @media (min-width: 769px) and (max-width: 1023px) {
-
-  } */
-  /* @media (min-width: 1024px) and (max-width: 1400px) {
-    height: 60%;
-  } */
 `;
 
 export default Main;

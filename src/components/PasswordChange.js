@@ -135,10 +135,12 @@ const PasswordChange = () => {
 const Wrap = styled.div`
   width: 100%;
   height: 100vh;
-  /* margin-left: 260px; */
   display: flex;
   justify-content: center;
   align-items: center;
+  @media (min-width: 1024px) {
+    margin-left: 260px;
+  }
 `
 
 const PwChangeWrap = styled.div`
@@ -152,11 +154,8 @@ const PwChangeWrap = styled.div`
 
 const Container = styled.div`
   position: relative;
-  /* width: 700px;
-  height: 940px; */
   width: 100%;
   height: 100%;
-  /* border-radius: 30px; */
   background-color: white;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
   display: flex;
@@ -164,21 +163,31 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   h1 {
-    /* position: absolute;
-    top: 0;
-    left: 0;
-    right: 0; */
     margin: 0 auto;
     padding: 30px 0;
     font-size: 20px;
     color: #FE7770;
     width: 100%;
-    /* border-bottom: 1px solid #E0E2E6; */
     text-align: center;
   }
   @media (min-width: 520px) and (max-width: 768px) {
     padding: 0 60px;
     box-sizing: border-box;
+  }
+  @media (min-width: 769px) {
+    width: 700px;
+    height: 640px;
+    border-radius: 30px;
+    font-size: 20px;
+    h1 {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      font-size: 26px;
+      width: 540px;
+      border-bottom: 1px solid #E0E2E6;
+    }
   }
 `;
 
@@ -193,6 +202,9 @@ const ModInputWrap = styled.div`
   p {
     font-size: 13px;
   }
+  @media (min-width: 769px) {
+    font-size: 17px;
+  }
 `
 
 const InputTxt = styled.div`
@@ -204,12 +216,10 @@ const InputTxt = styled.div`
   justify-content: center;
   align-items: center;
   input {
-    /* width: 400px; */
     width: 100%;
     background-color: transparent;
     border: none;
     border-bottom: 1px solid #808080;
-    /* padding: 12px 0 12px 6px; */
     padding: 6px 0 6px 3px;
     margin: 12px auto;
     box-sizing: border-box;
@@ -218,8 +228,6 @@ const InputTxt = styled.div`
   }
   p {
     position: absolute;
-    /* bottom: -20px;
-    left: 6px; */
     bottom: -6px;
     left: -26px;
     margin: 0;
@@ -244,6 +252,18 @@ const InputTxt = styled.div`
   button:disabled {
     background-color: #808080;
     cursor: default; 
+  }
+  @media (min-width: 769px) {
+    width: 58%;
+    input {
+      width: 400px;
+      padding: 12px 0 12px 6px;
+    }
+    p {
+      bottom: -6px;
+      left: 6px;
+      -webkit-transform: scale(1.0);
+    }
   }
 `
 

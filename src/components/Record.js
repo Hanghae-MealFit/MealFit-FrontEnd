@@ -505,12 +505,14 @@ const Record = () => {
 const Wrap = styled.div`
   width: 100%;
   height: 100%;
-  /* margin-left: 260px; */
   display: flex;
   justify-content: center;
   align-items: center;
   @media (min-width: 769px) {
     height: 100vh;
+  }
+  @media (min-width: 1024px) {
+    margin-left: 260px;
   }
 `
 
@@ -535,8 +537,12 @@ const Container = styled.div`
   margin-top: 60px;
   padding-top: 20px;
   overflow: hidden;
-  @media (min-width: 769px) {
-    width: 80%;
+  @media (min-width: 1024px) {
+    margin-top: 0;
+    padding-top: 0;
+  }
+  @media (min-width: 1440px) {
+    width: 95%;
     height: 70%;
     border-radius: 30px;
     flex-direction: row;
@@ -554,8 +560,16 @@ const CalendarContainer = styled.div`
   justify-content: center;
   align-items: center;
   border-radius: 3px;
+  @media (min-width: 520px) {
+    height: 50%;
+  }
   @media (min-width: 769px) {
+    width: 600px;
+    height: 50%;
+  }
+  @media (min-width: 1440px) {
     width: 50%;
+    height: 100%;
     border-right: 1px solid #BBB;
   }
 `;
@@ -579,11 +593,23 @@ const RecordingBox = styled.div`
     border-bottom: 1px solid #E0E2E6;
     margin-top: 10px;
   }
+  @media (min-width: 520px) {
+    margin-top: 35px;
+    margin-bottom: 35px;
+    height: 50%;
+  }
   @media (min-width: 769px) {
+    width: 600px;
+  }
+  @media (min-width: 1440px) {
     width: 50%;
+    height: 100%;
     h1.Title {
       padding: 20px 0;
+      font-size: 20px;
       width: 540px;
+      border-top: none;
+      margin-top: 0;
     }
   }
 `;
@@ -617,7 +643,7 @@ const Select = styled.div`
   width: 100%;
   color: #555;
   font-size: 12px;
-  @media (min-width: 769px) {
+  @media (min-width: 1440px) {
     width: 450px;
   }
 `;
@@ -656,6 +682,11 @@ const SelectTitle = styled.div`
     color: #555;
     box-sizing: border-box;
   }
+  @media (min-width: 1440px) {
+    p.TotalKcal {
+      font-size: 12px;
+    }
+  }
 `
 
 const Button = styled.button`
@@ -672,6 +703,10 @@ const Button = styled.button`
   font-weight: 900;
   margin-right: 10px;
   cursor: pointer;
+  @media (min-width: 1440px) {
+    width: 80px;
+    font-size: 14px;
+  }
 `;
 
 const SelectContent = styled.div`
@@ -839,7 +874,9 @@ const MyCalendar = styled(Calendar)`
     align-items: center;
     width: 100%;
     height: 50px;
-    /* margin-bottom: 40px; */
+    @media (min-width: 1440px) {
+      margin-bottom: 40px;
+    }
   }
 
   .react-calendar__navigation__label {
@@ -866,6 +903,9 @@ const MyCalendar = styled(Calendar)`
     color: #808080;
     margin-top: 10px;
     margin-bottom: 10px;
+    @media (min-width: 1440px) {      
+      font-size: 20px;
+    }
   }
 
   /* 버튼 */
@@ -886,6 +926,10 @@ const MyCalendar = styled(Calendar)`
     }
     &:active {
       background-color: #808080;
+    }
+    @media (min-width: 1440px) {
+      height: 50px;
+      font-size: 22px;
     }
   }
 

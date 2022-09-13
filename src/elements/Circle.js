@@ -124,17 +124,20 @@ const Circle = ({Token, timeCheck, setTimeCheck}) => {
         <Dot TodayPer={todayPer} EatTime={eatTime} onMouseEnter={ShowHoverDesc} onMouseLeave={HideHoverDesc} onClick={ChangeTimeOpen}></Dot>
         <svg>
           <circle style={{
-            fill: eatTime === true ? "#dcff95" : "#FFB0AC"
+            fill: eatTime === true ? "#FFB0AC" : "#ccc"
           }}
           cx={ MobileMedia.matches ? "130" : TabletMedia.matches ? "160" : "195" }
           cy={ MobileMedia.matches ? "130" : TabletMedia.matches ? "160" : "195" }
           r={ MobileMedia.matches ? "105" : TabletMedia.matches ? "135" : "170"}>
           </circle>
           <circle style={{
-            strokeDashoffset: `calc(890 - (890 * ${NowPer}) / 100)`,
-            stroke: eatTime === true ? "yellowgreen" : "#FE7770"
+            strokeDashoffset:
+            MobileMedia.matches ? `calc(890 - (890 * ${NowPer}) / 100)` :
+            TabletMedia.matches ? `calc(850 - (850 * ${NowPer}) / 100)` :
+            `calc(1080 - (1080 * ${NowPer}) / 100)`,
+            stroke: eatTime === true ? "#FE7770" : "#777"
           }}
-          cx={ MobileMedia.matches ? "130" :  TabletMedia.matches ? "160" : "195" }
+          cx={ MobileMedia.matches ? "130" : TabletMedia.matches ? "160" : "195" }
           cy={ MobileMedia.matches ? "130" : TabletMedia.matches ? "160" : "195" }
           r={ MobileMedia.matches ? "105" : TabletMedia.matches ? "135" : "170" }>
           </circle>
@@ -269,6 +272,15 @@ const Percent = styled.div`
       stroke-dashoffset: 850;
     }
   }
+  @media (min-width: 1024px) {
+    width: 400px;
+    height: 400px;
+    svg circle {
+      transform: translate(0px, 0px);
+      stroke-dasharray: 1080;
+      stroke-dashoffset: 1080;
+    }
+  }
 `
 
 const animateDot = keyframes`
@@ -287,7 +299,6 @@ const Dot = styled.div`
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  /* inset: 0px; */
   z-index: 10;
   /* transform: ${(props) => `rotate(${props.TodayPer}deg)`}; */
   transition: 0.2s;

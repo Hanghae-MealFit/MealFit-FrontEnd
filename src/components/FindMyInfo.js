@@ -144,10 +144,12 @@ const FindMyInfo = () => {
 const Wrap = styled.div`
   width: 100%;
   height: 100vh;
-  /* margin-left: 260px; */
   display: flex;
   justify-content: center;
   align-items: center;
+  @media (min-width: 1024px) {
+    margin-left: 260px;
+  }
 `
 
 const FindWrap = styled.div`
@@ -182,6 +184,7 @@ const FindWrap = styled.div`
       padding: 30px 0;
       width: 540px;
       border-bottom: 1px solid #E0E2E6;
+      font-size: 26px;
     }
   }
 `
@@ -218,6 +221,7 @@ const FindIdInputWrap = styled.div`
   @media (min-width: 769px) {
     p {
       width: 60%;
+      font-size: 14px;
     }
   }
 `
@@ -241,6 +245,7 @@ const FindPwInputWrap = styled.div`
   @media (min-width: 769px) {
     p {
       width: 60%;
+      font-size: 14px;
     }
   }
 `

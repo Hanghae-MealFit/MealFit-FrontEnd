@@ -96,10 +96,8 @@ const Wrap = styled.div`
 `;
 
 const Container = styled.div`
-  /* width: calc(100% - 260px); */
   width: 90%;
   height: 100%;
-  /* margin: 180px 0 60px 260px; */
   margin-top: 180px;
   margin-bottom: 60px;
   display: flex;
@@ -110,10 +108,13 @@ const Container = styled.div`
   font-size: 20px;
   text-align: center;
   font-weight: bold;
+  @media (min-width: 1024px) {
+    width: calc(100% - 260px);
+    margin: 180px 0 60px 260px;
+  }
 `;
 
 const CardList = styled.div`
-  /* max-width: 1080px; */
   width: 100%;
   height: 100%;
   display: flex;
@@ -125,10 +126,15 @@ const CardList = styled.div`
   @media (min-width: 400px) and (max-width: 599px) {
     width: 70%;
   }
+  @media (min-width: 1024px) {
+    max-width: 740px;
+  }
+  @media (min-width: 1440px) {
+    max-width: 1080px;
+  }
 `;
 
 const CardsBox = styled.div`
-  /* width: 30%; */
   width: 100%;
   height: 400px;
   display: flex;
@@ -144,6 +150,12 @@ const CardsBox = styled.div`
   }
   @media (min-width: 769px) {
     width: 45%;
+  }
+  @media (min-width: 1024px) {
+    width: 46%;
+  }
+  @media (min-width: 1440px) {
+    width: 30%;
   }
 `;
 

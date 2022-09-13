@@ -102,11 +102,11 @@ const CircleGraph = ({ totalEatItem }) => {
               <svg>
                 <circle style={{
                   stroke: v.per > 100 ? "red" : "#BBB"
-                }} cx="75" cy="75" r="60"></circle>
+                }} cx="65" cy="65" r="50"></circle>
                 <circle style={{
                   strokeDashoffset: `calc(377 - (377 * ${v.per > 100 ? v.per - 100 : v.per }) / 100)`,
                   stroke: "#FE7770"
-                }} cx="75" cy="75" r="60"></circle>
+                }} cx="65" cy="65" r="50"></circle>
               </svg>
               <Info>
                 <InfoTitle>{v.title}</InfoTitle>
@@ -135,6 +135,11 @@ const Wrap = styled.div`
     flex-wrap: wrap;
   }
   @media (min-width: 769px) {
+    width: 120%;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  @media (min-width: 1440px) {
     width: 100%;
     flex-direction: row;
     flex-wrap: wrap;
@@ -142,8 +147,8 @@ const Wrap = styled.div`
 `
 
 const CircleWrap = styled.div`
-  width: 160px;
-  height: 160px;
+  width: 140px;
+  height: 140px;
   display: flex;
   flex-direction: column;
   justify-content: center;
