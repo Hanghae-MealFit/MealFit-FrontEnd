@@ -59,7 +59,7 @@ const RecordModal = (
     return () => {
       observer.disconnect();
     }
-  }, []);
+  }, [notFoundSearch]);
 
   useEffect(() => {
     getSearchList();
@@ -72,7 +72,7 @@ const RecordModal = (
       setPage((prev) => prev + 1);
     }
   }
-  console.log("page", page)
+  // console.log("page", page)
 
   const getSearchList = useCallback( async (data) => {
     const SearchName = data ? data : search_food_ref.current.value
@@ -85,11 +85,11 @@ const RecordModal = (
               refresh_token: `Bearer ${auth.refresh_token}`
             },
           })
-          console.log(res)
+          // console.log(res)
           if(res.data.length === 0) {
             setNotFoundSarch(true)
           } else {
-            console.log("안",notFoundSearch)
+            // console.log("안",notFoundSearch)
             setNotFoundSarch(false)
             setList(prev => {
               // console.log("prev", prev)
@@ -98,12 +98,12 @@ const RecordModal = (
             preventRef.current = true;
           }
         } catch(error) {
-          console.log(error)
+          // console.log(error)
         }
       }
     }, [page])
   // console.log("list", list)
-  console.log("밖",notFoundSearch)
+  // console.log("밖",notFoundSearch)
   
   // 음식 추가하기
   const FoodInsert = async () => {
@@ -243,7 +243,7 @@ const RecordModal = (
   const displayText = (e) => {
     setText(e.target.value);
   };
-  console.log(text)
+  // console.log(text)
 
   return (
     <Container>
@@ -336,7 +336,7 @@ const RecordModal = (
                     </label>
                   </FoodInfo>
                 ))}
-                <div ref={obsRef} style={{height: "10px"}}></div>
+                <div ref={obsRef} style={{height: "0"}}></div>
               </FoodData>
             )
           }
@@ -406,8 +406,8 @@ const ModalBlock = styled.div`
   height: 100%;
   z-index: 1000;
   @media (min-width: 520px) {
-    width: 80%;
-    height: 80%;
+    width: 90%;
+    height: 90%;
     border-radius: 30px;
   }
   @media (min-width: 769px) {
