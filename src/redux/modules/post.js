@@ -31,7 +31,7 @@ export function loadPost(post) {
 }
   
 export function updatePost(post, params) {
-  console.log("확인", post, params)
+  // console.log("확인", post, params)
   return { type: UPDATE, payload: {post, params} }
 }
 

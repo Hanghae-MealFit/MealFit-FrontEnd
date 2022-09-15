@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import KakaoLogin from '../elements/KakaoLogin';
 import NaverLogin from '../elements/NaverLogin';
 import GoogleLogin from '../elements/GoogleLogin';
@@ -24,6 +24,12 @@ const Login = () => {
       navigate("/")
     }
   }, [])
+  
+  const { pathname } = useLocation();
+
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   const IdChange = (e) => {
     let regTxt = /[0-9a-zA-Z]/;
@@ -73,7 +79,7 @@ const Login = () => {
             "Content-Type": "application/json"
           }
         })
-        console.log(res)
+        // console.log(res)
         if(res.status === 200 & res.data.tokenBox.accessToken !== null && res.data.tokenBox.refreshToken !== null) {
           sessionStorage.setItem("accessToken", res.data.tokenBox.accessToken)
           sessionStorage.setItem("refreshToken", res.data.tokenBox.refreshToken)
@@ -81,10 +87,12 @@ const Login = () => {
           navigate("/")
         }
       } catch(error) {
-        console.log(error)
-        if(error.response.status === 401) {
-          window.alert("회원가입 시 작성한 e-mail에서 인증 후 로그인 가능합니다.")
+        // console.log(error)
+        if(error.response.status === 401 && error.response.data === "잘못된 로그인 정보입니다.") {
+          window.alert("로그인에 실패하였습니다. 아이디 혹은 비밀번호를 다시 확인해주세요.")
           username_ref.current.focus()
+        } else if(error.response.status === 401 && error.response.data === "이메일 인증을 받지 않았습니다. 이메일 인증을 해주세요!") {
+          window.alert("회원가입 시 작성한 e-mail에서 인증 후 로그인 가능합니다.")
         } else {
           window.alert("로그인에 실패하였습니다. 아이디 혹은 비밀번호를 다시 확인해주세요.")
           username_ref.current.focus()
@@ -130,6 +138,15 @@ const Wrap = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  @media (max-width: 769px) and (max-height: 500px) {
+    height: 100%;
+    margin-top: 60px;
+  }
+  @media (min-width: 769px) and (max-height: 760px) {
+    height: 100%;
+    margin-top: 100px;
+    margin-bottom: 40px;
+  }
   @media (min-width: 1024px) {
     margin-left: 260px;
   }
@@ -333,6 +350,9 @@ const SocialBtnWrap = styled.div`
   align-items: center;
   @media (min-width: 769px) {
     width: 50%;
+  }
+  @media (max-width: 769px) and (max-height: 500px) {
+    margin: 26px auto 30px;
   }
 `
 

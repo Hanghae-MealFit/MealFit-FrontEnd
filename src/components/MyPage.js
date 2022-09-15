@@ -1,17 +1,23 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { MemoizedSidebar } from "./Sidebar";
 import PicSelect from '../elements/PicSelect';
 
+import { loadMainUserDB } from '../redux/modules/userinfo';
 import { loadUserWeightDB } from '../redux/modules/userweight'
 
 const MyPage = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const Token = {
+    authorization: sessionStorage.getItem("accessToken"),
+    refresh_token: sessionStorage.getItem("refreshToken")
+  }
 
   let code = new URL(window.location.href);
   const MYPAGE_CHECK = code.href
@@ -27,10 +33,15 @@ const MyPage = () => {
   const startMinute = user.startFasting.split(":")[1]
   const endHour = user.endFasting.split(":")[0]
   const endMinute = user.endFasting.split(":")[1]
-  console.log(useSelector((state) => state.userinfo.user))
+
+  const { pathname } = useLocation();
+
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   useEffect(() => {
-    if(MYPAGE_CHECK === "http://localhost:3000/user/info") {
+    if(MYPAGE_CHECK === "http://mealfit.co.kr/user/info") {
       setMyPageIn(true)
     } else {
       setMyPageIn(false)
@@ -39,6 +50,14 @@ const MyPage = () => {
 
   useEffect(() => {
     dispatch(loadUserWeightDB())
+    dispatch(loadMainUserDB())
+  }, [])
+
+  useEffect(() => {
+    if(Token.authorization === null && Token.refresh_token === null) {
+      window.alert("MyPage는 로그인 후 사용 가능합니다.")
+      navigate("/")
+    }
   }, [])
 
   return (
@@ -134,12 +153,19 @@ const MyPage = () => {
 
 const Wrap = styled.div`
   width: 100%;
-  height: 100vh;
+  height: 100%;
+  margin-top: 60px;
   display: flex;
   justify-content: center;
   align-items: center;
+  @media (min-width: 769px) {
+    margin-top: 100px;
+    margin-bottom: 40px;
+  }
   @media (min-width: 1024px) {
     margin-left: 260px;
+    margin-top: 20px;
+    margin-bottom: 20px;
   }
 `
 
@@ -156,7 +182,6 @@ const MyPageInfoWrap = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
-  margin-top: 60px;
   background-color: white;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
   display: flex;
@@ -170,10 +195,6 @@ const MyPageInfoWrap = styled.div`
     color: #FE7770;
     width: 100%;
     text-align: center;
-  }
-  @media (min-width: 520px) and (max-width: 768px) {
-    padding: 0 60px;
-    box-sizing: border-box;
   }
   @media (min-width: 769px) {
     padding: 0 60px;

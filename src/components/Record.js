@@ -8,12 +8,16 @@ import DimmedLayer from "../elements/DimmedLayer";
 import CircleGraph from "../elements/CircleGraph"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPen, faXmark, faCaretRight, faCaretDown } from '@fortawesome/free-solid-svg-icons'
+import { loadMainUserDB } from "../redux/modules/userinfo";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 
 import Calendar from 'react-calendar';
 import moment from "moment";
 import 'moment/locale/ko';
 
 const Record = () => {
+  const userGoal = useSelector((state) => state.userinfo.user.nutritionGoal);
   const [isLogin, setIsLogin] = React.useState(false)
   const [value, onChange] = React.useState(new Date());
   const [recordModalOpen, setRecordModalOpen] = React.useState(false);
@@ -37,6 +41,12 @@ const Record = () => {
 
   const [editEatItem, setEditEatItem] = React.useState(false);
 
+  const { pathname } = useLocation();
+
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
   const Token = {
     authorization: sessionStorage.getItem("accessToken"),
     refresh_token: sessionStorage.getItem("refreshToken")
@@ -58,7 +68,6 @@ const Record = () => {
     setSelectEatItem(value)
     setSelectBreakfast(true)
   }
-  console.log(selectEatItem)
 
   const LunchSelectItem = (value) => {
     setSelectEatItem(value)
@@ -120,9 +129,9 @@ const Record = () => {
               refresh_token: `Bearer ${auth.refresh_token}`
             },
           })
-        console.log(res)
+        // console.log(res)
         const data = res.data.dietResponseDto;
-        console.log(data)
+        // console.log(data)
         if(res.status === 200) {
           setTotalEatItem(data)
           setBreakfastEatItem(data.filter((value) => value.dietStatus === "BREAKFAST"))
@@ -130,13 +139,10 @@ const Record = () => {
           setDinnerEatItem(data.filter((value) => value.dietStatus === "DINNER"))
         }
       } catch (error) {
-        console.log(error)
+        // console.log(error)
       }
     }
   }
-  console.log("아침",breakfastEatItem)
-  console.log("점심",lunchEatItem)
-  console.log("저녁",dinnerEatItem)
 
   const [morningKcal, setMorningKcal] = React.useState(0)
   const [lunchKcal, setLunchKcal] = React.useState(0)
@@ -185,8 +191,11 @@ const Record = () => {
     }
   }
 
+  const dispatch = useDispatch();
+
   React.useEffect(() => {
     LoginCheck()
+    dispatch(loadMainUserDB())
 }, [])
 
   React.useEffect(() => {
@@ -213,13 +222,13 @@ const Record = () => {
           refresh_token: `Bearer ${auth.refresh_token}`
         },
       })
-      console.log(res)
+      // console.log(res)
       if(res.status === 200 && res.data === "식단 삭제 완료!") {
         window.alert("선택하신 음식이 삭제되었습니다.")
         setCheckInputFood(!checkInputFood)
       }
     } catch(error) {
-      console.log(error)
+      // console.log(error)
       window.alert("음식 삭제에 실패하였습니다.")
     }
   }
@@ -231,13 +240,17 @@ const Record = () => {
         <Container>
           {
             isLogin ? (
-              null
+              userGoal.carbs === 0 && userGoal.fat === 0 && userGoal.kcal === 0 && userGoal.protein === 0 ? (
+                <DimmedLayer carbs={userGoal.carbs} fat={userGoal.fat} kcal={userGoal.kcal} protein={userGoal.protein} />
+              ) : (
+                null
+              )
             ) :
             (
               <DimmedLayer />
             )
           }
-          <CalendarContainer style={{ filter: !isLogin ? "blur(6px)" : "none" }}>
+          <CalendarContainer style={{ filter: !isLogin ? "blur(6px)" : userGoal.carbs === 0 && userGoal.fat === 0 && userGoal.kcal === 0 && userGoal.protein === 0 ? "blur(6px)" : "none" }}>
             <MyCalendar
               onChange={onChange} value={value}
               calendarType="US" // 요일을 일요일부터 시작하도록 설정
@@ -245,7 +258,7 @@ const Record = () => {
             />
           </CalendarContainer>
           <RecordingBox 
-            style={{ filter: !isLogin ? "blur(6px)" : "none" }}>
+            style={{ filter: !isLogin ? "blur(6px)" : userGoal.carbs === 0 && userGoal.fat === 0 && userGoal.kcal === 0 && userGoal.protein === 0 ? "blur(6px)" : "none" }}>
             <h1 className="Title">
               <div className="text-gray-500 mt-4">
                 {moment(value).format("YYYY년 MM월 DD일 dddd")}
@@ -526,6 +539,7 @@ const RecordWrap = styled.div`
 `;
 
 const Container = styled.div`
+  position: relative;
   width: 100%;
   height: 100%;
   background-color: white;

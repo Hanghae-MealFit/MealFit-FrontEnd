@@ -14,9 +14,9 @@ const SocialUserCheck = () => {
 
     const getUser = async () => {
       if(USER_CHECK === "true") {
-        window.location.href = "http://localhost:3000/user/signupsns"
+        window.location.href = "http://mealfit.co.kr/user/signupsns"
       } else {
-        window.location.href = "http://localhost:3000/"
+        window.location.href = "http://mealfit.co.kr/"
       }
     }
     getUser();

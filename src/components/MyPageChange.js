@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 
 import { MemoizedSidebar } from "./Sidebar";
@@ -29,6 +29,11 @@ const MyPageChange = () => {
   const goal_fat_err_ref = React.useRef(null);
 
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   const [ myPageChangeIn, setMyPageChangeIn ] = React.useState(false)
   const [ files, setFiles ] = React.useState(null);
@@ -69,6 +74,10 @@ const MyPageChange = () => {
   const [ goalFat, setGoalFat ] = React.useState();
   const [ goalFatError, setGoalFatError ] = React.useState("* 값을 입력해주세요.");
 
+  const sessionStorage = window.sessionStorage;
+  const ACCESS_TOKEN = sessionStorage.getItem("accessToken")
+  const REFRESH_TOKEN = sessionStorage.getItem("refreshToken")
+
   const onhandleSignUpSNS = async (e) => {
     e.preventDefault()
 
@@ -84,7 +93,7 @@ const MyPageChange = () => {
       protein: goal_pro_ref.current.value,
       fat: goal_fat_ref.current.value,
     }
-    console.log(SignupSNSInfo)
+    // console.log(SignupSNSInfo)
 
     const formData = new FormData()
     formData.append("nickname", SignupSNSInfo.nickname);
@@ -100,10 +109,6 @@ const MyPageChange = () => {
       formData.append("profileImage", SignupSNSInfo.profileImage);
     }
 
-    const sessionStorage = window.sessionStorage;
-    const ACCESS_TOKEN = sessionStorage.getItem("accessToken")
-    const REFRESH_TOKEN = sessionStorage.getItem("refreshToken")
-
     await axios({
       baseURL: "http://43.200.174.111:8080/",
       method: "POST",
@@ -115,16 +120,23 @@ const MyPageChange = () => {
         refresh_token: `Bearer ${REFRESH_TOKEN}`
       },
     }).then((response) => {
-      console.log(response.status)
+      // console.log(response.status)
       if(response.status === 200) {
         window.alert("회원정보 등록에 성공하셨습니다.")
         navigate("/")
       }
     }).catch((error) => {
-      console.log(error)
+      // console.log(error)
       window.alert("회원정보 등록에 실패하셨습니다.")
     })
   }
+
+  useEffect(() => {
+    if(ACCESS_TOKEN === null && REFRESH_TOKEN === null) {
+      window.alert("내 정보 변경은 로그인 후 사용 가능합니다.")
+      navigate("/")
+    }
+  }, [])
 
   const CheckNickname = async (e) => {
     e.preventDefault()
@@ -142,7 +154,7 @@ const MyPageChange = () => {
         nickname_err_ref.current.style.color = "#81C147";
       }
     } catch(error) {
-      console.log(error)
+      // console.log(error)
       SetCheckNickMsg("* 사용 불가능 한 닉네임입니다.")
       nickname_err_ref.current.style.color = "#FF0000";
       nickname_ref.current.focus()
@@ -498,20 +510,35 @@ const MyPageChange = () => {
 
 const Wrap = styled.div`
   width: 100%;
-  height: 100vh;
+  height: 100%;
+  margin-top: 60px;
   display: flex;
   justify-content: center;
   align-items: center;
+  @media (min-width: 769px) {
+    margin-top: 100px;
+    margin-bottom: 40px;
+  }
   @media (min-width: 1024px) {
     margin-left: 260px;
+    margin-top: 20px;
+    margin-bottom: 20px;
   }
 `
 
 const SignUpWrap = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`
+
+const FormWrap = styled.form`
   position: relative;
   width: 100%;
   height: 100%;
-  margin-top: 60px;
   background-color: white;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
   display: flex;
@@ -526,13 +553,10 @@ const SignUpWrap = styled.div`
     width: 100%;
     text-align: center;
   }
-  @media (min-width: 520px) and (max-width: 768px) {
-    padding: 0 60px;
-  }
   @media (min-width: 769px) {
     padding: 0 60px;
     width: 700px;
-    height: 820px;
+    height: 850px;
     border-radius: 30px;
     box-sizing: border-box;
     h1 {
@@ -551,18 +575,12 @@ const SignUpWrap = styled.div`
   }
 `
 
-const FormWrap = styled.form`
-  margin-top: 60px;
-  width: 100%;
-  height: 100%;
-  @media (min-width: 769px) {
-    margin-top: 124px;
-  }
-`
-
 const PicWrap = styled.div`
   width: 100%;
   margin: 0 auto;
+  @media (min-width: 769px) {
+    margin-top: 124px;
+  }
 `
 
 const Contents = styled.div`
@@ -794,6 +812,9 @@ const FastTime = styled.div`
   p {
     margin: 0;
   }
+  @media (min-width: 769px) {
+    font-size: 14px;
+  }
 `
 
 const Button = styled.div`
@@ -818,7 +839,6 @@ const Button = styled.div`
   @media (min-width: 769px) {
     width: 460px;
     height: 40px;
-    margin: 0 auto;
   }
 `
 

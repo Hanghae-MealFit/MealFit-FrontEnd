@@ -51,7 +51,7 @@ export const loadMainUserDB = () => {
         // console.log(res)
         dispatch(loadUser(res.data))
       } catch (error) {
-        console.log(error)
+        // console.log(error)
       }
     }
   }

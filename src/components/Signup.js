@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 
 import PicSelect from '../elements/PicSelect'
 
@@ -9,6 +9,11 @@ const Signup = () => {
 
   const sessionStorage = window.sessionStorage;
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   React.useEffect(() => {
     if(sessionStorage.getItem("accessToken") !== null || sessionStorage.getItem("refreshToken") !== null) {
@@ -106,7 +111,7 @@ const Signup = () => {
     if (SignupInfo.profileImage !== null) {
       formData.append("profileImage", SignupInfo.profileImage);
     }
-    console.log(formData)
+    // console.log(formData)
 
     await axios({
       baseURL: "http://43.200.174.111:8080/",
@@ -118,10 +123,10 @@ const Signup = () => {
       },
     }).then((response) => {
       if (response.status === 201 && response.data === "가입 완료!")
-        alert(`${nickname_ref.current.value}님 반갑습니다.\n밀핏 회원가입에 성공하셨습니다.`)
+        alert(`${nickname_ref.current.value}님 반갑습니다.\n밀핏 회원가입에 성공하셨습니다.\n가입 시 입력하신 이메일을 확인하여 인증을 완료해주세요.`)
       navigate("/user/login")
     }).catch((error) => {
-      console.log("에러", error)
+      // console.log("에러", error)
       alert(`밀핏 회원가입에 실패하셨습니다.`)
     })
   }
@@ -141,9 +146,9 @@ const Signup = () => {
         SetCheckIdMsg("* 사용 가능 한 아이디입니다.")
         username_err_ref.current.style.color = "#81C147";
       }
-      console.log(res)
+      // console.log(res)
     } catch (error) {
-      console.log(error)
+      // console.log(error)
       SetCheckIdMsg("* 사용 불가능 한 아이디입니다.")
       username_err_ref.current.style.color = "#FF0000";
       username_ref.current.focus()
@@ -165,9 +170,9 @@ const Signup = () => {
         SetCheckNickMsg("* 사용 가능 한 닉네임입니다.")
         nickname_err_ref.current.style.color = "#81C147";
       }
-      console.log(res)
+      // console.log(res)
     } catch (error) {
-      console.log(error)
+      // console.log(error)
       SetCheckNickMsg("* 사용 불가능 한 닉네임입니다.")
       nickname_err_ref.current.style.color = "#FF0000";
       nickname_ref.current.focus()
@@ -189,9 +194,9 @@ const Signup = () => {
         SetCheckEmailMsg("* 사용 가능 한 이메일입니다.")
         email_err_ref.current.style.color = "#81C147";
       }
-      console.log(res)
+      // console.log(res)
     } catch (error) {
-      console.log(error)
+      // console.log(error)
       SetCheckEmailMsg("* 사용 불가능 한 이메일 입니다.")
       email_err_ref.current.style.color = "#FF0000";
     }
@@ -484,18 +489,26 @@ const Signup = () => {
 
 const Wrap = styled.div`
   width: 100%;
-  height: 100vh;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   @media (min-width: 769px) {
     height: 100%;
     margin-top: 100px;
+    margin-bottom: 40px;
   }
-  @media (min-width: 1024px) {
+  @media (min-width: 1024px) and (max-height: 1000px) {
+    height: 100%;
     margin-left: 260px;
-    margin-top: 0;
+    margin-top: 40px;
+    margin-bottom: 40px;
+  }
+  @media (min-width: 1024px) and (min-height: 1001px) {
     height: 100vh;
+    margin-left: 260px;
+    margin-top: 0px;
+    margin-bottom: 0px;
   }
 `
 
@@ -621,7 +634,6 @@ const WeightWrap = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-
   div {
     position: relative;
     width: 100px;
@@ -660,6 +672,11 @@ const WeightWrap = styled.div`
     -webkit-transform: scale(0.8);
     color: #D9D9D9;
     text-align: left;
+  }
+  @media (min-width: 320px) {
+    div {
+      width: 140px;
+    }
   }
   @media (min-width: 769px) {
     width: 460px;
@@ -765,6 +782,9 @@ const FastTime = styled.div`
   p {
     margin: 0;
   }
+  @media (min-width: 769px) {
+    font-size: 14px;
+  }
 `
 
 const Button = styled.div`
@@ -789,7 +809,6 @@ const Button = styled.div`
   @media (min-width: 769px) {
     width: 460px;
     height: 40px;
-    margin: 0 auto;
   }
 `
 

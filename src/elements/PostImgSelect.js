@@ -12,6 +12,14 @@ const PostImgSelect = ({ files, setFiles }) => {
 
     e.preventDefault();
 
+    const correctForm = /(.*?)\.(jpg|jpeg|png|gif|bmp)$/;
+    if (e.target.files[0]?.size > 3 * 1024 * 1024) {
+      return;
+    } else if (!e.target?.files[0]?.name.match(correctForm)) {
+      alert("이미지 파일만 가능합니다.");
+      return;
+    }
+
     const file = e.target.files[0];
     const reader = new FileReader();
     reader.readAsDataURL(file); // 내가 올릴 img

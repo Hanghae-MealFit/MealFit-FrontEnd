@@ -114,6 +114,9 @@ const TopText = styled.div`
   p {
     margin: 0;
   }
+  @media (min-width: 769px) {
+    font-size: 16px;
+  }
 `;
 
 const BottomText = styled.div`
@@ -127,6 +130,16 @@ const BottomText = styled.div`
   }
   p.remain {
     font-size: 13px;
+  }
+  @media (min-width: 769px) {
+    font-size: 18px;
+    p.TimeCheck {
+      font-size: 14px;
+      margin: 10px 0;
+    }
+    p.remain {
+      font-size: 18px;
+    }
   }
 `;
 

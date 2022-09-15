@@ -82,11 +82,6 @@ const CircleGraph = ({ totalEatItem }) => {
     }
   }, [totalFat])
 
-
-
-  console.log(totalKcal, totalCarbs, totalPro, totalFat)
-  console.log(kcalPer)
-
   const TotalInfo = [
     { title: "칼로리", info: totalKcal, goal: user.kcal, per: kcalPer, unit: "(Kcal)" },
     { title: "탄수화물", info: totalCarbs, goal: user.carbs, per: CarbsPer, unit: "(g)" },

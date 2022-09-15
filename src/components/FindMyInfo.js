@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 
 const FindMyInfo = () => {
 
@@ -14,6 +14,12 @@ const FindMyInfo = () => {
       navigate("/")
     }
   }, [])
+
+  const { pathname } = useLocation();
+
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   const id_email_ref = React.useRef(null)
   const pw_id_ref = React.useRef(null)
@@ -35,9 +41,13 @@ const FindMyInfo = () => {
             "Content-Type": "application/json"
           }
         })
-        console.log(res)
+        // console.log(res)
+        if(res.status === 200) {
+          window.alert("입력하신 이메일의 메일을 확인해주세요.")
+        }
     } catch(error) {
-      console.log(error)
+      // console.log(error)
+      window.alert("전송에 실패하였습니다.")
     }
   }
 
@@ -51,9 +61,13 @@ const FindMyInfo = () => {
           "Content-Type": "application/json"
         }
       })
-      console.log(res)
+      // console.log(res)
+      if(res.status === 200) {
+        window.alert("입력하신 이메일의 메일을 확인해주세요.")
+      }
     } catch(error) {
-      console.log(error)
+      // console.log(error)
+      window.alert("전송에 실패하였습니다.")
     }
   }
 
@@ -147,7 +161,22 @@ const Wrap = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  @media (max-width: 769px) and (max-height: 500px) {
+    height: 100%;
+  }
+  @media (min-width: 769px) and (max-height: 900px) {
+    height: 100%;
+    margin-top: 100px;
+    margin-bottom: 40px;
+  }
+  @media (min-width: 1024px) and (max-height: 900px) {
+    width: 100vh;
+    margin-left: 260px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
   @media (min-width: 1024px) {
+    width: 100vh;
     margin-left: 260px;
   }
 `
@@ -237,6 +266,10 @@ const FindPwInputWrap = styled.div`
   p {
     width: 80%;
     font-size: 12px;
+  }
+  @media (max-width: 769px) and (max-height: 500px) {
+    margin-top: 30px;
+    margin-bottom: 30px;
   }
   @media (min-width: 520px) and (max-width: 768px) {
     padding: 0 60px;

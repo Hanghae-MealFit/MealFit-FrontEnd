@@ -3,7 +3,7 @@ import styled, {css} from "styled-components";
 import axios from "axios";
 // FontAwesom Icon 사용
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faClipboardList, faPenToSquare } from '@fortawesome/free-solid-svg-icons'
+import { faClipboardList, faPenToSquare, faBullhorn } from '@fortawesome/free-solid-svg-icons'
 
 import { loadMainUserDB } from "../redux/modules/userinfo";
 
@@ -13,8 +13,6 @@ import { useSelector, useDispatch } from "react-redux";
 const Sidebar = () => {
 
   const user = useSelector((state) => state.userinfo.user.userProfile)
-  // const user2 = useSelector((state) => state)
-  // console.log(user2)
 
   const [isLogin, setIsLogin] = React.useState(false);
   const sessionStorage = window.sessionStorage;
@@ -32,7 +30,7 @@ const Sidebar = () => {
   const USER_CHECK = code.href
 
   const LoginCheck = () => {
-    if (Token.authorization !== null && Token.refresh_token !== null && USER_CHECK !== "http://localhost:3000/user/signupsns") {
+    if (Token.authorization !== null && Token.refresh_token !== null && USER_CHECK !== "http://mealfit.co.kr/user/signupsns") {
       setIsLogin(true)
     }
   }
@@ -74,7 +72,7 @@ const Sidebar = () => {
     if(!isLogin) {
       sessionStorage.clear()
     }
-    console.log("OnClick", e.target.innerText)
+    // console.log("OnClick", e.target.innerText)
     if(e.target.innerText === "식단게시판") {
       navigate("/post/all")
     } else if (e.target.innerText === "기록하기") {
@@ -82,6 +80,10 @@ const Sidebar = () => {
     } else if (e.target.innerText === "식단가이드") {
       navigate("/")
     }
+  }
+
+  const FeedbackClick = () => {
+    window.open("https://forms.gle/R31WZBaz35g6kxto6", '_blank')
   }
 
   const onClickLogin = () => {
@@ -101,7 +103,7 @@ const Sidebar = () => {
             refresh_token: `Bearer ${Token.refresh_token}`
           }
         })
-        console.log("반응", response)
+        // console.log("반응", response)
       if (response.status === 200) {
         sessionStorage.clear();
         setIsLogin(false);
@@ -110,9 +112,9 @@ const Sidebar = () => {
         window.location.reload();
       }
     } catch (error) {
-      console.log("에러", error)
+      // console.log("에러", error)
       // console.log(Token)
-      // window.alert("로그아웃에 실패하였습니다. 다시 한번 시도해주십시오.");
+      window.alert("로그아웃에 실패하였습니다. 다시 한번 시도해주십시오.");
     }
   };
 
@@ -165,7 +167,7 @@ const Sidebar = () => {
               <ul>
                 <li onClick={() => navigate("/post/all")}>식단게시판</li>
                 <li onClick={() => navigate("/record")}>기록하기</li>
-                <li onClick={() => navigate("/")}>피드백 작성하기</li>
+                <li onClick={FeedbackClick}>피드백 작성하기</li>
               </ul>
             </div>
           ) : (
@@ -206,6 +208,10 @@ const Sidebar = () => {
             <MenuWrap className="sidebar-item" onClick={MenuClick} ref={record_ref} checkMenu={USER_CHECK.includes("record") ? true : false}>
               <span><FontAwesomeIcon icon={faPenToSquare} /></span>
               <p>기록하기</p>
+            </MenuWrap>
+            <MenuWrap className="sidebar-item" onClick={FeedbackClick}>
+              <span><FontAwesomeIcon icon={faBullhorn}></FontAwesomeIcon></span>
+              <p>피드백 작성</p>
             </MenuWrap>
           </Menu>
           {

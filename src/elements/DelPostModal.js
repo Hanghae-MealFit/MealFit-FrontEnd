@@ -26,7 +26,7 @@ const DelPostModal = ({setModalOpen, postId}) => {
           }
         })
         .then(function (response) {
-          console.log("반응", response)
+          // console.log("반응", response)
           if(response.status === 200 && response.data === "삭제완료!"){
           alert('삭제에 성공하였습니다');
           setModalOpen(false)
@@ -35,7 +35,7 @@ const DelPostModal = ({setModalOpen, postId}) => {
           // window.alert("삭제되었습니다.")
         })
         .catch(function (error) {
-          console.log("에러", error)
+          // console.log("에러", error)
           alert("삭제 실패!")
         });
       // console.log("삭제됨!", DeletPost) 
