@@ -3,7 +3,7 @@ import styled from "styled-components";
 import axios from 'axios';
 
 const CommentList = (comments) => {
-    console.log(comments)
+    // console.log(comments)
     return (
         <CommentInfo>
             <img src={comments.userDto.profileImage} />

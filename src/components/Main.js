@@ -3,7 +3,7 @@ import styled from "styled-components";
 import axios from "axios";
 
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from 'react-router-dom';
 
 import Cards from "../elements/Cards";
 import Circle from "../elements/Circle";
@@ -16,7 +16,6 @@ import { loadPostDB } from "../redux/modules/post";
 
 const Main = () => {
   const data = useSelector((state) => state.post.post);
-  console.log(useSelector((state) => state))
   const MainData = data?.sort((a,b) => (b.view - a.view)).slice(0, 4)
   const weight = useSelector((state) => state.userweight.data.data);
   const dispatch = useDispatch();
@@ -33,7 +32,12 @@ const Main = () => {
 
   const currentWeight_ref = React.useRef(null);
   const current_weight_err_ref = React.useRef(null);
-  
+
+  const { pathname } = useLocation();
+
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   const Token = {
     authorization: sessionStorage.getItem("accessToken"),
@@ -108,15 +112,23 @@ const Main = () => {
           refresh_token: `Bearer ${Token.refresh_token}`
         },
       })
-      console.log(res)
-      if(res.status === 200 && res.data === "입력 완료!") {
+      // console.log(res)
+      if(res.status === 201 && res.data === "입력 완료!") {
         setCurWeight('')
         setChangeMyWeight(false)
         setWeightCheck(!weightCheck)
       }
     } catch (error) {
-      console.log(error)
+      // console.log(error)
       currentWeight_ref.current.focus()
+    }
+  }
+
+  const DetailPostView = (v) => {
+    if(Token.authorization !== null && Token.refresh_token !== null) {
+      navigate(`/post/${v.postId}`)
+    } else {
+      window.alert("게시글 상세보기는 로그인 후 사용 가능합니다.")
     }
   }
 
@@ -151,6 +163,22 @@ const Main = () => {
             </Item1>
             <GrapWrap style={{ filter: !isLogin ? "blur(6px)" : "none" }}>
               <Item2>
+                <Rechart weight={weight} />
+                <Titlebar>
+                  <p>몸무게 변화량</p>
+                </Titlebar>
+                <PlusBtn onMouseEnter={WeightEnterMsg} onMouseLeave={WeightLeaveMsg} onClick={WeightModalOpen}>
+                  +
+                  {
+                    myWeightHover ?
+                    (
+                      <WeightModal>체중 입력하기</WeightModal>
+                    ) :
+                    (
+                      null
+                    )
+                  }
+                </PlusBtn>
                 {
                   changeMyWeight ?
                   (
@@ -184,48 +212,26 @@ const Main = () => {
                     </WeightWrap>
                   ) :
                   (
-                    <>
-                      <Titlebar>
-                        <p>몸무게 변화량</p>
-                      </Titlebar>
-                      <PlusBtn onMouseEnter={WeightEnterMsg} onMouseLeave={WeightLeaveMsg} onClick={WeightModalOpen}>
-                        +
-                        {
-                          myWeightHover ?
-                          (
-                            <WeightModal>체중 입력하기</WeightModal>
-                          ) :
-                          (
-                            null
-                          )
-                        }
-                      </PlusBtn>
-                      <Rechart weight={weight} />
-                    </>
+                    null
                   )
                 }
               </Item2>
             </GrapWrap>
           </TopMenu>
-          <div style={{ width: "100%", height: "45%" }}>
+          <BottomMenu>
             <Item4>
               <Titlebar>
                 <p>오늘의 식단</p>
               </Titlebar>
               <CardList>
                 {MainData?.map((v, idx) => (
-                  <CardsBox
-                    onClick={() => {
-                      navigate(`/post/${v.postId}`);
-                    }}
-                    key={idx}
-                  >
+                  <CardsBox onClick={() => DetailPostView(v)} key={idx}>
                     <Cards post={v} />
                   </CardsBox>
                 ))}
               </CardList>
             </Item4>
-          </div>
+          </BottomMenu>
         </Container>
       </MainWrap>
     </Wrap>
@@ -234,20 +240,15 @@ const Main = () => {
 
 const Wrap = styled.div`
   width: 100%;
-  height: 150vh;
+  height: 100%;
   margin-top: 60px;
   display: flex;
   justify-content: center;
   align-items: center;
-  @media (min-width: 400px) and (max-width: 768px) {
-    height: 120vh;
-  }
-  @media (min-width: 769px) {
-    height: 100vh;
-  }
   @media (min-width: 1024px) {
-    margin-left: 260px;
+    height: 100vh;
     margin-top: 0;
+    margin-left: 260px;
   }
 `
 
@@ -278,9 +279,9 @@ const Titlebar = styled.div`
   @media (min-width: 1024px) {
     width: 140px;
     height: 40px;
-  }
-  p {
-    font-size: 16px;
+    p {
+      font-size: 16px;
+    }
   }
 `;
 
@@ -370,14 +371,11 @@ const Item1 = styled.div`
   justify-content: center;
   align-items: center;
   margin: 20px 0;
-  @media (min-width: 769px) {
-    margin: 0;
-  }
 `;
 
 const GrapWrap = styled.div`
   width: 100%;
-  height: 100%;
+  height: 50%;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
@@ -391,23 +389,19 @@ const GrapWrap = styled.div`
 const Item2 = styled.div`
   position: relative;
   width: 100%;
-  min-height: 220px;
+  height: 220px;
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 8px;
   background-color: #F6EAE0;
-  @media (min-width: 400px) and (max-width: 768px) {
+  @media (min-width: 500px) and (max-width: 768px) {
     width: 70%;
-    min-height: 240px;
+    height: 260px;
   }
   @media (min-width: 769px) {
-    width: 90%;
-    height: 55%;
-  }
-  @media (min-width: 1024px) {
-    width: 70%;
-    height: 60%;
+    width: 80%;
+    height: 260px;
   }
 `;
 
@@ -572,14 +566,22 @@ const SignUpBtn = styled.button`
   }
 `
 
+const BottomMenu = styled.div`
+  width: 100%;
+  height: 100%;
+  @media (min-width: 769px) {
+    height: 45%;
+  }
+`
+
 const Item4 = styled.div`
-    position: relative;
-    box-sizing: border-box;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    align-items: space-evenly;
+  position: relative;
+  box-sizing: border-box;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: space-evenly;
 `;
 
 const CardList = styled.div`
@@ -593,7 +595,7 @@ const CardList = styled.div`
 
 const CardsBox = styled.div`
   width: 80%;
-  height: 75%;
+  height: 260px;
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
@@ -601,22 +603,39 @@ const CardsBox = styled.div`
   &:first-child {
     margin-top: 50px;
   }
+  &:last-child {
+    margin-bottom: 30px;
+  }
   @media (min-width: 400px) and (max-width: 768px) {
     width: 46%;
     &:nth-child(2) {
       margin-top: 50px;
     }
+    &:nth-child(3) {
+      margin-bottom: 30px;
+    }
   }
-  @media (min-width: 769px) and (max-width: 1023px) {
+  @media (min-width: 769px) {
     width: 23%;
+    margin-top: 80px;
+    margin-bottom: 80px;
     &:first-child {
-      margin-top: 30px;
+      margin-top: 80px;
+    }
+    &:last-child {
+      margin-bottom: 80px;
     }
   }
   @media (min-width: 1024px) {
     width: 22%;
+    height: 300px;
+    margin-top: 0px;
+    margin-bottom: 0px;
     &:first-child {
-      margin-top: 30px;
+      margin-top: 0px;
+    }
+    &:last-child {
+      margin-bottom: 0px;
     }
   }
 `;

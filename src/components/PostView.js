@@ -5,15 +5,21 @@ import axios from "axios";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart, faEye, faPen, faXmark } from '@fortawesome/free-solid-svg-icons'
 
-import { useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useParams, useLocation } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 
 import { MemoizedSidebar } from "./Sidebar";
 import Header from "../elements/Header";
+import { loadMainUserDB } from "../redux/modules/userinfo";
 
 const PostView = (props) => {
+  const dispatch = useDispatch();
   const { postId } = useParams();
+  const { pathname } = useLocation();
 
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
   const user = useSelector((state) => state.userinfo.user.userProfile)
 
   const [contentData, setContentData] = React.useState({
@@ -42,13 +48,14 @@ const PostView = (props) => {
       profileImage: null
     }]
   )
+  // console.log(commentData)
 
   const [isLogin, setIsLogin] = React.useState(false);
   const [commentUserCheck, setCommentUserCheck] = React.useState('')
   const [commentEditCheck, setCommentEditCheck] = React.useState('')
   const [commentEditOpen, setCommentEditOpen] = React.useState(false)
-  console.log(commentUserCheck)
-  console.log(commentData)
+  // console.log(commentUserCheck)
+  // console.log(commentData)
 
   // 좋아요 버튼
   const [postLiked, setPostLiked] = React.useState(false);
@@ -111,10 +118,11 @@ const PostView = (props) => {
           refresh_token: `Bearer ${Token.refresh_token}`
         }
       })
-      console.log("게시글 불러오기", response)
+      // console.log("게시글 불러오기", response)
       setContentData(response.data)
     } catch (error) {
-      console.log(error)
+      // console.log(error)
+      window.alert("식단 조회에 실패하였습니다.")
     }
   };
 
@@ -130,10 +138,10 @@ const PostView = (props) => {
           refresh_token: `Bearer ${Token.refresh_token}`
         }
       })
-      console.log("댓글 불러오기", response.data)
+      // console.log("댓글 불러오기", response.data)
       setCommentData(response.data.comments)
     } catch (error) {
-      console.log("댓글 불러오기 실패", error)
+      // console.log("댓글 불러오기 실패", error)
     }
   }
 
@@ -151,10 +159,12 @@ const PostView = (props) => {
         }
       })
       // console.log("댓글 작성하기", response)
+      window.alert("댓글 작성에 성공하였습니다.")
       setCommentCheck(!commentCheck)
       setCheckItemContent('')
     } catch (error) {
-      console.log("댓글 작성 실패", error)
+      // console.log("댓글 작성 실패", error)
+      window.alert("댓글 작성에 실패하였습니다.")
     }
   }
 
@@ -180,11 +190,13 @@ const PostView = (props) => {
       })
       // console.log(res)
       if(res.status === 200 && res.data === "수정 완료!") {
+        window.alert("댓글 수정에 성공하였습니다.")
         setCommentEditOpen(false)
         setCommentCheck(!commentCheck)
       }
     } catch(err) {
-      console.log(err)
+      // console.log(err)
+      window.alert("댓글 수정에 실패하였습니다.")
     }
   }
 
@@ -200,25 +212,19 @@ const PostView = (props) => {
       })
       // console.log("댓글 삭제하기", response)
       if(response.status === 200 && response.data === "삭제완료") {
-        alert('댓글을 삭제하였습니다.');
+        window.alert('댓글 삭제에 성공하였습니다.');
         setCommentCheck(!commentCheck)
       }
     } catch (error) {
-      console.log("댓글 삭제실패", error)
+      // console.log("댓글 삭제실패", error)
+      window.alert('댓글 삭제에 실패하였습니다.');
     }
   }
 
   // 좋아요 버튼
   const PostLike = async () => {
-
-    if(postLiked === false) {
-      setPostLiked(true)
-    } else {
-      setPostLiked(false)
-    }
-
     try {
-      const res = await axios.post(`http://43.200.174.111:8080/api/post/comment/${postId}/likeIt`,
+      const res = await axios.post(`http://43.200.174.111:8080/api/post/${postId}/likeIt`,
       null,
       {
         headers: {
@@ -227,22 +233,18 @@ const PostView = (props) => {
           refresh_token: `Bearer ${Token.refresh_token}`
         }
       })
-      console.log("게시글 좋아요",res)
+      // console.log("게시글 좋아요",res)
+      if(res.status === 200) {
+        setPostLiked(!postLiked)
+      }
     } catch(error) {
-      console.log(error)
+      // console.log(error)
     }
   }
 
   const comment_like_ref = React.useRef(null)
   // 댓글 좋아요 버튼
   const CommentLike = async (commentId) => {
-
-    if(commentLiked === false) {
-      setCommentLiked(true)
-    } else {
-      setCommentLiked(false)
-    }
-
     try {
       const res = await axios.post(`http://43.200.174.111:8080/api/post/comment/${commentId}/likeIt`, null,
       {
@@ -252,33 +254,45 @@ const PostView = (props) => {
           refresh_token: `Bearer ${Token.refresh_token}`
         }
       })
-      console.log("댓글 좋아요",res, "commentId", commentId)
-      if(res.status === 201 && res.data === true) {
-        if(commentUserCheck.commentId === commentId) {
-          comment_like_ref.current.style.color = "#FF7770"
-        }
-      } else if(res.status === 201 && res.data === false) {
-        if(commentUserCheck.commentId === commentId) {
-          comment_like_ref.current.style.color = "#D9D9D9"
-        }
+      // console.log("댓글 좋아요",res, "commentId", commentId)
+      if(res.status === 200) {
+        setCommentLiked(!commentLiked)
       }
+      // if(res.status === 201 && res.data === true) {
+      //   if(commentUserCheck.commentId === commentId) {
+      //     comment_like_ref.current.style.color = "#FF7770"
+      //   }
+      // } else if(res.status === 201 && res.data === false) {
+      //   if(commentUserCheck.commentId === commentId) {
+      //     comment_like_ref.current.style.color = "#D9D9D9"
+      //   }
+      // }
     } catch(error) {
-      console.log(error)
+      // console.log(error)
     }
   }
 
-  console.log("liked",postLiked)
-  console.log("commentliked", commentLiked)
+  // console.log("liked",postLiked)
+  // console.log("commentliked", commentLiked)
 
   useEffect(() => {
     isLoginCheck()
     PostViewAX()
     CommentLoad()
+    dispatch(loadMainUserDB())
   }, [])
+
+  useEffect(() => {
+    PostViewAX()
+  }, [postLiked])
 
   useEffect(() => {
     CommentLoad()
   }, [commentCheck])
+
+  useEffect(() => {
+    CommentLoad()
+  }, [commentLiked])
 
   useEffect(() => {
     if(commentEditOpen) {
@@ -308,7 +322,7 @@ const PostView = (props) => {
               </WriteTime>
             </BoardText>
           </UserInfo>
-          <IconWrap liked={postLiked}>
+          <IconWrap liked={contentData.liked}>
             <div onClick={PostLike}>
               <span><FontAwesomeIcon icon={faHeart} /></span>{contentData.like}
             </div>
@@ -323,11 +337,11 @@ const PostView = (props) => {
         <CommentTitle>댓글</CommentTitle>
         <CommentWrap>
           {commentData.map((v, idx) => (
-            <CommentInfo key={idx} liked={commentLiked} commentId={commentUserCheck.commentId} commentIdCheck={v.commentId}
+            <CommentInfo key={idx} liked={v.liked} commentId={commentUserCheck.commentId} commentIdCheck={v.commentId}
               onMouseEnter={() => setCommentUserCheck(v)}
               onMouseLeave={() => setCommentUserCheck('')}>
               <div className="CommentProfile">
-                <img src={v.userDto.profileImage} alt="Comment Writer Img" />
+                <img src={v.userDto.profileImage === null ? temp_pro_img : v.userDto.profileImage} alt="Comment Writer Img" />
               </div>
               <div className="CommentWrap">
                 <p>{v.userDto.nickname}</p>
@@ -374,7 +388,7 @@ const PostView = (props) => {
         <Comment>
           <CommentWriter>
             <WriterInfo>
-              <img src={user.profileImage} alt="Comment Writer Img" />
+              <img src={user.profileImage === null ? temp_pro_img : user.profileImage} alt="Comment Writer Img" />
               <p>{user.nickname}</p>
             </WriterInfo>
             <WriteInput>
@@ -661,9 +675,9 @@ const CommentInfo = styled.div`
     margin: 0 4px;
     color: #D9D9D9;
   }
-  /* div.BtnWrap div.likeBtn {
-    color: ${props => props.liked && props.commentId === props.commentIdCheck ? "#FF7770" : "#D9D9D9"};
-  } */
+  div.BtnWrap div.likeBtn {
+    color: ${props => props.liked ? "#FF7770" : "#D9D9D9"};
+  }
   div.BtnWrap div:hover {
     color: #333;
     cursor: pointer;

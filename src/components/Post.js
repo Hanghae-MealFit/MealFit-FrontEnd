@@ -2,15 +2,24 @@ import React, { useCallback, useEffect } from "react";
 import styled from "styled-components";
 import axios from "axios";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 import { MemoizedSidebar } from "./Sidebar";
 import CardsAll from "../elements/CardsAll";
 import Header from "../elements/Header";
 
+import { loadMainUserDB } from "../redux/modules/userinfo";
+
 const Post = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { pathname } = useLocation();
 
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  
   const [ isLogin, setIsLogin ] = React.useState(false);
 
   const Token = {
@@ -43,28 +52,37 @@ const Post = () => {
       setPage((prev) => prev + 1);
     }
   }
-  console.log("page", page)
+  // console.log("page", page)
 
   const getPostList = useCallback(async() => {
     try {
       const res = await axios.get(`http://43.200.174.111:8080/api/post?size=3&page=${page}`)
-      console.log(res.data)
+      // console.log(res.data)
       if(res.data) {
         setList(prev => {
-          console.log("prev", prev)
+          // console.log("prev", prev)
           return [...prev, ...res.data]
         })
         preventRef.current = true;
       }
     } catch(error) {
-      console.log(error)
+      // console.log(error)
     }
   }, [page])
-  console.log("list", list)
+  // console.log("list", list)
+
+  const DetailPostView = (v) => {
+    if(Token.authorization !== null && Token.refresh_token !== null) {
+      navigate(`/post/${v.postId}`)
+    } else {
+      window.alert("게시글 상세보기는 로그인 후 사용 가능합니다.")
+    }
+  }
 
   useEffect(() => {
     if(Token.authorization !== null && Token.refresh_token !== null) {
       setIsLogin(true)
+      dispatch(loadMainUserDB())
     }
   }, [])
   
@@ -75,7 +93,7 @@ const Post = () => {
       <Container>
         <CardList>
           {list?.map((v, idx) => (
-            <CardsBox className="CardsBox" onClick={() => {navigate(`/post/${v.postId}`)}} key={idx}>
+            <CardsBox className="CardsBox" onClick={() => DetailPostView(v)} key={idx}>
               <CardsAll post={v} />
             </CardsBox>
           ))}

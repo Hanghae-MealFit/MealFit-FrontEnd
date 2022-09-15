@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
@@ -47,6 +47,64 @@ const RecordModal = (
     refresh_token: sessionStorage.getItem("refreshToken")
   }
 
+  const obsRef = React.useRef(null) // observer Element
+  const [list, setList] = React.useState([]); // Post List
+  const [page, setPage] = React.useState(0); // 현재 페이지
+  const preventRef = React.useRef(true); // 옵저버 중복 실행 방지
+  const endRef = React.useRef(false); // 모든 글 로드 확인
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(obsHandler, { threshold: 0.5 });
+    if (obsRef.current) observer.observe(obsRef.current);
+    return () => {
+      observer.disconnect();
+    }
+  }, [notFoundSearch]);
+
+  useEffect(() => {
+    getSearchList();
+  }, [page])
+
+  const obsHandler = (entries) => {
+    const target = entries[0];
+    if (target.isIntersecting && preventRef.current) {
+      preventRef.current = false;
+      setPage((prev) => prev + 1);
+    }
+  }
+  // console.log("page", page)
+
+  const getSearchList = useCallback( async (data) => {
+    const SearchName = data ? data : search_food_ref.current.value
+    if(SearchName.length !== 0) {
+      try {
+        const res = await axios.get(`http://43.200.174.111:8080/api/food?name=${SearchName}&page=${page}`,
+          {
+            headers: {
+              Authorization: `Bearer ${auth.authorization}`,
+              refresh_token: `Bearer ${auth.refresh_token}`
+            },
+          })
+          // console.log(res)
+          if(res.data.length === 0) {
+            setNotFoundSarch(true)
+          } else {
+            // console.log("안",notFoundSearch)
+            setNotFoundSarch(false)
+            setList(prev => {
+              // console.log("prev", prev)
+              return [...prev, ...res.data]
+            })
+            preventRef.current = true;
+          }
+        } catch(error) {
+          // console.log(error)
+        }
+      }
+    }, [page])
+  // console.log("list", list)
+  // console.log("밖",notFoundSearch)
+  
   // 음식 추가하기
   const FoodInsert = async () => {
     try {
@@ -64,43 +122,43 @@ const RecordModal = (
             refresh_token: `Bearer ${auth.refresh_token}`
           },
         })
-      console.log(res)
+      // console.log(res)
       if(res.status === 201 && res.data === "음식 입력 완료") {
         window.alert("음식 입력에 완료되었습니다.\n검색 후 섭취량을 기록해주세요.")
         setNotFoundSarch(false)
         search_food_ref.current.focus()
         setText(foodName_ref.current.value)
-        FoodSearch(foodName_ref.current.value)
+        getSearchList(foodName_ref.current.value)
       }
     } catch (error) {
-      console.log(error)
+      // console.log(error)
       window.alert("음식 입력에 실패하였습니다.")
     }
   }
 
   // 검색
-  const FoodSearch = async (data) => {
-    console.log(data)
-    const SearchName = data ? data : search_food_ref.current.value
-    try {
-      const res = await axios.get(`http://43.200.174.111:8080/api/food?name=${SearchName}`,
-        {
-          headers: {
-            Authorization: `Bearer ${auth.authorization}`,
-            refresh_token: `Bearer ${auth.refresh_token}`
-          },
-        })
-        console.log(res)
-        if(res.data.length === 0) {
-          setNotFoundSarch(true)
-        } else {
-          setNotFoundSarch(false)
-          setSearchList(res.data)
-        }
-    } catch (error) {
-        console.log(error)
-    }
-  }
+  // const FoodSearch = async (data) => {
+  //   // console.log(data)
+  //   const SearchName = data ? data : search_food_ref.current.value
+  //   try {
+  //     const res = await axios.get(`http://43.200.174.111:8080/api/food?name=${SearchName}`,
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${auth.authorization}`,
+  //           refresh_token: `Bearer ${auth.refresh_token}`
+  //         },
+  //       })
+  //       console.log(res)
+  //       if(res.data.length === 0) {
+  //         setNotFoundSarch(true)
+  //       } else {
+  //         setNotFoundSarch(false)
+  //         setSearchList(res.data)
+  //       }
+  //   } catch (error) {
+  //       // console.log(error)
+  //   }
+  // }
 
   // 식단 추가하기
   const DietInsert = async () => {
@@ -117,14 +175,14 @@ const RecordModal = (
           refresh_token: `Bearer ${auth.refresh_token}`
         },
       })
-      console.log(res)
+      // console.log(res)
       if(res.status === 201) {
         window.alert("식단 입력이 완료되었습니다.")
         setRecordModalOpen(false)
         setCheckInputFood(!checkInputFood)
       }
     } catch (error) {
-        console.log(error)
+        // console.log(error)
         window.alert("식단 입력에 실패하였습니다.")
     }
   }
@@ -149,7 +207,7 @@ const RecordModal = (
           refresh_token: `Bearer ${auth.refresh_token}`
         },
       })
-      console.log(res)
+      // console.log(res)
       if(res.status === 200 && res.data === "식단 수정 완료!") {
         window.alert("음식 수정이 완료되었습니다.")
         setRecordModalOpen(false)
@@ -157,17 +215,26 @@ const RecordModal = (
         setCheckInputFood(!checkInputFood)
       }
     } catch (error) {
-      console.log(error)
+      // console.log(error)
       window.alert("음식 수정에 실패하였습니다.")
     }
   }
-  console.log("EatItem",selectEatItem, "selectMenu",selectMenu)
-
-  console.log("edit", editEatItem)
 
   const onCheckEnter = (e) => {
     if(e.key === 'Enter') {
-      FoodSearch()
+      setPage(0)
+      setList([])
+      if(page === 0) {
+        getSearchList()
+      }
+    }
+  }
+
+  const CheckList = () => {
+    setPage(0)
+    setList([])
+    if(page === 0) {
+      getSearchList()
     }
   }
 
@@ -176,6 +243,7 @@ const RecordModal = (
   const displayText = (e) => {
     setText(e.target.value);
   };
+  // console.log(text)
 
   return (
     <Container>
@@ -192,7 +260,7 @@ const RecordModal = (
           }
           <InputTxt>
             <input ref={search_food_ref} type="text" placeholder='검색어를 입력하세요.' onKeyPress={onCheckEnter} value={text} onChange={displayText} />
-            <button onClick={() => FoodSearch()}>
+            <button onClick={CheckList}>
               <FontAwesomeIcon icon={faMagnifyingGlass} />
             </button>
           </InputTxt>
@@ -235,7 +303,7 @@ const RecordModal = (
             ) :
             (
               <FoodData>
-                {searchList?.map((v, idx) => (
+                {list?.map((v, idx) => (
                   <FoodInfo key={idx}>
                     <RadioInput type="radio" id={v.foodId} name="SelectFood" value={v} />
                     <label htmlFor={v.foodId} onClick={(e) => {SelectFood(e, v)}}>
@@ -268,6 +336,7 @@ const RecordModal = (
                     </label>
                   </FoodInfo>
                 ))}
+                <div ref={obsRef} style={{height: "0"}}></div>
               </FoodData>
             )
           }
@@ -337,13 +406,18 @@ const ModalBlock = styled.div`
   height: 100%;
   z-index: 1000;
   @media (min-width: 520px) {
-    width: 80%;
-    height: 80%;
+    width: 90%;
+    height: 90%;
     border-radius: 30px;
   }
   @media (min-width: 769px) {
-    width: 60%;
-    height: 60%;
+    width: 75%;
+    height: 75%;
+    border-radius: 30px;
+  }
+  @media (min-width: 1024px) {
+    width: 50%;
+    height: 75%;
     border-radius: 30px;
   }
   animation: modal-show 1s;
@@ -477,7 +551,7 @@ const Direct = styled.div`
 
 const FoodData = styled.div`
   width: 100%;
-  height: 360px;
+  height: 300px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;

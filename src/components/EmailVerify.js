@@ -16,13 +16,13 @@ const EmailVerify = () => {
           username: USER_NAME,
           code: CODE
         })
-        console.log(res)
+        // console.log(res)
         if(res.status === 200) {
           window.alert("인증에 성공하였습니다.\n로그인 페이지로 돌아갑니다.")
           navigate("/user/login")
         }
       } catch(error) {
-        console.log(error)
+        // console.log(error)
         window.alert("인증에 실패하였습니다.\n로그인 페이지로 돌아갑니다.")
         navigate("/user/login")
       }

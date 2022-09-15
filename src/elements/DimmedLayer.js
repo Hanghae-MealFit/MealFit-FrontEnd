@@ -2,15 +2,24 @@ import React from 'react'
 import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom'
 
-const DimmedLayer = () => {
+const DimmedLayer = ({carbs, fat, kcal, protein}) => {
   const navigate = useNavigate();
   return (
     <>
       <Dimmed></Dimmed>
-      <LoginWrap>
-        <p>로그인 후 이용해주세요</p>
-        <Button onClick={() => {navigate("/user/login")}}>로그인</Button>
-      </LoginWrap>
+        {
+          carbs === 0 && fat === 0 && kcal === 0 && protein === 0 ? (
+          <LoginWrap>
+            <p>하루 목표량을 작성 후 사용해주세요.</p>
+            <Button onClick={() => {navigate("/user/info")}}>마이 페이지</Button>
+          </LoginWrap>
+          ) : (
+          <LoginWrap>
+            <p>로그인 후 이용해주세요</p>
+            <Button onClick={() => {navigate("/user/login")}}>로그인</Button>
+          </LoginWrap>
+          )
+        }
     </>
   )
 }

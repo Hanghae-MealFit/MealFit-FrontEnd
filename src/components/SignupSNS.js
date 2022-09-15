@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 
 import PicSelect from '../elements/PicSelect'
 
@@ -28,8 +28,12 @@ const SignupSNS = () => {
   const goal_fat_err_ref = React.useRef(null);
 
   const navigate = useNavigate();
+  const { pathname } = useLocation();
 
-  //
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
   const [ files, setFiles ] = React.useState(null);
 
   // 현재 체중 목표 체중 값
@@ -87,7 +91,7 @@ const SignupSNS = () => {
       protein: goal_pro_ref.current.value,
       fat: goal_fat_ref.current.value,
     }
-    console.log(SignupSNSInfo)
+    // console.log(SignupSNSInfo)
 
     const formData = new FormData()
     formData.append("nickname", SignupSNSInfo.nickname);
@@ -114,13 +118,13 @@ const SignupSNS = () => {
         refresh_token: `Bearer ${REFRESH_TOKEN}`
       },
     }).then((response) => {
-      console.log(response.status)
+      // console.log(response.status)
       if(response.status === 200) {
         window.alert("회원정보 등록에 성공하셨습니다.")
         navigate("/")
       }
     }).catch((error) => {
-      console.log(error)
+      // console.log(error)
       window.alert("회원정보 등록에 실패하셨습니다.")
     })
   }
@@ -146,7 +150,7 @@ const SignupSNS = () => {
         nickname_err_ref.current.style.color = "#81C147";
       }
     } catch(error) {
-      console.log(error)
+      // console.log(error)
       SetCheckNickMsg("* 사용 불가능 한 닉네임입니다.")
       nickname_err_ref.current.style.color = "#FF0000";
       nickname_ref.current.focus()
@@ -501,18 +505,26 @@ const SignupSNS = () => {
 
 const Wrap = styled.div`
   width: 100%;
-  height: 100vh;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   @media (min-width: 769px) {
     height: 100%;
     margin-top: 100px;
+    margin-bottom: 40px;
   }
-  @media (min-width: 1024px) {
+  @media (min-width: 1024px) and (max-height: 1000px) {
+    height: 100%;
     margin-left: 260px;
-    margin-top: 0;
+    margin-top: 40px;
+    margin-bottom: 40px;
+  }
+  @media (min-width: 1024px) and (min-height: 1001px) {
     height: 100vh;
+    margin-left: 260px;
+    margin-top: 0px;
+    margin-bottom: 0px;
   }
 `
 
@@ -800,6 +812,9 @@ const FastTime = styled.div`
   font-size: 11px;
   p {
     margin: 0;
+  }
+  @media (min-width: 769px) {
+    font-size: 14px;
   }
 `
 

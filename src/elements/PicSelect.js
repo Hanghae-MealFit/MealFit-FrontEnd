@@ -16,8 +16,16 @@ const PicSelect = ( { setFiles, myPageIn } ) => {
 
     e.preventDefault();
 
+    const correctForm = /(.*?)\.(jpg|jpeg|png|gif|bmp)$/;
+    if (e.target.files[0]?.size > 3 * 1024 * 1024) {
+      return;
+    } else if (!e.target?.files[0]?.name.match(correctForm)) {
+      alert("이미지 파일만 가능합니다.");
+      return;
+    }
+
     const file = e.target.files[0];
-    console.log(file)
+    // console.log(file)
     const reader = new FileReader();
     reader.readAsDataURL(file); // 내가 올릴 img
     reader.onload = (e) => {
@@ -41,7 +49,7 @@ const PicSelect = ( { setFiles, myPageIn } ) => {
           )
         }
         
-        <IconWrap htmlFor="file" style={{ display: myPageIn ? "none" : "flex" }}>
+        <IconWrap htmlFor="file" style={{ display: myPageIn ? "none" : "flex" }} accept='image/jpg,impge/png,image/jpeg,image/gif'>
           <FontAwesomeIcon icon={faCamera} />
         </IconWrap>
         <input type="file" id="file" onChange={previewImage} style={{ display: "none" }} />

@@ -1,12 +1,17 @@
 import React from "react";
 import styled from "styled-components";
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 
 import { MemoizedSidebar } from "./Sidebar";
 
 const PasswordChange = () => {
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   const cur_password_ref = React.useRef(null);
   const password_ref = React.useRef(null);
@@ -25,13 +30,20 @@ const PasswordChange = () => {
   // 입력된 비밀번호 값이 영어+숫자가 아닐 시, 유저에게 제공 될 값
   const [checkPwMsg, SetPwCheckMsg] = React.useState("* 입력하신 비밀번호를 다시 입력해주세요.");
 
+  const auth = {
+    authorization: sessionStorage.getItem("accessToken"),
+    refresh_token: sessionStorage.getItem("refreshToken")
+  };
+
+  React.useEffect(() => {
+    if(auth.authorization === null && auth.refresh_token === null) {
+      window.alert("비밀번호 변경은 로그인 후 사용 가능합니다.")
+      navigate("/")
+    }
+  }, [])
+
   const onhandlePwChange = async (e) => {
     e.preventDefault()
-
-    const auth = {
-      authorization: sessionStorage.getItem("accessToken"),
-      refresh_token: sessionStorage.getItem("refreshToken")
-    };
 
     try {
       const res = await axios.put("http://43.200.174.111:8080/api/user/password", {
@@ -45,9 +57,30 @@ const PasswordChange = () => {
           refresh_token: `Bearer ${auth.refresh_token}`
         }
       })
-      console.log(res)
+      // console.log(res)
+      if(res.status === 200) {
+        try {
+          const response = await axios.post("http://43.200.174.111:8080/logout", null ,{
+              headers: {
+                Authorization: `Bearer ${auth.authorization}`,
+                refresh_token: `Bearer ${auth.refresh_token}`
+              }
+            })
+            // console.log("반응", response)
+          if (response.status === 200) {
+            sessionStorage.clear();
+            window.alert("비밀번호가 변경되었습니다. 다시 로그인 해주세요.")
+            navigate("/user/login")
+            window.location.reload()
+          }
+        } catch (error) {
+          // console.log("에러", error)
+          // console.log(Token)
+          window.alert("로그아웃에 실패하였습니다. 다시 한번 시도해주십시오.");
+        }
+      };
     } catch(err) {
-      console.log(err)
+      // console.log(err)
     }
   }
 
@@ -138,6 +171,10 @@ const Wrap = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  @media (max-height: 500px) {
+    height: 100%;
+    margin-top: 60px;
+  }
   @media (min-width: 1024px) {
     margin-left: 260px;
   }
@@ -268,13 +305,14 @@ const InputTxt = styled.div`
 `
 
 const Button = styled.div`
-  position: absolute;
+  /* position: absolute; */
   width: 80%;
   height: 40px;
-  bottom: 120px;
+  /* bottom: 120px; */
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 30px;
   button {
     width: 46%;
     height: 100%;

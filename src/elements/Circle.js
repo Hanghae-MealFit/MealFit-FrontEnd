@@ -72,13 +72,13 @@ const Circle = ({Token, timeCheck, setTimeCheck}) => {
           refresh_token: `Bearer ${Token.refresh_token}`
         }
       })
-      console.log(res)
+      // console.log(res)
       if(res.status === 200) {
         setChangeEatTime(false)
         setTimeCheck(!timeCheck)
       }
     } catch(err) {
-      console.log(err)
+      // console.log(err)
     }
   }
 
@@ -312,14 +312,14 @@ const Dot = styled.div`
     width: 24px;
     height: 24px;
     background-color: #fff;
-    border: ${props => (props.EatTime === true ? "2px solid green" : "2px solid #FE7770")};
+    border: ${props => (props.EatTime === true ? "2px solid #FE7770" : "2px solid #777")};
     border-radius: 50%;
     z-index: 10;
     box-sizing: border-box;
     display: flex;
     justify-content: center;
     align-items: center;
-    color: ${props => (props.EatTime === true ? "green" : "#FE7770")};
+    color: ${props => (props.EatTime === true ? "#FE7770" : "#777")};
     font-size: 20px;
   }
   &:hover:before {
@@ -344,6 +344,11 @@ const Modal = styled.div`
   h2 {
     margin: 0;
     font-size: 20px;
+  }
+  @media (min-width: 769px) {
+    h2 {
+      font-size: 24px;
+    }
   }
 `
 
@@ -378,6 +383,9 @@ const FastTime = styled.div`
   p {
     margin: 0;
   }
+  @media (min-width: 769px) {
+    font-size: 14px;
+  }
 `
 
 const Select = styled.select`
@@ -391,6 +399,9 @@ const Select = styled.select`
   font-family: 'GmarketM', 'sans-serif';
   font-size: 10px;
   text-align: center;
+  @media (min-width: 769px) {
+    font-size: 11px;
+  }
 `
 
 const Button = styled.div`

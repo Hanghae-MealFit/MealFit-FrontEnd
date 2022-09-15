@@ -29,7 +29,7 @@ const Header = ({isLogin, postId, user, conuser}) => {
   return (
     <Titlebar>
       {
-        (PageCheck === "http://localhost:3000/post/all") ?
+        (PageCheck === "http://mealfit.co.kr/post/all") ?
           (
             <Titletag>
               <h2>식단 게시판</h2>
@@ -43,13 +43,13 @@ const Header = ({isLogin, postId, user, conuser}) => {
               }
             </Titletag>
           )
-          : (PageCheck === "http://localhost:3000/post") ?
+          : (PageCheck === "http://mealfit.co.kr/post") ?
           (
             <Titletag>
               <h2>게시글 작성</h2>
             </Titletag>
           )
-          : (PageCheck === `http://localhost:3000/post/${postId}`) ?
+          : (PageCheck === `http://mealfit.co.kr/post/${postId}`) ?
           (
             <Titletag>
               <h2>게시글 상세보기</h2>
@@ -73,7 +73,7 @@ const Header = ({isLogin, postId, user, conuser}) => {
               }
             </Titletag>
           )
-          : (PageCheck === `http://localhost:3000/post/${postId}/edit`) ?
+          : (PageCheck === `http://mealfit.co.kr/post/${postId}/edit`) ?
           (
             <Titletag>
               <h2>게시글 수정하기</h2>

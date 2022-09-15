@@ -21,7 +21,7 @@ const CardsAll = ({post}) => {
             <img src={post.profileImage === null ? temp_pro_img : post.profileImage} alt="Writer Profile Img" />
             <p>{post.nickname}</p>
           </UserInfo>
-          <TextLabel>
+          <TextLabel liked={post.liked}>
             <div>
               <span><FontAwesomeIcon icon={faHeart} /></span>{post.like}
             </div>
@@ -127,6 +127,9 @@ const TextLabel = styled.div`
     align-items: center;
     margin-right: 4px;
     font-size: 17px;
+  }
+  div:first-child {
+    color: ${props => props.liked ? "#FF7770" : "#808080"};
   }
 `;
 

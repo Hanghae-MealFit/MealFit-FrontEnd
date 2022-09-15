@@ -1,15 +1,24 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
 import axios from 'axios';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
+import { useDispatch } from "react-redux";
 
 import { MemoizedSidebar } from "./Sidebar";
 import PostImgSelect from '../elements/PostImgSelect';
 import Header from "../elements/Header";
 
+import { loadMainUserDB } from "../redux/modules/userinfo";
+
 const PostUp = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { postId } = useParams();
+  const { pathname } = useLocation();
+
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   let code = new URL(window.location.href);
   const PageCheck = code.href
@@ -65,11 +74,11 @@ const PostUp = () => {
         refresh_token: `Bearer ${auth.refresh_token}`
       },
     }).then((response) => {
-      console.log("반응", response)
+      // console.log("반응", response)
       window.alert("식단 작성 성공!");
       navigate("/post/all")
     }).catch((error) => {
-      console.log("에러", error)
+      // console.log("에러", error)
       window.alert("식단 작성 실패!");
     });
   };
@@ -85,7 +94,7 @@ const PostUp = () => {
       })
       setContentData(response.data)
     } catch (error) {
-      console.log(error)
+      // console.log(error)
     }
   };
 
@@ -105,13 +114,13 @@ const PostUp = () => {
         refresh_token: `Bearer ${auth.refresh_token}`
       },
     }).then((response) => {
-      console.log("반응", response)
+      // console.log("반응", response)
       if(response.status === 200 && response.data === "수정 완료!") {
         window.alert("게시글이 성공적으로 수정되었습니다.")
         navigate(`/post/${postId}`)
       }
     }).catch((error) => {
-      console.log("에러", error)
+      // console.log("에러", error)
       window.alert("게시글 수정에 실패하였습니다.")
     });
   }
@@ -128,6 +137,10 @@ const PostUp = () => {
       if(EditPage) {
         PostViewAX()
       }
+    }, [])
+
+    useEffect(() => {
+      dispatch(loadMainUserDB())
     }, [])
 
     return (
