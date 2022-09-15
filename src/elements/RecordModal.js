@@ -29,9 +29,9 @@ const RecordModal = (
   }
 
   const [notFoundSearch, setNotFoundSarch] = React.useState(false)
-  const [searchList, setSearchList] = React.useState()
   const [selectMenu, setSelectMenu] = React.useState()
   const [selectMenuCheck, setSelectMenuCheck] = React.useState(false)
+  const [eatWeight, setEatWeight] = React.useState();
 
   const search_food_ref = React.useRef(null);
   const foodName_ref = React.useRef(null);
@@ -73,6 +73,7 @@ const RecordModal = (
     }
   }
   // console.log("page", page)
+  // console.log(list)
 
   const getSearchList = useCallback( async (data) => {
     const SearchName = data ? data : search_food_ref.current.value
@@ -86,10 +87,9 @@ const RecordModal = (
             },
           })
           // console.log(res)
-          if(res.data.length === 0) {
+          if(list.length === 0 && res.data.length === 0) {
             setNotFoundSarch(true)
           } else {
-            // console.log("안",notFoundSearch)
             setNotFoundSarch(false)
             setList(prev => {
               // console.log("prev", prev)
@@ -103,7 +103,6 @@ const RecordModal = (
       }
     }, [page])
   // console.log("list", list)
-  // console.log("밖",notFoundSearch)
   
   // 음식 추가하기
   const FoodInsert = async () => {
@@ -127,7 +126,7 @@ const RecordModal = (
         window.alert("음식 입력에 완료되었습니다.\n검색 후 섭취량을 기록해주세요.")
         setNotFoundSarch(false)
         search_food_ref.current.focus()
-        setText(foodName_ref.current.value)
+        search_food_ref.current.value = foodName_ref.current.value
         getSearchList(foodName_ref.current.value)
       }
     } catch (error) {
@@ -162,28 +161,35 @@ const RecordModal = (
 
   // 식단 추가하기
   const DietInsert = async () => {
-    try {
-      const res = await axios.post(`http://43.200.174.111:8080/api/diet`,{
-        foodId: selectMenu.foodId,
-        foodWeight: eating_weight_ref.current.value,
-        status: selectTime === "아침" ? "BREAKFAST" : selectTime === "점심" ? "LUNCH" : "DINNER",
-        date: SelectDay
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${auth.authorization}`,
-          refresh_token: `Bearer ${auth.refresh_token}`
+    const regNum = /[0-9]/g
+    if(eating_weight_ref === '') {
+      window.alert("섭취량을 빈 값으로 입력할 수 없습니다.")
+    } else if(!regNum.test(eating_weight_ref.current.value)) {
+      window.alert("섭취량은 숫자만 입력 가능합니다. ex) 그램(g) 양")
+    } else {
+      try {
+        const res = await axios.post(`http://43.200.174.111:8080/api/diet`,{
+          foodId: selectMenu.foodId,
+          foodWeight: eating_weight_ref.current.value,
+          status: selectTime === "아침" ? "BREAKFAST" : selectTime === "점심" ? "LUNCH" : "DINNER",
+          date: SelectDay
         },
-      })
-      // console.log(res)
-      if(res.status === 201) {
-        window.alert("식단 입력이 완료되었습니다.")
-        setRecordModalOpen(false)
-        setCheckInputFood(!checkInputFood)
+        {
+          headers: {
+            Authorization: `Bearer ${auth.authorization}`,
+            refresh_token: `Bearer ${auth.refresh_token}`
+          },
+        })
+        // console.log(res)
+        if(res.status === 201) {
+          window.alert("식단 입력이 완료되었습니다.")
+          setRecordModalOpen(false)
+          setCheckInputFood(!checkInputFood)
+        }
+      } catch (error) {
+          // console.log(error)
+          window.alert("식단 입력에 실패하였습니다.")
       }
-    } catch (error) {
-        // console.log(error)
-        window.alert("식단 입력에 실패하였습니다.")
     }
   }
 
@@ -220,30 +226,36 @@ const RecordModal = (
     }
   }
 
+  const CurrentEatWeight = (e) => {
+    // 체중 입력 시 숫자만 입력할 수 있도록 정규식 사용
+    setEatWeight(e.target.value.replace(/[^0-9.]/g, ''))
+  }
+
   const onCheckEnter = (e) => {
     if(e.key === 'Enter') {
-      setPage(0)
-      setList([])
-      if(page === 0) {
-        getSearchList()
+      if(search_food_ref.current.value !== '') {
+        setPage(0)
+        setList([])
+        if(page === 0) {
+          getSearchList()
+        }
+      } else {
+        window.alert("검색어를 필수로 입력해주세요.")
       }
     }
   }
 
   const CheckList = () => {
-    setPage(0)
-    setList([])
-    if(page === 0) {
-      getSearchList()
+    if(search_food_ref.current.value !== '') {
+      setPage(0)
+      setList([])
+      if(page === 0) {
+        getSearchList()
+      }
+    } else {
+      window.alert("검색어를 필수로 입력해주세요.")
     }
   }
-
-  const [text, setText] = React.useState("");
-
-  const displayText = (e) => {
-    setText(e.target.value);
-  };
-  // console.log(text)
 
   return (
     <Container>
@@ -259,7 +271,7 @@ const RecordModal = (
             )
           }
           <InputTxt>
-            <input ref={search_food_ref} type="text" placeholder='검색어를 입력하세요.' onKeyPress={onCheckEnter} value={text} onChange={displayText} />
+            <input ref={search_food_ref} type="text" placeholder='검색어를 입력하세요.' onKeyPress={onCheckEnter} />
             <button onClick={CheckList}>
               <FontAwesomeIcon icon={faMagnifyingGlass} />
             </button>
@@ -325,7 +337,7 @@ const RecordModal = (
                         { selectMenuCheck && v.foodId === selectMenu.foodId ?
                           (
                             <EatInput>
-                              <input ref={eating_weight_ref} type="text" placeholder='섭취량을 입력해주세요.' />
+                              <input ref={eating_weight_ref} onChange={(e) => CurrentEatWeight(e)} type="text" placeholder='섭취량을 입력해주세요.' value={eatWeight || ''} />
                             </EatInput>
                           ) :
                           (
