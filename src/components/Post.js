@@ -57,7 +57,7 @@ const Post = () => {
   const getPostList = useCallback(async() => {
     try {
       const res = await axios.get(`http://43.200.174.111:8080/api/post?size=3&page=${page}`)
-      // console.log(res.data)
+      console.log(res.data)
       if(res.data) {
         setList(prev => {
           // console.log("prev", prev)
@@ -66,10 +66,10 @@ const Post = () => {
         preventRef.current = true;
       }
     } catch(error) {
-      // console.log(error)
+      console.log(error)
     }
   }, [page])
-  // console.log("list", list)
+  console.log("list", list)
 
   const DetailPostView = (v) => {
     if(Token.authorization !== null && Token.refresh_token !== null) {

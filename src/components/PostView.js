@@ -37,6 +37,8 @@ const PostView = (props) => {
     view: 1
   })
 
+  console.log(contentData)
+
   const [commentData, setCommentData] = React.useState(
     [{
       comment: "",
