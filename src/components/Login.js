@@ -5,6 +5,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import KakaoLogin from '../elements/KakaoLogin';
 import NaverLogin from '../elements/NaverLogin';
 import GoogleLogin from '../elements/GoogleLogin';
+import Instance from '../axios/Instance'
 
 const Login = () => {
   const username_ref = React.useRef(null);
@@ -70,15 +71,12 @@ const Login = () => {
         password: password_ref.current.value,
       }
       try {
-        const res = await axios.post("http://43.200.174.111:8080/login",
-        {
+        const res = await Instance.post("/login", {
           username: LoginInfo.username,
           password: LoginInfo.password
-        }, {
-          headers: {
-            "Content-Type": "application/json"
-          }
-        })
+        });
+        Instance.defaults.headers.common["accessToken"] = res.data?.tokenBox.accessToken;
+        Instance.defaults.headers.common["refreshToken"] = res.data?.tokenBox.refreshToken;
         // console.log(res)
         if(res.status === 200 & res.data.tokenBox.accessToken !== null && res.data.tokenBox.refreshToken !== null) {
           sessionStorage.setItem("accessToken", res.data.tokenBox.accessToken)
