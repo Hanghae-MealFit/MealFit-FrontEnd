@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import TokenInstance from '../axios/TokenInstance'
 
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -103,15 +104,10 @@ const Main = () => {
 
   const SendChangeWeight = async () => {
     try {
-      const res = await axios.post("http://43.200.174.111:8080/api/bodyInfo",{
+      const res = await TokenInstance.post("api/bodyInfo", {
         savedDate: dateString,
         weight: currentWeight_ref.current.value
-      }, {
-        headers: {
-          Authorization: `Bearer ${Token.authorization}`,
-          refresh_token: `Bearer ${Token.refresh_token}`
-        },
-      })
+      });
       // console.log(res)
       if(res.status === 201 && res.data === "입력 완료!") {
         setCurWeight('')
