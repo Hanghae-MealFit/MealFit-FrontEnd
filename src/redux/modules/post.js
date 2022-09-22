@@ -1,4 +1,5 @@
 import axios from "axios"; //axios: node.js와 브라우저를 위한 Promise 기반 HTTP 클라이언트
+import Instance from "../../axios/Instance"
 
 //Actions
 const POST_LOAD = "post/POST_LOAD";
@@ -47,7 +48,7 @@ export function delPost(post) {
 export const loadPostDB = () => {
   return async function (dispatch) {
     try {
-      const res = await axios.get('http://43.200.174.111:8080/api/post?size=12')
+      const res = await Instance.get("/api/post?size=12")
       console.log(res)
       dispatch(loadPost(res.data))
     } catch(error) {

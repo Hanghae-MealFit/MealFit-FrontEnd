@@ -1,4 +1,5 @@
 import axios from "axios";
+import TokenInstance from "../../axios/TokenInstance"
 
 //Actions
 const USER_WEIGHT_LOAD = "userweight/USER_WEIGHT_LOAD";
@@ -31,13 +32,7 @@ export const loadUserWeightDB = () => {
   return async function (dispatch) {
     if (auth.authorization !== null && auth.refresh_token !== null) {
       try {
-        const res = await axios.get("http://43.200.174.111:8080/api/bodyInfo",
-          {
-            headers: {
-              Authorization: `Bearer ${auth.authorization}`,
-              refresh_token: `Bearer ${auth.refresh_token}`
-            },
-          })
+        const res = await TokenInstance.get("/api/bodyInfo")
         // console.log(res)
         dispatch(loadWeight(res.data))
       } catch (error) {
