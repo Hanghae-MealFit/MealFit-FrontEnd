@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
+import Instance from '../axios/Instance'
 import { useNavigate, useLocation } from 'react-router-dom'
 
 const FindMyInfo = () => {
@@ -34,17 +35,13 @@ const FindMyInfo = () => {
 
   const FindId = async () => {
     try {
-      const res = await axios.post("http://43.200.174.111:8080/api/user/find/username",
+      const res = await Instance.post("/api/user/find/username",
         id_email_ref.current.value,
-        {
-          headers: {
-            "Content-Type": "application/json"
-          }
-        })
-        // console.log(res)
-        if(res.status === 200) {
-          window.alert("입력하신 이메일의 메일을 확인해주세요.")
-        }
+      )
+      // console.log(res)
+      if(res.status === 200) {
+        window.alert("입력하신 이메일의 메일을 확인해주세요.")
+      }
     } catch(error) {
       // console.log(error)
       window.alert("전송에 실패하였습니다.")
@@ -53,13 +50,9 @@ const FindMyInfo = () => {
 
   const FindPw = async () => {
     try {
-      const res = await axios.post("http://43.200.174.111:8080/api/user/find/password", {
+      const res = await Instance.post("/api/user/find/password", {
         "username": pw_id_ref.current.value,
         "email": pw_email_ref.current.value
-      }, {
-        headers: {
-          "Content-Type": "application/json"
-        }
       })
       // console.log(res)
       if(res.status === 200) {
