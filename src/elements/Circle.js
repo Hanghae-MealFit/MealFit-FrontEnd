@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import styled, { keyframes } from 'styled-components'
 import { useSelector } from 'react-redux';
+import TokenInstance from '../axios/TokenInstance';
 
 import { MemoizedTime } from './Time'
 import axios from 'axios';
@@ -63,14 +64,9 @@ const Circle = ({Token, timeCheck, setTimeCheck}) => {
 
   const ChangeTiemAX = async () => {
     try {
-      const res = await axios.put("http://43.200.174.111:8080/api/user/fastingTime", {
+      const res = await TokenInstance.put("/api/user/fastingTime", {
         startFasting: startFastingHour_ref.current.value + ":" + startFastingMinute_ref.current.value,
         endFasting: endFastingHour_ref.current.value + ":" + endFastingMinute_ref.current.value,
-      }, {
-        headers: {
-          Authorization: `Bearer ${Token.authorization}`,
-          refresh_token: `Bearer ${Token.refresh_token}`
-        }
       })
       // console.log(res)
       if(res.status === 200) {
