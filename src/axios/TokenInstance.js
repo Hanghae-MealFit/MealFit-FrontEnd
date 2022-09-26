@@ -1,5 +1,7 @@
 import axios from 'axios'
 
+const sessionStorage = window.sessionStorage
+
 const Token = {
   authorization: sessionStorage.getItem("accessToken"),
   refresh_token: sessionStorage.getItem("refreshToken")
