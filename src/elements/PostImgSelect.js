@@ -14,6 +14,7 @@ const PostImgSelect = ({ files, setFiles }) => {
 
     const correctForm = /(.*?)\.(jpg|jpeg|png|gif|bmp)$/;
     if (e.target.files[0]?.size > 3 * 1024 * 1024) {
+      alert("이미지 파일의 용량은 3MB를 넘을 수 없습니다.")
       return;
     } else if (!e.target?.files[0]?.name.match(correctForm)) {
       alert("이미지 파일만 가능합니다.");
@@ -27,6 +28,7 @@ const PostImgSelect = ({ files, setFiles }) => {
       setPrevFiles(e.target.result);
     };
     setFiles(file)
+    console.log(file)
   }
 
   return (
