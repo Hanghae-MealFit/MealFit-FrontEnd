@@ -52,7 +52,9 @@ const Sidebar = () => {
     if(isLogin) {
       dispatch(loadMainUserDB())
     }
-  }, [])
+  }, [USER_CHECK])
+
+  console.log(isLogin)
 
   const [ showMenu, setShowMenu ] = React.useState(false)
   const ShowMenuToggle = () => {
