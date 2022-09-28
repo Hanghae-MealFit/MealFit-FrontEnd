@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCamera } from '@fortawesome/free-solid-svg-icons'
@@ -6,7 +6,7 @@ import { faCamera } from '@fortawesome/free-solid-svg-icons'
 const PostImgSelect = ({ files, setFiles }) => {
 
   const temp_img = "/logo/writebasicimage.png"
-  const [prevFiles, setPrevFiles] = React.useState(temp_img);
+  const [prevFiles, setPrevFiles] = useState(temp_img);
 
   const previewImage = async (e) => {
 

@@ -1,20 +1,19 @@
-import React from 'react'
-import { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled, { keyframes } from 'styled-components'
 import { useSelector } from "react-redux";
 
 const CircleGraph = ({ totalEatItem }) => {
   const user = useSelector((state) => state.userinfo.user.nutritionGoal)
 
-  const [totalKcal, setTotalKcal] = React.useState(0)
-  const [totalCarbs, setTotalCarbs] = React.useState(0)
-  const [totalPro, setTotalPro] = React.useState(0)
-  const [totalFat, setTotalFat] = React.useState(0)
+  const [totalKcal, setTotalKcal] = useState(0)
+  const [totalCarbs, setTotalCarbs] = useState(0)
+  const [totalPro, setTotalPro] = useState(0)
+  const [totalFat, setTotalFat] = useState(0)
 
-  const [kcalPer, setKcalPer] = React.useState(0)
-  const [CarbsPer, setCarbsPer] = React.useState(0)
-  const [ProPer, setProPer] = React.useState(0)
-  const [FatPer, setFatPer] = React.useState(0)
+  const [kcalPer, setKcalPer] = useState(0)
+  const [CarbsPer, setCarbsPer] = useState(0)
+  const [ProPer, setProPer] = useState(0)
+  const [FatPer, setFatPer] = useState(0)
 
   const Kcal_arr = []
   const Carbs_arr = []

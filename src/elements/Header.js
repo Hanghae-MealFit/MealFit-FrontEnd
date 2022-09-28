@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 
@@ -9,7 +9,7 @@ const Header = ({isLogin, postId, user, conuser}) => {
   const navigate = useNavigate();
 
   // 삭제 모달창
-  const [modalOpen, setModalOpen] = React.useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
 
   const PostWrite = () => {
     if (isLogin === true) {

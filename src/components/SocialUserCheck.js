@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react'
 
 const SocialUserCheck = () => {
   const sessionStorage = window.sessionStorage;
-  React.useEffect(() => {
+  useEffect(() => {
     let code = new URL(window.location.href);
 
     const ACCESS_TOKEN = code.href.split('=')[1].split('&')[0];

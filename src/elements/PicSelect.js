@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { useSelector, useDispatch } from 'react-redux'
 import { loadMainUserDB } from '../redux/modules/userinfo'
@@ -11,7 +11,7 @@ const PicSelect = ( { setFiles, myPageIn } ) => {
 
   const temp_img = "/logo/profile.png"
   const mypage_img = userInfo.profileImage
-  const [ prevFiles, setPrevFiles ] = React.useState(temp_img);
+  const [ prevFiles, setPrevFiles ] = useState(temp_img);
   const previewImage = (e) => {
 
     e.preventDefault();

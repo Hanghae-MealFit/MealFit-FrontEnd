@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, memo } from 'react'
+
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 
@@ -143,4 +144,4 @@ const BottomText = styled.div`
   }
 `;
 
-export const MemoizedTime = React.memo(Time)
+export const MemoizedTime = memo(Time)

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
 import { useNavigate, useLocation } from 'react-router-dom'
@@ -11,75 +11,75 @@ const Signup = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
-  React.useEffect(() => {
+  useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if(sessionStorage.getItem("accessToken") !== null || sessionStorage.getItem("refreshToken") !== null) {
       window.alert("이미 로그인 되어 있는 상태입니다.\n메인으로 돌아갑니다.")
       navigate("/")
     }
   }, [])
 
-  const username_ref = React.useRef(null);
-  const nickname_ref = React.useRef(null);
-  const email_ref = React.useRef(null);
-  const password_ref = React.useRef(null);
-  const passwordCheck_ref = React.useRef(null);
-  const currentWeight_ref = React.useRef(null);
-  const goalWeight_ref = React.useRef(null);
-  const startFastingHour_ref = React.useRef(null);
-  const startFastingMinute_ref = React.useRef(null);
-  const endFastingHour_ref = React.useRef(null);
-  const endFastingMinute_ref = React.useRef(null);
-  const username_err_ref = React.useRef(null);
-  const nickname_err_ref = React.useRef(null);
-  const email_err_ref = React.useRef(null);
-  const pw_err_ref = React.useRef(null);
-  const pw_check_err_ref = React.useRef(null);
-  const current_weight_err_ref = React.useRef(null);
-  const goal_weight_err_ref = React.useRef(null);
-  const hour_check_ref = React.useRef(null)
+  const username_ref = useRef(null);
+  const nickname_ref = useRef(null);
+  const email_ref = useRef(null);
+  const password_ref = useRef(null);
+  const passwordCheck_ref = useRef(null);
+  const currentWeight_ref = useRef(null);
+  const goalWeight_ref = useRef(null);
+  const startFastingHour_ref = useRef(null);
+  const startFastingMinute_ref = useRef(null);
+  const endFastingHour_ref = useRef(null);
+  const endFastingMinute_ref = useRef(null);
+  const username_err_ref = useRef(null);
+  const nickname_err_ref = useRef(null);
+  const email_err_ref = useRef(null);
+  const pw_err_ref = useRef(null);
+  const pw_check_err_ref = useRef(null);
+  const current_weight_err_ref = useRef(null);
+  const goal_weight_err_ref = useRef(null);
+  const hour_check_ref = useRef(null)
 
   // formData로 보낼 이미지 파일
-  const [files, setFiles] = React.useState(null);
+  const [files, setFiles] = useState(null);
 
   // 현재 체중 목표 체중 값
-  const [curWeight, setCurWeight] = React.useState();
-  const [goWeight, setGoWeight] = React.useState();
+  const [curWeight, setCurWeight] = useState();
+  const [goWeight, setGoWeight] = useState();
 
-  const [curInfoMsg, SetCurInfoMsg] = React.useState(false);
-  const [goInfoMsg, SetGoInfoMsg] = React.useState(false);
-  const [curError, setCurError] = React.useState("* 현재 체중을 입력해주세요.");
-  const [goError, setGoError] = React.useState("* 목표 체중을 입력해주세요.");
+  const [curInfoMsg, SetCurInfoMsg] = useState(false);
+  const [goInfoMsg, SetGoInfoMsg] = useState(false);
+  const [curError, setCurError] = useState("* 현재 체중을 입력해주세요.");
+  const [goError, setGoError] = useState("* 목표 체중을 입력해주세요.");
 
   // ID 중복확인 클릭 시, 유저에게 제공 될 값
-  const [checkIdMsg, SetCheckIdMsg] = React.useState("* 사용하실 아이디를 입력해주세요.");
+  const [checkIdMsg, SetCheckIdMsg] = useState("* 사용하실 아이디를 입력해주세요.");
 
   // 닉네임 중복확인 클릭 시, 유저에게 제공 될 값
-  const [checkNickMsg, SetCheckNickMsg] = React.useState("* 사용하실 닉네임을 입력해주세요.");
+  const [checkNickMsg, SetCheckNickMsg] = useState("* 사용하실 닉네임을 입력해주세요.");
 
   // 이메일 중복확인 클릭 시, 유저에게 제공 될 값
-  const [checkEmailMsg, SetCheckEmailMsg] = React.useState("* 이메일은 아이디 비밀번호를 찾을 때 사용됩니다.");
+  const [checkEmailMsg, SetCheckEmailMsg] = useState("* 이메일은 아이디 비밀번호를 찾을 때 사용됩니다.");
 
   // 입력된 비밀번호 값이 영어+숫자가 아닐 시, 유저에게 제공 될 값
-  const [PwMsg, SetPwMsg] = React.useState("* 비밀번호는 영어/숫자 조합으로 8자 이상 사용 가능합니다.");
+  const [PwMsg, SetPwMsg] = useState("* 비밀번호는 영어/숫자 조합으로 8자 이상 사용 가능합니다.");
 
   // 입력된 비밀번호 값이 영어+숫자가 아닐 시, 유저에게 제공 될 값
-  const [checkPwMsg, SetPwCheckMsg] = React.useState("* 입력하신 비밀번호를 다시 입력해주세요.");
+  const [checkPwMsg, SetPwCheckMsg] = useState("* 입력하신 비밀번호를 다시 입력해주세요.");
 
   // 단식 시간 설정하지 않았을 경우, 버튼 클릭 불가능하게 설정
-  const [startHourCheck, SetStartHourCheck] = React.useState("* 필수 선택값을 선택하세요.");
+  const [startHourCheck, SetStartHourCheck] = useState("* 필수 선택값을 선택하세요.");
 
   // 입력된 아이디 값이 4글자보다 적을 시, 버튼 클릭 불가능하게 설정
-  const [idCheckDis, SetIdCheckDis] = React.useState(true);
+  const [idCheckDis, SetIdCheckDis] = useState(true);
 
   // 입력된 닉네임 값이 2글자보다 적을 시, 버튼 클릭 불가능하게 설정
-  const [nickCheckDis, SetNickCheckDis] = React.useState(true);
+  const [nickCheckDis, SetNickCheckDis] = useState(true);
 
   // 입력된 이메일 값이 이메일 형식이 아닐 시, 버튼 클릭 불가능하게 설정
-  const [emailCheckDis, SetEmailCheckDis] = React.useState(true);
+  const [emailCheckDis, SetEmailCheckDis] = useState(true);
 
   const onhandleSignUp = async (e) => {
     e.preventDefault()

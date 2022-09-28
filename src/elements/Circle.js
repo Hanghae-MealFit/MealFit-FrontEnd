@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import styled, { keyframes } from 'styled-components'
 import { useSelector } from 'react-redux';
 import TokenInstance from '../axios/TokenInstance';
@@ -8,7 +8,7 @@ import axios from 'axios';
 
 const Circle = ({Token, timeCheck, setTimeCheck}) => {
 
-  const [time, setTime] = React.useState(new Date());
+  const [time, setTime] = useState(new Date());
 
   const Hour = time.getHours();
   const Minute = time.getMinutes();
@@ -16,10 +16,10 @@ const Circle = ({Token, timeCheck, setTimeCheck}) => {
   const TodaySecond = 86400;
   const NowSecond = (((Hour * 60) + Minute) * 60) + Second
   const NowPer = ((NowSecond / TodaySecond) * 100).toFixed(1)
-  const [ todayPer, setTodayPer ] = React.useState();
-  const [ eatTime, setEatTime ] = React.useState(true);
-  const [ hoverClickPlus, setHoverClickPlus ] = React.useState(false)
-  const [ changeEatTime, setChangeEatTime ] = React.useState(false)
+  const [ todayPer, setTodayPer ] = useState();
+  const [ eatTime, setEatTime ] = useState(true);
+  const [ hoverClickPlus, setHoverClickPlus ] = useState(false)
+  const [ changeEatTime, setChangeEatTime ] = useState(false)
 
   const user = useSelector((state) => state.userinfo.user.fastingInfo);
   const StartTime = user.startFasting.split(":")
@@ -28,12 +28,12 @@ const Circle = ({Token, timeCheck, setTimeCheck}) => {
   const EndTime = user.endFasting.split(":")
   const EndTimeTotal = ((parseInt(EndTime[0] * 60) + parseInt(EndTime[1])) * 60) + parseInt(EndTime[2])
 
-  const [ startHourCheck, SetStartHourCheck ] = React.useState("* 필수 선택값을 모두 선택하세요.");
-  const hour_check_ref = React.useRef(null);
-  const startFastingHour_ref = React.useRef(null);
-  const startFastingMinute_ref = React.useRef(null);
-  const endFastingHour_ref = React.useRef(null);
-  const endFastingMinute_ref = React.useRef(null);
+  const [ startHourCheck, SetStartHourCheck ] = useState("* 필수 선택값을 모두 선택하세요.");
+  const hour_check_ref = useRef(null);
+  const startFastingHour_ref = useRef(null);
+  const startFastingMinute_ref = useRef(null);
+  const endFastingHour_ref = useRef(null);
+  const endFastingMinute_ref = useRef(null);
 
   const TimeChange = (e) => {
     if(startFastingHour_ref.current.value && startFastingMinute_ref.current.value && endFastingHour_ref.current.value && endFastingMinute_ref.current.value !== "default") {

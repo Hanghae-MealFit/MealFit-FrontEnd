@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect, useRef } from 'react'
 import styled from "styled-components";
 import axios from 'axios';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
@@ -16,7 +16,7 @@ const PostUp = () => {
   const { postId } = useParams();
   const { pathname } = useLocation();
 
-  React.useEffect(() => {
+  useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
 
@@ -24,11 +24,11 @@ const PostUp = () => {
   const PageCheck = code.href
   const EditPage = PageCheck.includes("edit")
 
-  const [ImageFile, setImageFile] = React.useState([]);
-  const [contentText, setContentText] = React.useState(false);
+  const [ImageFile, setImageFile] = useState([]);
+  const [contentText, setContentText] = useState(false);
   const UpdateformData = new FormData();
   const formData = new FormData();
-  const content_ref = React.useRef(null);
+  const content_ref = useRef(null);
 
   const TextCheck = (e) => {
     if(e.target.value.length === 0) {
@@ -43,7 +43,7 @@ const PostUp = () => {
     refresh_token: sessionStorage.getItem("refreshToken")
   };
 
-  const [contentData, setContentData] = React.useState({
+  const [contentData, setContentData] = useState({
     content: "",
     createdAt: null,
     image: [],
