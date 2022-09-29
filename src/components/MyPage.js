@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -21,8 +21,8 @@ const MyPage = () => {
 
   let code = new URL(window.location.href);
   const MYPAGE_CHECK = code.href
-  const [ myPageIn, setMyPageIn ] = React.useState(false)
-  const [ files, setFiles ] = React.useState(null);
+  const [ myPageIn, setMyPageIn ] = useState(false)
+  const [ files, setFiles ] = useState(null);
 
   const user = useSelector((state) => state.userinfo.user.fastingInfo);
   const userInfo = useSelector((state) => state.userinfo.user.userProfile);
@@ -36,7 +36,7 @@ const MyPage = () => {
 
   const { pathname } = useLocation();
 
-  React.useEffect(() => {
+  useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
 

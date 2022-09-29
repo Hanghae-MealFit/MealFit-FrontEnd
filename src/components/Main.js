@@ -1,6 +1,5 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect, useRef } from 'react'
 import styled from "styled-components";
-import axios from "axios";
 import TokenInstance from '../axios/TokenInstance'
 
 import { useDispatch, useSelector } from "react-redux";
@@ -22,21 +21,21 @@ const Main = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [ isLogin, setIsLogin ] = React.useState(false);
-  const [ myWeightHover, setMyWeightHover ] = React.useState(false);
-  const [ changeMyWeight, setChangeMyWeight ] = React.useState(false);
-  const [ curWeight, setCurWeight ] = React.useState();
-  const [ curInfoMsg, SetCurInfoMsg ] = React.useState(false);
-  const [ curError, setCurError ] = React.useState("* 현재 체중을 입력해주세요.");
-  const [ weightCheck, setWeightCheck ] = React.useState(false);
-  const [ timeCheck, setTimeCheck ] = React.useState(false);
+  const [ isLogin, setIsLogin ] = useState(false);
+  const [ myWeightHover, setMyWeightHover ] = useState(false);
+  const [ changeMyWeight, setChangeMyWeight ] = useState(false);
+  const [ curWeight, setCurWeight ] = useState();
+  const [ curInfoMsg, SetCurInfoMsg ] = useState(false);
+  const [ curError, setCurError ] = useState("* 현재 체중을 입력해주세요.");
+  const [ weightCheck, setWeightCheck ] = useState(false);
+  const [ timeCheck, setTimeCheck ] = useState(false);
 
-  const currentWeight_ref = React.useRef(null);
-  const current_weight_err_ref = React.useRef(null);
+  const currentWeight_ref = useRef(null);
+  const current_weight_err_ref = useRef(null);
 
   const { pathname } = useLocation();
 
-  React.useEffect(() => {
+  useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
 

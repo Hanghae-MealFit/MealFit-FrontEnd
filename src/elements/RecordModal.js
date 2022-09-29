@@ -1,11 +1,9 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import styled from 'styled-components';
 import axios from "axios";
-import { useNavigate } from 'react-router-dom';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
-// import FoodModal from "../elements/FoodModal";
 
 const RecordModal = (
   {
@@ -28,30 +26,30 @@ const RecordModal = (
     setEditEatItem(false)
   }
 
-  const [notFoundSearch, setNotFoundSarch] = React.useState(false)
-  const [selectMenu, setSelectMenu] = React.useState()
-  const [selectMenuCheck, setSelectMenuCheck] = React.useState(false)
-  const [eatWeight, setEatWeight] = React.useState();
+  const [notFoundSearch, setNotFoundSarch] = useState(false)
+  const [selectMenu, setSelectMenu] = useState()
+  const [selectMenuCheck, setSelectMenuCheck] = useState(false)
+  const [eatWeight, setEatWeight] = useState();
 
-  const search_food_ref = React.useRef(null);
-  const foodName_ref = React.useRef(null);
-  const serving_ref = React.useRef(null);
-  const kcal_ref = React.useRef(null);
-  const carbs_ref = React.useRef(null);
-  const pro_ref = React.useRef(null);
-  const fat_ref = React.useRef(null);
-  const eating_weight_ref = React.useRef(null);
+  const search_food_ref = useRef(null);
+  const foodName_ref = useRef(null);
+  const serving_ref = useRef(null);
+  const kcal_ref = useRef(null);
+  const carbs_ref = useRef(null);
+  const pro_ref = useRef(null);
+  const fat_ref = useRef(null);
+  const eating_weight_ref = useRef(null);
 
   const auth = {
     authorization: sessionStorage.getItem("accessToken"),
     refresh_token: sessionStorage.getItem("refreshToken")
   }
 
-  const obsRef = React.useRef(null) // observer Element
-  const [list, setList] = React.useState([]); // Post List
-  const [page, setPage] = React.useState(0); // 현재 페이지
-  const preventRef = React.useRef(true); // 옵저버 중복 실행 방지
-  const endRef = React.useRef(false); // 모든 글 로드 확인
+  const obsRef = useRef(null) // observer Element
+  const [list, setList] = useState([]); // Post List
+  const [page, setPage] = useState(0); // 현재 페이지
+  const preventRef = useRef(true); // 옵저버 중복 실행 방지
+  const endRef = useRef(false); // 모든 글 로드 확인
 
   useEffect(() => {
     const observer = new IntersectionObserver(obsHandler, { threshold: 0.5 });

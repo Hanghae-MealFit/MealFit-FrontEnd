@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from 'react'
 import styled from "styled-components";
 import axios from 'axios';
 
@@ -18,32 +18,32 @@ import 'moment/locale/ko';
 
 const Record = () => {
   const userGoal = useSelector((state) => state.userinfo.user.nutritionGoal);
-  const [isLogin, setIsLogin] = React.useState(false)
-  const [value, onChange] = React.useState(new Date());
-  const [recordModalOpen, setRecordModalOpen] = React.useState(false);
+  const [isLogin, setIsLogin] = useState(false)
+  const [value, onChange] = useState(new Date());
+  const [recordModalOpen, setRecordModalOpen] = useState(false);
 
-  const [breakfastOpen, setBreakfastOpen] = React.useState(false);
-  const [lunchOpen, setLunchOpen] = React.useState(false);
-  const [dinnerOpen, setDinnerOpen] = React.useState(false);
+  const [breakfastOpen, setBreakfastOpen] = useState(false);
+  const [lunchOpen, setLunchOpen] = useState(false);
+  const [dinnerOpen, setDinnerOpen] = useState(false);
 
-  const [ totalEatItem, setTotalEatItem] = React.useState([])
-  const [ breakfastEatItem, setBreakfastEatItem] = React.useState([])
-  const [ lunchEatItem, setLunchEatItem] = React.useState([])
-  const [ dinnerEatItem, setDinnerEatItem] = React.useState([])
-  const [ checkInputFood, setCheckInputFood ] = React.useState(false)
+  const [ totalEatItem, setTotalEatItem] = useState([])
+  const [ breakfastEatItem, setBreakfastEatItem] = useState([])
+  const [ lunchEatItem, setLunchEatItem] = useState([])
+  const [ dinnerEatItem, setDinnerEatItem] = useState([])
+  const [ checkInputFood, setCheckInputFood ] = useState(false)
 
-  const [selectTime, setSelectTime] = React.useState("");
+  const [selectTime, setSelectTime] = useState("");
 
-  const [selectEatItem, setSelectEatItem] = React.useState("");
-  const [selectBreakfast, setSelectBreakfast] = React.useState(false);
-  const [selectLunch, setSelectLunch] = React.useState(false);
-  const [selectDinner, setSelectDinner] = React.useState(false);
+  const [selectEatItem, setSelectEatItem] = useState("");
+  const [selectBreakfast, setSelectBreakfast] = useState(false);
+  const [selectLunch, setSelectLunch] = useState(false);
+  const [selectDinner, setSelectDinner] = useState(false);
 
-  const [editEatItem, setEditEatItem] = React.useState(false);
+  const [editEatItem, setEditEatItem] = useState(false);
 
   const { pathname } = useLocation();
 
-  React.useEffect(() => {
+  useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
 
@@ -60,9 +60,9 @@ const Record = () => {
     }
   }
   
-  const morning_ref = React.useRef(null);
-  const lunch_ref = React.useRef(null);
-  const dinner_ref = React.useRef(null);
+  const morning_ref = useRef(null);
+  const lunch_ref = useRef(null);
+  const dinner_ref = useRef(null);
 
   const BreakfastSelectItem = (value) => {
     setSelectEatItem(value)
@@ -144,9 +144,9 @@ const Record = () => {
     }
   }
 
-  const [morningKcal, setMorningKcal] = React.useState(0)
-  const [lunchKcal, setLunchKcal] = React.useState(0)
-  const [dinnerKcal, setDinnerKcal] = React.useState(0)
+  const [morningKcal, setMorningKcal] = useState(0)
+  const [lunchKcal, setLunchKcal] = useState(0)
+  const [dinnerKcal, setDinnerKcal] = useState(0)
 
   let MorningArr = [];
   let LunchArr = [];
@@ -193,24 +193,24 @@ const Record = () => {
 
   const dispatch = useDispatch();
 
-  React.useEffect(() => {
+  useEffect(() => {
     LoginCheck()
     dispatch(loadMainUserDB())
 }, [])
 
-  React.useEffect(() => {
+  useEffect(() => {
     getFood()
   }, [SelectDay, checkInputFood])
 
-  React.useEffect(() => {
+  useEffect(() => {
     MorningKcal()
   }, [breakfastEatItem])
 
-  React.useEffect(() => {
+  useEffect(() => {
     LunchKcal()
   }, [lunchEatItem])
 
-  React.useEffect(() => {
+  useEffect(() => {
     DinnerKcal()
   }, [dinnerEatItem])
 

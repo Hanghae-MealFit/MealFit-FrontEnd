@@ -1,6 +1,5 @@
-import React from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import styled from 'styled-components'
-import axios from 'axios'
 import Instance from '../axios/Instance'
 import { useNavigate, useLocation } from 'react-router-dom'
 
@@ -9,7 +8,7 @@ const FindMyInfo = () => {
   const sessionStorage = window.sessionStorage;
   const navigate = useNavigate();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if(sessionStorage.getItem("accessToken") !== null || sessionStorage.getItem("refreshToken") !== null) {
       window.alert("이미 로그인 되어 있는 상태입니다.\n메인으로 돌아갑니다.")
       navigate("/")
@@ -18,20 +17,20 @@ const FindMyInfo = () => {
 
   const { pathname } = useLocation();
 
-  React.useEffect(() => {
+  useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
 
-  const id_email_ref = React.useRef(null)
-  const pw_id_ref = React.useRef(null)
-  const pw_email_ref = React.useRef(null)
-  const id_email_msg_ref = React.useRef(null)
-  const pw_id_msg_ref = React.useRef(null)
-  const pw_email_msg_ref = React.useRef(null)
+  const id_email_ref = useRef(null)
+  const pw_id_ref = useRef(null)
+  const pw_email_ref = useRef(null)
+  const id_email_msg_ref = useRef(null)
+  const pw_id_msg_ref = useRef(null)
+  const pw_email_msg_ref = useRef(null)
 
-  const [ idEmailMsg, SetIdEmailMsg] = React.useState("* 가입하신 아이디의 이메일을 입력해주세요.")
-  const [ pwIdMsg, SetPwIdMsg] = React.useState("* 가입하신 아이디를 입력해주세요.")
-  const [ pwEmailMsg, SetPwEmailMsg] = React.useState("* 가입하신 아이디의 이메일을 입력해주세요.")
+  const [ idEmailMsg, SetIdEmailMsg] = useState("* 가입하신 아이디의 이메일을 입력해주세요.")
+  const [ pwIdMsg, SetPwIdMsg] = useState("* 가입하신 아이디를 입력해주세요.")
+  const [ pwEmailMsg, SetPwEmailMsg] = useState("* 가입하신 아이디의 이메일을 입력해주세요.")
 
   const FindId = async () => {
     try {

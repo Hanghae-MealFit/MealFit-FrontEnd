@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from 'react'
 import styled from "styled-components";
 import axios from 'axios';
 import { useNavigate, useLocation } from 'react-router-dom'
@@ -9,33 +9,33 @@ const PasswordChange = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
-  React.useEffect(() => {
+  useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
 
-  const cur_password_ref = React.useRef(null);
-  const password_ref = React.useRef(null);
-  const passwordCheck_ref = React.useRef(null);
+  const cur_password_ref = useRef(null);
+  const password_ref = useRef(null);
+  const passwordCheck_ref = useRef(null);
 
-  const cur_pw_err_ref = React.useRef(null);
-  const pw_err_ref = React.useRef(null);
-  const pw_check_err_ref = React.useRef(null);
+  const cur_pw_err_ref = useRef(null);
+  const pw_err_ref = useRef(null);
+  const pw_check_err_ref = useRef(null);
 
   // 현재 비밀번호 입력 값이 영어+숫자가 아닐 시, 유저에게 제공 될 값
-  const [curPwMsg, setCurPwMsg] = React.useState("* 비밀번호는 영어/숫자 조합으로 8자 이상 사용 가능합니다.");
+  const [curPwMsg, setCurPwMsg] = useState("* 비밀번호는 영어/숫자 조합으로 8자 이상 사용 가능합니다.");
 
   // 입력된 비밀번호 값이 영어+숫자가 아닐 시, 유저에게 제공 될 값
-  const [PwMsg, SetPwMsg] = React.useState("* 비밀번호는 영어/숫자 조합으로 8자 이상 사용 가능합니다.");
+  const [PwMsg, SetPwMsg] = useState("* 비밀번호는 영어/숫자 조합으로 8자 이상 사용 가능합니다.");
 
   // 입력된 비밀번호 값이 영어+숫자가 아닐 시, 유저에게 제공 될 값
-  const [checkPwMsg, SetPwCheckMsg] = React.useState("* 입력하신 비밀번호를 다시 입력해주세요.");
+  const [checkPwMsg, SetPwCheckMsg] = useState("* 입력하신 비밀번호를 다시 입력해주세요.");
 
   const auth = {
     authorization: sessionStorage.getItem("accessToken"),
     refresh_token: sessionStorage.getItem("refreshToken")
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     if(auth.authorization === null && auth.refresh_token === null) {
       window.alert("비밀번호 변경은 로그인 후 사용 가능합니다.")
       navigate("/")

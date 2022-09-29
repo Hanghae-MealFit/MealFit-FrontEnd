@@ -1,32 +1,31 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { useSelector } from 'react-redux'
 
 import { MemoizedSidebar } from "./Sidebar";
 import PicSelect from '../elements/PicSelect'
 
 const MyPageChange = () => {
-  const nickname_ref = React.useRef(null);
-  const currentWeight_ref = React.useRef(null);
-  const goalWeight_ref = React.useRef(null);
-  const startFastingHour_ref = React.useRef(null);
-  const startFastingMinute_ref = React.useRef(null);
-  const endFastingHour_ref = React.useRef(null);
-  const endFastingMinute_ref = React.useRef(null);
-  const nickname_err_ref = React.useRef(null);
-  const current_weight_err_ref = React.useRef(null);
-  const goal_weight_err_ref = React.useRef(null);
-  const hour_check_ref = React.useRef(null);
-  const goal_kcal_ref = React.useRef(null);
-  const goal_carbs_ref = React.useRef(null);
-  const goal_pro_ref = React.useRef(null);
-  const goal_fat_ref = React.useRef(null);
-  const goal_kcal_err_ref = React.useRef(null);
-  const goal_carbs_err_ref = React.useRef(null);
-  const goal_pro_err_ref = React.useRef(null);
-  const goal_fat_err_ref = React.useRef(null);
+  const nickname_ref = useRef(null);
+  const currentWeight_ref = useRef(null);
+  const goalWeight_ref = useRef(null);
+  const startFastingHour_ref = useRef(null);
+  const startFastingMinute_ref = useRef(null);
+  const endFastingHour_ref = useRef(null);
+  const endFastingMinute_ref = useRef(null);
+  const nickname_err_ref = useRef(null);
+  const current_weight_err_ref = useRef(null);
+  const goal_weight_err_ref = useRef(null);
+  const hour_check_ref = useRef(null);
+  const goal_kcal_ref = useRef(null);
+  const goal_carbs_ref = useRef(null);
+  const goal_pro_ref = useRef(null);
+  const goal_fat_ref = useRef(null);
+  const goal_kcal_err_ref = useRef(null);
+  const goal_carbs_err_ref = useRef(null);
+  const goal_pro_err_ref = useRef(null);
+  const goal_fat_err_ref = useRef(null);
 
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -35,44 +34,44 @@ const MyPageChange = () => {
     window.scrollTo(0, 0);
   }, [pathname]);
 
-  const [ myPageChangeIn, setMyPageChangeIn ] = React.useState(false)
-  const [ files, setFiles ] = React.useState(null);
+  const [ myPageChangeIn, setMyPageChangeIn ] = useState(false)
+  const [ files, setFiles ] = useState(null);
 
   // 현재 체중 목표 체중 값
-  const [ curWeight, setCurWeight ] = React.useState();
-  const [ goWeight, setGoWeight ] = React.useState();
+  const [ curWeight, setCurWeight ] = useState();
+  const [ goWeight, setGoWeight ] = useState();
 
-  const [ curInfoMsg, SetCurInfoMsg ] = React.useState(false);
-  const [ goInfoMsg, SetGoInfoMsg ] = React.useState(false);
-  const [ curError, setCurError ] = React.useState("* 현재 체중을 입력해주세요.");
-  const [ goError, setGoError ] = React.useState("* 목표 체중을 입력해주세요.");
+  const [ curInfoMsg, SetCurInfoMsg ] = useState(false);
+  const [ goInfoMsg, SetGoInfoMsg ] = useState(false);
+  const [ curError, setCurError ] = useState("* 현재 체중을 입력해주세요.");
+  const [ goError, setGoError ] = useState("* 목표 체중을 입력해주세요.");
 
   // 닉네임 중복확인 클릭 시, 유저에게 제공 될 값
-  const [ checkNickMsg, SetCheckNickMsg ] = React.useState("* 사용하실 닉네임을 입력해주세요.");
+  const [ checkNickMsg, SetCheckNickMsg ] = useState("* 사용하실 닉네임을 입력해주세요.");
 
   // 입력된 닉네임 값이 2글자보다 적을 시, 버튼 클릭 불가능하게 설정
-  const [ nickCheckDis, SetNickCheckDis ] = React.useState(true);
+  const [ nickCheckDis, SetNickCheckDis ] = useState(true);
 
   // 단식 시간 설정하지 않았을 경우, 버튼 클릭 불가능하게 설정
-  const [ startHourCheck, SetStartHourCheck ] = React.useState("* 필수 선택값을 모두 선택하세요.");
+  const [ startHourCheck, SetStartHourCheck ] = useState("* 필수 선택값을 모두 선택하세요.");
 
   // 목표 섭취량 입력 시, 예시 표시
-  const [ calInfo, SetCalInfo ] = React.useState();
-  const [ carbsInfo, SetCarbsInfo ] = React.useState();
-  const [ proInfo, SetProInfo ] = React.useState();
-  const [ fatInfo, SetFatInfo ] = React.useState();
+  const [ calInfo, SetCalInfo ] = useState();
+  const [ carbsInfo, SetCarbsInfo ] = useState();
+  const [ proInfo, SetProInfo ] = useState();
+  const [ fatInfo, SetFatInfo ] = useState();
 
-  const [ goalKcal, setGoalKcal ] = React.useState();
-  const [ goalKcalError, setGoalKcalError ] = React.useState("* 값을 입력해주세요.");
+  const [ goalKcal, setGoalKcal ] = useState();
+  const [ goalKcalError, setGoalKcalError ] = useState("* 값을 입력해주세요.");
 
-  const [ goalCarbs, setGoalCarbs ] = React.useState();
-  const [ goalCarbsError, setGoalCarbsError ] = React.useState("* 값을 입력해주세요.");
+  const [ goalCarbs, setGoalCarbs ] = useState();
+  const [ goalCarbsError, setGoalCarbsError ] = useState("* 값을 입력해주세요.");
 
-  const [ goalPro, setGoalPro ] = React.useState();
-  const [ goalProError, setGoalProError ] = React.useState("* 값을 입력해주세요.");
+  const [ goalPro, setGoalPro ] = useState();
+  const [ goalProError, setGoalProError ] = useState("* 값을 입력해주세요.");
 
-  const [ goalFat, setGoalFat ] = React.useState();
-  const [ goalFatError, setGoalFatError ] = React.useState("* 값을 입력해주세요.");
+  const [ goalFat, setGoalFat ] = useState();
+  const [ goalFatError, setGoalFatError ] = useState("* 값을 입력해주세요.");
 
   const sessionStorage = window.sessionStorage;
   const ACCESS_TOKEN = sessionStorage.getItem("accessToken")

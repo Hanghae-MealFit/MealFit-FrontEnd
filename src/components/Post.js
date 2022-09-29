@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import styled from "styled-components";
 import axios from "axios";
 
@@ -16,22 +16,22 @@ const Post = () => {
   const dispatch = useDispatch();
   const { pathname } = useLocation();
 
-  React.useEffect(() => {
+  useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
   
-  const [ isLogin, setIsLogin ] = React.useState(false);
+  const [ isLogin, setIsLogin ] = useState(false);
 
   const Token = {
     authorization: sessionStorage.getItem("accessToken"),
     refresh_token: sessionStorage.getItem("refreshToken")
   }
 
-  const obsRef = React.useRef(null) // observer Element
-  const [list, setList] = React.useState([]); // Post List
-  const [page, setPage] = React.useState(0); // 현재 페이지
-  const preventRef = React.useRef(true); // 옵저버 중복 실행 방지
-  const endRef = React.useRef(false); // 모든 글 로드 확인
+  const obsRef = useRef(null) // observer Element
+  const [list, setList] = useState([]); // Post List
+  const [page, setPage] = useState(0); // 현재 페이지
+  const preventRef = useRef(true); // 옵저버 중복 실행 방지
+  const endRef = useRef(false); // 모든 글 로드 확인
 
   useEffect(() => {
     const observer = new IntersectionObserver(obsHandler, { threshold: 0.5 });

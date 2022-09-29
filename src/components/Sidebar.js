@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useRef, memo } from 'react'
 import styled, {css} from "styled-components";
 import axios from "axios";
 // FontAwesom Icon 사용
@@ -14,13 +14,13 @@ const Sidebar = () => {
 
   const user = useSelector((state) => state.userinfo.user.userProfile)
 
-  const [isLogin, setIsLogin] = React.useState(false);
+  const [isLogin, setIsLogin] = useState(false);
   const sessionStorage = window.sessionStorage;
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const board_ref = React.useRef(null);
-  const record_ref = React.useRef(null);
+  const board_ref = useRef(null);
+  const record_ref = useRef(null);
 
   const Token = {
     authorization: sessionStorage.getItem("accessToken"),
@@ -44,11 +44,11 @@ const Sidebar = () => {
     }
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     LoginCheck()
   }, [USER_CHECK]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if(isLogin) {
       dispatch(loadMainUserDB())
     }
@@ -56,7 +56,7 @@ const Sidebar = () => {
 
   console.log(isLogin)
 
-  const [ showMenu, setShowMenu ] = React.useState(false)
+  const [ showMenu, setShowMenu ] = useState(false)
   const ShowMenuToggle = () => {
     if(showMenu === true) {
       setShowMenu(false)
@@ -64,7 +64,7 @@ const Sidebar = () => {
       setShowMenu(true)
     }
   }
-  React.useEffect(() => {
+  useEffect(() => {
     if(showMenu === true) {
       setShowMenu(false)
     }
@@ -448,4 +448,4 @@ const LogInBtn = styled.button`
 `
 
 // export default Sidebar;
-export const MemoizedSidebar = React.memo(Sidebar)
+export const MemoizedSidebar = memo(Sidebar)

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect, useRef } from 'react'
 import styled from "styled-components";
 import axios from "axios";
 
@@ -17,12 +17,12 @@ const PostView = (props) => {
   const { postId } = useParams();
   const { pathname } = useLocation();
 
-  React.useEffect(() => {
+  useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
   const user = useSelector((state) => state.userinfo.user.userProfile)
 
-  const [contentData, setContentData] = React.useState({
+  const [contentData, setContentData] = useState({
     content: "",
     createdAt: null,
     image: [],
@@ -39,7 +39,7 @@ const PostView = (props) => {
 
   console.log(contentData)
 
-  const [commentData, setCommentData] = React.useState(
+  const [commentData, setCommentData] = useState(
     [{
       comment: "",
       commentId: "",
@@ -52,27 +52,27 @@ const PostView = (props) => {
   )
   // console.log(commentData)
 
-  const [isLogin, setIsLogin] = React.useState(false);
-  const [commentUserCheck, setCommentUserCheck] = React.useState('')
-  const [commentEditCheck, setCommentEditCheck] = React.useState('')
-  const [commentEditOpen, setCommentEditOpen] = React.useState(false)
+  const [isLogin, setIsLogin] = useState(false);
+  const [commentUserCheck, setCommentUserCheck] = useState('')
+  const [commentEditCheck, setCommentEditCheck] = useState('')
+  const [commentEditOpen, setCommentEditOpen] = useState(false)
   // console.log(commentUserCheck)
   // console.log(commentData)
 
   // 좋아요 버튼
-  const [postLiked, setPostLiked] = React.useState(false);
+  const [postLiked, setPostLiked] = useState(false);
 
   // 댓글 좋아요
-  const [commentLiked, setCommentLiked] = React.useState(false);
+  const [commentLiked, setCommentLiked] = useState(false);
 
-  const comment_ref = React.useRef(null);
+  const comment_ref = useRef(null);
 
   // 사용자 입력 저장 
-  const [checkItemContent, setCheckItemContent] = React.useState('');
+  const [checkItemContent, setCheckItemContent] = useState('');
   // 줄바꿈 위치를 저장하는 Dictionary
-  const [lineBreakIndexDict, setLineBreakIndexDict] = React.useState({});
+  const [lineBreakIndexDict, setLineBreakIndexDict] = useState({});
   // 줄 수 (높이)
-  const [lineHeight, setLineHeight] = React.useState(0);
+  const [lineHeight, setLineHeight] = useState(0);
 
   // 사용자 입력 업데이트 및 줄바꿈 감지
   const checkItemChangeHandler = (event) => {
@@ -129,7 +129,7 @@ const PostView = (props) => {
   };
 
   // 댓글 작성 후, 리렌더링 진행될 수 있도록 설정
-  const [commentCheck, setCommentCheck] = React.useState(false);
+  const [commentCheck, setCommentCheck] = useState(false);
 
   // 댓글 불러오기
   const CommentLoad = async () => {
@@ -176,7 +176,7 @@ const PostView = (props) => {
     setCommentEditOpen(true)
   }
 
-  const edit_ref = React.useRef(null)
+  const edit_ref = useRef(null)
 
   const CommentEdit = async () => {
     const commentId = commentEditCheck.commentId
@@ -244,7 +244,7 @@ const PostView = (props) => {
     }
   }
 
-  const comment_like_ref = React.useRef(null)
+  const comment_like_ref = useRef(null)
   // 댓글 좋아요 버튼
   const CommentLike = async (commentId) => {
     try {

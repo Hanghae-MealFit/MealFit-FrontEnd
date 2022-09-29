@@ -1,6 +1,5 @@
-import React from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import styled from 'styled-components'
-import axios from 'axios'
 import { useNavigate, useLocation } from 'react-router-dom';
 import KakaoLogin from '../elements/KakaoLogin';
 import NaverLogin from '../elements/NaverLogin';
@@ -8,18 +7,18 @@ import GoogleLogin from '../elements/GoogleLogin';
 import Instance from '../axios/Instance'
 
 const Login = () => {
-  const username_ref = React.useRef(null);
-  const password_ref = React.useRef(null);
-  const username_err_ref = React.useRef(null);
-  const pw_err_ref = React.useRef(null);
+  const username_ref = useRef(null);
+  const password_ref = useRef(null);
+  const username_err_ref = useRef(null);
+  const pw_err_ref = useRef(null);
 
-  const [ checkIdMsg, SetCheckIdMsg] = React.useState("")
-  const [ pwMsg, SetPwMsg ] = React.useState("")
+  const [ checkIdMsg, SetCheckIdMsg] = useState("")
+  const [ pwMsg, SetPwMsg ] = useState("")
 
   const sessionStorage = window.sessionStorage;
   const navigate = useNavigate();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if(sessionStorage.getItem("accessToken") !== null || sessionStorage.getItem("refreshToken") !== null) {
       window.alert("이미 로그인 되어 있는 상태입니다.\n메인으로 돌아갑니다.")
       navigate("/")
@@ -28,7 +27,7 @@ const Login = () => {
   
   const { pathname } = useLocation();
 
-  React.useEffect(() => {
+  useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
 
