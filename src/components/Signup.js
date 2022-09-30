@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
+import Instance from '../axios/Instance'
 import { useNavigate, useLocation } from 'react-router-dom'
 
 import PicSelect from '../elements/PicSelect'
@@ -136,12 +137,7 @@ const Signup = () => {
 
     try {
       const username = username_ref.current.value
-      const res = await axios.get(`http://43.200.174.111:8080/api/user/username/${username}`,
-        {
-          headers: {
-            "Content-Type": "application/json"
-          }
-        })
+      const res = await Instance.get(`api/user/username/${username}`)
       if (res.data === "검증완료!" && res.status === 200) {
         SetCheckIdMsg("* 사용 가능 한 아이디입니다.")
         username_err_ref.current.style.color = "#81C147";
@@ -160,12 +156,7 @@ const Signup = () => {
 
     try {
       const nickname = nickname_ref.current.value
-      const res = await axios.get(`http://43.200.174.111:8080/api/user/nickname/${nickname}`,
-        {
-          headers: {
-            "Content-Type": "application/json"
-          }
-        })
+      const res = await Instance.get(`/api/user/nickname/${nickname}`)
       if (res.data === "검증완료!" && res.status === 200) {
         SetCheckNickMsg("* 사용 가능 한 닉네임입니다.")
         nickname_err_ref.current.style.color = "#81C147";
@@ -184,12 +175,7 @@ const Signup = () => {
 
     try {
       const email = email_ref.current.value
-      const res = await axios.get(`http://43.200.174.111:8080/api/user/email/${email}`,
-        {
-          headers: {
-            "Content-Type": "application/json"
-          }
-        })
+      const res = await Instance.get(`/api/user/email/${email}`)
       if (res.data === "검증완료!" && res.status === 200) {
         SetCheckEmailMsg("* 사용 가능 한 이메일입니다.")
         email_err_ref.current.style.color = "#81C147";
