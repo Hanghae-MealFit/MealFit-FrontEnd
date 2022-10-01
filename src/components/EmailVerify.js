@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import axios from 'axios'
+import Instance from '../axios/Instance'
 import { useNavigate } from 'react-router-dom'
 
 const EmailVerify = () => {
@@ -12,7 +13,7 @@ const EmailVerify = () => {
 
     const userVerify = async () => {
       try {
-        const res = await axios.get(`http://43.200.174.111:8080/api/user/verify?username=${USER_NAME}&code=${CODE}`, {
+        const res = await Instance.get(`/api/user/verify?username=${USER_NAME}&code=${CODE}`, {
           username: USER_NAME,
           code: CODE
         })
