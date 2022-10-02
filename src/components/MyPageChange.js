@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
+import Instance from '../axios/Instance'
 import { useNavigate, useLocation } from 'react-router-dom'
 
 import { MemoizedSidebar } from "./Sidebar";
@@ -142,12 +143,7 @@ const MyPageChange = () => {
 
     try {
       const nickname = nickname_ref.current.value
-      const res = await axios.get(`http://43.200.174.111:8080/api/user/nickname/${nickname}`,
-      {
-        headers: {
-          "Content-Type": "application/json"
-        }
-      })
+      const res = await Instance.get(`http://43.200.174.111:8080/api/user/nickname/${nickname}`)
       if(res.data === "검증완료!" && res.status === 200) {
         SetCheckNickMsg("* 사용 가능 한 닉네임입니다.")
         nickname_err_ref.current.style.color = "#81C147";
