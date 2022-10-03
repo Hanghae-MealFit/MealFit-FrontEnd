@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import styled from "styled-components";
 import axios from 'axios';
+import TokenInstance from '../axios/TokenInstance';
 import { useNavigate, useLocation } from 'react-router-dom'
 
 import { MemoizedSidebar } from "./Sidebar";
@@ -46,26 +47,15 @@ const PasswordChange = () => {
     e.preventDefault()
 
     try {
-      const res = await axios.put("http://43.200.174.111:8080/api/user/password", {
+      const res = await TokenInstance.put("/api/user/password", {
         password: cur_password_ref.current.value,
         changePassword: password_ref.current.value,
         passwordCheck: passwordCheck_ref.current.value
-      }, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${auth.authorization}`,
-          refresh_token: `Bearer ${auth.refresh_token}`
-        }
       })
       // console.log(res)
       if(res.status === 200) {
         try {
-          const response = await axios.post("http://43.200.174.111:8080/logout", null ,{
-              headers: {
-                Authorization: `Bearer ${auth.authorization}`,
-                refresh_token: `Bearer ${auth.refresh_token}`
-              }
-            })
+          const response = await TokenInstance.post("/logout", null)
             // console.log("반응", response)
           if (response.status === 200) {
             sessionStorage.clear();

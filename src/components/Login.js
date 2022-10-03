@@ -76,7 +76,7 @@ const Login = () => {
         });
         Instance.defaults.headers.common["accessToken"] = res.data?.tokenBox.accessToken;
         Instance.defaults.headers.common["refreshToken"] = res.data?.tokenBox.refreshToken;
-        // console.log(res)
+        console.log(res)
         if(res.status === 200 & res.data.tokenBox.accessToken !== null && res.data.tokenBox.refreshToken !== null) {
           sessionStorage.setItem("accessToken", res.data.tokenBox.accessToken)
           sessionStorage.setItem("refreshToken", res.data.tokenBox.refreshToken)
@@ -84,7 +84,7 @@ const Login = () => {
           navigate("/")
         }
       } catch(error) {
-        // console.log(error)
+        console.log(error)
         if(error.response.status === 401 && error.response.data === "잘못된 로그인 정보입니다.") {
           window.alert("로그인에 실패하였습니다. 아이디 혹은 비밀번호를 다시 확인해주세요.")
           username_ref.current.focus()
