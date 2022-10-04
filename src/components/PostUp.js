@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import styled from "styled-components";
 import axios from 'axios';
+import TokenInstance from '../axios/TokenInstance';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { useDispatch } from "react-redux";
 
@@ -86,12 +87,7 @@ const PostUp = () => {
   // 수정 페이지 시, 식단 게시글 상세조회
   const PostViewAX = async () => {
     try {
-      const response = await axios.get(`http://43.200.174.111:8080/api/post/${postId}`, {
-        headers: {
-          Authorization: `Bearer ${auth.authorization}`,
-          refresh_token: `Bearer ${auth.refresh_token}`
-        }
-      })
+      const response = await TokenInstance.get(`/api/post/${postId}`)
       setContentData(response.data)
     } catch (error) {
       // console.log(error)
